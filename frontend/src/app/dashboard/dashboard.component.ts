@@ -26,4 +26,8 @@ export class DashboardComponent implements OnInit {
   navigateToAsset(id: number) {
     this.router.navigate([`organization/${id}`]);
   }
+
+  createOrg() {
+    // Possibly open modal to create new Organization
+  }
 }

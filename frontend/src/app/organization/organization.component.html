@@ -1,13 +1,24 @@
-<div class="row card-group">
-  <div class="col-3" *ngFor="let asset of assetAry">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">{{ asset.name }}</h5>
-        <p class="card-text">
-          {{ asset.description }}
-        </p>
-        <a href="#" class="btn btn-primary">Select</a>
+<div class="container">
+  <div class="row card-group">
+    <div class="col-3" *ngFor="let asset of assetAry">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ asset.name }}</h5>
+          <p class="card-text">
+            {{ asset.description }}
+          </p>
+          <button class="btn btn-primary" style="margin-right: 5px;">
+            View
+          </button>
+          <button class="btn btn-secondary" style="margin-right: 5px;">
+            Edit
+          </button>
+        </div>
       </div>
     </div>
   </div>
+  <br />
+  <button (click)="createOrg()" type="button" class="btn btn-primary float-right">
+    Add Asset
+  </button>
 </div>
