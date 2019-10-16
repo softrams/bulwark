@@ -8,9 +8,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 
 import { AppService } from './app.service';
 import { HttpClientModule } from '@angular/common/http';
+import { AssessmentsComponent } from './assessments/assessments.component';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, DashboardComponent],
+  declarations: [AppComponent, NavbarComponent, DashboardComponent, AssessmentsComponent],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [AppService],
   bootstrap: [AppComponent]

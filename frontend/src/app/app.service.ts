@@ -24,6 +24,15 @@ export class AppService {
       .then(res => {
         return res;
       });
+    }
+
+    getAssessments() {
+      return this.http
+        .get(`${this.api}/organization/asset/assessment/`)
+        .toPromise()
+        .then(res => {
+          return res;
+        });
   }
 
   private handleError(error: HttpErrorResponse) {
