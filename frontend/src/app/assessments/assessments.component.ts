@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-assessments',
@@ -10,10 +10,11 @@ import { ActivatedRoute, Params } from '@angular/router';
 export class AssessmentsComponent implements OnInit {
   assessmentAry: any = [];
   assetId: number;
-
+  
   constructor(
     private appService: AppService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    public router: Router
   ) { }
 
   ngOnInit() {

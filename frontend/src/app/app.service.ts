@@ -28,7 +28,7 @@ export class AppService {
 
   getAssessments(id: number) {
     return this.http
-      .get(`${this.api}/organization/asset/assessment/${id}`)
+      .get(`${this.api}/assessment/${id}`)
       .toPromise()
       .then(res => {
         return res;

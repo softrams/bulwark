@@ -33,4 +33,8 @@ export class DashboardComponent implements OnInit {
   navigateToAsset(id: number) {
     this.router.navigate([`dashboard/organization/${id}`]);
   }
+
+  navigateToAssessment(id: number) {
+    this.router.navigate([`assessment/${id}`]);
+  }
 }
