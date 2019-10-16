@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +13,8 @@ export class DashboardComponent implements OnInit {
   orgId: number;
   constructor(
     private appService: AppService,
-    public activatedRoute: ActivatedRoute
+    public activatedRoute: ActivatedRoute,
+    public router: Router
   ) {}
 
   ngOnInit() {
@@ -27,5 +28,9 @@ export class DashboardComponent implements OnInit {
         this.orgAry = res;
       });
     }
+  }
+
+  navigateToAsset(id: number) {
+    this.router.navigate([`dashboard/organization/${id}`]);
   }
 }

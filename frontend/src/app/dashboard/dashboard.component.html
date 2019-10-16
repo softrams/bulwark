@@ -8,7 +8,9 @@
             <p class="card-text">
               {{ org.description }}
             </p>
-            <a href="#" class="btn btn-primary">Select</a>
+            <a (click)="navigateToAsset(org.id)" class="btn btn-primary"
+              >Select</a
+            >
           </div>
         </div>
       </div>
