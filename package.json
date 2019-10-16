@@ -12,6 +12,11 @@
     "start": "cd dist && node app.js",
     "postinstall": "cd frontend && ng build --prod"
   },
+  "nodemonConfig": {
+    "ignore": [
+      "frontend"
+    ]
+  },
   "keywords": [
     "application_security",
     "vulnerability",
