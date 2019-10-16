@@ -8,5 +8,6 @@
     "experimentalDecorators": true,
     "outDir": "dist"
   },
-  "exclude": ["frontend"]
+  "exclude": ["./frontend"],
+  "include": ["src/**/*"]
 }
