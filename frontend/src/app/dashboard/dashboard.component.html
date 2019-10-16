@@ -1,26 +1,32 @@
-<div *ngIf="!activatedRoute.snapshot.params.id">
-  <div *ngFor="let org of orgAry">
-    <div class="card" style="width: 18rem;">
-      <div class="card-body">
-        <h5 class="card-title">{{ org.name }}</h5>
-        <p class="card-text">
-          {{ org.description }}
-        </p>
-        <a href="#" class="btn btn-primary">Select</a>
+<div class="container">
+  <div *ngIf="!activatedRoute.snapshot.params.id">
+    <div class="row card-group">
+      <div class="col-3" *ngFor="let org of orgAry">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ org.name }}</h5>
+            <p class="card-text">
+              {{ org.description }}
+            </p>
+            <a href="#" class="btn btn-primary">Select</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div *ngIf="activatedRoute.snapshot.params.id">
-  <div *ngFor="let asset of assetAry">
-    <div class="card" style="width: 18rem;">
-      <div class="card-body">
-        <h5 class="card-title">{{ asset.name }}</h5>
-        <p class="card-text">
-          {{ asset.description }}
-        </p>
-        <a href="#" class="btn btn-primary">Select</a>
+  <div *ngIf="activatedRoute.snapshot.params.id">
+    <div class="row card-group">
+      <div class="col-3" *ngFor="let asset of assetAry">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{ asset.name }}</h5>
+            <p class="card-text">
+              {{ asset.description }}
+            </p>
+            <a href="#" class="btn btn-primary">Select</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>

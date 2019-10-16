@@ -13,7 +13,7 @@ export class DashboardComponent implements OnInit {
   orgId: number;
   constructor(
     private appService: AppService,
-    private activatedRoute: ActivatedRoute
+    public activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
