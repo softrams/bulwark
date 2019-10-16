@@ -9,6 +9,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class AssessmentsComponent implements OnInit {
   assessmentAry: any = [];
+  assetId: number;
 
   constructor(
     private appService: AppService,
@@ -16,9 +17,10 @@ export class AssessmentsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.appService.getAssessments().then(res => {
-      this.assessmentAry = res;
-    });
+      this.assetId = +this.activatedRoute.snapshot.params.id;
+      this.appService.getAssessments(this.assetId).then(res => {
+        this.assessmentAry = res;
+      });
   }
 
 }

@@ -26,13 +26,13 @@ export class AppService {
       });
     }
 
-    getAssessments() {
-      return this.http
-        .get(`${this.api}/organization/asset/assessment/`)
-        .toPromise()
-        .then(res => {
-          return res;
-        });
+  getAssessments(id: number) {
+    return this.http
+      .get(`${this.api}/organization/asset/assessment/${id}`)
+      .toPromise()
+      .then(res => {
+        return res;
+      });
   }
 
   private handleError(error: HttpErrorResponse) {

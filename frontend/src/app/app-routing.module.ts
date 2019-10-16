@@ -19,8 +19,8 @@ const routes: Routes = [
     component: DashboardComponent
   },
   {
-    path: 'dashboard/organization/asset/assessment/',
-    component: DashboardComponent
+    path: 'assessment',
+    component: AssessmentsComponent
   }
 ];
 

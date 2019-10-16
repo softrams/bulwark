@@ -5,6 +5,7 @@ import * as bodyParser from 'body-parser';
 import { createConnection } from 'typeorm';
 import { Organization } from './entity/Organization';
 import { Asset } from './entity/Asset';
+import { Assessment } from './entity/Assessment';
 
 const cors = require('cors');
 
@@ -31,6 +32,7 @@ createConnection().then(connection => {
   // register routes
   const orgRepository = connection.getRepository(Organization);
   const assetRepository = connection.getRepository(Asset);
+  const assessmentRepository = connection.getRepository(Assessment);
 
   app.get('/api/organization', async function(req: Request, res: Response) {
     const orgs = await orgRepository.find();
@@ -46,4 +48,14 @@ createConnection().then(connection => {
     });
     res.json(asset);
   });
+
+  app.get('/api/assessment/:id', async function(
+    req: Request,
+    res: Response
+  ) {
+    const assessment = await assessmentRepository.find({
+      where: { asset: req.params.id }
+    });
+    res.json(assessment);
+  });  
 });
