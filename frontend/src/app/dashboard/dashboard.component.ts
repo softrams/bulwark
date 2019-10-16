@@ -18,19 +18,12 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.activatedRoute.snapshot.params.id) {
-      this.orgId = +this.activatedRoute.snapshot.params.id;
-      this.appService.getOrganizationAssets(this.orgId).then(res => {
-        this.assetAry = res;
-      });
-    } else {
-      this.appService.getOrganizations().then(res => {
-        this.orgAry = res;
-      });
-    }
+    this.appService.getOrganizations().then(res => {
+      this.orgAry = res;
+    });
   }
 
   navigateToAsset(id: number) {
-    this.router.navigate([`dashboard/organization/${id}`]);
+    this.router.navigate([`organization/${id}`]);
   }
 }

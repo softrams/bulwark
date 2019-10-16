@@ -1,0 +1,13 @@
+<div class="row card-group">
+  <div class="col-3" *ngFor="let asset of assetAry">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ asset.name }}</h5>
+        <p class="card-text">
+          {{ asset.description }}
+        </p>
+        <a href="#" class="btn btn-primary">Select</a>
+      </div>
+    </div>
+  </div>
+</div>
