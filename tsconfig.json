@@ -6,7 +6,8 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "removeComments": true
   },
   "exclude": ["./frontend"],
   "include": ["src/**/*"]
