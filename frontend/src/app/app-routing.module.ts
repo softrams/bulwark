@@ -16,6 +16,15 @@ export class AssetResolver implements Resolve<any> {
   }
 }
 
+@Injectable()
+export class AssessmentResolver implements Resolve<any> {
+  constructor(private apiService: AppService) {}
+
+  resolve(route: ActivatedRouteSnapshot) {
+    return this.apiService.getAssessments(route.params.id);
+  }
+}
+
 const routes: Routes = [
   {
     path: '',
@@ -32,7 +41,8 @@ const routes: Routes = [
   },
   {
     path: 'assessment/:id',
-    component: AssessmentsComponent
+    component: AssessmentsComponent,
+    resolve: { assessments: AssessmentResolver }
   },
   {
     path: 'organization/:id',
@@ -44,6 +54,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [AssetResolver]
+  providers: [AssetResolver, AssessmentResolver]
 })
 export class AppRoutingModule {}

@@ -11,16 +11,9 @@ export class AssessmentsComponent implements OnInit {
   assessmentAry: any = [];
   assetId: number;
 
-  constructor(
-    private appService: AppService,
-    public activatedRoute: ActivatedRoute,
-    public router: Router
-  ) {}
+  constructor(private appService: AppService, public activatedRoute: ActivatedRoute, public router: Router) {}
 
   ngOnInit() {
-    this.assetId = +this.activatedRoute.snapshot.params.id;
-    this.appService.getAssessments(this.assetId).then(res => {
-      this.assessmentAry = res;
-    });
+    this.activatedRoute.data.subscribe(({ assessments }) => (this.assessmentAry = assessments));
   }
 }
