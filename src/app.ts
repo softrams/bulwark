@@ -6,12 +6,10 @@ import { createConnection } from 'typeorm';
 import { Organization } from './entity/Organization';
 import { Asset } from './entity/Asset';
 import { Assessment } from './entity/Assessment';
-<<<<<<< HEAD
+import { Vulnerability } from './entity/Vulnerability';
+
 const puppeteer = require('puppeteer');
 const fs = require('fs');
-=======
-import { Vulnerability } from './entity/Vulnerability';
->>>>>>> 6cae61e3c500fb745849649006de1af58938a807
 
 const cors = require('cors');
 
@@ -66,7 +64,7 @@ createConnection().then((connection) => {
       where: { vulnerability: req.params.id }
     });
     res.json(vulnerabilities);
-  });  
+  });
 
     // puppeteer generate
     app.get('/api/report/generate', async (req: Request, res: Response) => {
