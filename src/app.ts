@@ -58,7 +58,7 @@ createConnection().then((connection) => {
     const page = await browser.newPage();
     const filePath = path.join(__dirname, '../temp_report.pdf');
     await page.goto('', { waitUntil: 'networkidle2' });
-    await page.pdf({ path: path.join(__dirname, '../temp_report.pdf'), format: 'A4' });
+    await page.pdf({ path: filePath, format: 'A4' });
     await browser.close();
     const file = fs.createReadStream(filePath);
     const stat = fs.statSync(filePath);
