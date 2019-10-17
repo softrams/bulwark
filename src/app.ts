@@ -60,8 +60,8 @@ createConnection().then((connection) => {
     await page.goto('', { waitUntil: 'networkidle2' });
     await page.pdf({ path: path.join(__dirname, '../temp_report.pdf'), format: 'A4' });
     await browser.close();
-    var file = fs.createReadStream(filePath);
-    var stat = fs.statSync(filePath);
+    const file = fs.createReadStream(filePath);
+    const stat = fs.statSync(filePath);
     res.setHeader('Content-Length', stat.size);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename=report.pdf');
