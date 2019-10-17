@@ -24,6 +24,15 @@ export class AppService {
       .then(res => {
         return res;
       });
+    }
+
+  getAssessments(id: number) {
+    return this.http
+      .get(`${this.api}/assessment/${id}`)
+      .toPromise()
+      .then(res => {
+        return res;
+      });
   }
 
   private handleError(error: HttpErrorResponse) {

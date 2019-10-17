@@ -11,14 +11,10 @@ export class DashboardComponent implements OnInit {
   orgAry: any = [];
   assetAry: any = [];
   orgId: number;
-  constructor(
-    private appService: AppService,
-    public activatedRoute: ActivatedRoute,
-    public router: Router
-  ) {}
+  constructor(private appService: AppService, public activatedRoute: ActivatedRoute, public router: Router) {}
 
   ngOnInit() {
-    this.appService.getOrganizations().then(res => {
+    this.appService.getOrganizations().then((res) => {
       this.orgAry = res;
     });
   }

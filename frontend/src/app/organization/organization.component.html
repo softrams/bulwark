@@ -7,7 +7,7 @@
           <p class="card-text">
             {{ asset.description }}
           </p>
-          <button class="btn btn-primary" style="margin-right: 5px;">
+          <button (click)="navigateToAssessment(asset.id)" class="btn btn-primary" style="margin-right: 5px;">
             View
           </button>
           <button class="btn btn-secondary" style="margin-right: 5px;">
@@ -18,7 +18,7 @@
     </div>
   </div>
   <br />
-  <button (click)="createOrg()" type="button" class="btn btn-primary float-right">
+  <button (click)="createAsset()" type="button" class="btn btn-primary float-right">
     Add Asset
   </button>
 </div>
