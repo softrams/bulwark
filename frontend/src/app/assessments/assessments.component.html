@@ -1,20 +1,25 @@
-<table class="table" *ngIf="activatedRoute.snapshot.params.id">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Assessment Name</th>
-      <th scope="col">Description</th>
-      <th scope="col">View</th>
-      <th scope="col">Delete</th>
-    </tr>
-  </thead>
-  <tbody *ngFor="let assessment of assessmentAry">
-    <tr>
-    <th scope="row">{{ assessment.id }} </th>
-    <td>{{ assessment.name }}</td>
-    <td>{{ assessment.description }}</td>
-    <td><a href="#" class="btn btn-primary">View</a></td>
-    <td><a href="#" class="btn btn-primary">Delete</a></td>
-    </tr>
-  </tbody>
-</table>
+<div class="container-fluid">
+  <table class="table" *ngIf="activatedRoute.snapshot.params.id">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Assessment Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">View</th>
+        <th scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let assessment of assessmentAry">
+      <tr>
+        <th scope="row">{{ assessment.id }}</th>
+        <td>{{ assessment.name }}</td>
+        <td>{{ assessment.description }}</td>
+        <td><a href="#" class="btn btn-primary">View</a></td>
+        <td><a href="#" class="btn btn-primary">Delete</a></td>
+      </tr>
+    </tbody>
+  </table>
+  <button type="button" class="btn btn-primary float-right">
+    Create Assessment
+  </button>
+</div>

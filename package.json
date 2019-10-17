@@ -10,7 +10,7 @@
     "nodemon:watch": "nodemon -e ts --exec \"npm run compile\" ",
     "start:dev": "concurrently --kill-others \"npm run nodemon:watch\" \"npm run ngServe\"",
     "start": "cd dist && node app.js",
-    "postinstall": "cd frontend && ng build --prod"
+    "postinstall": "cd frontend && npm install && ng build --prod"
   },
   "nodemonConfig": {
     "ignore": [

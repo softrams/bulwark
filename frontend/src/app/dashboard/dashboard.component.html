@@ -1,35 +1,24 @@
 <div class="container">
-  <div *ngIf="!activatedRoute.snapshot.params.id">
-    <div class="row card-group">
-      <div class="col-3" *ngFor="let org of orgAry">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">{{ org.name }}</h5>
-            <p class="card-text">
-              {{ org.description }}
-            </p>
-            <a (click)="navigateToAsset(org.id)" class="btn btn-primary"
-              >Select</a
-            >
-          </div>
+  <div class="row card-group">
+    <div class="col-3" *ngFor="let org of orgAry">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ org.name }}</h5>
+          <p class="card-text">
+            {{ org.description }}
+          </p>
+          <button (click)="navigateToAsset(org.id)" class="btn btn-primary" style="margin-right: 5px;">
+            View
+          </button>
+          <button (click)="navigateToAsset(org.id)" class="btn btn-secondary" style="margin-right: 5px;">
+            Edit
+          </button>
         </div>
       </div>
     </div>
   </div>
-
-  <div *ngIf="activatedRoute.snapshot.params.id">
-    <div class="row card-group">
-      <div class="col-3" *ngFor="let asset of assetAry">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">{{ asset.name }}</h5>
-            <p class="card-text">
-              {{ asset.description }}
-            </p>
-            <a (click)="navigateToAssessment(asset.id)" class="btn btn-primary">Select</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <br />
+  <button (click)="createOrg()" type="button" class="btn btn-primary float-right">
+    Add Organization
+  </button>
 </div>
