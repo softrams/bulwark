@@ -6,6 +6,7 @@ import { AssessmentsComponent } from '../app/assessments/assessments.component';
 
 import { AppService } from '../app/app.service';
 import { OrganizationComponent } from './organization/organization.component';
+import { VulnerabilityComponent } from './vulnerability/vulnerability.component';
 
 @Injectable()
 export class AssetResolver implements Resolve<any> {
@@ -22,6 +23,15 @@ export class AssessmentResolver implements Resolve<any> {
 
   resolve(route: ActivatedRouteSnapshot) {
     return this.apiService.getAssessments(route.params.id);
+  }
+}
+
+@Injectable()
+export class VulnerabilityResolver implements Resolve<any> {
+  constructor(private apiService: AppService) {}
+
+  resolve(route: ActivatedRouteSnapshot) {
+    return this.apiService.getVulnerabilities(route.params.id);
   }
 }
 
@@ -48,12 +58,17 @@ const routes: Routes = [
     path: 'organization/:id',
     component: OrganizationComponent,
     resolve: { assets: AssetResolver }
+  },
+  {
+    path: 'vulnerabilities/:id',
+    component: VulnerabilityComponent,
+    resolve: { vulnerabilities: VulnerabilityResolver }
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [AssetResolver, AssessmentResolver]
+  providers: [AssetResolver, AssessmentResolver, VulnerabilityResolver]
 })
 export class AppRoutingModule {}

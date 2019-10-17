@@ -18,7 +18,7 @@ export class OrganizationComponent implements OnInit {
   navigateToAssessment(id: number) {
     this.router.navigate([`assessment/${id}`]);
   }
-
+  
   createAsset() {
     // placeholder
   }

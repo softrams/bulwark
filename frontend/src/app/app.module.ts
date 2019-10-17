@@ -10,9 +10,10 @@ import { AppService } from './app.service';
 import { HttpClientModule } from '@angular/common/http';
 import { AssessmentsComponent } from './assessments/assessments.component';
 import { OrganizationComponent } from './organization/organization.component';
+import { VulnerabilityComponent } from './vulnerability/vulnerability.component';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, DashboardComponent, OrganizationComponent, AssessmentsComponent],
+  declarations: [AppComponent, NavbarComponent, DashboardComponent, OrganizationComponent, AssessmentsComponent, VulnerabilityComponent],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [AppService],
   bootstrap: [AppComponent]

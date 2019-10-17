@@ -14,7 +14,7 @@
         <th scope="row">{{ assessment.id }}</th>
         <td>{{ assessment.name }}</td>
         <td>{{ assessment.description }}</td>
-        <td><a href="#" class="btn btn-primary">View</a></td>
+        <td><a (click)="navigateToVulnerability(assessment.id)" class="btn btn-primary">View</a></td>
         <td><a href="#" class="btn btn-primary">Delete</a></td>
       </tr>
     </tbody>
