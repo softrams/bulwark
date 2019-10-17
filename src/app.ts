@@ -6,6 +6,7 @@ import { createConnection } from 'typeorm';
 import { Organization } from './entity/Organization';
 import { Asset } from './entity/Asset';
 import { Assessment } from './entity/Assessment';
+import { Vulnerability } from './entity/Vulnerability';
 
 const cors = require('cors');
 
@@ -33,6 +34,7 @@ createConnection().then(connection => {
   const orgRepository = connection.getRepository(Organization);
   const assetRepository = connection.getRepository(Asset);
   const assessmentRepository = connection.getRepository(Assessment);
+  const vulnerabilityRepository = connection.getRepository(Vulnerability);
 
   app.get('/api/organization', async function(req: Request, res: Response) {
     const orgs = await orgRepository.find();
@@ -57,5 +59,15 @@ createConnection().then(connection => {
       where: { asset: req.params.id }
     });
     res.json(assessment);
+  });
+
+  app.get('/api/vulnerabilities/:id', async function(
+    req: Request,
+    res: Response
+  ) {
+    const vulnerabilities = await vulnerabilityRepository.find({
+      where: { vulnerability: req.params.id }
+    });
+    res.json(vulnerabilities);
   });  
 });

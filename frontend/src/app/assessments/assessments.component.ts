@@ -16,4 +16,9 @@ export class AssessmentsComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ assessments }) => (this.assessmentAry = assessments));
   }
+
+  navigateToVulnerability(id: number) {
+    this.router.navigate([`vulnerabilities/${id}`]);
+  }
+
 }
