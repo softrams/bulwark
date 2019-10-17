@@ -6,11 +6,13 @@ import { createConnection } from 'typeorm';
 import { Organization } from './entity/Organization';
 import { Asset } from './entity/Asset';
 import { Assessment } from './entity/Assessment';
+const puppeteer = require('puppeteer');
+const fs = require('fs');
 
 const cors = require('cors');
 
 // create typeorm connection
-createConnection().then(connection => {
+createConnection().then((connection) => {
   const app = express();
   app.use(cors());
   app.use(
@@ -26,9 +28,7 @@ createConnection().then(connection => {
   var server_ip_address = process.env.IP || '127.0.0.1';
   app.set('port', server_port);
   app.set('server_ip_address', server_ip_address);
-  app.listen(server_port, () =>
-    console.log(`Server running on ${server_ip_address}:${server_port}`)
-  );
+  app.listen(server_port, () => console.log(`Server running on ${server_ip_address}:${server_port}`));
   // register routes
   const orgRepository = connection.getRepository(Organization);
   const assetRepository = connection.getRepository(Asset);
@@ -39,23 +39,39 @@ createConnection().then(connection => {
     res.json(orgs);
   });
 
-  app.get('/api/organization/asset/:id', async function(
-    req: Request,
-    res: Response
-  ) {
+  app.get('/api/organization/asset/:id', async function(req: Request, res: Response) {
     const asset = await assetRepository.find({
       where: { organization: req.params.id }
     });
     res.json(asset);
   });
 
-  app.get('/api/assessment/:id', async function(
-    req: Request,
-    res: Response
-  ) {
+  app.get('/api/assessment/:id', async function(req: Request, res: Response) {
     const assessment = await assessmentRepository.find({
       where: { asset: req.params.id }
     });
     res.json(assessment);
-  });  
+  });
+  // puppeteer generate
+  app.get('/api/report/generate', async (req: Request, res: Response) => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    const filePath = path.join(__dirname, '../temp_report.pdf');
+    await page.goto('', { waitUntil: 'networkidle2' });
+    await page.pdf({ path: path.join(__dirname, '../temp_report.pdf'), format: 'A4' });
+    await browser.close();
+    var file = fs.createReadStream(filePath);
+    var stat = fs.statSync(filePath);
+    res.setHeader('Content-Length', stat.size);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=report.pdf');
+    file.pipe(res);
+    fs.unlink(filePath, (err, res) => {
+      if (err) {
+        // handle error here
+      } else {
+        console.info('File removed');
+      }
+    });
+  });
 });
