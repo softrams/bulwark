@@ -24,11 +24,20 @@ export class AppService {
       .then(res => {
         return res;
       });
-    }
+  }
 
   getAssessments(id: number) {
     return this.http
       .get(`${this.api}/assessment/${id}`)
+      .toPromise()
+      .then(res => {
+        return res;
+      });
+  }
+
+  getVulnerabilities(id: number) {
+    return this.http
+      .get(`${this.api}/vulnerabilities/${id}`)
       .toPromise()
       .then(res => {
         return res;
