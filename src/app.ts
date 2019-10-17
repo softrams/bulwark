@@ -6,12 +6,9 @@ import { createConnection } from 'typeorm';
 import { Organization } from './entity/Organization';
 import { Asset } from './entity/Asset';
 import { Assessment } from './entity/Assessment';
-<<<<<<< HEAD
+import { Vulnerability } from './entity/Vulnerability';
 const puppeteer = require('puppeteer');
 const fs = require('fs');
-=======
-import { Vulnerability } from './entity/Vulnerability';
->>>>>>> 6cae61e3c500fb745849649006de1af58938a807
 
 const cors = require('cors');
 
@@ -58,36 +55,33 @@ createConnection().then((connection) => {
     res.json(assessment);
   });
 
-  app.get('/api/vulnerabilities/:id', async function(
-    req: Request,
-    res: Response
-  ) {
+  app.get('/api/vulnerabilities/:id', async function(req: Request, res: Response) {
     const vulnerabilities = await vulnerabilityRepository.find({
       where: { vulnerability: req.params.id }
     });
     res.json(vulnerabilities);
-  });  
+  });
 
-    // puppeteer generate
-    app.get('/api/report/generate', async (req: Request, res: Response) => {
-      const browser = await puppeteer.launch();
-      const page = await browser.newPage();
-      const filePath = path.join(__dirname, '../temp_report.pdf');
-      await page.goto('', { waitUntil: 'networkidle2' });
-      await page.pdf({ path: filePath, format: 'A4' });
-      await browser.close();
-      const file = fs.createReadStream(filePath);
-      const stat = fs.statSync(filePath);
-      res.setHeader('Content-Length', stat.size);
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', 'attachment; filename=report.pdf');
-      file.pipe(res);
-      fs.unlink(filePath, (err, res) => {
-        if (err) {
-          // handle error here
-        } else {
-          console.info('File removed');
-        }
-      });
+  // puppeteer generate
+  app.get('/api/report/generate', async (req: Request, res: Response) => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    const filePath = path.join(__dirname, '../temp_report.pdf');
+    await page.goto('', { waitUntil: 'networkidle2' });
+    await page.pdf({ path: filePath, format: 'A4' });
+    await browser.close();
+    const file = fs.createReadStream(filePath);
+    const stat = fs.statSync(filePath);
+    res.setHeader('Content-Length', stat.size);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=report.pdf');
+    file.pipe(res);
+    fs.unlink(filePath, (err, res) => {
+      if (err) {
+        // handle error here
+      } else {
+        console.info('File removed');
+      }
     });
+  });
 });
