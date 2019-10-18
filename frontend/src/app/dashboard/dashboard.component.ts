@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
     this.router.navigate([`organization/${id}`]);
   }
 
-  createOrg() {
-    // Possibly open modal to create new Organization
+  navigateToCreate() {
+    this.router.navigate([`organization-form`]);
   }
 }

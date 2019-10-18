@@ -8,6 +8,8 @@ import { Asset } from './entity/Asset';
 import { Assessment } from './entity/Assessment';
 import { Vulnerability } from './entity/Vulnerability';
 const puppeteer = require('puppeteer');
+const multer = require('multer');
+var upload = multer();
 const fs = require('fs');
 
 const cors = require('cors');
@@ -39,6 +41,10 @@ createConnection().then((connection) => {
   app.get('/api/organization', async function(req: Request, res: Response) {
     const orgs = await orgRepository.find();
     res.json(orgs);
+  });
+
+  app.post('/api/organization/upload', upload.single('orgAvatar'), async (req: Request, res: Response) => {
+    console.log(req['file']);
   });
 
   app.get('/api/organization/asset/:id', async function(req: Request, res: Response) {

@@ -7,6 +7,7 @@ import { AssessmentsComponent } from '../app/assessments/assessments.component';
 import { AppService } from '../app/app.service';
 import { OrganizationComponent } from './organization/organization.component';
 import { VulnerabilityComponent } from './vulnerability/vulnerability.component';
+import { OrgFormComponent } from './org-form/org-form.component';
 
 @Injectable()
 export class AssetResolver implements Resolve<any> {
@@ -63,6 +64,10 @@ const routes: Routes = [
     path: 'vulnerabilities/:id',
     component: VulnerabilityComponent,
     resolve: { vulnerabilities: VulnerabilityResolver }
+  },
+  {
+    path: 'organization-form',
+    component: OrgFormComponent
   }
 ];
 
