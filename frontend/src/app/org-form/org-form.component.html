@@ -1,4 +1,12 @@
 <div class="container">
+  <img
+    *ngIf="avatar"
+    [src]="getSantizeUrl(avatar)"
+    alt="avatar"
+    class="img-thumbnail"
+    style="height: 200px; width: 200px;"
+  />
+
   <form [formGroup]="orgForm" (ngSubmit)="onSubmit(orgForm)">
     <div class="form-group">
       <label for="formGroupExampleInput">Organization Name</label>
@@ -14,6 +22,6 @@
         (change)="handleFileInput($event.target.files)"
       />
     </div>
-    <button class="btn btn-primary float-right" type="submit">Submit</button>
+    <button [disabled]="!orgForm.valid" class="btn btn-primary float-right" type="submit">Submit</button>
   </form>
 </div>

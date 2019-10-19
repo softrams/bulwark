@@ -36,4 +36,8 @@ export class DashboardComponent implements OnInit {
   navigateToCreate() {
     this.router.navigate([`organization-form`]);
   }
+
+  navigateToOrganization(id: number) {
+    this.router.navigate([`organization-form/${id}`]);
+  }
 }

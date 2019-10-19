@@ -2,7 +2,8 @@ import { Component, OnInit, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Organization } from './Organization';
 import { AppService } from '../app.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-org-form',
@@ -13,18 +14,38 @@ export class OrgFormComponent implements OnInit, OnChanges {
   public orgModel: Organization;
   orgForm: FormGroup;
   fileToUpload: File = null;
-
-  constructor(private fb: FormBuilder, public appService: AppService, public route: Router) {
+  avatar: any;
+  orgId: number;
+  constructor(
+    private fb: FormBuilder,
+    public appService: AppService,
+    public route: Router,
+    public activatedRoute: ActivatedRoute,
+    private sanitizer: DomSanitizer
+  ) {
     this.createForm();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.activatedRoute.data.subscribe(({ organization }) => {
+      this.orgModel = organization;
+      this.appService.getAvatarById(this.orgModel['avatarData']).then((res) => {
+        this.avatar = res;
+      });
+    });
+    this.activatedRoute.params.subscribe((params) => {
+      this.orgId = params['id'];
+    });
+    this.rebuildForm();
+  }
 
-  ngOnChanges() {}
+  ngOnChanges() {
+    this.rebuildForm();
+  }
 
   createForm() {
     this.orgForm = this.fb.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.maxLength(50)]],
       avatar: ['']
     });
   }
@@ -40,32 +61,59 @@ export class OrgFormComponent implements OnInit, OnChanges {
     this.fileToUpload = files.item(0);
   }
 
+  public getSantizeUrl(url: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(url);
+  }
+
   onSubmit(contact: FormGroup) {
     this.orgModel = contact.value;
-    this.appService.upload(this.fileToUpload).subscribe(
-      (fileId) => {
-        this.orgModel.avatar = +fileId;
-        this.appService.createOrg(this.orgModel).subscribe(
-          (success) => {
-            this.route.navigate(['dashboard']);
-            // TODO:  Alert messages
-            // this.alertMessage = 'Thank you for your submission!  We will get back to you ASAP!';
-            // this.alertType = 'success';
-            // this.submitted = true;
-          },
-          (err) => {
-            // this.alertMessage = 'Something went wrong!  Please try again later.';
-            // this.alertType = 'danger';
-            // this.submitted = true;
-          }
-        );
-      },
-      (error) => {
-        // this.alertMessage = 'Something went wrong!  Please try again later.';
-        // this.alertType = 'danger';
-        // this.submitted = true;
-      }
-    );
+    if (this.fileToUpload) {
+      this.appService.upload(this.fileToUpload).subscribe(
+        (fileId) => {
+          this.orgModel.avatar = +fileId;
+          this.createOrUpdateOrg(this.orgModel);
+        },
+        (error) => {
+          // TODO: Handle file upload error
+        }
+      );
+    } else {
+      this.createOrUpdateOrg(this.orgModel);
+    }
     this.orgForm.reset();
+  }
+
+  createOrUpdateOrg(org: Organization) {
+    if (this.orgId) {
+      this.appService.updateOrg(this.orgId, org).subscribe(
+        (success) => {
+          this.route.navigate(['dashboard']);
+          // TODO:  Alert messages
+          // this.alertMessage = 'Thank you for your submission!  We will get back to you ASAP!';
+          // this.alertType = 'success';
+          // this.submitted = true;
+        },
+        (err) => {
+          // this.alertMessage = 'Something went wrong!  Please try again later.';
+          // this.alertType = 'danger';
+          // this.submitted = true;
+        }
+      );
+    } else {
+      this.appService.createOrg(org).subscribe(
+        (success) => {
+          this.route.navigate(['dashboard']);
+          // TODO:  Alert messages
+          // this.alertMessage = 'Thank you for your submission!  We will get back to you ASAP!';
+          // this.alertType = 'success';
+          // this.submitted = true;
+        },
+        (err) => {
+          // this.alertMessage = 'Something went wrong!  Please try again later.';
+          // this.alertType = 'danger';
+          // this.submitted = true;
+        }
+      );
+    }
   }
 }

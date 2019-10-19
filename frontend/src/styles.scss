@@ -13,6 +13,12 @@
 
 .btn-primary:active {
   color: #fff;
-  background-color: #ae0a0a !important;
+  background-color: #910a0a !important;
+  border-color: #ae0a0a;
+}
+
+.btn-primary:disabled {
+  color: #fff;
+  background-color: #ae0a0a;
   border-color: #ae0a0a;
 }

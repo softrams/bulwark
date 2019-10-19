@@ -52,6 +52,31 @@ export class AppService {
       });
   }
 
+  getAvatarById(file: any) {
+    const httpOptions = {
+      responseType: 'blob' as 'json'
+    };
+    return this.http
+      .get(`${this.api}/organization/file/${file.id}`, httpOptions)
+      .toPromise()
+      .then((res: Blob) => {
+        const blob = new Blob([res], {
+          type: file.mimetype
+        });
+        const url = window.URL.createObjectURL(blob);
+        return url;
+      });
+  }
+
+  getOrganizationById(id: number) {
+    return this.http
+      .get(`${this.api}/organization/${id}`)
+      .toPromise()
+      .then((res) => {
+        return res;
+      });
+  }
+
   getOrganizationAssets(id: number) {
     return this.http
       .get(`${this.api}/organization/asset/${id}`)
@@ -81,6 +106,10 @@ export class AppService {
 
   createOrg(org: Organization) {
     return this.http.post(`${this.api}/organization`, org);
+  }
+
+  updateOrg(id: number, org: Organization) {
+    return this.http.patch(`${this.api}/organization/${id}`, org);
   }
 
   upload(fileToUpload: File) {
