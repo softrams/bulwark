@@ -26,7 +26,6 @@ export class DashboardComponent implements OnInit {
   }
 
   public getSantizeUrl(url: string) {
-    console.log('here', url);
     return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 
