@@ -7,6 +7,7 @@ import { AssessmentsComponent } from '../app/assessments/assessments.component';
 import { AppService } from '../app/app.service';
 import { OrganizationComponent } from './organization/organization.component';
 import { VulnerabilityComponent } from './vulnerability/vulnerability.component';
+import { OrgFormComponent } from './org-form/org-form.component';
 
 @Injectable()
 export class AssetResolver implements Resolve<any> {
@@ -35,6 +36,15 @@ export class VulnerabilityResolver implements Resolve<any> {
   }
 }
 
+@Injectable()
+export class OrganizationResolver implements Resolve<any> {
+  constructor(private apiService: AppService) {}
+
+  resolve(route: ActivatedRouteSnapshot) {
+    return this.apiService.getOrganizationById(route.params.id);
+  }
+}
+
 const routes: Routes = [
   {
     path: '',
@@ -43,10 +53,6 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: DashboardComponent
-  },
-  {
-    path: 'dashboard/organization/:id',
     component: DashboardComponent
   },
   {
@@ -63,12 +69,21 @@ const routes: Routes = [
     path: 'vulnerabilities/:id',
     component: VulnerabilityComponent,
     resolve: { vulnerabilities: VulnerabilityResolver }
+  },
+  {
+    path: 'organization-form',
+    component: OrgFormComponent
+  },
+  {
+    path: 'organization-form/:id',
+    component: OrgFormComponent,
+    resolve: { organization: OrganizationResolver }
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [AssetResolver, AssessmentResolver, VulnerabilityResolver]
+  providers: [AssetResolver, AssessmentResolver, VulnerabilityResolver, OrganizationResolver]
 })
 export class AppRoutingModule {}

@@ -1,7 +1,8 @@
 <div class="container">
   <div class="row card-group">
     <div class="col-3" *ngFor="let org of orgAry">
-      <div class="card">
+      <div class="card" style="margin-top: 10px;">
+        <img *ngIf="org.imgUrl" class="card-img-top" [src]="getSantizeUrl(org.imgUrl)" alt="Card image cap" />
         <div class="card-body">
           <h5 class="card-title">{{ org.name }}</h5>
           <p class="card-text">
@@ -10,7 +11,7 @@
           <button (click)="navigateToAsset(org.id)" class="btn btn-primary" style="margin-right: 5px;">
             View
           </button>
-          <button (click)="navigateToAsset(org.id)" class="btn btn-secondary" style="margin-right: 5px;">
+          <button (click)="navigateToOrganization(org.id)" class="btn btn-secondary" style="margin-right: 5px;">
             Edit
           </button>
         </div>
@@ -18,7 +19,7 @@
     </div>
   </div>
   <br />
-  <button (click)="createOrg()" type="button" class="btn btn-primary float-right">
+  <button (click)="navigateToCreate()" type="button" class="btn btn-primary float-right">
     Add Organization
   </button>
 </div>
