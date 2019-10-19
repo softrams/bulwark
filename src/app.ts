@@ -7,6 +7,7 @@ import { Organization } from './entity/Organization';
 import { Asset } from './entity/Asset';
 import { Assessment } from './entity/Assessment';
 import { Vulnerability } from './entity/Vulnerability';
+import { File } from './entity/File';
 const puppeteer = require('puppeteer');
 const multer = require('multer');
 var upload = multer();
@@ -37,14 +38,39 @@ createConnection().then((connection) => {
   const assetRepository = connection.getRepository(Asset);
   const assessmentRepository = connection.getRepository(Assessment);
   const vulnerabilityRepository = connection.getRepository(Vulnerability);
+  const fileRepository = connection.getRepository(File);
+
+  app.post('/api/upload', upload.single('file'), async (req: Request, res: Response) => {
+    // TODO Virus scanning, file type validation, etc
+    let file = new File();
+    file.fieldName = req['file'].fieldname;
+    file.originalName = req['file'].originalname;
+    file.encoding = req['file'].encoding;
+    file.mimetype = req['file'].mimetype;
+    file.buffer = req['file'].buffer;
+    file.size = req['file'].size;
+    const newFile = await fileRepository.save(file);
+    res.json(newFile.id);
+  });
 
   app.get('/api/organization', async function(req: Request, res: Response) {
-    const orgs = await orgRepository.find();
+    const orgs = await orgRepository.find({ relations: ['avatar'] });
     res.json(orgs);
   });
 
-  app.post('/api/organization/upload', upload.single('orgAvatar'), async (req: Request, res: Response) => {
-    console.log(req['file']);
+  app.post('/api/organization', async (req: Request, res: Response) => {
+    let org = new Organization();
+    org.name = req.body.name;
+    org.avatar = req.body.avatar;
+    const newOrg = await orgRepository.save(org);
+    res.send(newOrg);
+  });
+
+  app.get('/api/organization/file/:id', async function(req: Request, res: Response) {
+    const file = await fileRepository.findOne({
+      where: { id: req.params.id }
+    });
+    res.send(file.buffer);
   });
 
   app.get('/api/organization/asset/:id', async function(req: Request, res: Response) {

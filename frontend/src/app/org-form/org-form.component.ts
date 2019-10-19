@@ -2,6 +2,7 @@ import { Component, OnInit, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Organization } from './Organization';
 import { AppService } from '../app.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-org-form',
@@ -13,7 +14,7 @@ export class OrgFormComponent implements OnInit, OnChanges {
   orgForm: FormGroup;
   fileToUpload: File = null;
 
-  constructor(private fb: FormBuilder, public appService: AppService) {
+  constructor(private fb: FormBuilder, public appService: AppService, public route: Router) {
     this.createForm();
   }
 
@@ -24,15 +25,14 @@ export class OrgFormComponent implements OnInit, OnChanges {
   createForm() {
     this.orgForm = this.fb.group({
       name: ['', Validators.required],
-      description: ['', Validators.required],
-      file: ['']
+      avatar: ['']
     });
   }
 
   rebuildForm() {
     this.orgForm.reset({
       name: this.orgModel.name,
-      description: this.orgModel.description
+      avatar: this.orgModel.avatar
     });
   }
 
@@ -42,12 +42,23 @@ export class OrgFormComponent implements OnInit, OnChanges {
 
   onSubmit(contact: FormGroup) {
     this.orgModel = contact.value;
-    //this.orgModel.file = fd;
-    this.appService.uploadOrgImage(this.fileToUpload).subscribe(
-      (success) => {
-        // this.alertMessage = 'Thank you for your submission!  We will get back to you ASAP!';
-        // this.alertType = 'success';
-        // this.submitted = true;
+    this.appService.upload(this.fileToUpload).subscribe(
+      (fileId) => {
+        this.orgModel.avatar = +fileId;
+        this.appService.createOrg(this.orgModel).subscribe(
+          (success) => {
+            this.route.navigate(['dashboard']);
+            // TODO:  Alert messages
+            // this.alertMessage = 'Thank you for your submission!  We will get back to you ASAP!';
+            // this.alertType = 'success';
+            // this.submitted = true;
+          },
+          (err) => {
+            // this.alertMessage = 'Something went wrong!  Please try again later.';
+            // this.alertType = 'danger';
+            // this.submitted = true;
+          }
+        );
       },
       (error) => {
         // this.alertMessage = 'Something went wrong!  Please try again later.';

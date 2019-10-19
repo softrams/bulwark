@@ -1,3 +1,3 @@
 export class Organization {
-  constructor(public name: string, public description: string, public file: File) {}
+  constructor(public name: string, public avatar: number) {}
 }

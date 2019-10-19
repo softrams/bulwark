@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { File } from './File';
 
 @Entity()
 export class Organization {
@@ -6,6 +7,7 @@ export class Organization {
   id: number;
   @Column()
   name: string;
-  @Column()
-  description: string;
+  @OneToOne((type) => File)
+  @JoinColumn()
+  avatar: number;
 }

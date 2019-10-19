@@ -9,12 +9,46 @@ export class AppService {
   constructor(private http: HttpClient) {}
   api = 'http://localhost:5000/api';
 
+  // TODO:  Delete this monstrosity that I have created
+  //       Please forgive me coding gods!
+  //       We need to find a better solution than to individually
+  //       query for each image.  This will not work well with reports!
   getOrganizations() {
+    const httpOptions = {
+      responseType: 'blob' as 'json'
+    };
     return this.http
       .get(`${this.api}/organization`)
       .toPromise()
-      .then((res) => {
-        return res;
+      .then(async (res) => {
+        const orgs: any = res;
+        let count = 0;
+        for (let i = 0; i < orgs.length; i++) {
+          if (orgs[i].avatar && orgs[i].avatar.buffer) {
+            await this.http
+              .get(`${this.api}/organization/file/${orgs[i].avatar.id}`, httpOptions)
+              .toPromise()
+              .then(async (res: Blob) => {
+                const blob = new Blob([res], {
+                  type: orgs[i].avatar.mimetype
+                });
+                const url = window.URL.createObjectURL(blob);
+                orgs[i].imgUrl = url;
+                count++;
+              })
+              .catch((err) => {
+                this.handleError(err);
+              });
+          } else {
+            count++;
+          }
+        }
+        if (count === orgs.length) {
+          return orgs;
+        }
+      })
+      .catch((err) => {
+        this.handleError(err);
       });
   }
 
@@ -45,14 +79,14 @@ export class AppService {
       });
   }
 
-  submitOrgForm(orgForm: any) {
-    return this.http.post(`${this.api}/organization`, orgForm);
+  createOrg(org: Organization) {
+    return this.http.post(`${this.api}/organization`, org);
   }
 
-  uploadOrgImage(fileToUpload: File) {
+  upload(fileToUpload: File) {
     const formData: FormData = new FormData();
-    formData.append('orgAvatar', fileToUpload);
-    return this.http.post(`${this.api}/organization/upload`, formData);
+    formData.append('file', fileToUpload);
+    return this.http.post(`${this.api}/upload`, formData);
   }
 
   private handleError(error: HttpErrorResponse) {
