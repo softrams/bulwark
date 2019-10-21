@@ -15,6 +15,7 @@ import { VulnerabilityComponent } from './vulnerability/vulnerability.component'
 import { VulnFormComponent } from './vuln-form/vuln-form.component';
 import { OrgFormComponent } from './org-form/org-form.component';
 import { AssetFormComponent } from './asset-form/asset-form.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { AssetFormComponent } from './asset-form/asset-form.component';
     VulnerabilityComponent,
     OrgFormComponent,
     AssetFormComponent,
-    VulnFormComponent
+    VulnFormComponent,
+    FooterComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule],
   providers: [AppService],

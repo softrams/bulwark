@@ -29,9 +29,11 @@ export class OrgFormComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ organization }) => {
       this.orgModel = organization;
-      this.appService.getAvatarById(this.orgModel['avatarData']).then((res) => {
-        this.avatar = res;
-      });
+      if (this.orgModel['avatarData']) {
+        this.appService.getAvatarById(this.orgModel['avatarData']).then((res) => {
+          this.avatar = res;
+        });
+      }
     });
     this.activatedRoute.params.subscribe((params) => {
       this.orgId = params['id'];
@@ -88,31 +90,15 @@ export class OrgFormComponent implements OnInit, OnChanges {
       this.appService.updateOrg(this.orgId, org).subscribe(
         (success) => {
           this.route.navigate(['dashboard']);
-          // TODO:  Alert messages
-          // this.alertMessage = 'Thank you for your submission!  We will get back to you ASAP!';
-          // this.alertType = 'success';
-          // this.submitted = true;
         },
-        (err) => {
-          // this.alertMessage = 'Something went wrong!  Please try again later.';
-          // this.alertType = 'danger';
-          // this.submitted = true;
-        }
+        (err) => {}
       );
     } else {
       this.appService.createOrg(org).subscribe(
         (success) => {
           this.route.navigate(['dashboard']);
-          // TODO:  Alert messages
-          // this.alertMessage = 'Thank you for your submission!  We will get back to you ASAP!';
-          // this.alertType = 'success';
-          // this.submitted = true;
         },
-        (err) => {
-          // this.alertMessage = 'Something went wrong!  Please try again later.';
-          // this.alertType = 'danger';
-          // this.submitted = true;
-        }
+        (err) => {}
       );
     }
   }

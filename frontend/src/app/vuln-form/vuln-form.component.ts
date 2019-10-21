@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AppService } from '../app.service';
-import { VulnFormEvent } from '../vuln-form-event';
+import { VulnFormEvent } from './vuln-form-event';
 
 @Component({
   selector: 'app-vuln-form',
@@ -14,12 +14,16 @@ export class VulnFormComponent implements OnChanges, OnInit {
   vulnEventFormModel: VulnFormEvent;
   vulnEventForm: FormGroup;
   submitted = false;
-  alertType: String;
-  alertMessage: String;
+  alertType: string;
+  alertMessage: string;
 
-  constructor(private appService: AppService, public activatedRoute: ActivatedRoute,
-              public router: Router, private fb: FormBuilder) {
-  this.createForm();
+  constructor(
+    private appService: AppService,
+    public activatedRoute: ActivatedRoute,
+    public router: Router,
+    private fb: FormBuilder
+  ) {
+    this.createForm();
   }
 
   ngOnInit() {
@@ -33,9 +37,9 @@ export class VulnFormComponent implements OnChanges, OnInit {
   createForm() {
     this.vulnEventForm = this.fb.group({
       impact: ['', Validators.required],
-      likelihood: ['', [ Validators.required ]],
-      risk: ['', [ Validators.required]],
-      systemic: ['', [ Validators.required]],
+      likelihood: ['', [Validators.required]],
+      risk: ['', [Validators.required]],
+      systemic: ['', [Validators.required]],
       status: ['', Validators.required],
       description: ['', Validators.required],
       remediation: ['', Validators.required],
@@ -47,7 +51,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
       detailedInfo: ['', Validators.required]
     });
   }
-
 
   rebuildForm() {
     this.vulnEventForm.reset({
@@ -63,12 +66,11 @@ export class VulnFormComponent implements OnChanges, OnInit {
       jiraId: this.vulnEventFormModel.jiraId,
       cvssScore: this.vulnEventFormModel.cvssScore,
       cvssUrl: this.vulnEventFormModel.cvssUrl,
-      detailedInf: this.vulnEventFormModel.detailedInfo,
+      detailedInf: this.vulnEventFormModel.detailedInfo
     });
   }
 
   onSubmit(contact: FormGroup) {
     // Do stuff
   }
-
 }

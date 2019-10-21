@@ -68,7 +68,7 @@ const routes: Routes = [
     resolve: { assets: AssetResolver }
   },
   {
-    path: 'vulnerabilities/:id',
+    path: 'vulnerability/:id',
     component: VulnerabilityComponent,
     resolve: { vulnerabilities: VulnerabilityResolver }
   },
@@ -86,7 +86,7 @@ const routes: Routes = [
     resolve: { organization: OrganizationResolver }
   },
   {
-    path: 'asset-form',
+    path: 'organization/:id/asset-form',
     component: AssetFormComponent
   }
 ];

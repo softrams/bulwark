@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Organization } from './org-form/Organization';
+import { Asset } from './asset-form/Asset';
 
 @Injectable({
   providedIn: 'root'
@@ -97,7 +98,7 @@ export class AppService {
 
   getVulnerabilities(id: number) {
     return this.http
-      .get(`${this.api}/vulnerabilities/${id}`)
+      .get(`${this.api}/vulnerability/${id}`)
       .toPromise()
       .then((res) => {
         return res;
@@ -110,6 +111,10 @@ export class AppService {
 
   updateOrg(id: number, org: Organization) {
     return this.http.patch(`${this.api}/organization/${id}`, org);
+  }
+
+  createAsset(asset: Asset) {
+    return this.http.post(`${this.api}/organization/${asset.organization}/asset`, asset);
   }
 
   upload(fileToUpload: File) {
