@@ -13,6 +13,7 @@ import { AssessmentsComponent } from './assessments/assessments.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { VulnerabilityComponent } from './vulnerability/vulnerability.component';
 import { OrgFormComponent } from './org-form/org-form.component';
+import { AssetFormComponent } from './asset-form/asset-form.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { OrgFormComponent } from './org-form/org-form.component';
     OrganizationComponent,
     AssessmentsComponent,
     VulnerabilityComponent,
-    OrgFormComponent
+    OrgFormComponent,
+    AssetFormComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule],
   providers: [AppService],
