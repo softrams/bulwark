@@ -7,6 +7,7 @@ import { AssessmentsComponent } from '../app/assessments/assessments.component';
 import { AppService } from '../app/app.service';
 import { OrganizationComponent } from './organization/organization.component';
 import { VulnerabilityComponent } from './vulnerability/vulnerability.component';
+import { VulnFormComponent } from './vuln-form/vuln-form.component';
 import { OrgFormComponent } from './org-form/org-form.component';
 
 @Injectable()
@@ -71,6 +72,10 @@ const routes: Routes = [
     resolve: { vulnerabilities: VulnerabilityResolver }
   },
   {
+    path: 'vulnform',
+    component: VulnFormComponent
+  },
+  {
     path: 'organization-form',
     component: OrgFormComponent
   },
@@ -84,6 +89,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [AssetResolver, AssessmentResolver, VulnerabilityResolver, OrganizationResolver]
+  providers: [AssetResolver, AssessmentResolver, VulnerabilityResolver, VulnFormComponent, OrganizationResolver]
 })
 export class AppRoutingModule {}

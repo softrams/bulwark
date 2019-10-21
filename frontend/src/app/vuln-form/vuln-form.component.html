@@ -1,0 +1,126 @@
+<div class="container-fluid">
+  <h1>Vulnerability Submission</h1>
+  <hr>
+    <h2>Vulnerability Data</h2>
+    <form [formGroup]='vulnEventForm' name="vulnEventForm" (ngSubmit)="onSubmit(vulnEventForm)">
+      <div class="form-row">
+        <div class="col-4">
+          <label for="name">Vulnerability Name</label>
+          <input formControlName="name" type="text" class="form-control form-control-sm" id="name" placeholder="Vulnerability Name">
+          <div *ngIf="vulnEventForm.controls['name'].errors && !vulnEventForm.controls['name'].pristine"
+            class="alert alert-danger">Vulnerability name is required</div>
+        </div>
+        <div class="col-2">
+          <label for="status">Status</label>
+          <select formControlName="status" class="form-control form-control-sm" id="status">
+              <option>Open</option>
+              <option>Resolved</option>
+              <option>Verification</option>
+              <option>On Hold</option>
+            </select>
+            <div *ngIf="vulnEventForm.controls['name'].errors && !vulnEventForm.controls['name'].pristine"
+              class="alert alert-danger">Vulnerability name is required</div>
+        </div>
+        <div class="form-row">
+            <div class="col-4">
+              <label for="name">Jira #</label>
+              <input formControlName="jiraId" type="text" class="form-control form-control-sm" id="jiraId" placeholder="###-1234">
+              <div *ngIf="vulnEventForm.controls['name'].errors && !vulnEventForm.controls['jiraId'].pristine"
+                class="alert alert-danger">Jira ticket is required</div>
+            </div>
+            <div class="col-3">
+              <label for="systemic">Systemic</label>
+              <select formControlName="systemic" class="form-control form-control-sm" id="systemic">
+                  <option>True</option>
+                  <option>False</option>
+                </select>
+                <div *ngIf="vulnEventForm.controls['systemic'].errors && !vulnEventForm.controls['systemic'].pristine"
+                  class="alert alert-danger">Systemic setting is required</div>
+            </div>
+        </div>        
+          <div class="col-2">
+              <label for="likelihood">Likelihood</label>
+              <select formControlName="likelihood" class="form-control form-control-sm" id="likelihood">
+                <option>Critical</option>
+                <option>High</option>
+                <option>Medium</option>
+                <option>Low</option>
+              </select>
+              <div *ngIf="vulnEventForm.controls['likelihood'].errors && !vulnEventForm.controls['likelihood'].pristine"
+                class="alert alert-danger">Likelihood is not valid</div>
+          </div>
+          <div class="col-2">
+              <label for="impact">Impact</label>
+              <select formControlName="impact" class="form-control form-control-sm" id="impact">
+                <option>Critical</option>
+                <option>High</option>
+                <option>Medium</option>
+                <option>Low</option>
+              </select>
+              <div *ngIf="vulnEventForm.controls['impact'].errors && !vulnEventForm.controls['impact'].pristine"
+                class="alert alert-danger">Impact is not valid</div>
+          </div>
+          <div class="col-2">
+              <label for="risk">Risk</label>
+              <select formControlName="risk" class="form-control form-control-sm" id="risk">
+                <option>Critical</option>
+                <option>High</option>
+                <option>Medium</option>
+                <option>Low</option>
+              </select>
+              <div *ngIf="vulnEventForm.controls['risk'].errors && !vulnEventForm.controls['risk'].pristine"
+                class="alert alert-danger">Risk not valid</div>
+            </div>
+            <div class="col-2">
+                <label for="cvssScore">CVSS Score</label>
+                <input formControlName="cvssScore" type="text" class="form-control form-control-sm" id="cvssScore" placeholder="Vulnerability Name">
+                <div *ngIf="vulnEventForm.controls['cvssScore'].errors && !vulnEventForm.controls['cvssScore'].pristine"
+                  class="alert alert-danger">CVSS Score is not valid</div>
+            </div>            
+      </div>
+      <br />
+      <div class="form-row">
+        <div class="col-2">
+            <label for="cvssUrl">CVSS Score</label>
+            <input formControlName="cvssUrl" type="text" class="form-control form-control-sm" id="cvssUrl" placeholder="Vulnerability Name">
+            <div *ngIf="vulnEventForm.controls['cvssUrl'].errors && !vulnEventForm.controls['cvssUrl'].pristine"
+              class="alert alert-danger">CVSS URL is not valid</div>
+        </div>  
+        <div class="form-group col-md-5">
+          <label for="description">Description</label>
+          <textarea class="form-control" id="description" rows="3"></textarea>
+          <div *ngIf="vulnEventForm.controls['description'].errors && !vulnEventForm.controls['description'].pristine"
+                class="alert alert-danger">Description is not valid</div>
+        </div>
+      </div>
+      <br />
+      <div class="form-row">
+          <div class="form-group col-md-5">
+            <label for="detailedInfo">Issue Detail</label>
+            <textarea class="form-control" id="detailedInfo" rows="3"></textarea>
+            <div *ngIf="vulnEventForm.controls['detailedInfo'].errors && !vulnEventForm.controls['detailedInfo'].pristine"
+                  class="alert alert-danger">Detailed information is not valid</div>
+          </div>
+        </div>
+      <br />
+      <div class="form-row">
+          <div class="form-group col-md-5">
+            <label for="remediation">Remediation</label>
+            <textarea class="form-control" id="remediation" rows="3"></textarea>
+            <div *ngIf="vulnEventForm.controls['remediation'].errors && !vulnEventForm.controls['remediation'].pristine"
+                  class="alert alert-danger">Remediation information is not valid</div>
+          </div>
+        </div>
+      <br />
+      <div class="form-row">
+          <div class="form-group col-md-5">
+            <label for="screenshot">Screenshot Upload</label>
+            <input type="file" class="form-control-file" id="screenshot" rows="3">
+          </div>
+        </div>
+      <br />               
+      <button [disabled]="!vulnEventForm.valid" type="submit"
+        class="btn btn-success">Submit</button>
+    </form>  
+</div>
+
