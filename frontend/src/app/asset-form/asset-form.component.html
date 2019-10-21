@@ -1,0 +1,9 @@
+<div class="container-fluid">
+  <form [formGroup]="assetForm" (ngSubmit)="onSubmit(assetForm)">
+    <div class="form-group">
+      <label for="assetName">Asset Name</label>
+      <input formControlName="name" type="text" class="form-control" id="assetName" />
+    </div>
+    <button [disabled]="!assetForm.valid" class="btn btn-primary float-right" type="submit">Submit</button>
+  </form>
+</div>

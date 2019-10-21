@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AppService } from '../app.service';
+import { Organization } from '../org-form/Organization';
 
 @Component({
   selector: 'app-organization',
@@ -8,19 +10,27 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class OrganizationComponent implements OnInit {
   assetAry: any = [];
-
-  constructor(public activatedRoute: ActivatedRoute, public router: Router) {}
+  orgId: number;
+  org: any;
+  constructor(public activatedRoute: ActivatedRoute, public router: Router, public appService: AppService) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ assets }) => (this.assetAry = assets));
+    this.activatedRoute.params.subscribe((params) => {
+      this.orgId = params['id'];
+      this.appService.getOrganizationById(this.orgId).then((org) => (this.org = org));
+    });
   }
 
   navigateToAssessment(id: number) {
     this.router.navigate([`assessment/${id}`]);
   }
-  
-  createAsset() {
-    // placeholder
+
+  navigateToDashboard() {
+    this.router.navigate([`dashboard`]);
   }
 
+  navigateToCreateAsset() {
+    this.router.navigate([`organization/${this.orgId}/asset-form`]);
+  }
 }

@@ -9,6 +9,7 @@ import { OrganizationComponent } from './organization/organization.component';
 import { VulnerabilityComponent } from './vulnerability/vulnerability.component';
 import { VulnFormComponent } from './vuln-form/vuln-form.component';
 import { OrgFormComponent } from './org-form/org-form.component';
+import { AssetFormComponent } from './asset-form/asset-form.component';
 
 @Injectable()
 export class AssetResolver implements Resolve<any> {
@@ -67,7 +68,7 @@ const routes: Routes = [
     resolve: { assets: AssetResolver }
   },
   {
-    path: 'vulnerabilities/:id',
+    path: 'vulnerability/:id',
     component: VulnerabilityComponent,
     resolve: { vulnerabilities: VulnerabilityResolver }
   },
@@ -83,6 +84,10 @@ const routes: Routes = [
     path: 'organization-form/:id',
     component: OrgFormComponent,
     resolve: { organization: OrganizationResolver }
+  },
+  {
+    path: 'organization/:id/asset-form',
+    component: AssetFormComponent
   }
 ];
 

@@ -18,7 +18,10 @@ export class AssessmentsComponent implements OnInit {
   }
 
   navigateToVulnerability(id: number) {
-    this.router.navigate([`vulnerabilities/${id}`]);
+    this.router.navigate([`vulnerability/${id}`]);
   }
 
+  navigateToDashboard() {
+    this.router.navigate([`dashboard`]);
+  }
 }

@@ -49,7 +49,7 @@ createConnection().then((connection) => {
   app.post('/api/upload', upload.single('file'), async (req: Request, res: Response) => {
     // TODO Virus scanning, file type validation, etc
     if (!req['file']) {
-      res.status(400).send('You must provide a file');
+      return res.status(400).send('You must provide a file');
     } else {
       let file = new File();
       file.fieldName = req['file'].fieldname;
@@ -86,7 +86,7 @@ createConnection().then((connection) => {
     }
     const errors = await validate(org);
     if (errors.length > 0) {
-      res.status(400).send('Organization form validation failed');
+      return res.status(400).send('Organization form validation failed');
     } else {
       const newOrg = await orgRepository.save(org);
       res.send(newOrg);
@@ -101,7 +101,7 @@ createConnection().then((connection) => {
     }
     const errors = await validate(org);
     if (errors.length > 0) {
-      res.status(400).send('Organization form validation failed');
+      return res.status(400).send('Organization form validation failed');
     } else {
       const newOrg = await orgRepository.save(org);
       res.send(newOrg);
@@ -129,11 +129,27 @@ createConnection().then((connection) => {
     res.json(assessment);
   });
 
-  app.get('/api/vulnerabilities/:id', async function(req: Request, res: Response) {
+  app.get('/api/vulnerability/:id', async function(req: Request, res: Response) {
     const vulnerabilities = await vulnerabilityRepository.find({
       where: { vulnerability: req.params.id }
     });
     res.json(vulnerabilities);
+  });
+
+  app.post('/api/organization/:id/asset', async (req: Request, res: Response) => {
+    let asset = new Asset();
+    if (isNaN(req.body.organization) || !req.body.name) {
+      return res.status(400).send('Invalid Asset request');
+    }
+    asset.name = req.body.name;
+    asset.organization = req.body.organization;
+    const errors = await validate(asset);
+    if (errors.length > 0) {
+      res.status(400).send('Asset form validation failed');
+    } else {
+      const newAsset = await assetRepository.save(asset);
+      res.send(newAsset);
+    }
   });
 
   // puppeteer generate
