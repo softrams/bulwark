@@ -12,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AssessmentsComponent } from './assessments/assessments.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { VulnerabilityComponent } from './vulnerability/vulnerability.component';
+import { VulnFormComponent } from './vuln-form/vuln-form.component';
 import { OrgFormComponent } from './org-form/org-form.component';
 import { AssetFormComponent } from './asset-form/asset-form.component';
 
@@ -24,7 +25,8 @@ import { AssetFormComponent } from './asset-form/asset-form.component';
     AssessmentsComponent,
     VulnerabilityComponent,
     OrgFormComponent,
-    AssetFormComponent
+    AssetFormComponent,
+    VulnFormComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule],
   providers: [AppService],

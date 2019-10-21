@@ -22,4 +22,5 @@ export class OrganizationComponent implements OnInit {
   navigateToCreateAsset() {
     this.router.navigate([`asset-form`]);
   }
+
 }
