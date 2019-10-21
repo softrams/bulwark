@@ -67,4 +67,8 @@ export class VulnFormComponent implements OnChanges, OnInit {
     });
   }
 
+  onSubmit(contact: FormGroup) {
+    // Do stuff
+  }
+
 }

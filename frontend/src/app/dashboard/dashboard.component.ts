@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,7 +12,12 @@ export class DashboardComponent implements OnInit {
   orgAry: any = [];
   assetAry: any = [];
   orgId: number;
-  constructor(private appService: AppService, public activatedRoute: ActivatedRoute, public router: Router) {}
+  constructor(
+    private sanitizer: DomSanitizer,
+    private appService: AppService,
+    public activatedRoute: ActivatedRoute,
+    public router: Router
+  ) {}
 
   ngOnInit() {
     this.appService.getOrganizations().then((res) => {
@@ -19,11 +25,19 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  public getSantizeUrl(url: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(url);
+  }
+
   navigateToAsset(id: number) {
     this.router.navigate([`organization/${id}`]);
   }
 
-  createOrg() {
-    // Possibly open modal to create new Organization
+  navigateToCreate() {
+    this.router.navigate([`organization-form`]);
+  }
+
+  navigateToOrganization(id: number) {
+    this.router.navigate([`organization-form/${id}`]);
   }
 }

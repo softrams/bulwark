@@ -13,10 +13,19 @@ import { AssessmentsComponent } from './assessments/assessments.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { VulnerabilityComponent } from './vulnerability/vulnerability.component';
 import { VulnFormComponent } from './vuln-form/vuln-form.component';
+import { OrgFormComponent } from './org-form/org-form.component';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, DashboardComponent, OrganizationComponent, AssessmentsComponent, VulnerabilityComponent,
-     VulnFormComponent],
+  declarations: [
+    AppComponent,
+    NavbarComponent,
+    DashboardComponent,
+    OrganizationComponent,
+    AssessmentsComponent,
+    VulnerabilityComponent,
+    OrgFormComponent,
+    VulnFormComponent
+  ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule],
   providers: [AppService],
   bootstrap: [AppComponent]
