@@ -53,8 +53,8 @@ export class AssetFormComponent implements OnInit, OnChanges {
     });
   }
 
-  onSubmit(contact: FormGroup) {
-    this.assetModel = contact.value;
+  onSubmit(asset: FormGroup) {
+    this.assetModel = asset.value;
     this.assetModel.organization = this.orgId;
     this.assetModel.id = this.assetId;
     this.createOrUpdateAsset(this.assetModel);

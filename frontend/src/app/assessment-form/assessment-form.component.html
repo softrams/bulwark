@@ -1,0 +1,36 @@
+<div class="container-fluid">
+  <form [formGroup]="assessmentForm" (ngSubmit)="onSubmit(assessmentForm)">
+    <div class="form-group col-6 mx-auto">
+      <label for="assessmentName">Assessment Name</label>
+      <input formControlName="name" type="text" class="form-control" id="assessmentName" />
+      <label for="executiveSummary">Executive Summary</label>
+      <textarea formControlName="executiveSummary" type="text" class="form-control" id="executiveSummary"></textarea>
+      <label for="jiraId">JIRA ID</label>
+      <input formControlName="jiraId" type="text" class="form-control" id="jiraId" />
+      <label for="testUrl">Test URL</label>
+      <input formControlName="testUrl" type="text" class="form-control" id="testUrl" />
+      <label for="prodUrl">Production URL</label>
+      <input formControlName="prodUrl" type="text" class="form-control" id="prodUrl" />
+      <label for="scope">Scope of the Assessment</label>
+      <input formControlName="scope" type="text" class="form-control" id="scope" />
+      <label for="tag">Source Code Tag</label>
+      <input formControlName="tag" type="text" class="form-control" id="tag" />
+      <label for="startDate" class="col-form-label">Start Date</label>
+      <input formControlName="startDate" class="form-control" type="date" id="startDate" />
+      <label for="endDate" class="col-form-label">Start Date</label>
+      <input formControlName="endDate" class="form-control" type="date" id="endDate" />
+      <br />
+      <button (click)="navigateToAssessments()" class="btn btn-secondary float-right" type="submit">
+        Back to Assessments
+      </button>
+      <button
+        [disabled]="!assessmentForm.valid"
+        class="btn btn-primary float-right"
+        type="submit"
+        style="margin-right: 5px;"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>

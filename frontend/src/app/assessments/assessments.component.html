@@ -1,28 +1,42 @@
 <div class="container-fluid">
-  <table class="table" *ngIf="activatedRoute.snapshot.params.id">
+  <table class="table" *ngIf="activatedRoute.snapshot.params.assetId">
     <thead class="thead-dark">
       <tr>
         <th scope="col">#</th>
         <th scope="col">Assessment Name</th>
-        <th scope="col">Description</th>
-        <th scope="col">View</th>
-        <th scope="col">Delete</th>
+        <th scope="col">Jira ID</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col"></th>
       </tr>
     </thead>
     <tbody *ngFor="let assessment of assessmentAry">
       <tr>
         <th scope="row">{{ assessment.id }}</th>
-        <td>{{ assessment.name }}</td>
-        <td>{{ assessment.description }}</td>
-        <td><a (click)="navigateToVulnerability(assessment.id)" class="btn btn-primary">View</a></td>
-        <td><a href="#" class="btn btn-primary">Delete</a></td>
+        <td>{{ assessment?.name }}</td>
+        <td>{{ assessment?.jiraId }}</td>
+        <td>{{ assessment?.startDate | date: 'shortDate' }}</td>
+        <td>{{ assessment?.endDate | date: 'shortDate' }}</td>
+        <td>
+          <button
+            class="btn btn-secondary"
+            type="button"
+            (click)="navigateToAssessmentById(assessment.id)"
+            style="margin-right: 10px;"
+          >
+            <fa-icon [icon]="faPencilAlt"></fa-icon>
+          </button>
+          <button class="btn btn-primary" type="button" (click)="navigateToVulnerability(assessment.id)">
+            <fa-icon [icon]="faHaykal"></fa-icon>
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
-  <button (click)="navigateToDashboard()" type="button" class="btn btn-secondary float-right">
-    Back to Dashboard
+  <button (click)="navigateToOrganization()" type="button" class="btn btn-secondary float-right">
+    Back to Organization
   </button>
-  <button style="margin-right: 5px;" type="button" class="btn btn-primary float-right">
+  <button (click)="navigateToAssessment()" style="margin-right: 5px;" type="button" class="btn btn-primary float-right">
     Create Assessment
   </button>
 </div>
