@@ -10,13 +10,22 @@ import { VulnerabilityComponent } from './vulnerability/vulnerability.component'
 import { VulnFormComponent } from './vuln-form/vuln-form.component';
 import { OrgFormComponent } from './org-form/org-form.component';
 import { AssetFormComponent } from './asset-form/asset-form.component';
+import { Asset } from './asset-form/Asset';
 
 @Injectable()
-export class AssetResolver implements Resolve<any> {
+export class AssetsResolver implements Resolve<any> {
   constructor(private apiService: AppService) {}
 
   resolve(route: ActivatedRouteSnapshot) {
     return this.apiService.getOrganizationAssets(route.params.id);
+  }
+}
+
+@Injectable()
+export class AssetResolver implements Resolve<any> {
+  constructor(private apiService: AppService) {}
+  resolve(route: ActivatedRouteSnapshot) {
+    return this.apiService.getAsset(route.params.assetId, route.params.id);
   }
 }
 
@@ -65,7 +74,7 @@ const routes: Routes = [
   {
     path: 'organization/:id',
     component: OrganizationComponent,
-    resolve: { assets: AssetResolver }
+    resolve: { assets: AssetsResolver }
   },
   {
     path: 'vulnerability/:id',
@@ -88,12 +97,24 @@ const routes: Routes = [
   {
     path: 'organization/:id/asset-form',
     component: AssetFormComponent
+  },
+  {
+    path: 'organization/:id/asset-form/:assetId',
+    component: AssetFormComponent,
+    resolve: { asset: AssetResolver }
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [AssetResolver, AssessmentResolver, VulnerabilityResolver, VulnFormComponent, OrganizationResolver]
+  providers: [
+    AssetResolver,
+    AssetsResolver,
+    AssessmentResolver,
+    VulnerabilityResolver,
+    VulnFormComponent,
+    OrganizationResolver
+  ]
 })
 export class AppRoutingModule {}

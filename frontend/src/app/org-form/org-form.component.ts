@@ -28,17 +28,19 @@ export class OrgFormComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ organization }) => {
-      this.orgModel = organization;
-      if (this.orgModel['avatarData']) {
-        this.appService.getAvatarById(this.orgModel['avatarData']).then((res) => {
-          this.avatar = res;
-        });
+      if (organization) {
+        this.orgModel = organization;
+        if (this.orgModel['avatarData']) {
+          this.appService.getAvatarById(this.orgModel['avatarData']).then((res) => {
+            this.avatar = res;
+          });
+        }
+        this.rebuildForm();
       }
     });
     this.activatedRoute.params.subscribe((params) => {
       this.orgId = params['id'];
     });
-    this.rebuildForm();
   }
 
   ngOnChanges() {

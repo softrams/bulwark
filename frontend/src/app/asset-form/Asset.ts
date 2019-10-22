@@ -1,3 +1,3 @@
 export class Asset {
-  constructor(public name: string, public organization: number) {}
+  constructor(public id: number, public name: string, public organization: number) {}
 }

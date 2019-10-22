@@ -2,8 +2,7 @@ import { Component, OnInit, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Asset } from './Asset';
 import { AppService } from '../app.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
+import { Router, ActivatedRoute, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-asset-form',
@@ -13,21 +12,28 @@ import { Location } from '@angular/common';
 export class AssetFormComponent implements OnInit, OnChanges {
   public assetModel: Asset;
   public assetForm: FormGroup;
-  public assetId: number;
   public orgId: number;
+  public assetId: number;
   constructor(
     private fb: FormBuilder,
     public appService: AppService,
     public route: Router,
-    public activatedRoute: ActivatedRoute,
-    private location: Location
+    public activatedRoute: ActivatedRoute
   ) {
     this.createForm();
   }
 
   ngOnInit() {
+    this.activatedRoute.data.subscribe(({ asset }) => {
+      if (asset) {
+        this.assetModel = asset;
+        this.rebuildForm();
+      }
+    });
     this.activatedRoute.params.subscribe((params) => {
       this.orgId = params['id'];
+      this.assetId = params['assetId'];
+      console.log(this.orgId, this.assetId);
     });
   }
 
@@ -50,17 +56,19 @@ export class AssetFormComponent implements OnInit, OnChanges {
   onSubmit(contact: FormGroup) {
     this.assetModel = contact.value;
     this.assetModel.organization = this.orgId;
+    this.assetModel.id = this.assetId;
     this.createOrUpdateAsset(this.assetModel);
-    console.log(this.assetModel);
   }
 
   createOrUpdateAsset(asset: Asset) {
     if (this.assetId) {
-      // Add update code
+      this.appService.updateAsset(asset).subscribe((success) => {
+        this.route.navigate([`organization/${this.orgId}`]);
+      });
     } else {
       this.appService.createAsset(asset).subscribe(
         (success) => {
-          this.location.back();
+          this.route.navigate([`organization/${this.orgId}`]);
         },
         (err) => {}
       );

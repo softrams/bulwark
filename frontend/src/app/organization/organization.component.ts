@@ -30,7 +30,11 @@ export class OrganizationComponent implements OnInit {
     this.router.navigate([`dashboard`]);
   }
 
-  navigateToCreateAsset() {
+  navigateToCreateAsset(assetId: number) {
     this.router.navigate([`organization/${this.orgId}/asset-form`]);
+  }
+
+  navigateToAsset(assetId: number) {
+    this.router.navigate([`organization/${this.orgId}/asset-form/${assetId}`]);
   }
 }
