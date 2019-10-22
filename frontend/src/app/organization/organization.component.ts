@@ -17,13 +17,13 @@ export class OrganizationComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ assets }) => (this.assetAry = assets));
     this.activatedRoute.params.subscribe((params) => {
-      this.orgId = params['id'];
+      this.orgId = params['orgId'];
       this.appService.getOrganizationById(this.orgId).then((org) => (this.org = org));
     });
   }
 
   navigateToAssessment(id: number) {
-    this.router.navigate([`assessment/${id}`]);
+    this.router.navigate([`organization/${this.orgId}/asset/${id}`]);
   }
 
   navigateToDashboard() {

@@ -131,7 +131,7 @@ createConnection().then((connection) => {
 
   app.get('/api/vulnerability/:id', async function(req: Request, res: Response) {
     const vulnerabilities = await vulnerabilityRepository.find({
-      where: { vulnerability: req.params.id }
+      where: { assessment: req.params.id }
     });
     res.json(vulnerabilities);
   });
@@ -174,6 +174,51 @@ createConnection().then((connection) => {
     }
   });
 
+  app.post('/api/assessment', async (req: Request, res: Response) => {
+    let assessment = new Assessment();
+    assessment.name = req.body.name;
+    assessment.asset = req.body.asset;
+    assessment.executiveSummary = req.body.executiveSummary;
+    assessment.jiraId = req.body.jiraId;
+    assessment.testUrl = req.body.testUrl;
+    assessment.prodUrl = req.body.prodUrl;
+    assessment.scope = req.body.scope;
+    assessment.tag = req.body.tag;
+    assessment.startDate = new Date(req.body.startDate);
+    assessment.endDate = new Date(req.body.endDate);
+    const errors = await validate(assessment);
+    if (errors.length > 0) {
+      return res.status(400).send('Assessment form validation failed');
+    } else {
+      await assessmentRepository.save(assessment);
+      res.json('Assessment created succesfully').status(200);
+    }
+  });
+
+  app.get('/api/asset/:assetId/assessment/:assessmentId', async (req: Request, res: Response) => {
+    if (!req.params.assetId || !req.params.assessmentId) {
+      return res.status(400).send('Invalid assessment request');
+    }
+    let asset = await assessmentRepository.findOne({
+      where: { id: req.params.assessmentId, asset: req.params.assetId }
+    });
+    res.status(200).json(asset);
+  });
+
+  app.patch('/api/asset/:assetId/assessment/:assessmentId', async function(req: Request, res: Response) {
+    let assessment = new Assessment();
+    assessment = req.body;
+    if (assessment.startDate > assessment.endDate) {
+      return res.status(400).send('The assessment start date can not be later than the end date');
+    }
+    const errors = await validate(assessment);
+    if (errors.length > 0) {
+      return res.status(400).send('Assessment form validation failed');
+    } else {
+      await assessmentRepository.save(assessment);
+      res.json('Asset patched successfully').status(200);
+    }
+  });
   // puppeteer generate
   app.get('/api/report/generate', async (req: Request, res: Response) => {
     const browser = await puppeteer.launch();

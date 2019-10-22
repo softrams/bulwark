@@ -10,14 +10,13 @@ import { VulnerabilityComponent } from './vulnerability/vulnerability.component'
 import { VulnFormComponent } from './vuln-form/vuln-form.component';
 import { OrgFormComponent } from './org-form/org-form.component';
 import { AssetFormComponent } from './asset-form/asset-form.component';
-import { Asset } from './asset-form/Asset';
-
+import { AssessmentFormComponent } from './assessment-form/assessment-form.component';
 @Injectable()
 export class AssetsResolver implements Resolve<any> {
   constructor(private apiService: AppService) {}
 
   resolve(route: ActivatedRouteSnapshot) {
-    return this.apiService.getOrganizationAssets(route.params.id);
+    return this.apiService.getOrganizationAssets(route.params.orgId);
   }
 }
 
@@ -25,16 +24,24 @@ export class AssetsResolver implements Resolve<any> {
 export class AssetResolver implements Resolve<any> {
   constructor(private apiService: AppService) {}
   resolve(route: ActivatedRouteSnapshot) {
-    return this.apiService.getAsset(route.params.assetId, route.params.id);
+    return this.apiService.getAsset(route.params.assetId, route.params.assessmentId);
   }
 }
 
 @Injectable()
 export class AssessmentResolver implements Resolve<any> {
   constructor(private apiService: AppService) {}
+  resolve(route: ActivatedRouteSnapshot) {
+    return this.apiService.getAssessment(route.params.assetId, route.params.assessmentId);
+  }
+}
+
+@Injectable()
+export class AssessmentsResolver implements Resolve<any> {
+  constructor(private apiService: AppService) {}
 
   resolve(route: ActivatedRouteSnapshot) {
-    return this.apiService.getAssessments(route.params.id);
+    return this.apiService.getAssessments(route.params.assetId);
   }
 }
 
@@ -43,7 +50,7 @@ export class VulnerabilityResolver implements Resolve<any> {
   constructor(private apiService: AppService) {}
 
   resolve(route: ActivatedRouteSnapshot) {
-    return this.apiService.getVulnerabilities(route.params.id);
+    return this.apiService.getVulnerabilities(route.params.assessmentId);
   }
 }
 
@@ -67,17 +74,17 @@ const routes: Routes = [
     component: DashboardComponent
   },
   {
-    path: 'assessment/:id',
+    path: 'organization/:orgId/asset/:assetId',
     component: AssessmentsComponent,
-    resolve: { assessments: AssessmentResolver }
+    resolve: { assessments: AssessmentsResolver }
   },
   {
-    path: 'organization/:id',
+    path: 'organization/:orgId',
     component: OrganizationComponent,
     resolve: { assets: AssetsResolver }
   },
   {
-    path: 'vulnerability/:id',
+    path: 'organization/:orgId/asset/:assetId/assessment/:assessmentId/vulnerability',
     component: VulnerabilityComponent,
     resolve: { vulnerabilities: VulnerabilityResolver }
   },
@@ -102,6 +109,15 @@ const routes: Routes = [
     path: 'organization/:id/asset-form/:assetId',
     component: AssetFormComponent,
     resolve: { asset: AssetResolver }
+  },
+  {
+    path: 'organization/:orgId/asset/:assetId/assessment',
+    component: AssessmentFormComponent
+  },
+  {
+    path: 'asset/:assetId/assessment/:assessmentId',
+    component: AssessmentFormComponent,
+    resolve: { assessment: AssessmentResolver }
   }
 ];
 
@@ -111,10 +127,11 @@ const routes: Routes = [
   providers: [
     AssetResolver,
     AssetsResolver,
-    AssessmentResolver,
+    AssessmentsResolver,
     VulnerabilityResolver,
     VulnFormComponent,
-    OrganizationResolver
+    OrganizationResolver,
+    AssessmentResolver
   ]
 })
 export class AppRoutingModule {}

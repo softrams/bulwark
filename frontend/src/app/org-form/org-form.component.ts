@@ -91,17 +91,21 @@ export class OrgFormComponent implements OnInit, OnChanges {
     if (this.orgId) {
       this.appService.updateOrg(this.orgId, org).subscribe(
         (success) => {
-          this.route.navigate(['dashboard']);
+          this.navigateToDashboard();
         },
         (err) => {}
       );
     } else {
       this.appService.createOrg(org).subscribe(
         (success) => {
-          this.route.navigate(['dashboard']);
+          this.navigateToDashboard();
         },
         (err) => {}
       );
     }
+  }
+
+  navigateToDashboard() {
+    this.route.navigate(['dashboard']);
   }
 }

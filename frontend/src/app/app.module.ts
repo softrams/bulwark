@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +17,9 @@ import { VulnFormComponent } from './vuln-form/vuln-form.component';
 import { OrgFormComponent } from './org-form/org-form.component';
 import { AssetFormComponent } from './asset-form/asset-form.component';
 import { FooterComponent } from './footer/footer.component';
+import { AssessmentFormComponent } from './assessment-form/assessment-form.component';
+
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -28,10 +32,11 @@ import { FooterComponent } from './footer/footer.component';
     OrgFormComponent,
     AssetFormComponent,
     VulnFormComponent,
-    FooterComponent
+    FooterComponent,
+    AssessmentFormComponent
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule],
-  providers: [AppService],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule, FontAwesomeModule],
+  providers: [AppService, DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

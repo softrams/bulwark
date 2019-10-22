@@ -22,6 +22,11 @@
         (change)="handleFileInput($event.target.files)"
       />
     </div>
-    <button [disabled]="!orgForm.valid" class="btn btn-primary float-right" type="submit">Submit</button>
+    <button (click)="navigateToDashboard()" class="btn btn-secondary float-right" type="submit">
+      Back to Dashboard
+    </button>
+    <button [disabled]="!orgForm.valid" class="btn btn-primary float-right" type="submit" style="margin-right: 5px">
+      Submit
+    </button>
   </form>
 </div>

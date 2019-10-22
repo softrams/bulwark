@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Organization } from './org-form/Organization';
 import { Asset } from './asset-form/Asset';
+import { Assessment } from './assessment-form/Assessment';
 
 @Injectable({
   providedIn: 'root'
@@ -123,6 +124,18 @@ export class AppService {
 
   updateAsset(asset: Asset) {
     return this.http.patch(`${this.api}/organization/${asset.organization}/asset/${asset.id}`, asset);
+  }
+
+  createAssessment(assessment: Assessment) {
+    return this.http.post(`${this.api}/assessment`, assessment);
+  }
+
+  updateAssessment(assessment: Assessment, assetId: number) {
+    return this.http.patch(`${this.api}/asset/${assetId}/assessment/${assessment.id}`, assessment);
+  }
+
+  getAssessment(assetId: number, assessmentId: number) {
+    return this.http.get(`${this.api}/asset/${assetId}/assessment/${assessmentId}`);
   }
 
   upload(fileToUpload: File) {
