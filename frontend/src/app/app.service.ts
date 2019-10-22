@@ -117,6 +117,14 @@ export class AppService {
     return this.http.post(`${this.api}/organization/${asset.organization}/asset`, asset);
   }
 
+  getAsset(assetId: number, orgId: number) {
+    return this.http.get(`${this.api}/organization/${orgId}/asset/${assetId}`);
+  }
+
+  updateAsset(asset: Asset) {
+    return this.http.patch(`${this.api}/organization/${asset.organization}/asset/${asset.id}`, asset);
+  }
+
   upload(fileToUpload: File) {
     const formData: FormData = new FormData();
     formData.append('file', fileToUpload);

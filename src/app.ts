@@ -88,8 +88,8 @@ createConnection().then((connection) => {
     if (errors.length > 0) {
       return res.status(400).send('Organization form validation failed');
     } else {
-      const newOrg = await orgRepository.save(org);
-      res.send(newOrg);
+      await orgRepository.save(org);
+      res.json('Organization patched succesfully').status(200);
     }
   });
 
@@ -148,7 +148,29 @@ createConnection().then((connection) => {
       res.status(400).send('Asset form validation failed');
     } else {
       const newAsset = await assetRepository.save(asset);
-      res.send(newAsset);
+      res.json(newAsset);
+    }
+  });
+
+  app.get('/api/organization/:id/asset/:assetId', async (req: Request, res: Response) => {
+    if (!req.params.id || !req.params.assetId) {
+      return res.status(400).send('Invalid Asset request');
+    }
+    let asset = await assetRepository.findOne({ where: { id: req.params.assetId, organization: req.params.id } });
+    res.status(200).json(asset);
+  });
+
+  app.patch('/api/organization/:id/asset/:assetId', async function(req: Request, res: Response) {
+    let asset = new Asset();
+    asset.name = req.body.name;
+    asset.organization = req.body.organization;
+    asset.id = +req.params.assetId;
+    const errors = await validate(asset);
+    if (errors.length > 0) {
+      return res.status(400).send('Asset form validation failed');
+    } else {
+      await assetRepository.save(asset);
+      res.json('Asset patched successfully').status(200);
     }
   });
 
