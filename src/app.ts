@@ -136,6 +136,46 @@ createConnection().then((connection) => {
     res.json(vulnerabilities);
   });
 
+  app.post('/api/vulnerability', upload.array('screenshots'), async (req, res) => {
+    let vulnerability = new Vulnerability();
+    vulnerability.impact = req.body.impact;
+    vulnerability.likelihood = req.body.likelihood;
+    vulnerability.risk = req.body.risk;
+    vulnerability.status = req.body.status;
+    vulnerability.description = req.body.description;
+    vulnerability.remediation = req.body.remediation;
+    vulnerability.jiraId = req.body.jiraId;
+    vulnerability.cvssScore = req.body.cvssScore;
+    vulnerability.cvssUrl = req.body.cvssUrl;
+    vulnerability.detailedInfo = req.body.detailedInfo;
+    vulnerability.assessment = req.body.assessment;
+    vulnerability.name = req.body.name;
+    vulnerability.systemic = req.body.systemic;
+    const errors = await validate(vulnerability);
+    if (errors.length > 0) {
+      return res.status(400).send('Vulnerability form validation failed');
+    } else {
+      await vulnerabilityRepository.save(vulnerability);
+      for (let screenshot of req['files']) {
+        let file = new File();
+        file.buffer = screenshot.buffer;
+        file.fieldName = screenshot.fieldName;
+        file.encoding = screenshot.encoding;
+        file.mimetype = screenshot.mimetype;
+        file.size = screenshot.size;
+        file.originalName = screenshot.originalName;
+        file.vulnerability = vulnerability;
+        const errors = await validate(file);
+        if (errors.length > 0) {
+          return res.status(400).send('File validation failed');
+        } else {
+          await fileRepository.save(file);
+        }
+      }
+      res.json('Vulnerability saved successfully').status(200);
+    }
+  });
+
   app.post('/api/organization/:id/asset', async (req: Request, res: Response) => {
     let asset = new Asset();
     if (isNaN(req.body.organization) || !req.body.name) {

@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Vulnerability } from './Vulnerability';
 
 @Entity()
 export class File {
@@ -16,4 +17,6 @@ export class File {
   buffer: Buffer;
   @Column()
   size: number;
+  @ManyToOne((type) => Vulnerability, (vuln) => vuln.screenshots)
+  vulnerability: Vulnerability;
 }

@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Organization } from './org-form/Organization';
 import { Asset } from './asset-form/Asset';
 import { Assessment } from './assessment-form/Assessment';
+import { Vulnerability } from './vuln-form/Vulnerability';
 
 @Injectable({
   providedIn: 'root'
@@ -106,6 +107,10 @@ export class AppService {
       });
   }
 
+  createVuln(vuln: FormData) {
+    return this.http.post(`${this.api}/vulnerability`, vuln);
+  }
+
   createOrg(org: Organization) {
     return this.http.post(`${this.api}/organization`, org);
   }
@@ -142,6 +147,10 @@ export class AppService {
     const formData: FormData = new FormData();
     formData.append('file', fileToUpload);
     return this.http.post(`${this.api}/upload`, formData);
+  }
+
+  uploadMultiple(fileToUpload: FormData) {
+    return this.http.post(`${this.api}/upload-multiple`, fileToUpload);
   }
 
   private handleError(error: HttpErrorResponse) {
