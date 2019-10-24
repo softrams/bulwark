@@ -4,6 +4,9 @@
       <label for="assetName">Asset Name</label>
       <input formControlName="name" type="text" class="form-control" id="assetName" />
     </div>
-    <button [disabled]="!assetForm.valid" class="btn btn-primary float-right" type="submit">Submit</button>
+    <button (click)="navigateToAssets()" class="btn btn-secondary float-right" type="submit">Back to Assets</button>
+    <button [disabled]="!assetForm.valid" class="btn btn-primary float-right" type="submit" style="margin-right: 5px">
+      Submit
+    </button>
   </form>
 </div>

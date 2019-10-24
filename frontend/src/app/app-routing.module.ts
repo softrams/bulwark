@@ -89,7 +89,7 @@ const routes: Routes = [
     resolve: { vulnerabilities: VulnerabilityResolver }
   },
   {
-    path: 'vulnform',
+    path: 'organization/:orgId/asset/:assetId/assessment/:assessmentId/vuln-form',
     component: VulnFormComponent
   },
   {

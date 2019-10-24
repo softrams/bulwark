@@ -33,7 +33,6 @@ export class AssetFormComponent implements OnInit, OnChanges {
     this.activatedRoute.params.subscribe((params) => {
       this.orgId = params['id'];
       this.assetId = params['assetId'];
-      console.log(this.orgId, this.assetId);
     });
   }
 
@@ -60,15 +59,19 @@ export class AssetFormComponent implements OnInit, OnChanges {
     this.createOrUpdateAsset(this.assetModel);
   }
 
+  navigateToAssets() {
+    this.route.navigate([`organization/${this.orgId}`]);
+  }
+
   createOrUpdateAsset(asset: Asset) {
     if (this.assetId) {
       this.appService.updateAsset(asset).subscribe((success) => {
-        this.route.navigate([`organization/${this.orgId}`]);
+        this.navigateToAssets();
       });
     } else {
       this.appService.createAsset(asset).subscribe(
         (success) => {
-          this.route.navigate([`organization/${this.orgId}`]);
+          this.navigateToAssets();
         },
         (err) => {}
       );
