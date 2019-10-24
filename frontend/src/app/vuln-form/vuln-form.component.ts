@@ -1,9 +1,11 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import { AppService } from '../app.service';
 import { Vulnerability } from './Vulnerability';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-vuln-form',
@@ -21,11 +23,14 @@ export class VulnFormComponent implements OnChanges, OnInit {
   assessmentId: string;
   vulnId: number;
   filesToUpload: FormData;
+  tempScreenshots: object[] = [];
+  faTrash = faTrash;
   constructor(
     private appService: AppService,
     public activatedRoute: ActivatedRoute,
     public router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private sanitizer: DomSanitizer
   ) {
     this.createForm();
   }
@@ -80,11 +85,37 @@ export class VulnFormComponent implements OnChanges, OnInit {
   }
 
   handleFileInput(files: FileList) {
-    this.filesToUpload = new FormData();
     for (let i = 0; i < files.length; i++) {
       const file = files.item(i);
-      this.filesToUpload.append('screenshots', file);
+      this.previewScreenshot(file);
     }
+  }
+
+  previewScreenshot(file: File) {
+    const blob = new Blob([file], {
+      type: file.type
+    });
+    const url = window.URL.createObjectURL(blob);
+    const renderObj = {
+      url: this.getSantizeUrl(url),
+      file: file
+    };
+    this.tempScreenshots.push(renderObj);
+  }
+
+  deleteScreenshot(file: File) {
+    this.tempScreenshots = this.tempScreenshots.filter((obj) => obj['file'] !== file);
+  }
+
+  finalizeScreenshots(screenshots: object[]) {
+    this.filesToUpload.delete('screenshots');
+    for (const screenshot of screenshots) {
+      this.filesToUpload.append('screenshots', screenshot['file']);
+    }
+  }
+
+  public getSantizeUrl(url: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 
   navigateToVulnerabilities() {
@@ -94,6 +125,10 @@ export class VulnFormComponent implements OnChanges, OnInit {
   }
 
   onSubmit(vulnForm: FormGroup) {
+    this.filesToUpload = new FormData();
+    if (this.tempScreenshots.length) {
+      this.finalizeScreenshots(this.tempScreenshots);
+    }
     this.vulnModel = vulnForm.value;
     this.filesToUpload.append('impact', this.vulnModel.impact);
     this.filesToUpload.append('likelihood', this.vulnModel.likelihood);
@@ -110,7 +145,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
     this.filesToUpload.append('name', this.vulnModel.name);
     this.vulnModel.assessment = +this.assessmentId;
     this.vulnModel.screenshots = this.filesToUpload;
-    console.log(this.vulnModel.screenshots.getAll('screenshots'));
     this.createOrUpdateVuln(this.filesToUpload);
   }
 
@@ -118,9 +152,15 @@ export class VulnFormComponent implements OnChanges, OnInit {
     if (this.vulnId) {
       // Do update
     } else {
-      this.appService.createVuln(vuln).subscribe((success) => {
-        this.navigateToVulnerabilities();
-      });
+      this.appService.createVuln(vuln).subscribe(
+        (success) => {
+          this.navigateToVulnerabilities();
+        },
+        (error) => {
+          // Reset current form data to avoid duplicate inputs
+          this.filesToUpload = new FormData();
+        }
+      );
     }
   }
 }

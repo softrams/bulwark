@@ -13,7 +13,6 @@
         <select formControlName="status" class="form-control form-control-sm" id="status">
           <option>Open</option>
           <option>Resolved</option>
-          <option>Verification</option>
           <option>On Hold</option>
         </select>
         <div *ngIf="vulnForm.controls['name'].errors && !vulnForm.controls['name'].pristine" class="alert alert-danger">
@@ -155,6 +154,12 @@
         multiple
         enctype="multipart/form-data"
       />
+      <div *ngFor="let screenshot of tempScreenshots">
+        <span>
+          <a [href]="screenshot.url" target="_blank">{{ screenshot?.file?.name }}</a>
+          <a><fa-icon (click)="deleteScreenshot(screenshot.file)" [icon]="faTrash"></fa-icon></a>
+        </span>
+      </div>
     </div>
     <button (click)="navigateToVulnerabilities()" type="button" class="btn btn-secondary float-right">
       Back to Vulnerabilities
