@@ -53,7 +53,7 @@ createConnection().then((connection) => {
     } else {
       let file = new File();
       file.fieldName = req['file'].fieldname;
-      file.originalName = req['file'].originalname;
+      file.name = req['file'].originalname;
       file.encoding = req['file'].encoding;
       file.mimetype = req['file'].mimetype;
       file.buffer = req['file'].buffer;
@@ -109,9 +109,7 @@ createConnection().then((connection) => {
   });
 
   app.get('/api/organization/file/:id', async function(req: Request, res: Response) {
-    const file = await fileRepository.findOne({
-      where: { id: req.params.id }
-    });
+    const file = await fileRepository.findOne(req.params.id);
     res.send(file.buffer);
   });
 
@@ -129,11 +127,72 @@ createConnection().then((connection) => {
     res.json(assessment);
   });
 
-  app.get('/api/vulnerability/:id', async function(req: Request, res: Response) {
+  app.get('/api/assessment/:id/vulnerability', async function(req: Request, res: Response) {
     const vulnerabilities = await vulnerabilityRepository.find({
       where: { assessment: req.params.id }
     });
     res.json(vulnerabilities);
+  });
+
+  app.get('/api/vulnerability/:vulnId', async (req: Request, res: Response) => {
+    if (!req.params.vulnId) {
+      return res.status(400).send('Invalid Vulnerability request');
+    }
+    let vuln = await vulnerabilityRepository.findOne(req.params.vulnId, { relations: ['screenshots'] });
+    res.status(200).json(vuln);
+  });
+
+  app.patch('/api/vulnerability/:vulnId', upload.array('screenshots'), async (req, res) => {
+    let vulnerability = new Vulnerability();
+    vulnerability.id = +req.params.vulnId;
+    vulnerability.impact = req.body.impact;
+    vulnerability.likelihood = req.body.likelihood;
+    vulnerability.risk = req.body.risk;
+    vulnerability.status = req.body.status;
+    vulnerability.description = req.body.description;
+    vulnerability.remediation = req.body.remediation;
+    vulnerability.jiraId = req.body.jiraId;
+    vulnerability.cvssScore = req.body.cvssScore;
+    vulnerability.cvssUrl = req.body.cvssUrl;
+    vulnerability.detailedInfo = req.body.detailedInfo;
+    vulnerability.assessment = req.body.assessment;
+    vulnerability.name = req.body.name;
+    vulnerability.systemic = req.body.systemic;
+    const errors = await validate(vulnerability);
+    if (errors.length > 0) {
+      return res.status(400).send('Vulnerability form validation failed');
+    } else {
+      await vulnerabilityRepository.save(vulnerability);
+      // Remove deleted files
+      if (req.body.screenshotsToDelete) {
+        let existingScreenshots = await fileRepository.find({ where: { vulnerability: vulnerability.id } });
+        let existingScreenshotIds = existingScreenshots.map((screenshot) => screenshot.id);
+        let screenshotsToDelete = JSON.parse(req.body.screenshotsToDelete);
+        // We only want to remove the files associated to the vulnerability
+        screenshotsToDelete = existingScreenshotIds.filter((value) => screenshotsToDelete.includes(value));
+        for (const screenshotId of screenshotsToDelete) {
+          fileRepository.delete(screenshotId);
+        }
+      }
+      // Save new files added
+      for (let screenshot of req['files']) {
+        let file = new File();
+        file.buffer = screenshot.buffer;
+        file.fieldName = screenshot.fieldName;
+        file.encoding = screenshot.encoding;
+        file.mimetype = screenshot.mimetype;
+        file.size = screenshot.size;
+        file.name = screenshot.originalname;
+        file.vulnerability = vulnerability;
+        const errors = await validate(file);
+        if (errors.length > 0) {
+          return res.status(400).send('File validation failed');
+        } else {
+          await fileRepository.save(file);
+        }
+      }
+      res.json('Vulnerability saved successfully').status(200);
+    }
   });
 
   app.post('/api/vulnerability', upload.array('screenshots'), async (req, res) => {
@@ -163,7 +222,7 @@ createConnection().then((connection) => {
         file.encoding = screenshot.encoding;
         file.mimetype = screenshot.mimetype;
         file.size = screenshot.size;
-        file.originalName = screenshot.originalName;
+        file.name = screenshot.originalname;
         file.vulnerability = vulnerability;
         const errors = await validate(file);
         if (errors.length > 0) {

@@ -6,7 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { AppService } from '../app.service';
 import { Vulnerability } from './Vulnerability';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
-
+import { AppFile } from '../classes/App_File';
 @Component({
   selector: 'app-vuln-form',
   templateUrl: './vuln-form.component.html',
@@ -24,6 +24,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
   vulnId: number;
   filesToUpload: FormData;
   tempScreenshots: object[] = [];
+  screenshotsToDelete: number[] = [];
   faTrash = faTrash;
   constructor(
     private appService: AppService,
@@ -36,7 +37,19 @@ export class VulnFormComponent implements OnChanges, OnInit {
   }
 
   ngOnInit() {
-    this.activatedRoute.data.subscribe();
+    this.activatedRoute.data.subscribe(({ vulnerability }) => {
+      if (vulnerability) {
+        this.vulnId = vulnerability;
+        for (const file of vulnerability['screenshots']) {
+          const existFile: AppFile = file;
+          this.appService.getAvatarById(existFile).then((url) => {
+            existFile.imgUrl = url;
+            this.previewScreenshot(null, existFile);
+          });
+        }
+        this.vulnForm.patchValue(vulnerability);
+      }
+    });
     this.activatedRoute.params.subscribe((params) => {
       this.orgId = params['orgId'];
       this.assetId = params['assetId'];
@@ -62,8 +75,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
       jiraId: ['', [Validators.maxLength(15)]],
       cvssScore: ['', Validators.required],
       cvssUrl: ['', Validators.required],
-      detailedInfo: ['', [Validators.required, Validators.maxLength(2000)]],
-      screenshots: ['']
+      detailedInfo: ['', [Validators.required, Validators.maxLength(2000)]]
     });
   }
 
@@ -87,30 +99,49 @@ export class VulnFormComponent implements OnChanges, OnInit {
   handleFileInput(files: FileList) {
     for (let i = 0; i < files.length; i++) {
       const file = files.item(i);
-      this.previewScreenshot(file);
+      this.previewScreenshot(file, null);
     }
   }
 
-  previewScreenshot(file: File) {
-    const blob = new Blob([file], {
-      type: file.type
-    });
-    const url = window.URL.createObjectURL(blob);
-    const renderObj = {
-      url: this.getSantizeUrl(url),
-      file: file
-    };
-    this.tempScreenshots.push(renderObj);
+  previewScreenshot(file: File, existFile: AppFile) {
+    // Image from DB
+    if (existFile) {
+      const renderObj = {
+        url: this.getSantizeUrl(existFile.imgUrl),
+        file: existFile
+      };
+      this.tempScreenshots.push(renderObj);
+    } else {
+      // Preview unsaved form
+      const blob = new Blob([file], {
+        type: file.type
+      });
+      const url = window.URL.createObjectURL(blob);
+      const renderObj = {
+        url: this.getSantizeUrl(url),
+        file: file
+      };
+      this.tempScreenshots.push(renderObj);
+    }
   }
 
   deleteScreenshot(file: File) {
-    this.tempScreenshots = this.tempScreenshots.filter((obj) => obj['file'] !== file);
+    const index = this.tempScreenshots.indexOf(file);
+    if (index > -1) {
+      this.screenshotsToDelete.push(file['file']['id']);
+      this.tempScreenshots.splice(index, 1);
+    }
   }
 
-  finalizeScreenshots(screenshots: object[]) {
+  finalizeScreenshots(screenshots: object[], screenshotsToDelete: number[]) {
     this.filesToUpload.delete('screenshots');
-    for (const screenshot of screenshots) {
-      this.filesToUpload.append('screenshots', screenshot['file']);
+    if (screenshots.length) {
+      for (const screenshot of screenshots) {
+        this.filesToUpload.append('screenshots', screenshot['file']);
+      }
+    }
+    if (screenshotsToDelete.length) {
+      this.filesToUpload.append('screenshotsToDelete', JSON.stringify(screenshotsToDelete));
     }
   }
 
@@ -126,9 +157,8 @@ export class VulnFormComponent implements OnChanges, OnInit {
 
   onSubmit(vulnForm: FormGroup) {
     this.filesToUpload = new FormData();
-    if (this.tempScreenshots.length) {
-      this.finalizeScreenshots(this.tempScreenshots);
-    }
+    const newScreenshots = this.tempScreenshots.filter((screenshot) => !screenshot['file'].id);
+    this.finalizeScreenshots(newScreenshots, this.screenshotsToDelete);
     this.vulnModel = vulnForm.value;
     this.filesToUpload.append('impact', this.vulnModel.impact);
     this.filesToUpload.append('likelihood', this.vulnModel.likelihood);
@@ -150,7 +180,9 @@ export class VulnFormComponent implements OnChanges, OnInit {
 
   createOrUpdateVuln(vuln: FormData) {
     if (this.vulnId) {
-      // Do update
+      this.appService.updateVulnerability(this.vulnId, vuln).subscribe((success) => {
+        this.navigateToVulnerabilities();
+      });
     } else {
       this.appService.createVuln(vuln).subscribe(
         (success) => {
