@@ -24,7 +24,7 @@ export class AssetsResolver implements Resolve<any> {
 export class AssetResolver implements Resolve<any> {
   constructor(private apiService: AppService) {}
   resolve(route: ActivatedRouteSnapshot) {
-    return this.apiService.getAsset(route.params.assetId, route.params.assessmentId);
+    return this.apiService.getAsset(route.params.assetId, route.params.id);
   }
 }
 
@@ -115,7 +115,7 @@ const routes: Routes = [
     component: AssessmentFormComponent
   },
   {
-    path: 'asset/:assetId/assessment/:assessmentId',
+    path: 'organization/:orgId/asset/:assetId/assessment/:assessmentId',
     component: AssessmentFormComponent,
     resolve: { assessment: AssessmentResolver }
   }

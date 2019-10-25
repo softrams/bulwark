@@ -246,8 +246,9 @@ createConnection().then((connection) => {
   });
 
   app.patch('/api/asset/:assetId/assessment/:assessmentId', async function(req: Request, res: Response) {
-    let assessment = new Assessment();
+    let assessment = await assessmentRepository.findOne({ where: { id: req.params.assessmentId } });
     assessment = req.body;
+    assessment.id = +req.params.assessmentId;
     if (assessment.startDate > assessment.endDate) {
       return res.status(400).send('The assessment start date can not be later than the end date');
     }

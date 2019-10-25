@@ -3,7 +3,6 @@ import { Router, ActivatedRoute, RouterOutlet } from '@angular/router';
 import { AppService } from '../app.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Assessment } from './Assessment';
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-assessment-form',
@@ -20,21 +19,23 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
     public appService: AppService,
     private fb: FormBuilder,
     public route: Router,
-    public activatedRoute: ActivatedRoute,
-    private datePipe: DatePipe
+    public activatedRoute: ActivatedRoute
   ) {
     this.createForm();
   }
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ assessment }) => {
-      assessment.startDate = this.transformDate(assessment.startDate);
-      assessment.endDate = this.transformDate(assessment.endDate);
-      this.assessmentForm.patchValue(assessment);
+      if (assessment) {
+        assessment.startDate = this.transformDate(assessment.startDate);
+        assessment.endDate = this.transformDate(assessment.endDate);
+        this.assessmentForm.patchValue(assessment);
+      }
     });
     this.activatedRoute.params.subscribe((params) => {
-      this.assetId = params['assetId'];
-      this.orgId = params['assetId'];
+      this.assetId = +params['assetId'];
+      this.assessmentId = +params['assessmentId'];
+      this.orgId = +params['orgId'];
     });
   }
 
@@ -63,12 +64,12 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
   createForm() {
     this.assessmentForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(20)]],
-      executiveSummary: ['', [Validators.required, Validators.maxLength(1500)]],
-      jiraId: ['', [Validators.required, Validators.maxLength(15)]],
+      executiveSummary: ['', [Validators.maxLength(1500)]],
+      jiraId: ['', [Validators.maxLength(15)]],
       testUrl: ['', [Validators.required, Validators.maxLength(250)]],
       prodUrl: ['', [Validators.required, Validators.maxLength(250)]],
       scope: ['', [Validators.required, Validators.maxLength(20)]],
-      tag: ['', [Validators.required, Validators.maxLength(250)]],
+      tag: ['', [Validators.maxLength(250)]],
       startDate: ['', [Validators.required, Validators.maxLength(25)]],
       endDate: ['', [Validators.required, Validators.maxLength(25)]]
     });
@@ -82,8 +83,7 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
 
   createOrUpdateAssessment(assessment: Assessment) {
     if (this.assessmentId) {
-      assessment.id = this.assessmentId;
-      this.appService.updateAssessment(assessment, this.assetId).subscribe((success) => {
+      this.appService.updateAssessment(assessment, this.assessmentId, this.assetId).subscribe((success) => {
         this.navigateToAssessments();
       });
     } else {

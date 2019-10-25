@@ -39,6 +39,6 @@ export class AssessmentsComponent implements OnInit {
   }
 
   navigateToAssessmentById(assessmentId: number) {
-    this.router.navigate([`asset/${this.assetId}/assessment/${assessmentId}`]);
+    this.router.navigate([`organization/${this.orgId}/asset/${this.assetId}/assessment/${assessmentId}`]);
   }
 }

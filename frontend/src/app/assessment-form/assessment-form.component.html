@@ -12,7 +12,7 @@
       <label for="prodUrl">Production URL</label>
       <input formControlName="prodUrl" type="text" class="form-control" id="prodUrl" />
       <label for="scope">Scope of the Assessment</label>
-      <input formControlName="scope" type="text" class="form-control" id="scope" />
+      <textarea formControlName="scope" type="text" class="form-control" id="scope"></textarea>
       <label for="tag">Source Code Tag</label>
       <input formControlName="tag" type="text" class="form-control" id="tag" />
       <label for="startDate" class="col-form-label">Start Date</label>
@@ -20,7 +20,7 @@
       <label for="endDate" class="col-form-label">Start Date</label>
       <input formControlName="endDate" class="form-control" type="date" id="endDate" />
       <br />
-      <button (click)="navigateToAssessments()" class="btn btn-secondary float-right" type="submit">
+      <button (click)="navigateToAssessments()" class="btn btn-secondary float-right" type="button">
         Back to Assessments
       </button>
       <button

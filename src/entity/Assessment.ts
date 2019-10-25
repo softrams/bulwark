@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Asset } from './Asset';
-import { Length, IsUrl, IsDate, MaxLength } from 'class-validator';
+import { Length, IsUrl, IsDate, MaxLength, IsString } from 'class-validator';
 
 @Entity()
 export class Assessment {
@@ -25,8 +25,8 @@ export class Assessment {
   @MaxLength(250)
   scope: string;
   @Column()
-  @MaxLength(10)
-  tag: number;
+  @IsString()
+  tag: string;
   @Column()
   @IsDate()
   startDate: Date;

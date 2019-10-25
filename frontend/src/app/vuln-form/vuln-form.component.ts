@@ -59,7 +59,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
       description: ['', [Validators.required, Validators.maxLength(2000)]],
       remediation: ['', [Validators.required, Validators.maxLength(2000)]],
       name: ['', [Validators.required, Validators.maxLength(50)]],
-      jiraId: ['', [Validators.required, Validators.maxLength(15)]],
+      jiraId: ['', [Validators.maxLength(15)]],
       cvssScore: ['', Validators.required],
       cvssUrl: ['', Validators.required],
       detailedInfo: ['', [Validators.required, Validators.maxLength(2000)]],

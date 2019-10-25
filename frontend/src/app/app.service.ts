@@ -135,8 +135,8 @@ export class AppService {
     return this.http.post(`${this.api}/assessment`, assessment);
   }
 
-  updateAssessment(assessment: Assessment, assetId: number) {
-    return this.http.patch(`${this.api}/asset/${assetId}/assessment/${assessment.id}`, assessment);
+  updateAssessment(assessment: Assessment, assessmentId: number, assetId: number) {
+    return this.http.patch(`${this.api}/asset/${assetId}/assessment/${assessmentId}`, assessment);
   }
 
   getAssessment(assetId: number, assessmentId: number) {
