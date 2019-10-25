@@ -46,11 +46,20 @@ export class AssessmentsResolver implements Resolve<any> {
 }
 
 @Injectable()
-export class VulnerabilityResolver implements Resolve<any> {
+export class VulnerabilitiesResolver implements Resolve<any> {
   constructor(private apiService: AppService) {}
 
   resolve(route: ActivatedRouteSnapshot) {
     return this.apiService.getVulnerabilities(route.params.assessmentId);
+  }
+}
+
+@Injectable()
+export class VulnerabilityResolver implements Resolve<any> {
+  constructor(private apiService: AppService) {}
+
+  resolve(route: ActivatedRouteSnapshot) {
+    return this.apiService.getVulnerability(route.params.vulnId);
   }
 }
 
@@ -86,7 +95,12 @@ const routes: Routes = [
   {
     path: 'organization/:orgId/asset/:assetId/assessment/:assessmentId/vulnerability',
     component: VulnerabilityComponent,
-    resolve: { vulnerabilities: VulnerabilityResolver }
+    resolve: { vulnerabilities: VulnerabilitiesResolver }
+  },
+  {
+    path: 'organization/:orgId/asset/:assetId/assessment/:assessmentId/vuln-form/:vulnId',
+    component: VulnFormComponent,
+    resolve: { vulnerability: VulnerabilityResolver }
   },
   {
     path: 'organization/:orgId/asset/:assetId/assessment/:assessmentId/vuln-form',
@@ -128,10 +142,11 @@ const routes: Routes = [
     AssetResolver,
     AssetsResolver,
     AssessmentsResolver,
-    VulnerabilityResolver,
+    VulnerabilitiesResolver,
     VulnFormComponent,
     OrganizationResolver,
-    AssessmentResolver
+    AssessmentResolver,
+    VulnerabilityResolver
   ]
 })
 export class AppRoutingModule {}

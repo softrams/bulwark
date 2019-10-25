@@ -145,7 +145,6 @@
     <div>
       <label for="screenshot">Screenshot Upload</label>
       <input
-        formControlName="screenshots"
         name="screenshots"
         type="file"
         class="form-control-file"
@@ -157,10 +156,11 @@
       <div *ngFor="let screenshot of tempScreenshots">
         <span>
           <a [href]="screenshot.url" target="_blank">{{ screenshot?.file?.name }}</a>
-          <a><fa-icon (click)="deleteScreenshot(screenshot.file)" [icon]="faTrash"></fa-icon></a>
+          <a><fa-icon (click)="deleteScreenshot(screenshot)" [icon]="faTrash"></fa-icon></a>
         </span>
       </div>
     </div>
+    <br />
     <button (click)="navigateToVulnerabilities()" type="button" class="btn btn-secondary float-right">
       Back to Vulnerabilities
     </button>

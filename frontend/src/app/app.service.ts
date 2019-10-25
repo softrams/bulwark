@@ -98,13 +98,21 @@ export class AppService {
       });
   }
 
-  getVulnerabilities(id: number) {
+  getVulnerabilities(assessmentId: number) {
     return this.http
-      .get(`${this.api}/vulnerability/${id}`)
+      .get(`${this.api}/assessment/${assessmentId}/vulnerability`)
       .toPromise()
       .then((res) => {
         return res;
       });
+  }
+
+  getVulnerability(id: number) {
+    return this.http.get(`${this.api}/vulnerability/${id}`);
+  }
+
+  updateVulnerability(id: number, vuln: FormData) {
+    return this.http.patch(`${this.api}/vulnerability/${id}`, vuln);
   }
 
   createVuln(vuln: FormData) {

@@ -7,5 +7,5 @@ module.exports = {
   database: process.env.CLEARDB_DATABASE_NAME,
   entities: [__dirname + '/dist/entity/*.js'],
   logging: true,
-  synchronize: true
+  synchronize: false
 };
