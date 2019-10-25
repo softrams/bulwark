@@ -2,13 +2,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 import { AppService } from './app.service';
+import { LoaderService } from './loader.service';
+import { LoadingInterceptor } from './loading.interceptor';
 import { HttpClientModule } from '@angular/common/http';
 import { AssessmentsComponent } from './assessments/assessments.component';
 import { OrganizationComponent } from './organization/organization.component';
@@ -36,7 +38,12 @@ import { DatePipe } from '@angular/common';
     AssessmentFormComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule, FontAwesomeModule],
-  providers: [AppService, DatePipe],
+  providers: [
+    AppService,
+    DatePipe,
+    LoaderService,
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
