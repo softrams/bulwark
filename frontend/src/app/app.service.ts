@@ -119,6 +119,10 @@ export class AppService {
     return this.http.post(`${this.api}/vulnerability`, vuln);
   }
 
+  deleteVuln(vulnId: number) {
+    return this.http.delete(`${this.api}/vulnerability/${vulnId}`);
+  }
+
   createOrg(org: Organization) {
     return this.http.post(`${this.api}/organization`, org);
   }

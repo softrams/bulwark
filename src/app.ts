@@ -142,6 +142,19 @@ createConnection().then((connection) => {
     res.status(200).json(vuln);
   });
 
+  app.delete('/api/vulnerability/:vulnId', async (req: Request, res: Response) => {
+    if (!req.params.vulnId) {
+      return res.status(400).send('Vulnerability deletion failed.  Vulnerability does not exist.');
+    }
+    let vuln = await vulnerabilityRepository.findOne(req.params.vulnId);
+    if (!vuln) {
+      return res.status(400).send('Vulnerability deletion failed.  Vulnerability does not exist.');
+    } else {
+      await vulnerabilityRepository.delete(vuln);
+      res.status(200).json('Vulnerability successfully deleted');
+    }
+  });
+
   app.patch('/api/vulnerability/:vulnId', upload.array('screenshots'), async (req, res) => {
     let vulnerability = new Vulnerability();
     vulnerability.id = +req.params.vulnId;

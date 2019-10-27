@@ -17,6 +17,6 @@ export class File {
   buffer: Buffer;
   @Column()
   size: number;
-  @ManyToOne((type) => Vulnerability, (vuln) => vuln.screenshots)
+  @ManyToOne((type) => Vulnerability, (vuln) => vuln.screenshots, { onDelete: 'CASCADE' })
   vulnerability: Vulnerability;
 }
