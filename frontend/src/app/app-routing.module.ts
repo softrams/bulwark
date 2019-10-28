@@ -11,6 +11,7 @@ import { VulnFormComponent } from './vuln-form/vuln-form.component';
 import { OrgFormComponent } from './org-form/org-form.component';
 import { AssetFormComponent } from './asset-form/asset-form.component';
 import { AssessmentFormComponent } from './assessment-form/assessment-form.component';
+import { ReportComponent } from './report/report.component';
 @Injectable()
 export class AssetsResolver implements Resolve<any> {
   constructor(private apiService: AppService) {}
@@ -69,6 +70,15 @@ export class OrganizationResolver implements Resolve<any> {
 
   resolve(route: ActivatedRouteSnapshot) {
     return this.apiService.getOrganizationById(route.params.id);
+  }
+}
+
+@Injectable()
+export class ReportResolver implements Resolve<any> {
+  constructor(private apiService: AppService) {}
+
+  resolve(route: ActivatedRouteSnapshot) {
+    return this.apiService.getReport(route.params.assessmentId);
   }
 }
 
@@ -132,6 +142,11 @@ const routes: Routes = [
     path: 'organization/:orgId/asset/:assetId/assessment/:assessmentId',
     component: AssessmentFormComponent,
     resolve: { assessment: AssessmentResolver }
+  },
+  {
+    path: 'organization/:orgId/asset/:assetId/assessment/:assessmentId/report',
+    component: ReportComponent,
+    resolve: { report: ReportResolver }
   }
 ];
 
@@ -143,10 +158,10 @@ const routes: Routes = [
     AssetsResolver,
     AssessmentsResolver,
     VulnerabilitiesResolver,
-    VulnFormComponent,
     OrganizationResolver,
     AssessmentResolver,
-    VulnerabilityResolver
+    VulnerabilityResolver,
+    ReportResolver
   ]
 })
 export class AppRoutingModule {}

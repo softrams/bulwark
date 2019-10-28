@@ -64,7 +64,7 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
   createForm() {
     this.assessmentForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(20)]],
-      executiveSummary: ['', [Validators.maxLength(1500)]],
+      executiveSummary: [''],
       jiraId: ['', [Validators.maxLength(15)]],
       testUrl: ['', [Validators.required, Validators.maxLength(250)]],
       prodUrl: ['', [Validators.required, Validators.maxLength(250)]],

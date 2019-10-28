@@ -71,6 +71,22 @@ export class AppService {
       });
   }
 
+  getScreenshotById(screenshot: any) {
+    const httpOptions = {
+      responseType: 'blob' as 'json'
+    };
+    return this.http
+      .get(`${this.api}/organization/file/${screenshot.id}`, httpOptions)
+      .toPromise()
+      .then((res: Blob) => {
+        const blob = new Blob([res], {
+          type: screenshot.mimetype
+        });
+        const url = window.URL.createObjectURL(blob);
+        return url;
+      });
+  }
+
   getOrganizationById(id: number) {
     return this.http
       .get(`${this.api}/organization/${id}`)
@@ -163,6 +179,22 @@ export class AppService {
 
   uploadMultiple(fileToUpload: FormData) {
     return this.http.post(`${this.api}/upload-multiple`, fileToUpload);
+  }
+
+  getReport(assessmentId: number) {
+    return this.http.get(`${this.api}/assessment/${assessmentId}/report`);
+  }
+
+  generateReport(orgId: number, assetId: number, assessmentId: number) {
+    const httpOptions = {
+      responseType: 'blob' as 'json'
+    };
+    const generateObject = {
+      orgId,
+      assetId,
+      assessmentId
+    };
+    return this.http.post(`${this.api}/report/generate`, generateObject, httpOptions);
   }
 
   private handleError(error: HttpErrorResponse) {

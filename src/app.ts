@@ -7,7 +7,7 @@ import { Organization } from './entity/Organization';
 import { Asset } from './entity/Asset';
 import { Assessment } from './entity/Assessment';
 import { Vulnerability } from './entity/Vulnerability';
-
+import { Report } from './classes/Report';
 import { File } from './entity/File';
 const puppeteer = require('puppeteer');
 const multer = require('multer');
@@ -69,7 +69,7 @@ createConnection().then((connection) => {
   });
 
   app.get('/api/organization/:id', async function(req: Request, res: Response) {
-    let org = await orgRepository.findOne({ where: { id: req.params.id }, relations: ['avatar'] });
+    let org = await orgRepository.findOne(req.params.id, { relations: ['avatar'] });
     let resObj = {
       name: org.name,
       avatarData: org.avatar
@@ -138,6 +138,7 @@ createConnection().then((connection) => {
     if (!req.params.vulnId) {
       return res.status(400).send('Invalid Vulnerability request');
     }
+    // TODO: Utilize createQueryBuilder to only return screenshot IDs and not the full object
     let vuln = await vulnerabilityRepository.findOne(req.params.vulnId, { relations: ['screenshots'] });
     res.status(200).json(vuln);
   });
@@ -268,7 +269,7 @@ createConnection().then((connection) => {
     if (!req.params.id || !req.params.assetId) {
       return res.status(400).send('Invalid Asset request');
     }
-    let asset = await assetRepository.findOne({ where: { id: req.params.assetId, organization: req.params.id } });
+    let asset = await assetRepository.findOne(req.params.assetId);
     res.status(200).json(asset);
   });
 
@@ -311,14 +312,12 @@ createConnection().then((connection) => {
     if (!req.params.assetId || !req.params.assessmentId) {
       return res.status(400).send('Invalid assessment request');
     }
-    let asset = await assessmentRepository.findOne({
-      where: { id: req.params.assessmentId, asset: req.params.assetId }
-    });
-    res.status(200).json(asset);
+    let assessment = await assessmentRepository.findOne(req.params.assessmentId);
+    res.status(200).json(assessment);
   });
 
   app.patch('/api/asset/:assetId/assessment/:assessmentId', async function(req: Request, res: Response) {
-    let assessment = await assessmentRepository.findOne({ where: { id: req.params.assessmentId } });
+    let assessment = await assessmentRepository.findOne(req.params.assessmentId);
     assessment = req.body;
     assessment.id = +req.params.assessmentId;
     if (assessment.startDate > assessment.endDate) {
@@ -332,12 +331,45 @@ createConnection().then((connection) => {
       res.json('Asset patched successfully').status(200);
     }
   });
+
+  app.get('/api/assessment/:assessmentId/report', async (req: Request, res: Response) => {
+    if (!req.params.assessmentId) {
+      return res.status(400).send('Invalid report request');
+    }
+    let report = new Report();
+    let assessment = await assessmentRepository.findOne(req.params.assessmentId, { relations: ['asset'] });
+    let asset = await assetRepository.findOne(assessment.asset.id, { relations: ['organization'] });
+    let organization = await orgRepository.findOne(asset.organization.id);
+    let vulnerabilities = await vulnerabilityRepository
+      .createQueryBuilder('vuln')
+      .leftJoinAndSelect('vuln.screenshots', 'screenshot')
+      .where('vuln.assessmentId = :assessmentId', { assessmentId: assessment.id })
+      .select(['vuln', 'screenshot.id', 'screenshot.name', 'screenshot.mimetype'])
+      .getMany();
+    report.org = organization;
+    report.asset = asset;
+    report.assessment = assessment;
+    report.vulns = vulnerabilities;
+    res.status(200).json(report);
+  });
+
   // puppeteer generate
-  app.get('/api/report/generate', async (req: Request, res: Response) => {
+  app.post('/api/report/generate', async (req: Request, res: Response) => {
+    if (!req.body.orgId || !req.body.assetId || !req.body.assessmentId) {
+      return res.status(400).send('Invalid report parameters');
+    }
+    const url = `http://localhost:4200/organization/${req.body.orgId}/asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report`;
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     const filePath = path.join(__dirname, '../temp_report.pdf');
-    await page.goto('', { waitUntil: 'networkidle2' });
+    await page.goto(url, { waitUntil: 'networkidle0' });
+    const div_selector_to_remove = '#buttons';
+    await page.evaluate((sel) => {
+      var elements = document.querySelectorAll(sel);
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].parentNode.removeChild(elements[i]);
+      }
+    }, div_selector_to_remove);
     await page.pdf({ path: filePath, format: 'A4' });
     await browser.close();
     const file = fs.createReadStream(filePath);
