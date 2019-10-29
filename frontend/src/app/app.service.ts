@@ -29,7 +29,7 @@ export class AppService {
         for (let i = 0; i < orgs.length; i++) {
           if (orgs[i].avatar && orgs[i].avatar.buffer) {
             await this.http
-              .get(`${this.api}/organization/file/${orgs[i].avatar.id}`, httpOptions)
+              .get(`${this.api}/file/${orgs[i].avatar.id}`, httpOptions)
               .toPromise()
               .then(async (res: Blob) => {
                 const blob = new Blob([res], {
@@ -55,32 +55,16 @@ export class AppService {
       });
   }
 
-  getAvatarById(file: any) {
+  getImageById(file: any) {
     const httpOptions = {
       responseType: 'blob' as 'json'
     };
     return this.http
-      .get(`${this.api}/organization/file/${file.id}`, httpOptions)
+      .get(`${this.api}/file/${file.id}`, httpOptions)
       .toPromise()
       .then((res: Blob) => {
         const blob = new Blob([res], {
           type: file.mimetype
-        });
-        const url = window.URL.createObjectURL(blob);
-        return url;
-      });
-  }
-
-  getScreenshotById(screenshot: any) {
-    const httpOptions = {
-      responseType: 'blob' as 'json'
-    };
-    return this.http
-      .get(`${this.api}/organization/file/${screenshot.id}`, httpOptions)
-      .toPromise()
-      .then((res: Blob) => {
-        const blob = new Blob([res], {
-          type: screenshot.mimetype
         });
         const url = window.URL.createObjectURL(blob);
         return url;

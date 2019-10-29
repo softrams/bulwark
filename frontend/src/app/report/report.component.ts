@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from '../app.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -7,7 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './report.component.html',
   styleUrls: ['./report.component.sass']
 })
-export class ReportComponent implements OnInit, AfterViewInit {
+export class ReportComponent implements OnInit {
   report: any;
   numOfDays: number;
   orgId: number;
@@ -21,12 +21,7 @@ export class ReportComponent implements OnInit, AfterViewInit {
     private sanitizer: DomSanitizer,
     public router: Router
   ) {}
-  ngAfterViewInit() {
-    for (let url of this.urls) {
-      console.log(url);
-      window.URL.revokeObjectURL(url);
-    }
-  }
+
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ report }) => {
       this.report = report;
@@ -36,7 +31,7 @@ export class ReportComponent implements OnInit, AfterViewInit {
       for (const vuln of report.vulns) {
         vuln.screenshotObjs = [];
         for (const screenshot of vuln.screenshots) {
-          this.appService.getScreenshotById(screenshot).then((url) => {
+          this.appService.getImageById(screenshot).then((url) => {
             const screenshotObj = {
               url: this.getSantizeUrl(url),
               name: screenshot.name

@@ -9,14 +9,14 @@ import { Assessment } from './entity/Assessment';
 import { Vulnerability } from './entity/Vulnerability';
 import { Report } from './classes/Report';
 import { File } from './entity/File';
+import { validate } from 'class-validator';
+
 const puppeteer = require('puppeteer');
 const multer = require('multer');
 var upload = multer();
 const fs = require('fs');
-
 const helmet = require('helmet');
 const cors = require('cors');
-import { validate } from 'class-validator';
 
 // Setup middlware
 const app = express();
@@ -108,7 +108,7 @@ createConnection().then((connection) => {
     }
   });
 
-  app.get('/api/organization/file/:id', async function(req: Request, res: Response) {
+  app.get('/api/file/:id', async function(req: Request, res: Response) {
     const file = await fileRepository.findOne(req.params.id);
     res.send(file.buffer);
   });
@@ -191,8 +191,8 @@ createConnection().then((connection) => {
       // Save new files added
       for (let screenshot of req['files']) {
         let file = new File();
-        file.buffer = screenshot.buffer;
         file.fieldName = screenshot.fieldName;
+        file.buffer = screenshot.buffer;
         file.encoding = screenshot.encoding;
         file.mimetype = screenshot.mimetype;
         file.size = screenshot.size;
