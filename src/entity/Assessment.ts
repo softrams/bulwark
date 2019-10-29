@@ -10,7 +10,6 @@ export class Assessment {
   @Length(1, 20)
   name: string;
   @Column()
-  @MaxLength(1500)
   executiveSummary: string;
   @Column()
   @MaxLength(15)

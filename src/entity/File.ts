@@ -13,7 +13,7 @@ export class File {
   encoding: string;
   @Column()
   mimetype: string;
-  @Column()
+  @Column('mediumblob')
   buffer: Buffer;
   @Column()
   size: number;

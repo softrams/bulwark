@@ -9,7 +9,7 @@ export class Organization {
   @Column()
   @Length(1, 20)
   name: string;
-  @OneToOne((type) => File)
+  @OneToOne((type) => File, { onDelete: 'CASCADE' })
   @JoinColumn()
   avatar: number;
 }

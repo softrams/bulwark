@@ -42,7 +42,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
         this.vulnId = vulnerability;
         for (const file of vulnerability['screenshots']) {
           const existFile: AppFile = file;
-          this.appService.getAvatarById(existFile).then((url) => {
+          this.appService.getImageById(existFile).then((url) => {
             existFile.imgUrl = url;
             this.previewScreenshot(null, existFile);
           });

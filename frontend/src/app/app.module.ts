@@ -22,6 +22,7 @@ import { FooterComponent } from './footer/footer.component';
 import { AssessmentFormComponent } from './assessment-form/assessment-form.component';
 
 import { DatePipe } from '@angular/common';
+import { ReportComponent } from './report/report.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { DatePipe } from '@angular/common';
     AssetFormComponent,
     VulnFormComponent,
     FooterComponent,
-    AssessmentFormComponent
+    AssessmentFormComponent,
+    ReportComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule, FontAwesomeModule],
   providers: [

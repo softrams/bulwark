@@ -1,0 +1,185 @@
+<div class="container">
+  <div class="row" id="buttons">
+    <div class="col-12">
+      <div class="float-right">
+        <button (click)="generateReport()" type="button" class="btn btn-primary" style="margin-right: 5px">
+          Generate Report
+        </button>
+        <button (click)="navigateToVulns()" type="button" class="btn btn-secondary">
+          Back to Assessments
+        </button>
+      </div>
+    </div>
+  </div>
+  <br />
+  <div class="row" id="report">
+    <div class="col-12">
+      <div class="container">
+        <h1 class="text-center">
+          {{ report?.org?.name }}: {{ report?.asset?.name }} & {{ report?.assessment?.name }} Application Security
+          Report
+        </h1>
+        <hr />
+        <h4>
+          {{ report?.assessment?.startDate | date: 'shortDate' }} -
+          {{ report?.assessment?.endDate | date: 'shortDate' }}
+        </h4>
+        <p>
+          The Softrams Application Security Team performed a security assessment on {{ report?.asset?.name }} &
+          {{ report?.assessment?.name }} (the application) on {{ report?.assessment?.startDate | date: 'shortDate' }}.
+          The security assessment lasted {{ numOfDays }} days and ended on
+          {{ report?.assessment?.endDate | date: 'shortDate' }}. This report contains detailed information about
+          security vulnerabilities found during the assessment.
+        </p>
+        <br />
+        <div style="margin-bottom: 20px;">
+          <h4>Executive Summary</h4>
+          <p>
+            {{ report?.assessment?.executiveSummary }}
+          </p>
+        </div>
+        <h4>Application Security Team</h4>
+        <!--TODO:  Dynamically fill these out-->
+        <table class="table col-6">
+          <tr>
+            <th>Name</th>
+            <th>Position</th>
+          </tr>
+          <tr>
+            <td>Bill Jones</td>
+            <td>Head of Security</td>
+          </tr>
+          <tr>
+            <td>Alejandro Saenz</td>
+            <td>Sr. Application Security Engineer</td>
+          </tr>
+        </table>
+
+        <div style="margin-bottom: 20px;">
+          <h4>Finding Severity</h4>
+          <img src="../../assets/overallRiskSeverity.png" />
+        </div>
+        <h4>Tools and Methodology</h4>
+        <ul>
+          <li><a href="https://portswigger.net/burp" target="_blank">Burp Suite Professional</a></li>
+          <li>
+            <a href="https://developers.google.com/web/tools/chrome-devtools/" target="_blank"
+              >Chrome Developer Tools</a
+            >
+          </li>
+          <li><a href="https://developer.mozilla.org/en-US/docs/Tools" target="_blank">Firefox Developer Tools</a></li>
+          <li><a href="https://www.ssllabs.com/ssltest/" target="_blank">SSL Labs</a></li>
+          <li>
+            <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check" target="_blank">Owasp Dependency Check</a>
+          </li>
+        </ul>
+      </div>
+      <br />
+      <h4>Summary of Findings</h4>
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Finding</th>
+            <th scope="col">Overall Risk Severity</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let vuln of report.vulns">
+          <tr>
+            <th>{{ vuln.name }}</th>
+            <td>{{ vuln.risk }}</td>
+            <td>{{ vuln.status }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div>
+        <div *ngFor="let vuln of report.vulns; let i = index">
+          <div style="page-break-after:always; margin-top: 20px;"></div>
+          <h3>{{ vuln?.name }}</h3>
+          <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Impact</th>
+                <th scope="col">Likelihood</th>
+                <th scope="col">Risk</th>
+                <th scope="col">Systemic</th>
+                <th scope="col">CVSS Score</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ vuln.impact }}</td>
+                <td>{{ vuln.likelihood }}</td>
+                <td>{{ vuln.risk }}</td>
+                <td>{{ vuln.systemic }}</td>
+                <td>
+                  <a [href]="vuln.cvssUrl" target="_blank">{{ vuln.cvssScore }}</a>
+                </td>
+                <td>{{ vuln.status }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4>Problem Locations</h4>
+          <table class="table col-6">
+            <thead>
+              <tr>
+                <th scope="col">URL/Function</th>
+                <th scope="col">Parameter/Line #</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>http://google.com/admin/:id</th>
+                <td>id</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4>Description</h4>
+          <p>{{ vuln?.description }}</p>
+          <h4>Steps to Reproduce</h4>
+          <ol>
+            <li>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+              dolore magna aliqua
+            </li>
+            <li>
+              Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non
+              numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem
+            </li>
+            <li>
+              Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni
+              dolores eos qui ratione voluptatem sequi nesciunt
+            </li>
+            <li>
+              Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam
+              rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
+              explicabo
+            </li>
+          </ol>
+          <h4>Detailed Description</h4>
+          <p>
+            {{ vuln?.detailedInfo }}
+          </p>
+          <h4>Remediation</h4>
+          <p>
+            {{ vuln?.remediation }}
+          </p>
+          <h4>Screenshots</h4>
+          <div *ngFor="let screenshotObj of vuln.screenshotObjs">
+            <div class="gallery col-10 mx-auto">
+              <a target="_blank" [href]="screenshotObj.url">
+                <img [src]="screenshotObj.url" title="{{ screenshotObj.name }}" />
+              </a>
+              <div class="desc">
+                Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut
+                aliquid ex ea commodi consequatur
+              </div>
+            </div>
+          </div>
+          <div style="page-break-after:always; margin-top: 20px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
