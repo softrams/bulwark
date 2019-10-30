@@ -9,6 +9,7 @@ import { Assessment } from './entity/Assessment';
 import { Vulnerability } from './entity/Vulnerability';
 import { Report } from './classes/Report';
 import { File } from './entity/File';
+import { ProblemLocation } from './entity/ProblemLocation';
 import { validate } from 'class-validator';
 
 const puppeteer = require('puppeteer');
@@ -45,6 +46,7 @@ createConnection().then((connection) => {
   const assessmentRepository = connection.getRepository(Assessment);
   const vulnerabilityRepository = connection.getRepository(Vulnerability);
   const fileRepository = connection.getRepository(File);
+  const probLocRepository = connection.getRepository(ProblemLocation);
 
   app.post('/api/upload', upload.single('file'), async (req: Request, res: Response) => {
     // TODO Virus scanning, file type validation, etc
@@ -139,7 +141,9 @@ createConnection().then((connection) => {
       return res.status(400).send('Invalid Vulnerability request');
     }
     // TODO: Utilize createQueryBuilder to only return screenshot IDs and not the full object
-    let vuln = await vulnerabilityRepository.findOne(req.params.vulnId, { relations: ['screenshots'] });
+    let vuln = await vulnerabilityRepository.findOne(req.params.vulnId, {
+      relations: ['screenshots', 'problemLocations']
+    });
     res.status(200).json(vuln);
   });
 
@@ -205,6 +209,27 @@ createConnection().then((connection) => {
           await fileRepository.save(file);
         }
       }
+      // Remove deleted problem locations
+      const clientProdLocs = JSON.parse(req.body.problemLocations);
+      let clientProdLocsIds = clientProdLocs.map((value) => value.id);
+      let existingProbLocs = await probLocRepository.find({ where: { vulnerability: vulnerability.id } });
+      let existingProbLocIds = existingProbLocs.map((probLoc) => probLoc.id);
+      let prodLocsToDelete = existingProbLocIds.filter((value) => !clientProdLocsIds.includes(value));
+      for (const probLoc of prodLocsToDelete) {
+        probLocRepository.delete(probLoc);
+      }
+      // Update problem locations
+      for (let probLoc of clientProdLocs) {
+        let problemLocation = new ProblemLocation();
+        problemLocation = probLoc;
+        problemLocation.vulnerability = vulnerability;
+        const errors = await validate(problemLocation);
+        if (errors.length > 0) {
+          return res.status(400).send('Problem Location validation failed');
+        } else {
+          await probLocRepository.save(problemLocation);
+        }
+      }
       res.json('Vulnerability saved successfully').status(200);
     }
   });
@@ -229,6 +254,7 @@ createConnection().then((connection) => {
       return res.status(400).send('Vulnerability form validation failed');
     } else {
       await vulnerabilityRepository.save(vulnerability);
+      // Save screenshots
       for (let screenshot of req['files']) {
         let file = new File();
         file.buffer = screenshot.buffer;
@@ -243,6 +269,19 @@ createConnection().then((connection) => {
           return res.status(400).send('File validation failed');
         } else {
           await fileRepository.save(file);
+        }
+      }
+      // Save problem locations
+      const problemLocations = JSON.parse(req.body.problemLocations);
+      for (let probLoc of problemLocations) {
+        let problemLocation = new ProblemLocation();
+        problemLocation = probLoc;
+        problemLocation.vulnerability = vulnerability;
+        const errors = await validate(problemLocation);
+        if (errors.length > 0) {
+          return res.status(400).send('Problem Location validation failed');
+        } else {
+          await probLocRepository.save(problemLocation);
         }
       }
       res.json('Vulnerability saved successfully').status(200);
@@ -343,8 +382,9 @@ createConnection().then((connection) => {
     let vulnerabilities = await vulnerabilityRepository
       .createQueryBuilder('vuln')
       .leftJoinAndSelect('vuln.screenshots', 'screenshot')
+      .leftJoinAndSelect('vuln.problemLocations', 'problemLocation')
       .where('vuln.assessmentId = :assessmentId', { assessmentId: assessment.id })
-      .select(['vuln', 'screenshot.id', 'screenshot.name', 'screenshot.mimetype'])
+      .select(['vuln', 'screenshot.id', 'screenshot.name', 'screenshot.mimetype', 'problemLocation'])
       .getMany();
     report.org = organization;
     report.asset = asset;
