@@ -40,10 +40,6 @@ body {
 }
 
 .ng-valid[required],
-.ng-valid:not(form) {
-  border-left: 5px solid #42a948; /* green */
-}
-
 .ng-invalid:not(form) {
   border-left: 5px solid #ae0a0a; /* red */
 }

@@ -109,7 +109,33 @@
         </div>
       </div>
     </div>
-
+    <br />
+    <div formArrayName="problemLocations">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Problem Location</th>
+            <th scope="col">Target</th>
+            <th>
+              <button class="btn btn-primary" type="button" (click)="addProbLoc()">
+                <fa-icon [icon]="faPlus"></fa-icon>
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let probLoc of probLocArr.controls; let i = index" [formGroupName]="i">
+          <tr>
+            <td><input formControlName="location" class="form-control" /></td>
+            <td><input formControlName="target" class="form-control" /></td>
+            <td>
+              <button class="btn btn-secondary" type="button" (click)="deleteProbLoc(i)">
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div>
       <label for="description">Description</label>
       <textarea formControlName="description" class="form-control" id="description" rows="3"></textarea>

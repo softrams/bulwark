@@ -1,12 +1,13 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { AppService } from '../app.service';
 import { Vulnerability } from './Vulnerability';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { AppFile } from '../classes/App_File';
+import { ProblemLocation } from '../classes/ProblemLocation';
 @Component({
   selector: 'app-vuln-form',
   templateUrl: './vuln-form.component.html',
@@ -25,7 +26,10 @@ export class VulnFormComponent implements OnChanges, OnInit {
   filesToUpload: FormData;
   tempScreenshots: object[] = [];
   screenshotsToDelete: number[] = [];
+  probLocArray: ProblemLocation[] = [];
+  items: FormArray;
   faTrash = faTrash;
+  faPlus = faPlus;
   constructor(
     private appService: AppService,
     public activatedRoute: ActivatedRoute,
@@ -39,7 +43,16 @@ export class VulnFormComponent implements OnChanges, OnInit {
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ vulnerability }) => {
       if (vulnerability) {
-        this.vulnId = vulnerability;
+        this.vulnModel = vulnerability;
+        for (const probLoc of vulnerability.problemLocations) {
+          this.probLocArr.push(
+            this.fb.group({
+              id: probLoc.id,
+              location: probLoc.location,
+              target: probLoc.target
+            })
+          );
+        }
         for (const file of vulnerability['screenshots']) {
           const existFile: AppFile = file;
           this.appService.getImageById(existFile).then((url) => {
@@ -75,7 +88,8 @@ export class VulnFormComponent implements OnChanges, OnInit {
       jiraId: ['', [Validators.maxLength(15)]],
       cvssScore: ['', Validators.required],
       cvssUrl: ['', Validators.required],
-      detailedInfo: ['', [Validators.required, Validators.maxLength(2000)]]
+      detailedInfo: ['', [Validators.required, Validators.maxLength(2000)]],
+      problemLocations: this.fb.array([])
     });
   }
 
@@ -92,8 +106,28 @@ export class VulnFormComponent implements OnChanges, OnInit {
       jiraId: this.vulnModel.jiraId,
       cvssScore: this.vulnModel.cvssScore,
       cvssUrl: this.vulnModel.cvssUrl,
-      detailedInfo: this.vulnModel.detailedInfo
+      detailedInfo: this.vulnModel.detailedInfo,
+      problemLocations: this.vulnModel.problemLocations
     });
+  }
+
+  get probLocArr() {
+    return this.vulnForm.get('problemLocations') as FormArray;
+  }
+
+  initProbLocRows(): FormGroup {
+    return this.fb.group({
+      location: '',
+      target: ''
+    });
+  }
+
+  addProbLoc() {
+    this.probLocArr.push(this.initProbLocRows());
+  }
+
+  deleteProbLoc(index: number) {
+    this.probLocArr.removeAt(index);
   }
 
   handleFileInput(files: FileList) {
@@ -173,8 +207,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
     this.filesToUpload.append('detailedInfo', this.vulnModel.detailedInfo);
     this.filesToUpload.append('assessment', this.assessmentId);
     this.filesToUpload.append('name', this.vulnModel.name);
-    this.vulnModel.assessment = +this.assessmentId;
-    this.vulnModel.screenshots = this.filesToUpload;
+    this.filesToUpload.append('problemLocations', JSON.stringify(this.vulnModel.problemLocations));
     this.createOrUpdateVuln(this.filesToUpload);
   }
 
