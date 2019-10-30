@@ -6,6 +6,10 @@ module.exports = {
   password: process.env.CLEARDB_DATABASE_PASSWORD,
   database: process.env.CLEARDB_DATABASE_NAME,
   entities: [__dirname + '/dist/entity/*.js'],
+  migrations: ['migration/*.ts'],
+  cli: {
+    migrationsDir: 'migration'
+  },
   logging: true,
-  synchronize: false
+  synchronize: true
 };

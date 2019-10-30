@@ -5,12 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile": "tsc && cd dist && node app.js",
+    "compile": "rm -rf dist && tsc && cd dist && node app.js",
     "ngServe": "cd frontend && ng serve",
     "nodemon:watch": "nodemon -e ts --exec \"npm run compile\" ",
     "start:dev": "concurrently --kill-others \"npm run nodemon:watch\" \"npm run ngServe\"",
     "start": "cd dist && node app.js",
-    "postinstall": "cd frontend && npm install && ng build --prod"
+    "postinstall": "cd frontend && npm install && ng build --prod",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
+    "migration:generate": "typeorm migration:create -n refactor",
+    "migration:revert": "typeorm migration:revert"
   },
   "nodemonConfig": {
     "ignore": [
@@ -43,6 +47,8 @@
     "mysql": "^2.17.1",
     "puppeteer": "^1.20.0",
     "reflect-metadata": "^0.1.13",
+    "ts-node": "^8.4.1",
+    "tsconfig-paths": "^3.9.0",
     "typeorm": "^0.2.19"
   }
 }

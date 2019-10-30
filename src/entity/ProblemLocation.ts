@@ -7,10 +7,10 @@ export class ProblemLocation {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  @MaxLength(250)
+  @MaxLength(255)
   location: string;
   @Column()
-  @MaxLength(250)
+  @MaxLength(255)
   target: string;
   @ManyToOne((type) => Vulnerability, (vuln) => vuln.problemLocations, { onDelete: 'CASCADE' })
   vulnerability: Vulnerability;
