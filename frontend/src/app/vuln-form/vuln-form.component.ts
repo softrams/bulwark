@@ -5,7 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { AppService } from '../app.service';
 import { Vulnerability } from './Vulnerability';
-import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faPlus, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { AppFile } from '../classes/App_File';
 import { ProblemLocation } from '../classes/ProblemLocation';
 import { ResourceLocation } from '../classes/ResourceLocation';
@@ -32,6 +32,12 @@ export class VulnFormComponent implements OnChanges, OnInit {
   items: FormArray;
   faTrash = faTrash;
   faPlus = faPlus;
+  faEye = faEye;
+  faEyeSlash = faEyeSlash;
+  previewDescription = false;
+  previewDetailedDesc = false;
+  previewRemediation = false;
+
   constructor(
     private appService: AppService,
     public activatedRoute: ActivatedRoute,
@@ -258,5 +264,15 @@ export class VulnFormComponent implements OnChanges, OnInit {
         }
       );
     }
+  }
+
+  toggleDescPreview() {
+    this.previewDescription = !this.previewDescription;
+  }
+  toggleDetailedDescPreview() {
+    this.previewDetailedDesc = !this.previewDetailedDesc;
+  }
+  toggleRemediationPreview() {
+    this.previewRemediation = !this.previewRemediation;
   }
 }

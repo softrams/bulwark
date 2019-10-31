@@ -136,8 +136,17 @@
         </tbody>
       </table>
     </div>
-    <div>
-      <label for="description">Description</label>
+
+    <div class="row">
+      <div class="col-12">
+        <label for="description">Description</label>
+        <div class="float-right">
+          <fa-icon (click)="toggleDescPreview()" *ngIf="!previewDescription" [icon]="faEye"></fa-icon>
+          <fa-icon (click)="toggleDescPreview()" *ngIf="previewDescription" [icon]="faEyeSlash"></fa-icon>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!previewDescription">
       <textarea formControlName="description" class="form-control" id="description" rows="3"></textarea>
       <div
         *ngIf="vulnForm.controls['description'].errors && !vulnForm.controls['description'].pristine"
@@ -146,9 +155,21 @@
         Description is not valid
       </div>
     </div>
-    <div>
-      <label for="detailedInfo">Detailed Information</label>
-      <textarea formControlName="detailedInfo" class="form-control" id="detailedInfo" rows="3"></textarea>
+    <div *ngIf="previewDescription" class="previewBox">
+      <markdown class="variable-binding" [data]="vulnForm.get('description').value"></markdown>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <label for="detailedInfo">Detailed Information</label>
+        <div class="float-right">
+          <fa-icon (click)="toggleDetailedDescPreview()" *ngIf="!previewDetailedDesc" [icon]="faEye"></fa-icon>
+          <fa-icon (click)="toggleDetailedDescPreview()" *ngIf="previewDetailedDesc" [icon]="faEyeSlash"></fa-icon>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!previewDetailedDesc">
+      <textarea formControlName="detailedInfo" class="form-control" id="detailedInfo" rows="3"><pre></pre></textarea>
       <div
         *ngIf="vulnForm.controls['detailedInfo'].errors && !vulnForm.controls['detailedInfo'].pristine"
         class="alert alert-danger"
@@ -156,9 +177,20 @@
         Detailed information is not valid
       </div>
     </div>
+    <div *ngIf="previewDetailedDesc" class="previewBox">
+      <markdown class="variable-binding" [data]="vulnForm.get('detailedInfo').value"></markdown>
+    </div>
 
-    <div>
-      <label for="remediation">Remediation</label>
+    <div class="row">
+      <div class="col-12">
+        <label for="remediation">Remediation</label>
+        <div class="float-right">
+          <fa-icon (click)="toggleRemediationPreview()" *ngIf="!previewRemediation" [icon]="faEye"></fa-icon>
+          <fa-icon (click)="toggleRemediationPreview()" *ngIf="previewRemediation" [icon]="faEyeSlash"></fa-icon>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!previewRemediation">
       <textarea formControlName="remediation" class="form-control" id="remediation" rows="3"></textarea>
       <div
         *ngIf="vulnForm.controls['remediation'].errors && !vulnForm.controls['remediation'].pristine"
@@ -167,6 +199,10 @@
         Remediation information is not valid
       </div>
     </div>
+    <div *ngIf="previewRemediation" class="previewBox">
+      <markdown class="variable-binding" [data]="vulnForm.get('remediation').value"></markdown>
+    </div>
+
     <br />
     <div formArrayName="resourceLocations">
       <table class="table">
