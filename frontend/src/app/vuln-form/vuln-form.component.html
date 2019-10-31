@@ -168,6 +168,30 @@
       </div>
     </div>
     <br />
+    <div formArrayName="resourceLocations">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Resource URL</th>
+            <th>
+              <button class="btn btn-primary" type="button" (click)="addResLoc()">
+                <fa-icon [icon]="faPlus"></fa-icon>
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let resLoc of resLocArr.controls; let i = index" [formGroupName]="i">
+          <tr>
+            <td><input formControlName="resURL" class="form-control" /></td>
+            <td>
+              <button class="btn btn-secondary" type="button" (click)="deleteResLoc(i)">
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>    
     <div>
       <label for="screenshot">Screenshot Upload</label>
       <input
