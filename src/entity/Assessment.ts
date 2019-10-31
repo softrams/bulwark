@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Asset } from './Asset';
+import { Vulnerability } from './Vulnerability';
 import { Length, IsUrl, IsDate, MaxLength, IsString } from 'class-validator';
 
 @Entity()
@@ -32,6 +33,8 @@ export class Assessment {
   @Column()
   @IsDate()
   endDate: Date;
-  @ManyToOne((type) => Asset, (asset) => asset.id)
+  @ManyToOne((type) => Asset, (asset) => asset.assessment, { onDelete: 'CASCADE' })
   asset: Asset;
+  @OneToMany((type) => Vulnerability, (vuln) => vuln.assessment)
+  vulnerabilities: Vulnerability[];
 }

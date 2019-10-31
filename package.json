@@ -13,7 +13,8 @@
     "postinstall": "cd frontend && npm install && ng build --prod",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
-    "migration:generate": "typeorm migration:create -n refactor",
+    "migration:generate": "typeorm migration:generate -n",
+    "migration:create": "typeorm migration:create -n newInit",
     "migration:revert": "typeorm migration:revert"
   },
   "nodemonConfig": {

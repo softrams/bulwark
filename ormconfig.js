@@ -11,5 +11,5 @@ module.exports = {
     migrationsDir: 'migration'
   },
   logging: true,
-  synchronize: true
+  synchronize: false
 };
