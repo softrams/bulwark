@@ -20,7 +20,7 @@ import { OrgFormComponent } from './org-form/org-form.component';
 import { AssetFormComponent } from './asset-form/asset-form.component';
 import { FooterComponent } from './footer/footer.component';
 import { AssessmentFormComponent } from './assessment-form/assessment-form.component';
-
+import { MarkdownModule } from 'ngx-markdown';
 import { DatePipe } from '@angular/common';
 import { ReportComponent } from './report/report.component';
 
@@ -39,7 +39,14 @@ import { ReportComponent } from './report/report.component';
     AssessmentFormComponent,
     ReportComponent
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule, FontAwesomeModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    FontAwesomeModule,
+    MarkdownModule.forRoot()
+  ],
   providers: [
     AppService,
     DatePipe,
