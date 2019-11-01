@@ -8,12 +8,10 @@ export class Assessment {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
-  @Length(1, 20)
   name: string;
-  @Column()
+  @Column({ length: 4000 })
   executiveSummary: string;
   @Column()
-  @MaxLength(15)
   jiraId: string;
   @Column()
   @IsUrl()
@@ -22,7 +20,6 @@ export class Assessment {
   @IsUrl()
   prodUrl: string;
   @Column()
-  @MaxLength(250)
   scope: string;
   @Column()
   @IsString()

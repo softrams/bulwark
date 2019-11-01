@@ -147,7 +147,13 @@
       </div>
     </div>
     <div *ngIf="!previewDescription">
-      <textarea formControlName="description" class="form-control" id="description" rows="3"></textarea>
+      <textarea
+        formControlName="description"
+        class="form-control"
+        id="description"
+        rows="6"
+        maxlength="4000"
+      ></textarea>
       <div
         *ngIf="vulnForm.controls['description'].errors && !vulnForm.controls['description'].pristine"
         class="alert alert-danger"
@@ -169,7 +175,13 @@
       </div>
     </div>
     <div *ngIf="!previewDetailedDesc">
-      <textarea formControlName="detailedInfo" class="form-control" id="detailedInfo" rows="3"><pre></pre></textarea>
+      <textarea
+        formControlName="detailedInfo"
+        class="form-control"
+        id="detailedInfo"
+        rows="6"
+        maxlength="4000"
+      ></textarea>
       <div
         *ngIf="vulnForm.controls['detailedInfo'].errors && !vulnForm.controls['detailedInfo'].pristine"
         class="alert alert-danger"
@@ -191,7 +203,13 @@
       </div>
     </div>
     <div *ngIf="!previewRemediation">
-      <textarea formControlName="remediation" class="form-control" id="remediation" rows="3"></textarea>
+      <textarea
+        formControlName="remediation"
+        class="form-control"
+        id="remediation"
+        rows="6"
+        maxlength="4000"
+      ></textarea>
       <div
         *ngIf="vulnForm.controls['remediation'].errors && !vulnForm.controls['remediation'].pristine"
         class="alert alert-danger"

@@ -49,7 +49,7 @@ export class OrgFormComponent implements OnInit, OnChanges {
 
   createForm() {
     this.orgForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(50)]],
+      name: ['', [Validators.required]],
       avatar: ['']
     });
   }

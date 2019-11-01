@@ -83,18 +83,18 @@ export class VulnFormComponent implements OnChanges, OnInit {
 
   createForm() {
     this.vulnForm = this.fb.group({
-      impact: ['', [Validators.required, Validators.maxLength(6)]],
-      likelihood: ['', [Validators.required, Validators.maxLength(6)]],
-      risk: ['', [Validators.required, Validators.maxLength(13)]],
+      impact: ['', [Validators.required]],
+      likelihood: ['', [Validators.required]],
+      risk: ['', [Validators.required]],
       systemic: ['', [Validators.required]],
       status: ['', Validators.required],
-      description: ['', [Validators.required, Validators.maxLength(2000)]],
-      remediation: ['', [Validators.required, Validators.maxLength(2000)]],
-      name: ['', [Validators.required, Validators.maxLength(50)]],
-      jiraId: ['', [Validators.maxLength(15)]],
+      description: ['', [Validators.required, Validators.maxLength(4000)]],
+      remediation: ['', [Validators.required, Validators.maxLength(4000)]],
+      name: ['', [Validators.required]],
+      jiraId: ['', []],
       cvssScore: ['', Validators.required],
       cvssUrl: ['', Validators.required],
-      detailedInfo: ['', [Validators.required, Validators.maxLength(2000)]],
+      detailedInfo: ['', [Validators.required, Validators.maxLength(4000)]],
       problemLocations: this.fb.array([])
     });
   }

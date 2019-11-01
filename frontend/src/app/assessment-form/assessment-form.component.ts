@@ -63,15 +63,15 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
 
   createForm() {
     this.assessmentForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(20)]],
-      executiveSummary: [''],
-      jiraId: ['', [Validators.maxLength(15)]],
-      testUrl: ['', [Validators.required, Validators.maxLength(250)]],
-      prodUrl: ['', [Validators.required, Validators.maxLength(250)]],
+      name: ['', [Validators.required]],
+      executiveSummary: ['', Validators.maxLength(4000)],
+      jiraId: ['', []],
+      testUrl: ['', [Validators.required]],
+      prodUrl: ['', [Validators.required]],
       scope: ['', [Validators.required]],
-      tag: ['', [Validators.maxLength(250)]],
-      startDate: ['', [Validators.required, Validators.maxLength(25)]],
-      endDate: ['', [Validators.required, Validators.maxLength(25)]]
+      tag: ['', []],
+      startDate: ['', [Validators.required]],
+      endDate: ['', [Validators.required]]
     });
   }
 
