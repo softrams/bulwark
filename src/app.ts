@@ -11,6 +11,7 @@ import { Report } from './classes/Report';
 import { File } from './entity/File';
 import { ProblemLocation } from './entity/ProblemLocation';
 import { validate } from 'class-validator';
+import { Resource } from './entity/Resource';
 
 const puppeteer = require('puppeteer');
 const multer = require('multer');
@@ -47,6 +48,7 @@ createConnection().then((connection) => {
   const vulnerabilityRepository = connection.getRepository(Vulnerability);
   const fileRepository = connection.getRepository(File);
   const probLocRepository = connection.getRepository(ProblemLocation);
+  const resLocRepository = connection.getRepository(Resource);
 
   app.post('/api/upload', upload.single('file'), async (req: Request, res: Response) => {
     // TODO Virus scanning, file type validation, etc
@@ -142,7 +144,7 @@ createConnection().then((connection) => {
     }
     // TODO: Utilize createQueryBuilder to only return screenshot IDs and not the full object
     let vuln = await vulnerabilityRepository.findOne(req.params.vulnId, {
-      relations: ['screenshots', 'problemLocations']
+      relations: ['screenshots', 'problemLocations', 'resource']
     });
     res.status(200).json(vuln);
   });
@@ -218,8 +220,20 @@ createConnection().then((connection) => {
       for (const probLoc of prodLocsToDelete) {
         probLocRepository.delete(probLoc);
       }
+
+      // Remove deleted resource locations
+      const clientResLocs = JSON.parse(req.body.resourceLocations);
+      let clientResLocsIds = clientResLocs.map((value) => value.id);
+      let existingResLocs = await resLocRepository.find({ where: { vulnerability: vulnerability.id } });
+      let existingResLocIds = existingResLocs.map((resLoc) => resLoc.id);
+      let resLocsToDelete = existingResLocIds.filter((value) => !clientResLocsIds.includes(value));
+      for (const resLoc of resLocsToDelete) {
+        resLocRepository.delete(resLoc);
+      }
+
       // Update problem locations
       for (let probLoc of clientProdLocs) {
+        if (probLoc && probLoc.location && probLoc.target) {
         let problemLocation = new ProblemLocation();
         problemLocation = probLoc;
         problemLocation.vulnerability = vulnerability;
@@ -229,7 +243,27 @@ createConnection().then((connection) => {
         } else {
           await probLocRepository.save(problemLocation);
         }
+      } else {
+        return res.status(400).send('Invalid Problem Location.');
       }
+      }
+
+      // Update resource locations
+      for (let resLoc of clientResLocs) {
+        if (resLoc.description && resLoc.url) {
+        let resourceLocation = new Resource();
+        resourceLocation = resLoc;
+        resourceLocation.vulnerability = vulnerability;
+        const errors = await validate(resourceLocation);
+        if (errors.length > 0) {
+          return res.status(400).send('Resource Location validation failed');
+        } else {
+          await resLocRepository.save(resourceLocation);
+        }
+      } else {
+        return res.status(400).send('Resource Location Invalid.');
+      }
+    }      
       res.json('Vulnerability saved successfully').status(200);
     }
   });
@@ -274,16 +308,37 @@ createConnection().then((connection) => {
       // Save problem locations
       const problemLocations = JSON.parse(req.body.problemLocations);
       for (let probLoc of problemLocations) {
-        let problemLocation = new ProblemLocation();
-        problemLocation = probLoc;
-        problemLocation.vulnerability = vulnerability;
-        const errors = await validate(problemLocation);
-        if (errors.length > 0) {
-          return res.status(400).send('Problem Location validation failed');
+        if (probLoc && probLoc.location && probLoc.target) {
+          let problemLocation = new ProblemLocation();
+          problemLocation = probLoc;
+          problemLocation.vulnerability = vulnerability;
+          const errors = await validate(problemLocation);
+          if (errors.length > 0) {
+            return res.status(400).send('Problem Location validation failed');
+          } else {
+            await probLocRepository.save(problemLocation);
+          }
         } else {
-          await probLocRepository.save(problemLocation);
+          return res.status(400).send('Invalid Problem Location.');
         }
       }
+      // Save Resource Locations
+      const resourceLocations = JSON.parse(req.body.resourceLocations);
+      for (let resLoc of resourceLocations) {
+        if (resLoc.description && resLoc.url) {
+          let resourceLocation = new Resource();
+          resourceLocation = resLoc;
+          resourceLocation.vulnerability = vulnerability;
+          const errors = await validate(resourceLocation);
+          if (errors.length > 0) {
+            return res.status(400).send('Resource Location validation failed');
+          } else {
+            await resLocRepository.save(resourceLocation);
+          }
+        } else {
+          return res.status(400).send('Resource Location Invalid.');
+        }
+      }      
       res.json('Vulnerability saved successfully').status(200);
     }
   });

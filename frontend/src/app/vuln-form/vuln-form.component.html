@@ -125,8 +125,8 @@
         </thead>
         <tbody *ngFor="let probLoc of probLocArr.controls; let i = index" [formGroupName]="i">
           <tr>
-            <td><input formControlName="location" class="form-control" /></td>
-            <td><input formControlName="target" class="form-control" /></td>
+            <td><input formControlName="location" class="form-control" placeholder="location /ng/app/etc.."/></td>
+            <td><input formControlName="target" class="form-control" placeholder="httpscookiename" /></td>
             <td>
               <button class="btn btn-secondary" type="button" (click)="deleteProbLoc(i)">
                 <fa-icon [icon]="faTrash"></fa-icon>
@@ -204,6 +204,32 @@
     </div>
 
     <br />
+    <div formArrayName="resourceLocations">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Resource URL</th>
+            <th scope="col">Description</th>
+            <th>
+              <button class="btn btn-primary" type="button" (click)="addResLoc()">
+                <fa-icon [icon]="faPlus"></fa-icon>
+              </button>
+            </th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let resLoc of resLocArr.controls; let i = index" [formGroupName]="i">
+          <tr>
+            <td><input formControlName="description" class="form-control" placeholder="description" /></td>
+            <td><input formControlName="url" class="form-control" placeholder="URL"/></td>
+            <td>
+              <button class="btn btn-secondary" type="button" (click)="deleteResLoc(i)">
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>    
     <div>
       <label for="screenshot">Screenshot Upload</label>
       <input

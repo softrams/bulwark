@@ -8,6 +8,7 @@ import { Vulnerability } from './Vulnerability';
 import { faTrash, faPlus, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { AppFile } from '../classes/App_File';
 import { ProblemLocation } from '../classes/ProblemLocation';
+import { ResourceLocation } from '../classes/ResourceLocation';
 @Component({
   selector: 'app-vuln-form',
   templateUrl: './vuln-form.component.html',
@@ -27,6 +28,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
   tempScreenshots: object[] = [];
   screenshotsToDelete: number[] = [];
   probLocArray: ProblemLocation[] = [];
+  resLocArray: ResourceLocation[] = [];
   items: FormArray;
   faTrash = faTrash;
   faPlus = faPlus;
@@ -56,6 +58,15 @@ export class VulnFormComponent implements OnChanges, OnInit {
               id: probLoc.id,
               location: probLoc.location,
               target: probLoc.target
+            })
+          );
+        }
+        for (const resLoc of vulnerability.resource) {
+          this.resLocArr.push(
+            this.fb.group({
+              id: resLoc.id,
+              description: resLoc.description,
+              url: resLoc.url,
             })
           );
         }
@@ -95,7 +106,8 @@ export class VulnFormComponent implements OnChanges, OnInit {
       cvssScore: ['', Validators.required],
       cvssUrl: ['', Validators.required],
       detailedInfo: ['', [Validators.required, Validators.maxLength(2000)]],
-      problemLocations: this.fb.array([])
+      problemLocations: this.fb.array([]),
+      resourceLocations: this.fb.array([])
     });
   }
 
@@ -113,7 +125,8 @@ export class VulnFormComponent implements OnChanges, OnInit {
       cvssScore: this.vulnModel.cvssScore,
       cvssUrl: this.vulnModel.cvssUrl,
       detailedInfo: this.vulnModel.detailedInfo,
-      problemLocations: this.vulnModel.problemLocations
+      problemLocations: this.vulnModel.problemLocations,
+      resourceLocations: this.vulnModel.resourceLocations
     });
   }
 
@@ -134,6 +147,25 @@ export class VulnFormComponent implements OnChanges, OnInit {
 
   deleteProbLoc(index: number) {
     this.probLocArr.removeAt(index);
+  }
+
+  get resLocArr() {
+    return this.vulnForm.get('resourceLocations') as FormArray;
+  }
+
+  initResLocRows(): FormGroup {
+    return this.fb.group({
+      description: '',
+      url: '',
+    });
+  }
+
+  addResLoc() {
+    this.resLocArr.push(this.initResLocRows());
+  }
+
+  deleteResLoc(index: number) {
+    this.resLocArr.removeAt(index);
   }
 
   handleFileInput(files: FileList) {
@@ -214,6 +246,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
     this.filesToUpload.append('assessment', this.assessmentId);
     this.filesToUpload.append('name', this.vulnModel.name);
     this.filesToUpload.append('problemLocations', JSON.stringify(this.vulnModel.problemLocations));
+    this.filesToUpload.append('resourceLocations', JSON.stringify(this.vulnModel.resourceLocations));
     this.createOrUpdateVuln(this.filesToUpload);
   }
 
