@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Asset } from './Asset';
 import { Vulnerability } from './Vulnerability';
-import { Length, IsUrl, IsDate, MaxLength, IsString } from 'class-validator';
+import { IsUrl, IsDate, MaxLength, IsString } from 'class-validator';
 
 @Entity()
 export class Assessment {

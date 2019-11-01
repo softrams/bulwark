@@ -1,5 +1,4 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, OneToMany } from 'typeorm';
-import { Length, MaxLength } from 'class-validator';
 import { File } from './File';
 import { Asset } from './Asset';
 

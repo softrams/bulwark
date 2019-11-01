@@ -1,7 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Organization } from './Organization';
 import { Assessment } from './Assessment';
-import { MaxLength } from 'class-validator';
 
 @Entity()
 export class Asset {

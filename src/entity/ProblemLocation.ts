@@ -1,6 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Vulnerability } from './Vulnerability';
-import { MaxLength } from 'class-validator';
 
 @Entity()
 export class ProblemLocation {
