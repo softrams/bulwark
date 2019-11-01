@@ -308,27 +308,35 @@ createConnection().then((connection) => {
       // Save problem locations
       const problemLocations = JSON.parse(req.body.problemLocations);
       for (let probLoc of problemLocations) {
-        let problemLocation = new ProblemLocation();
-        problemLocation = probLoc;
-        problemLocation.vulnerability = vulnerability;
-        const errors = await validate(problemLocation);
-        if (errors.length > 0) {
-          return res.status(400).send('Problem Location validation failed');
+        if (probLoc && probLoc.location && probLoc.target) {
+          let problemLocation = new ProblemLocation();
+          problemLocation = probLoc;
+          problemLocation.vulnerability = vulnerability;
+          const errors = await validate(problemLocation);
+          if (errors.length > 0) {
+            return res.status(400).send('Problem Location validation failed');
+          } else {
+            await probLocRepository.save(problemLocation);
+          }
         } else {
-          await probLocRepository.save(problemLocation);
+          return res.status(400).send('Invalid Problem Location.');
         }
       }
       // Save Resource Locations
       const resourceLocations = JSON.parse(req.body.resourceLocations);
       for (let resLoc of resourceLocations) {
-        let resourceLocation = new Resource();
-        resourceLocation = resLoc;
-        resourceLocation.vulnerability = vulnerability;
-        const errors = await validate(resourceLocation);
-        if (errors.length > 0) {
-          return res.status(400).send('Resource Location validation failed');
+        if (resLoc.description && resLoc.url) {
+          let resourceLocation = new Resource();
+          resourceLocation = resLoc;
+          resourceLocation.vulnerability = vulnerability;
+          const errors = await validate(resourceLocation);
+          if (errors.length > 0) {
+            return res.status(400).send('Resource Location validation failed');
+          } else {
+            await resLocRepository.save(resourceLocation);
+          }
         } else {
-          await resLocRepository.save(resourceLocation);
+          return res.status(400).send('Resource Location Invalid.');
         }
       }      
       res.json('Vulnerability saved successfully').status(200);
