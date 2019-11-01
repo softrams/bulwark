@@ -144,7 +144,7 @@ createConnection().then((connection) => {
     }
     // TODO: Utilize createQueryBuilder to only return screenshot IDs and not the full object
     let vuln = await vulnerabilityRepository.findOne(req.params.vulnId, {
-      relations: ['screenshots', 'problemLocations']
+      relations: ['screenshots', 'problemLocations', 'resource']
     });
     res.status(200).json(vuln);
   });
@@ -233,6 +233,7 @@ createConnection().then((connection) => {
 
       // Update problem locations
       for (let probLoc of clientProdLocs) {
+        if (probLoc && probLoc.location && probLoc.target) {
         let problemLocation = new ProblemLocation();
         problemLocation = probLoc;
         problemLocation.vulnerability = vulnerability;
@@ -242,10 +243,14 @@ createConnection().then((connection) => {
         } else {
           await probLocRepository.save(problemLocation);
         }
+      } else {
+        return res.status(400).send('Invalid Problem Location.');
+      }
       }
 
       // Update resource locations
       for (let resLoc of clientResLocs) {
+        if (resLoc.description && resLoc.url) {
         let resourceLocation = new Resource();
         resourceLocation = resLoc;
         resourceLocation.vulnerability = vulnerability;
@@ -253,9 +258,12 @@ createConnection().then((connection) => {
         if (errors.length > 0) {
           return res.status(400).send('Resource Location validation failed');
         } else {
-          await probLocRepository.save(resourceLocation);
+          await resLocRepository.save(resourceLocation);
         }
-      }      
+      } else {
+        return res.status(400).send('Resource Location Invalid.');
+      }
+    }      
       res.json('Vulnerability saved successfully').status(200);
     }
   });
@@ -313,14 +321,14 @@ createConnection().then((connection) => {
       // Save Resource Locations
       const resourceLocations = JSON.parse(req.body.resourceLocations);
       for (let resLoc of resourceLocations) {
-        let resourceLocations = new Resource();
-        resourceLocations = resLoc;
-        resourceLocations.vulnerability = vulnerability;
-        const errors = await validate(resourceLocations);
+        let resourceLocation = new Resource();
+        resourceLocation = resLoc;
+        resourceLocation.vulnerability = vulnerability;
+        const errors = await validate(resourceLocation);
         if (errors.length > 0) {
           return res.status(400).send('Resource Location validation failed');
         } else {
-          await resLocRepository.save(resourceLocations);
+          await resLocRepository.save(resourceLocation);
         }
       }      
       res.json('Vulnerability saved successfully').status(200);

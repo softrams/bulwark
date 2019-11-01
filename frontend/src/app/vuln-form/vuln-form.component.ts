@@ -61,11 +61,12 @@ export class VulnFormComponent implements OnChanges, OnInit {
             })
           );
         }
-        for (const resLoc of vulnerability.resourceLocations) {
+        for (const resLoc of vulnerability.resource) {
           this.resLocArr.push(
             this.fb.group({
               id: resLoc.id,
-              resURL: resLoc.resURL,
+              description: resLoc.description,
+              url: resLoc.url,
             })
           );
         }
@@ -154,7 +155,8 @@ export class VulnFormComponent implements OnChanges, OnInit {
 
   initResLocRows(): FormGroup {
     return this.fb.group({
-      resURL: '',
+      description: '',
+      url: '',
     });
   }
 
@@ -244,7 +246,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
     this.filesToUpload.append('assessment', this.assessmentId);
     this.filesToUpload.append('name', this.vulnModel.name);
     this.filesToUpload.append('problemLocations', JSON.stringify(this.vulnModel.problemLocations));
-    this.filesToUpload.append('resURL', JSON.stringify(this.vulnModel.resourceLocations))
+    this.filesToUpload.append('resourceLocations', JSON.stringify(this.vulnModel.resourceLocations));
     this.createOrUpdateVuln(this.filesToUpload);
   }
 
