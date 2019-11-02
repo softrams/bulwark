@@ -9,6 +9,6 @@ export class Resource {
   description: string;
   @Column()
   url: string;
-  @ManyToOne((type) => Vulnerability, (vuln) => vuln.resource, { onDelete: 'CASCADE' })
+  @ManyToOne((type) => Vulnerability, (vuln) => vuln.resources, { onDelete: 'CASCADE' })
   vulnerability: Vulnerability;
 }

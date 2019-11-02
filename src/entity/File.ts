@@ -8,7 +8,7 @@ export class File {
   @Column()
   fieldName: string;
   @Column()
-  name: string;
+  originalname: string;
   @Column()
   encoding: string;
   @Column()

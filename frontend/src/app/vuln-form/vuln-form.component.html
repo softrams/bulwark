@@ -222,25 +222,25 @@
     </div>
 
     <br />
-    <div formArrayName="resourceLocations">
+    <div formArrayName="resources">
       <table class="table">
         <thead>
           <tr>
             <th scope="col">Resource URL</th>
             <th scope="col">Description</th>
             <th>
-              <button class="btn btn-primary" type="button" (click)="addResLoc()">
+              <button class="btn btn-primary" type="button" (click)="addResource()">
                 <fa-icon [icon]="faPlus"></fa-icon>
               </button>
             </th>
           </tr>
         </thead>
-        <tbody *ngFor="let resLoc of resLocArr.controls; let i = index" [formGroupName]="i">
+        <tbody *ngFor="let resource of resourceArr.controls; let i = index" [formGroupName]="i">
           <tr>
             <td><input formControlName="description" class="form-control" placeholder="description" /></td>
             <td><input formControlName="url" class="form-control" placeholder="URL" /></td>
             <td>
-              <button class="btn btn-secondary" type="button" (click)="deleteResLoc(i)">
+              <button class="btn btn-secondary" type="button" (click)="deleteResource(i)">
                 <fa-icon [icon]="faTrash"></fa-icon>
               </button>
             </td>
@@ -261,7 +261,7 @@
       />
       <div *ngFor="let screenshot of tempScreenshots">
         <span>
-          <a [href]="screenshot.url" target="_blank">{{ screenshot?.file?.name }}</a>
+          <a [href]="screenshot.url" target="_blank">{{ screenshot?.file?.originalname }}</a>
           <a><fa-icon (click)="deleteScreenshot(screenshot)" [icon]="faTrash"></fa-icon></a>
         </span>
       </div>
