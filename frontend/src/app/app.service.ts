@@ -3,13 +3,13 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Organization } from './org-form/Organization';
 import { Asset } from './asset-form/Asset';
 import { Assessment } from './assessment-form/Assessment';
-import { Vulnerability } from './vuln-form/Vulnerability';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
   api = 'http://localhost:5000/api';
 
   // TODO:  Delete this monstrosity that I have created
@@ -32,11 +32,7 @@ export class AppService {
               .get(`${this.api}/file/${orgs[i].avatar.id}`, httpOptions)
               .toPromise()
               .then(async (res: Blob) => {
-                const blob = new Blob([res], {
-                  type: orgs[i].avatar.mimetype
-                });
-                const url = window.URL.createObjectURL(blob);
-                orgs[i].imgUrl = url;
+                orgs[i].imgUrl = this.createObjectUrl(res, orgs[i].avatar.mimetype);
                 count++;
               })
               .catch((err) => {
@@ -67,7 +63,7 @@ export class AppService {
           type: file.mimetype
         });
         const url = window.URL.createObjectURL(blob);
-        return url;
+        return this.sanitizer.bypassSecurityTrustUrl(url);
       });
   }
 
@@ -179,6 +175,15 @@ export class AppService {
       assessmentId
     };
     return this.http.post(`${this.api}/report/generate`, generateObject, httpOptions);
+  }
+
+  public createObjectUrl(file, mimetype?: string) {
+    // Preview unsaved form
+    const blob = new Blob([file], {
+      type: mimetype || file.type
+    });
+    const url = window.URL.createObjectURL(blob);
+    return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 
   private handleError(error: HttpErrorResponse) {

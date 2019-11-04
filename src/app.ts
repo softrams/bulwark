@@ -485,8 +485,16 @@ createConnection().then((connection) => {
       .createQueryBuilder('vuln')
       .leftJoinAndSelect('vuln.screenshots', 'screenshot')
       .leftJoinAndSelect('vuln.problemLocations', 'problemLocation')
+      .leftJoinAndSelect('vuln.resources', 'resource')
       .where('vuln.assessmentId = :assessmentId', { assessmentId: assessment.id })
-      .select(['vuln', 'screenshot.id', 'screenshot.name', 'screenshot.mimetype', 'problemLocation'])
+      .select([
+        'vuln',
+        'screenshot.id',
+        'screenshot.originalname',
+        'screenshot.mimetype',
+        'problemLocation',
+        'resource'
+      ])
       .getMany();
     report.org = organization;
     report.asset = asset;

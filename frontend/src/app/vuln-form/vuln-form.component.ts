@@ -1,7 +1,6 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
 
 import { AppService } from '../app.service';
 import { Vulnerability } from './Vulnerability';
@@ -37,8 +36,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
     private appService: AppService,
     public activatedRoute: ActivatedRoute,
     public router: Router,
-    private fb: FormBuilder,
-    private sanitizer: DomSanitizer
+    private fb: FormBuilder
   ) {
     this.createForm();
   }
@@ -174,21 +172,17 @@ export class VulnFormComponent implements OnChanges, OnInit {
     // Image from DB
     if (existFile) {
       const renderObj = {
-        url: this.getSantizeUrl(existFile.imgUrl),
+        url: existFile.imgUrl,
         file: existFile
       };
       this.tempScreenshots.push(renderObj);
     } else {
-      // Preview unsaved form
-      const blob = new Blob([file], {
-        type: file.type
-      });
-      const url = window.URL.createObjectURL(blob);
-      // File objects do not have an `originalname` property
+      const url = this.appService.createObjectUrl(file);
+      // File objects do not have an `originalname` property so we need to add it
       file['originalname'] = file.name;
       const renderObj = {
-        url: this.getSantizeUrl(url),
-        file: file
+        url,
+        file
       };
       this.tempScreenshots.push(renderObj);
     }
@@ -212,10 +206,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
     if (screenshotsToDelete.length) {
       this.vulnFormData.append('screenshotsToDelete', JSON.stringify(screenshotsToDelete));
     }
-  }
-
-  public getSantizeUrl(url: string) {
-    return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 
   navigateToVulnerabilities() {

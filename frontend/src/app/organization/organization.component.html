@@ -6,32 +6,29 @@
   <div class="row card-group">
     <h4 *ngIf="!assetAry.length">The organization {{ org?.name }} does not have any assets.</h4>
     <div class="col-3" *ngFor="let asset of assetAry">
-      <div class="card">
+      <div class="card text-center">
         <div class="card-body">
           <h5 class="card-title">{{ asset.name }}</h5>
-          <p class="card-text">
-            {{ asset.description }}
-          </p>
-          <button (click)="navigateToAssessment(asset.id)" class="btn btn-primary" style="margin-right: 5px;">
-            Assessments
-          </button>
           <button (click)="navigateToAsset(asset.id)" class="btn btn-secondary" style="margin-right: 5px;">
             Edit
+          </button>
+          <button (click)="navigateToAssessment(asset.id)" class="btn btn-primary">
+            Assessments
           </button>
         </div>
       </div>
     </div>
   </div>
   <br />
-  <button (click)="navigateToDashboard()" type="button" class="btn btn-secondary float-right">
-    Back to Dashboard
+  <button (click)="navigateToCreateAsset()" type="button" class="btn btn-primary float-right">
+    Add Asset
   </button>
   <button
     style="margin-right: 5px;"
-    (click)="navigateToCreateAsset()"
+    (click)="navigateToDashboard()"
     type="button"
-    class="btn btn-primary float-right"
+    class="btn btn-secondary float-right"
   >
-    Add Asset
+    Back to Dashboard
   </button>
 </div>
