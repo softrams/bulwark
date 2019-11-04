@@ -151,7 +151,23 @@
       <p>
         <markdown>{{ vuln?.remediation }}</markdown>
       </p>
-
+      <h4>Resources</h4>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Description</th>
+            <th scope="col">URL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let resource of vuln?.resources">
+            <td>{{ resource?.description }}</td>
+            <td>
+              <a [href]="resource?.url" target="_blank">{{ resource?.url }}</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <h4>Screenshots</h4>
       <div *ngFor="let screenshotObj of vuln.screenshotObjs">
         <div class="gallery col-12 mx-auto">
