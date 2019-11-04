@@ -55,6 +55,9 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// NODE ENV
+const env = process.env.NODE_ENV || 'dev';
+
 // start express server
 const server_port = process.env.PORT || 5000;
 var server_ip_address = process.env.IP || '127.0.0.1';
@@ -508,7 +511,12 @@ createConnection().then((connection) => {
     if (!req.body.orgId || !req.body.assetId || !req.body.assessmentId) {
       return res.status(400).send('Invalid report parameters');
     }
-    const url = `http://localhost:4200/organization/${req.body.orgId}/asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report`;
+    let url;
+    if (env === 'production') {
+      url = `http://localhost:5000/#/organization/${req.body.orgId}/asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report`;
+    } else {
+      url = `http://localhost:4200/#/organization/${req.body.orgId}/asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report`;
+    }
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     const filePath = path.join(__dirname, '../temp_report.pdf');

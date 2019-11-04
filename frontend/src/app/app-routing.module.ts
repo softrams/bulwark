@@ -12,6 +12,7 @@ import { OrgFormComponent } from './org-form/org-form.component';
 import { AssetFormComponent } from './asset-form/asset-form.component';
 import { AssessmentFormComponent } from './assessment-form/assessment-form.component';
 import { ReportComponent } from './report/report.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 @Injectable()
 export class AssetsResolver implements Resolve<any> {
   constructor(private apiService: AppService) {}
@@ -147,11 +148,12 @@ const routes: Routes = [
     path: 'organization/:orgId/asset/:assetId/assessment/:assessmentId/report',
     component: ReportComponent,
     resolve: { report: ReportResolver }
-  }
+  },
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule],
   providers: [
     AssetResolver,

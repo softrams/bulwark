@@ -23,6 +23,7 @@ import { AssessmentFormComponent } from './assessment-form/assessment-form.compo
 import { MarkdownModule } from 'ngx-markdown';
 import { DatePipe } from '@angular/common';
 import { ReportComponent } from './report/report.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ReportComponent } from './report/report.component';
     VulnFormComponent,
     FooterComponent,
     AssessmentFormComponent,
-    ReportComponent
+    ReportComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
