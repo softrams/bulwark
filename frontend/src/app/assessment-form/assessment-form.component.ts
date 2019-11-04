@@ -43,8 +43,8 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
     this.rebuildForm();
   }
 
-  transformDate(date) {
-    return new Date(date);
+  transformDate(date: Date) {
+    return new Date(date).toISOString().substring(0, 10);
   }
 
   rebuildForm() {
