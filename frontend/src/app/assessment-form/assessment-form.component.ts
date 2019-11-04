@@ -27,11 +27,8 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ assessment }) => {
       if (assessment) {
-        console.log(assessment.startDate, assessment.endDate);
-
         assessment.startDate = this.transformDate(assessment.startDate);
         assessment.endDate = this.transformDate(assessment.endDate);
-        console.log(assessment.startDate, assessment.endDate);
         this.assessmentForm.patchValue(assessment);
       }
     });
