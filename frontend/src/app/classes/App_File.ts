@@ -1,3 +1,5 @@
+import { SafeUrl } from '@angular/platform-browser';
+
 export class AppFile {
   constructor(
     private id: number,
@@ -7,6 +9,6 @@ export class AppFile {
     public mimetype: string,
     public originalname: string,
     public size: string,
-    public imgUrl: string
+    public imgUrl: SafeUrl
   ) {}
 }

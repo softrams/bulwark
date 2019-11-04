@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from '../app.service';
-import { DomSanitizer } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-report',
   templateUrl: './report.component.html',
@@ -15,12 +15,7 @@ export class ReportComponent implements OnInit {
   assessmentId: number;
   isLoading = true;
   urls = [];
-  constructor(
-    public activatedRoute: ActivatedRoute,
-    public appService: AppService,
-    private sanitizer: DomSanitizer,
-    public router: Router
-  ) {}
+  constructor(public activatedRoute: ActivatedRoute, public appService: AppService, public router: Router) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ report }) => {
@@ -33,8 +28,8 @@ export class ReportComponent implements OnInit {
         for (const screenshot of vuln.screenshots) {
           this.appService.getImageById(screenshot).then((url) => {
             const screenshotObj = {
-              url: this.getSantizeUrl(url),
-              name: screenshot.name
+              url,
+              name: screenshot.originalname
             };
             this.urls.push(url);
             vuln.screenshotObjs.push(screenshotObj);
@@ -47,10 +42,6 @@ export class ReportComponent implements OnInit {
       this.assetId = params['assetId'];
       this.assessmentId = params['assessmentId'];
     });
-  }
-
-  public getSantizeUrl(url: string) {
-    return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 
   navigateToVulns() {

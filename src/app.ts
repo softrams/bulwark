@@ -486,7 +486,7 @@ createConnection().then((connection) => {
       .leftJoinAndSelect('vuln.screenshots', 'screenshot')
       .leftJoinAndSelect('vuln.problemLocations', 'problemLocation')
       .where('vuln.assessmentId = :assessmentId', { assessmentId: assessment.id })
-      .select(['vuln', 'screenshot.id', 'screenshot.name', 'screenshot.mimetype', 'problemLocation'])
+      .select(['vuln', 'screenshot.id', 'screenshot.originalname', 'screenshot.mimetype', 'problemLocation'])
       .getMany();
     report.org = organization;
     report.asset = asset;

@@ -2,7 +2,6 @@ div
   &.gallery
     margin: 5px
     border: 1px solid #ccc
-    float: left
     width: 80%
 
 
@@ -16,3 +15,8 @@ div
   &.desc
     padding: 15px
     text-align: center
+
+@media print
+  div
+  &.page
+    break-after: page;

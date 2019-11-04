@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Organization } from './Organization';
 import { AppService } from '../app.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-org-form',
@@ -20,8 +19,7 @@ export class OrgFormComponent implements OnInit, OnChanges {
     private fb: FormBuilder,
     public appService: AppService,
     public route: Router,
-    public activatedRoute: ActivatedRoute,
-    private sanitizer: DomSanitizer
+    public activatedRoute: ActivatedRoute
   ) {
     this.createForm();
   }
@@ -63,10 +61,6 @@ export class OrgFormComponent implements OnInit, OnChanges {
 
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
-  }
-
-  public getSantizeUrl(url: string) {
-    return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 
   onSubmit(contact: FormGroup) {

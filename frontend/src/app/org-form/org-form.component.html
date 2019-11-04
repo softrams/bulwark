@@ -1,11 +1,5 @@
 <div class="container col-6">
-  <img
-    *ngIf="avatar"
-    [src]="getSantizeUrl(avatar)"
-    alt="avatar"
-    class="img-thumbnail"
-    style="height: auto; width: 200px;"
-  />
+  <img *ngIf="avatar" [src]="avatar" alt="avatar" class="img-thumbnail" style="height: auto; width: 200px;" />
 
   <form [formGroup]="orgForm" (ngSubmit)="onSubmit(orgForm)">
     <div class="form-group">
@@ -22,11 +16,16 @@
         (change)="handleFileInput($event.target.files)"
       />
     </div>
-    <button (click)="navigateToDashboard()" class="btn btn-secondary float-right" type="submit">
-      Back to Dashboard
-    </button>
-    <button [disabled]="!orgForm.valid" class="btn btn-primary float-right" type="submit" style="margin-right: 5px">
+    <button [disabled]="!orgForm.valid" class="btn btn-primary float-right" type="submit">
       Submit
+    </button>
+    <button
+      (click)="navigateToDashboard()"
+      class="btn btn-secondary float-right"
+      type="submit"
+      style="margin-right: 5px"
+    >
+      Back to Dashboard
     </button>
   </form>
 </div>
