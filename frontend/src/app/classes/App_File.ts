@@ -5,7 +5,7 @@ export class AppFile {
     public encoding: string,
     public fieldName: string,
     public mimetype: string,
-    public name: string,
+    public originalname: string,
     public size: string,
     public imgUrl: string
   ) {}

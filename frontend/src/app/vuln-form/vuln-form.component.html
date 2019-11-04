@@ -125,8 +125,8 @@
         </thead>
         <tbody *ngFor="let probLoc of probLocArr.controls; let i = index" [formGroupName]="i">
           <tr>
-            <td><input formControlName="location" class="form-control" placeholder="location /ng/app/etc.."/></td>
-            <td><input formControlName="target" class="form-control" placeholder="httpscookiename" /></td>
+            <td><input formControlName="location" class="form-control" /></td>
+            <td><input formControlName="target" class="form-control" /></td>
             <td>
               <button class="btn btn-secondary" type="button" (click)="deleteProbLoc(i)">
                 <fa-icon [icon]="faTrash"></fa-icon>
@@ -147,7 +147,13 @@
       </div>
     </div>
     <div *ngIf="!previewDescription">
-      <textarea formControlName="description" class="form-control" id="description" rows="3"></textarea>
+      <textarea
+        formControlName="description"
+        class="form-control"
+        id="description"
+        rows="6"
+        maxlength="4000"
+      ></textarea>
       <div
         *ngIf="vulnForm.controls['description'].errors && !vulnForm.controls['description'].pristine"
         class="alert alert-danger"
@@ -169,7 +175,13 @@
       </div>
     </div>
     <div *ngIf="!previewDetailedDesc">
-      <textarea formControlName="detailedInfo" class="form-control" id="detailedInfo" rows="3"><pre></pre></textarea>
+      <textarea
+        formControlName="detailedInfo"
+        class="form-control"
+        id="detailedInfo"
+        rows="6"
+        maxlength="4000"
+      ></textarea>
       <div
         *ngIf="vulnForm.controls['detailedInfo'].errors && !vulnForm.controls['detailedInfo'].pristine"
         class="alert alert-danger"
@@ -191,7 +203,13 @@
       </div>
     </div>
     <div *ngIf="!previewRemediation">
-      <textarea formControlName="remediation" class="form-control" id="remediation" rows="3"></textarea>
+      <textarea
+        formControlName="remediation"
+        class="form-control"
+        id="remediation"
+        rows="6"
+        maxlength="4000"
+      ></textarea>
       <div
         *ngIf="vulnForm.controls['remediation'].errors && !vulnForm.controls['remediation'].pristine"
         class="alert alert-danger"
@@ -204,32 +222,32 @@
     </div>
 
     <br />
-    <div formArrayName="resourceLocations">
+    <div formArrayName="resources">
       <table class="table">
         <thead>
           <tr>
             <th scope="col">Resource URL</th>
             <th scope="col">Description</th>
             <th>
-              <button class="btn btn-primary" type="button" (click)="addResLoc()">
+              <button class="btn btn-primary" type="button" (click)="addResource()">
                 <fa-icon [icon]="faPlus"></fa-icon>
               </button>
             </th>
           </tr>
         </thead>
-        <tbody *ngFor="let resLoc of resLocArr.controls; let i = index" [formGroupName]="i">
+        <tbody *ngFor="let resource of resourceArr.controls; let i = index" [formGroupName]="i">
           <tr>
             <td><input formControlName="description" class="form-control" placeholder="description" /></td>
-            <td><input formControlName="url" class="form-control" placeholder="URL"/></td>
+            <td><input formControlName="url" class="form-control" placeholder="URL" /></td>
             <td>
-              <button class="btn btn-secondary" type="button" (click)="deleteResLoc(i)">
+              <button class="btn btn-secondary" type="button" (click)="deleteResource(i)">
                 <fa-icon [icon]="faTrash"></fa-icon>
               </button>
             </td>
           </tr>
         </tbody>
       </table>
-    </div>    
+    </div>
     <div>
       <label for="screenshot">Screenshot Upload</label>
       <input
@@ -243,7 +261,7 @@
       />
       <div *ngFor="let screenshot of tempScreenshots">
         <span>
-          <a [href]="screenshot.url" target="_blank">{{ screenshot?.file?.name }}</a>
+          <a [href]="screenshot.url" target="_blank">{{ screenshot?.file?.originalname }}</a>
           <a><fa-icon (click)="deleteScreenshot(screenshot)" [icon]="faTrash"></fa-icon></a>
         </span>
       </div>

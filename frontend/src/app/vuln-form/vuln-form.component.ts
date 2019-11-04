@@ -7,8 +7,6 @@ import { AppService } from '../app.service';
 import { Vulnerability } from './Vulnerability';
 import { faTrash, faPlus, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { AppFile } from '../classes/App_File';
-import { ProblemLocation } from '../classes/ProblemLocation';
-import { ResourceLocation } from '../classes/ResourceLocation';
 @Component({
   selector: 'app-vuln-form',
   templateUrl: './vuln-form.component.html',
@@ -24,12 +22,9 @@ export class VulnFormComponent implements OnChanges, OnInit {
   assetId: string;
   assessmentId: string;
   vulnId: number;
-  filesToUpload: FormData;
+  vulnFormData: FormData;
   tempScreenshots: object[] = [];
   screenshotsToDelete: number[] = [];
-  probLocArray: ProblemLocation[] = [];
-  resLocArray: ResourceLocation[] = [];
-  items: FormArray;
   faTrash = faTrash;
   faPlus = faPlus;
   faEye = faEye;
@@ -61,12 +56,12 @@ export class VulnFormComponent implements OnChanges, OnInit {
             })
           );
         }
-        for (const resLoc of vulnerability.resource) {
-          this.resLocArr.push(
+        for (const resource of vulnerability.resources) {
+          this.resourceArr.push(
             this.fb.group({
-              id: resLoc.id,
-              description: resLoc.description,
-              url: resLoc.url,
+              id: resource.id,
+              description: resource.description,
+              url: resource.url
             })
           );
         }
@@ -94,20 +89,20 @@ export class VulnFormComponent implements OnChanges, OnInit {
 
   createForm() {
     this.vulnForm = this.fb.group({
-      impact: ['', [Validators.required, Validators.maxLength(6)]],
-      likelihood: ['', [Validators.required, Validators.maxLength(6)]],
-      risk: ['', [Validators.required, Validators.maxLength(13)]],
+      impact: ['', [Validators.required]],
+      likelihood: ['', [Validators.required]],
+      risk: ['', [Validators.required]],
       systemic: ['', [Validators.required]],
       status: ['', Validators.required],
-      description: ['', [Validators.required, Validators.maxLength(2000)]],
-      remediation: ['', [Validators.required, Validators.maxLength(2000)]],
-      name: ['', [Validators.required, Validators.maxLength(50)]],
-      jiraId: ['', [Validators.maxLength(15)]],
+      description: ['', [Validators.required, Validators.maxLength(4000)]],
+      remediation: ['', [Validators.required, Validators.maxLength(4000)]],
+      name: ['', [Validators.required]],
+      jiraId: ['', []],
       cvssScore: ['', Validators.required],
       cvssUrl: ['', Validators.required],
-      detailedInfo: ['', [Validators.required, Validators.maxLength(2000)]],
+      detailedInfo: ['', [Validators.required, Validators.maxLength(4000)]],
       problemLocations: this.fb.array([]),
-      resourceLocations: this.fb.array([])
+      resources: this.fb.array([])
     });
   }
 
@@ -126,7 +121,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
       cvssUrl: this.vulnModel.cvssUrl,
       detailedInfo: this.vulnModel.detailedInfo,
       problemLocations: this.vulnModel.problemLocations,
-      resourceLocations: this.vulnModel.resourceLocations
+      resources: this.vulnModel.resources
     });
   }
 
@@ -149,23 +144,23 @@ export class VulnFormComponent implements OnChanges, OnInit {
     this.probLocArr.removeAt(index);
   }
 
-  get resLocArr() {
-    return this.vulnForm.get('resourceLocations') as FormArray;
+  get resourceArr() {
+    return this.vulnForm.get('resources') as FormArray;
   }
 
-  initResLocRows(): FormGroup {
+  initResourceRows(): FormGroup {
     return this.fb.group({
       description: '',
-      url: '',
+      url: ''
     });
   }
 
-  addResLoc() {
-    this.resLocArr.push(this.initResLocRows());
+  addResource() {
+    this.resourceArr.push(this.initResourceRows());
   }
 
-  deleteResLoc(index: number) {
-    this.resLocArr.removeAt(index);
+  deleteResource(index: number) {
+    this.resourceArr.removeAt(index);
   }
 
   handleFileInput(files: FileList) {
@@ -189,6 +184,8 @@ export class VulnFormComponent implements OnChanges, OnInit {
         type: file.type
       });
       const url = window.URL.createObjectURL(blob);
+      // File objects do not have an `originalname` property
+      file['originalname'] = file.name;
       const renderObj = {
         url: this.getSantizeUrl(url),
         file: file
@@ -206,14 +203,14 @@ export class VulnFormComponent implements OnChanges, OnInit {
   }
 
   finalizeScreenshots(screenshots: object[], screenshotsToDelete: number[]) {
-    this.filesToUpload.delete('screenshots');
+    this.vulnFormData.delete('screenshots');
     if (screenshots.length) {
       for (const screenshot of screenshots) {
-        this.filesToUpload.append('screenshots', screenshot['file']);
+        this.vulnFormData.append('screenshots', screenshot['file']);
       }
     }
     if (screenshotsToDelete.length) {
-      this.filesToUpload.append('screenshotsToDelete', JSON.stringify(screenshotsToDelete));
+      this.vulnFormData.append('screenshotsToDelete', JSON.stringify(screenshotsToDelete));
     }
   }
 
@@ -228,26 +225,26 @@ export class VulnFormComponent implements OnChanges, OnInit {
   }
 
   onSubmit(vulnForm: FormGroup) {
-    this.filesToUpload = new FormData();
+    this.vulnFormData = new FormData();
     const newScreenshots = this.tempScreenshots.filter((screenshot) => !screenshot['file'].id);
     this.finalizeScreenshots(newScreenshots, this.screenshotsToDelete);
     this.vulnModel = vulnForm.value;
-    this.filesToUpload.append('impact', this.vulnModel.impact);
-    this.filesToUpload.append('likelihood', this.vulnModel.likelihood);
-    this.filesToUpload.append('risk', this.vulnModel.risk);
-    this.filesToUpload.append('systemic', this.vulnModel.systemic);
-    this.filesToUpload.append('status', this.vulnModel.status);
-    this.filesToUpload.append('description', this.vulnModel.description);
-    this.filesToUpload.append('remediation', this.vulnModel.remediation);
-    this.filesToUpload.append('jiraId', this.vulnModel.jiraId);
-    this.filesToUpload.append('cvssScore', this.vulnModel.cvssScore.toString());
-    this.filesToUpload.append('cvssUrl', this.vulnModel.cvssUrl);
-    this.filesToUpload.append('detailedInfo', this.vulnModel.detailedInfo);
-    this.filesToUpload.append('assessment', this.assessmentId);
-    this.filesToUpload.append('name', this.vulnModel.name);
-    this.filesToUpload.append('problemLocations', JSON.stringify(this.vulnModel.problemLocations));
-    this.filesToUpload.append('resourceLocations', JSON.stringify(this.vulnModel.resourceLocations));
-    this.createOrUpdateVuln(this.filesToUpload);
+    this.vulnFormData.append('impact', this.vulnModel.impact);
+    this.vulnFormData.append('likelihood', this.vulnModel.likelihood);
+    this.vulnFormData.append('risk', this.vulnModel.risk);
+    this.vulnFormData.append('systemic', this.vulnModel.systemic);
+    this.vulnFormData.append('status', this.vulnModel.status);
+    this.vulnFormData.append('description', this.vulnModel.description);
+    this.vulnFormData.append('remediation', this.vulnModel.remediation);
+    this.vulnFormData.append('jiraId', this.vulnModel.jiraId);
+    this.vulnFormData.append('cvssScore', this.vulnModel.cvssScore.toString());
+    this.vulnFormData.append('cvssUrl', this.vulnModel.cvssUrl);
+    this.vulnFormData.append('detailedInfo', this.vulnModel.detailedInfo);
+    this.vulnFormData.append('assessment', this.assessmentId);
+    this.vulnFormData.append('name', this.vulnModel.name);
+    this.vulnFormData.append('problemLocations', JSON.stringify(this.vulnModel.problemLocations));
+    this.vulnFormData.append('resources', JSON.stringify(this.vulnModel.resources));
+    this.createOrUpdateVuln(this.vulnFormData);
   }
 
   createOrUpdateVuln(vuln: FormData) {
@@ -262,7 +259,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
         },
         (error) => {
           // Reset current form data to avoid duplicate inputs
-          this.filesToUpload = new FormData();
+          this.vulnFormData = new FormData();
         }
       );
     }

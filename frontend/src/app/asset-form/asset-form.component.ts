@@ -42,7 +42,7 @@ export class AssetFormComponent implements OnInit, OnChanges {
 
   createForm() {
     this.assetForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(20)]]
+      name: ['', [Validators.required]]
     });
   }
 

@@ -4,7 +4,13 @@
       <label for="assessmentName">Assessment Name</label>
       <input formControlName="name" type="text" class="form-control" id="assessmentName" />
       <label for="executiveSummary">Executive Summary</label>
-      <textarea formControlName="executiveSummary" type="text" class="form-control" id="executiveSummary"></textarea>
+      <textarea
+        formControlName="executiveSummary"
+        type="text"
+        class="form-control"
+        id="executiveSummary"
+        maxlength="4000"
+      ></textarea>
       <label for="jiraId">JIRA ID</label>
       <input formControlName="jiraId" type="text" class="form-control" id="jiraId" />
       <label for="testUrl">Test URL</label>
