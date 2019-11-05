@@ -96,8 +96,8 @@
       </tbody>
     </table>
   </div>
-  <div *ngFor="let vuln of report?.vulns">
-    <div class="page">
+  <div *ngFor="let vuln of report?.vulns; last as isLast">
+    <div [ngClass]="{ page: !isLast }">
       <br />
       <h3>{{ vuln?.name }}</h3>
       <table class="table">

@@ -511,12 +511,10 @@ createConnection().then((connection) => {
     if (!req.body.orgId || !req.body.assetId || !req.body.assessmentId) {
       return res.status(400).send('Invalid report parameters');
     }
-    let url;
-    if (env === 'production') {
-      url = `https://bulwark-security.herokuapp.com/#/organization/${req.body.orgId}/asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report`;
-    } else {
-      url = `http://localhost:4200/#/organization/${req.body.orgId}/asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report`;
-    }
+    let url =
+      env === 'production'
+        ? `${process.env.PROD_URL}/#/organization/${req.body.orgId}/asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report`
+        : `${process.env.DEV_URL}/#/organization/${req.body.orgId}/asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report`;
     const browser = await puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });

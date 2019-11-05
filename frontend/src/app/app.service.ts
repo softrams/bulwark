@@ -4,14 +4,14 @@ import { Organization } from './org-form/Organization';
 import { Asset } from './asset-form/Asset';
 import { Assessment } from './assessment-form/Assessment';
 import { DomSanitizer } from '@angular/platform-browser';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
   constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
-  api = 'https://bulwark-security.herokuapp.com/api';
-
+  api = environment.apiUrl;
   // TODO:  Delete this monstrosity that I have created
   //       Please forgive me coding gods!
   //       We need to find a better solution than to individually
@@ -31,8 +31,8 @@ export class AppService {
             await this.http
               .get(`${this.api}/file/${orgs[i].avatar.id}`, httpOptions)
               .toPromise()
-              .then(async (res: Blob) => {
-                orgs[i].imgUrl = this.createObjectUrl(res, orgs[i].avatar.mimetype);
+              .then(async (blob: Blob) => {
+                orgs[i].imgUrl = this.createObjectUrl(blob, orgs[i].avatar.mimetype);
                 count++;
               })
               .catch((err) => {
