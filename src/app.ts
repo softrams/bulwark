@@ -517,7 +517,9 @@ createConnection().then((connection) => {
     } else {
       url = `http://localhost:4200/#/organization/${req.body.orgId}/asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report`;
     }
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
     const page = await browser.newPage();
     const filePath = path.join(__dirname, '../temp_report.pdf');
     await page.goto(url, { waitUntil: 'networkidle0' });
