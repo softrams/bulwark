@@ -267,11 +267,16 @@
       </div>
     </div>
     <br />
-    <button (click)="navigateToVulnerabilities()" type="button" class="btn btn-secondary float-right">
-      Back to Vulnerabilities
-    </button>
-    <button [disabled]="!vulnForm.valid" type="submit" class="btn btn-primary float-right" style="margin-right: 5px;">
+    <button [disabled]="!vulnForm.valid" type="submit" class="btn btn-primary float-right">
       Submit
+    </button>
+    <button
+      (click)="navigateToVulnerabilities()"
+      type="button"
+      class="btn btn-secondary float-right"
+      style="margin-right: 5px;"
+    >
+      Back to Vulnerabilities
     </button>
   </form>
 </div>
