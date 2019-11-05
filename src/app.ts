@@ -67,7 +67,7 @@ app.listen(server_port, () => console.log(`Server running on ${server_ip_address
 
 // create typeorm connection
 createConnection().then((connection) => {
-  // register routes
+  // register respositories for database communication
   const orgRepository = connection.getRepository(Organization);
   const assetRepository = connection.getRepository(Asset);
   const assessmentRepository = connection.getRepository(Assessment);
@@ -100,6 +100,13 @@ createConnection().then((connection) => {
     });
   });
 
+  /**
+   * @description this is does
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @returns an array of organizations with avatar relations
+   */
   app.get('/api/organization', async function(req: Request, res: Response) {
     const orgs = await orgRepository.find({ relations: ['avatar'] });
     res.json(orgs);
