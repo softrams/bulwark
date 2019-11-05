@@ -22,4 +22,22 @@
   <button (click)="navigateToCreate()" type="button" class="btn btn-primary float-right">
     Add Organization
   </button>
+  <button
+    style="margin-right: 5px;"
+    *ngIf="!isArchive"
+    (click)="getArchivedOrganizations()"
+    type="button"
+    class="btn btn-info float-right"
+  >
+    View Archive
+  </button>
+  <button
+    style="margin-right: 5px;"
+    *ngIf="isArchive"
+    (click)="getOrganizations()"
+    type="button"
+    class="btn btn-info float-right"
+  >
+    View Active
+  </button>
 </div>

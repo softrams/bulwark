@@ -51,6 +51,41 @@ export class AppService {
       });
   }
 
+  getArchivedOrganizations() {
+    const httpOptions = {
+      responseType: 'blob' as 'json'
+    };
+    return this.http
+      .get(`${this.api}/organization/archive`)
+      .toPromise()
+      .then(async (res) => {
+        const orgs: any = res;
+        let count = 0;
+        for (let i = 0; i < orgs.length; i++) {
+          if (orgs[i].avatar && orgs[i].avatar.buffer) {
+            await this.http
+              .get(`${this.api}/file/${orgs[i].avatar.id}`, httpOptions)
+              .toPromise()
+              .then(async (blob: Blob) => {
+                orgs[i].imgUrl = this.createObjectUrl(blob, orgs[i].avatar.mimetype);
+                count++;
+              })
+              .catch((err) => {
+                this.handleError(err);
+              });
+          } else {
+            count++;
+          }
+        }
+        if (count === orgs.length) {
+          return orgs;
+        }
+      })
+      .catch((err) => {
+        this.handleError(err);
+      });
+  }
+
   getImageById(file: any) {
     const httpOptions = {
       responseType: 'blob' as 'json'
@@ -87,6 +122,10 @@ export class AppService {
 
   archiveOrganization(id: number) {
     return this.http.patch(`${this.api}/organization/${id}/archive`, null);
+  }
+
+  activateOrganization(id: number) {
+    return this.http.patch(`${this.api}/organization/${id}/activate`, null);
   }
 
   getAssessments(id: number) {

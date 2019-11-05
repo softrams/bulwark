@@ -113,6 +113,11 @@ createConnection().then((connection) => {
     res.json(orgs);
   });
 
+  app.get('/api/organization/archive', async function(req: Request, res: Response) {
+    const orgs = await orgRepository.find({ relations: ['avatar'], where: { status: status.archived } });
+    res.json(orgs);
+  });
+
   app.get('/api/organization/:id', async function(req: Request, res: Response) {
     let org = await orgRepository.findOne(req.params.id, { relations: ['avatar'] });
     let resObj = {
@@ -135,6 +140,19 @@ createConnection().then((connection) => {
     }
   });
 
+  app.patch('/api/organization/:id/activate', async function(req: Request, res: Response) {
+    let org = new Organization();
+    org.id = +req.params.id;
+    org.status = status.active;
+    const errors = await validate(org);
+    if (errors.length > 0) {
+      return res.status(400).send('Organization activation validation failed');
+    } else {
+      await orgRepository.save(org);
+      res.status(200).json('Organization activated succesfully');
+    }
+  });
+
   app.patch('/api/organization/:id', async function(req: Request, res: Response) {
     let org = new Organization();
     org.name = req.body.name;
@@ -154,6 +172,7 @@ createConnection().then((connection) => {
   app.post('/api/organization', async (req: Request, res: Response) => {
     let org = new Organization();
     org.name = req.body.name;
+    org.status = status.active;
     if (req.body.avatar) {
       org.avatar = req.body.avatar;
     }
