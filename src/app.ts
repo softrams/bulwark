@@ -506,7 +506,7 @@ createConnection().then((connection) => {
     res.status(200).json(report);
   });
 
-  // puppeteer generate
+  // Puppeteer report generation functionality
   app.post('/api/report/generate', async (req: Request, res: Response) => {
     if (!req.body.orgId || !req.body.assetId || !req.body.assessmentId) {
       return res.status(400).send('Invalid report parameters');
