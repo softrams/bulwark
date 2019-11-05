@@ -12,6 +12,7 @@ export class DashboardComponent implements OnInit {
   orgAry: any = [];
   assetAry: any = [];
   orgId: number;
+  isArchive = false;
   constructor(private appService: AppService, public activatedRoute: ActivatedRoute, public router: Router) {}
 
   ngOnInit() {
@@ -20,6 +21,14 @@ export class DashboardComponent implements OnInit {
 
   getOrganizations() {
     this.appService.getOrganizations().then((res) => {
+      this.isArchive = false;
+      this.orgAry = res;
+    });
+  }
+
+  getArchivedOrganizations() {
+    this.appService.getArchivedOrganizations().then((res) => {
+      this.isArchive = true;
       this.orgAry = res;
     });
   }
@@ -40,6 +49,15 @@ export class DashboardComponent implements OnInit {
     const confirmed = confirm(`Archive the organization "${org.name}"?`);
     if (confirmed) {
       this.appService.archiveOrganization(org.id).subscribe((res) => {
+        this.getOrganizations();
+      });
+    }
+  }
+
+  activateOrganization(org: Organization) {
+    const confirmed = confirm(`Activate the organization "${org.name}"?`);
+    if (confirmed) {
+      this.appService.activateOrganization(org.id).subscribe((res) => {
         this.getOrganizations();
       });
     }
