@@ -513,7 +513,7 @@ createConnection().then((connection) => {
     }
     let url;
     if (env === 'production') {
-      url = `http://localhost:5000/#/organization/${req.body.orgId}/asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report`;
+      url = `https://bulwark-security.herokuapp.com/#/organization/${req.body.orgId}/asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report`;
     } else {
       url = `http://localhost:4200/#/organization/${req.body.orgId}/asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report`;
     }
