@@ -35,6 +35,7 @@
     "typescript": "^3.6.4"
   },
   "dependencies": {
+    "@angular-devkit/build-angular": "~0.13.0",
     "@angular/cli": "~7.3.5",
     "@angular/compiler-cli": "~7.2.0",
     "@types/body-parser": "^1.17.1",
