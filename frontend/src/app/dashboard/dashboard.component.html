@@ -8,8 +8,21 @@
           <button (click)="navigateToOrganization(org.id)" class="btn btn-secondary" style="margin-right: 5px;">
             Edit
           </button>
-          <button (click)="archiveOrganization(org)" class="btn btn-warning" style="margin-right: 5px;">
+          <button
+            *ngIf="!isArchive"
+            (click)="archiveOrganization(org)"
+            class="btn btn-warning"
+            style="margin-right: 5px;"
+          >
             Archive
+          </button>
+          <button
+            *ngIf="isArchive"
+            (click)="activateOrganization(org)"
+            class="btn btn-warning"
+            style="margin-right: 5px;"
+          >
+            Activate
           </button>
           <button (click)="navigateToAsset(org.id)" class="btn btn-primary" style="margin-right: 5px;">
             Assets
