@@ -9,7 +9,7 @@
     "ngServe": "cd frontend && ng serve",
     "nodemon:watch": "nodemon -e ts --exec \"npm run start\" ",
     "start:dev": "concurrently --kill-others \"npm run nodemon:watch\" \"npm run ngServe\"",
-    "postinstall": "cd frontend && npm install && ng build --aot --prod",
+    "postinstall": "cd frontend && node ./node_modules/@angular/cli/bin/ng build --aot --prod",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
     "migration:generate": "typeorm migration:generate -n refactor",
@@ -35,9 +35,6 @@
     "typescript": "^3.6.4"
   },
   "dependencies": {
-    "@angular-devkit/build-angular": "~0.13.0",
-    "@angular/cli": "~7.3.5",
-    "@angular/compiler-cli": "~7.2.0",
     "@types/body-parser": "^1.17.1",
     "@types/express": "^4.17.1",
     "body-parser": "^1.19.0",
