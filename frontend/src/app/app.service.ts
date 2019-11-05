@@ -10,7 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class AppService {
   constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
-  api = 'http://localhost:5000/api';
+  api = 'https://bulwark-security.herokuapp.com/api';
 
   // TODO:  Delete this monstrosity that I have created
   //       Please forgive me coding gods!
