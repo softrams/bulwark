@@ -63,7 +63,7 @@ export class AppService {
           type: file.mimetype
         });
         const url = window.URL.createObjectURL(blob);
-        return this.sanitizer.bypassSecurityTrustUrl(url);
+        return url;
       });
   }
 
@@ -83,6 +83,10 @@ export class AppService {
       .then((res) => {
         return res;
       });
+  }
+
+  archiveOrganization(id: number) {
+    return this.http.patch(`${this.api}/organization/${id}/archive`, null);
   }
 
   getAssessments(id: number) {

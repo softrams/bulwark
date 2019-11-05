@@ -12,6 +12,7 @@ import { File } from './entity/File';
 import { ProblemLocation } from './entity/ProblemLocation';
 import { validate } from 'class-validator';
 import { Resource } from './entity/Resource';
+import { status } from './enums/status-enum';
 
 const puppeteer = require('puppeteer');
 const multer = require('multer');
@@ -108,7 +109,7 @@ createConnection().then((connection) => {
    * @returns an array of organizations with avatar relations
    */
   app.get('/api/organization', async function(req: Request, res: Response) {
-    const orgs = await orgRepository.find({ relations: ['avatar'] });
+    const orgs = await orgRepository.find({ relations: ['avatar'], where: { status: status.active } });
     res.json(orgs);
   });
 
@@ -119,6 +120,19 @@ createConnection().then((connection) => {
       avatarData: org.avatar
     };
     res.json(resObj);
+  });
+
+  app.patch('/api/organization/:id/archive', async function(req: Request, res: Response) {
+    let org = new Organization();
+    org.id = +req.params.id;
+    org.status = status.archived;
+    const errors = await validate(org);
+    if (errors.length > 0) {
+      return res.status(400).send('Organization archive validation failed');
+    } else {
+      await orgRepository.save(org);
+      res.status(200).json('Organization archived succesfully');
+    }
   });
 
   app.patch('/api/organization/:id', async function(req: Request, res: Response) {

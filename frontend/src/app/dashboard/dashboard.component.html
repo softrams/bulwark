@@ -1,12 +1,15 @@
 <div class="container">
   <div class="row card-group">
-    <div class="col-3" *ngFor="let org of orgAry">
+    <div class="col-4" *ngFor="let org of orgAry">
       <div class="card text-center" style="margin-top: 10px;">
         <img *ngIf="org.imgUrl" class="card-img-top" [src]="org.imgUrl" alt="Card image cap" />
         <div class="card-body">
           <h5 class="card-title">{{ org.name }}</h5>
           <button (click)="navigateToOrganization(org.id)" class="btn btn-secondary" style="margin-right: 5px;">
             Edit
+          </button>
+          <button (click)="archiveOrganization(org)" class="btn btn-warning" style="margin-right: 5px;">
+            Archive
           </button>
           <button (click)="navigateToAsset(org.id)" class="btn btn-primary" style="margin-right: 5px;">
             Assets
