@@ -12,6 +12,7 @@ import { File } from './entity/File';
 import { ProblemLocation } from './entity/ProblemLocation';
 import { validate } from 'class-validator';
 import { Resource } from './entity/Resource';
+import { status } from './enums/status-enum';
 
 const puppeteer = require('puppeteer');
 const multer = require('multer');
@@ -101,7 +102,7 @@ createConnection().then((connection) => {
   });
 
   app.get('/api/organization', async function(req: Request, res: Response) {
-    const orgs = await orgRepository.find({ relations: ['avatar'] });
+    const orgs = await orgRepository.find({ relations: ['avatar'], where: { status: status.active } });
     res.json(orgs);
   });
 

@@ -63,7 +63,7 @@ export class AppService {
           type: file.mimetype
         });
         const url = window.URL.createObjectURL(blob);
-        return this.sanitizer.bypassSecurityTrustUrl(url);
+        return url;
       });
   }
 
