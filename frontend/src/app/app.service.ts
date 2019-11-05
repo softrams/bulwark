@@ -85,6 +85,10 @@ export class AppService {
       });
   }
 
+  archiveOrganization(id: number) {
+    return this.http.patch(`${this.api}/organization/${id}/archive`, null);
+  }
+
   getAssessments(id: number) {
     return this.http
       .get(`${this.api}/assessment/${id}`)

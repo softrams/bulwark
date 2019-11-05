@@ -115,6 +115,19 @@ createConnection().then((connection) => {
     res.json(resObj);
   });
 
+  app.patch('/api/organization/:id/archive', async function(req: Request, res: Response) {
+    let org = new Organization();
+    org.id = +req.params.id;
+    org.status = status.archived;
+    const errors = await validate(org);
+    if (errors.length > 0) {
+      return res.status(400).send('Organization archive validation failed');
+    } else {
+      await orgRepository.save(org);
+      res.status(200).json('Organization archived succesfully');
+    }
+  });
+
   app.patch('/api/organization/:id', async function(req: Request, res: Response) {
     let org = new Organization();
     org.name = req.body.name;
