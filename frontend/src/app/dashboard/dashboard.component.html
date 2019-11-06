@@ -5,7 +5,12 @@
         <img *ngIf="org.imgUrl" class="card-img-top" [src]="org.imgUrl" alt="Card image cap" />
         <div class="card-body">
           <h5 class="card-title">{{ org.name }}</h5>
-          <button (click)="navigateToOrganization(org.id)" class="btn btn-secondary" style="margin-right: 5px;">
+          <button
+            *ngIf="!isArchive"
+            (click)="navigateToOrganization(org.id)"
+            class="btn btn-secondary"
+            style="margin-right: 5px;"
+          >
             Edit
           </button>
           <button
@@ -24,7 +29,12 @@
           >
             Activate
           </button>
-          <button (click)="navigateToAsset(org.id)" class="btn btn-primary" style="margin-right: 5px;">
+          <button
+            *ngIf="!isArchive"
+            (click)="navigateToAsset(org.id)"
+            class="btn btn-primary"
+            style="margin-right: 5px;"
+          >
             Assets
           </button>
         </div>

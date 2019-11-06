@@ -94,11 +94,7 @@ export class AppService {
       .get(`${this.api}/file/${file.id}`, httpOptions)
       .toPromise()
       .then((res: Blob) => {
-        const blob = new Blob([res], {
-          type: file.mimetype
-        });
-        const url = window.URL.createObjectURL(blob);
-        return url;
+        return this.createObjectUrl(res, file.mimetype);
       });
   }
 
