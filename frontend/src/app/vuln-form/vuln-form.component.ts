@@ -6,6 +6,7 @@ import { AppService } from '../app.service';
 import { Vulnerability } from './Vulnerability';
 import { faTrash, faPlus, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { AppFile } from '../classes/App_File';
+import { ValueConverter } from '@angular/compiler/src/render3/view/template';
 @Component({
   selector: 'app-vuln-form',
   templateUrl: './vuln-form.component.html',
@@ -31,6 +32,9 @@ export class VulnFormComponent implements OnChanges, OnInit {
   previewDescription = false;
   previewDetailedDesc = false;
   previewRemediation = false;
+  impactAssess = 0;
+  likelihoodAssess = 0;
+  riskAssess = 0;
 
   constructor(
     private appService: AppService,
@@ -42,6 +46,54 @@ export class VulnFormComponent implements OnChanges, OnInit {
   }
 
   ngOnInit() {
+    this.vulnForm.get('impact').valueChanges.subscribe(
+      value => {
+        if (this.impactAssess === 0) {
+        if (value === 'High') {
+          this.impactAssess += 3;
+        } else if (value === 'Medium') {
+          this.impactAssess += 2;
+        } else {
+          this.impactAssess += 1;
+        }
+        this.updateRisk();
+      } else {
+        this.impactAssess = 0;
+        if (value === 'High') {
+          this.impactAssess += 3;
+        } else if (value === 'Medium') {
+          this.impactAssess += 2;
+        } else {
+          this.impactAssess += 1;
+        }
+        this.updateRisk();
+      }
+    }
+    );
+    this.vulnForm.get('likelihood').valueChanges.subscribe(
+      value => {
+        if (this.likelihoodAssess === 0) {
+        if (value === 'High') {
+          this.likelihoodAssess += 3;
+        } else if (value === 'Medium') {
+          this.likelihoodAssess += 2;
+        } else {
+          this.likelihoodAssess += 1;
+        }
+        this.updateRisk();
+      } else {
+        this.likelihoodAssess = 0;
+        if (value === 'High') {
+          this.likelihoodAssess += 3;
+        } else if (value === 'Medium') {
+          this.likelihoodAssess += 2;
+        } else {
+          this.likelihoodAssess += 1;
+        }
+        this.updateRisk();
+      }
+    }
+    );
     this.activatedRoute.data.subscribe(({ vulnerability }) => {
       if (vulnerability) {
         this.vulnModel = vulnerability;
@@ -264,4 +316,32 @@ export class VulnFormComponent implements OnChanges, OnInit {
   toggleRemediationPreview() {
     this.previewRemediation = !this.previewRemediation;
   }
+
+  updateRisk() {
+    const value: number = this.impactAssess + this.likelihoodAssess;
+    this.riskAssess = value;
+
+    if (value === 6) {
+      this.vulnForm.patchValue({
+        risk: 'Critical',
+      });
+    } else if (value === 5) {
+      this.vulnForm.patchValue({
+        risk: 'High',
+      });
+  } else if (value === 4) {
+      this.vulnForm.patchValue({
+        risk: 'Medium',
+      });
+  } else if (value === 3) {
+      this.vulnForm.patchValue({
+        risk: 'Low',
+      });
+  } else {
+      this.vulnForm.patchValue({
+        risk: 'Informational',
+      });
+  }
+}
+
 }
