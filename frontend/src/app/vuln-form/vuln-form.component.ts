@@ -6,7 +6,7 @@ import { AppService } from '../app.service';
 import { Vulnerability } from './Vulnerability';
 import { faTrash, faPlus, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { AppFile } from '../classes/App_File';
-import { ValueConverter } from '@angular/compiler/src/render3/view/template';
+
 @Component({
   selector: 'app-vuln-form',
   templateUrl: './vuln-form.component.html',
