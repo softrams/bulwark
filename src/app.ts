@@ -102,10 +102,10 @@ createConnection().then((connection) => {
   });
 
   /**
-   * @description this is does
-   *
-   * @param {Request} req
-   * @param {Response} res
+   * @description API backend for getting organization data
+   * returns all organizations when triggered
+   * @param {Request} req 
+   * @param {Response} res contains JSON object with all organization data
    * @returns an array of organizations with avatar relations
    */
   app.get('/api/organization', async function(req: Request, res: Response) {
@@ -113,11 +113,25 @@ createConnection().then((connection) => {
     res.json(orgs);
   });
 
+  /**
+   * @description API backend for getting the organizational status for
+   * if the organization is archived or not
+   * @param {Request} req 
+   * @param {Response} res contains JSON object with archived organizations
+   * @returns an array of organizations with avatar relations and archived status
+   */
   app.get('/api/organization/archive', async function(req: Request, res: Response) {
     const orgs = await orgRepository.find({ relations: ['avatar'], where: { status: status.archived } });
     res.json(orgs);
   });
 
+  /**
+   * @description API backend for getting an organization associated by ID
+   *
+   * @param {Request} req
+   * @param {Response} res contains JSON object with the organization data
+   * @returns a JSON object with the given organization referenced by ID
+   */
   app.get('/api/organization/:id', async function(req: Request, res: Response) {
     let org = await orgRepository.findOne(req.params.id, { relations: ['avatar'] });
     let resObj = {
@@ -127,6 +141,13 @@ createConnection().then((connection) => {
     res.json(resObj);
   });
 
+  /**
+   * @description API backend for updating an organization associated by ID
+   * and updates archive status to archived
+   * @param {Request} req
+   * @param {Response} res contains JSON object with the organization data
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.patch('/api/organization/:id/archive', async function(req: Request, res: Response) {
     let org = new Organization();
     org.id = +req.params.id;
@@ -140,6 +161,13 @@ createConnection().then((connection) => {
     }
   });
 
+  /**
+   * @description API backend for updating an organization associated by ID
+   * and updates archive status to unarchived
+   * @param {Request} req ID and Status of the organization
+   * @param {Response} res contains JSON object with the organization data
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.patch('/api/organization/:id/activate', async function(req: Request, res: Response) {
     let org = new Organization();
     org.id = +req.params.id;
@@ -153,6 +181,13 @@ createConnection().then((connection) => {
     }
   });
 
+  /**
+   * @description API backend for updating an organization associated by ID
+   * and updates with supplied data
+   * @param {Request} req name and ID of the organization to alter
+   * @param {Response} res contains JSON object with the organization data
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.patch('/api/organization/:id', async function(req: Request, res: Response) {
     let org = new Organization();
     org.name = req.body.name;
@@ -169,6 +204,13 @@ createConnection().then((connection) => {
     }
   });
 
+  /**
+   * @description API backend for creating an organization
+   * 
+   * @param {Request} req Name, Status, and Avatar
+   * @param {Response} res contains JSON object with the organization data
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.post('/api/organization', async (req: Request, res: Response) => {
     let org = new Organization();
     org.name = req.body.name;
@@ -185,11 +227,25 @@ createConnection().then((connection) => {
     }
   });
 
+  /**
+   * @description API backend for requesting a file by ID
+   * and returns the buffer back to the UI
+   * @param {Request} req
+   * @param {Response} res contains a buffer with the file data
+   * @returns a buffer with the file data
+   */
   app.get('/api/file/:id', async function(req: Request, res: Response) {
     const file = await fileRepository.findOne(req.params.id);
     res.send(file.buffer);
   });
 
+  /**
+   * @description API backend for requesting an asset associated by ID
+   * and returns it to the UI
+   * @param {Request} req
+   * @param {Response} res contains JSON object with the asset data
+   * @returns a JSON object with the asset data
+   */
   app.get('/api/organization/asset/:id', async function(req: Request, res: Response) {
     const asset = await assetRepository.find({
       where: { organization: req.params.id }
@@ -197,6 +253,13 @@ createConnection().then((connection) => {
     res.json(asset);
   });
 
+  /**
+   * @description API backend for requesting an assessment associated by ID
+   * and returns it to the UI
+   * @param {Request} req
+   * @param {Response} res contains JSON object with the assessment data
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.get('/api/assessment/:id', async function(req: Request, res: Response) {
     const assessment = await assessmentRepository.find({
       where: { asset: req.params.id }
@@ -204,6 +267,13 @@ createConnection().then((connection) => {
     res.json(assessment);
   });
 
+  /**
+   * @description API backend for requesting a vulnerability and returns it to the UI
+   * 
+   * @param {Request} req
+   * @param {Response} res contains JSON object with the vulnerability data
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.get('/api/assessment/:id/vulnerability', async function(req: Request, res: Response) {
     const vulnerabilities = await vulnerabilityRepository.find({
       where: { assessment: req.params.id }
@@ -211,6 +281,13 @@ createConnection().then((connection) => {
     res.json(vulnerabilities);
   });
 
+  /**
+   * @description API backend for requesting a vulnerability associated by ID
+   * and updates archive status
+   * @param {Request} req
+   * @param {Response} res contains JSON object with the organization data
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.get('/api/vulnerability/:vulnId', async (req: Request, res: Response) => {
     if (!req.params.vulnId) {
       return res.status(400).send('Invalid Vulnerability request');
@@ -222,6 +299,13 @@ createConnection().then((connection) => {
     res.status(200).json(vuln);
   });
 
+  /**
+   * @description API backend for deleting a vulnerability associated by ID
+   * 
+   * @param {Request} req vulnID is required
+   * @param {Response} res contains JSON object with the success/fail
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.delete('/api/vulnerability/:vulnId', async (req: Request, res: Response) => {
     if (!req.params.vulnId) {
       return res.status(400).send('Vulnerability deletion failed.  Vulnerability does not exist.');
@@ -235,6 +319,13 @@ createConnection().then((connection) => {
     }
   });
 
+  /**
+   * @description API backend for updating a vulnerability associated by ID
+   * and performs updates
+   * @param {Request} req vulnId is required
+   * @param {Response} res contains JSON object with the status of the req
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.patch('/api/vulnerability/:vulnId', (req, res) => {
     uploadArray(req, res, async (err) => {
       if (req['fileExtError']) {
@@ -351,6 +442,13 @@ createConnection().then((connection) => {
     });
   });
 
+  /**
+   * @description API backend for creating a vulnerability with the
+   * provided req data
+   * @param {Request} req array for files, vulnerability form data as JSON
+   * @param {Response} res contains JSON object with the organization data
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.post('/api/vulnerability', async (req, res) => {
     uploadArray(req, res, async (err) => {
       if (req['fileExtError']) {
@@ -433,6 +531,13 @@ createConnection().then((connection) => {
     });
   });
 
+  /**
+   * @description API backend for creating an asset associated by org ID
+   * 
+   * @param {Request} req name, organization
+   * @param {Response} res contains JSON object with the organization data
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.post('/api/organization/:id/asset', async (req: Request, res: Response) => {
     let asset = new Asset();
     if (isNaN(req.body.organization) || !req.body.name) {
@@ -449,6 +554,13 @@ createConnection().then((connection) => {
     }
   });
 
+  /**
+   * @description API backend for requesting an organization asset associated by ID
+   * and returns the data
+   * @param {Request} req assetId, orgId
+   * @param {Response} res contains JSON object with the asset data tied to the org
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.get('/api/organization/:id/asset/:assetId', async (req: Request, res: Response) => {
     if (!req.params.id || !req.params.assetId) {
       return res.status(400).send('Invalid Asset request');
@@ -457,6 +569,13 @@ createConnection().then((connection) => {
     res.status(200).json(asset);
   });
 
+  /**
+   * @description API backend for updating an organization asset associated by ID
+   * and updates the data
+   * @param {Request} req name, organization, assetId
+   * @param {Response} res contains JSON object with the asset data tied to the org
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.patch('/api/organization/:id/asset/:assetId', async function(req: Request, res: Response) {
     let asset = new Asset();
     asset.name = req.body.name;
@@ -471,6 +590,13 @@ createConnection().then((connection) => {
     }
   });
 
+  /**
+   * @description API backend for creating an assessment
+   * 
+   * @param {Request} req assessment object data
+   * @param {Response} res contains JSON object with the success/fail status
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.post('/api/assessment', async (req: Request, res: Response) => {
     let assessment = new Assessment();
     assessment.name = req.body.name;
@@ -492,6 +618,12 @@ createConnection().then((connection) => {
     }
   });
 
+  /**
+   * @description API backend for requesting assessment by ID association
+   * @param {Request} req assetId, assessmentId
+   * @param {Response} res contains JSON object with the assessment data
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.get('/api/asset/:assetId/assessment/:assessmentId', async (req: Request, res: Response) => {
     if (!req.params.assetId || !req.params.assessmentId) {
       return res.status(400).send('Invalid assessment request');
@@ -500,6 +632,12 @@ createConnection().then((connection) => {
     res.status(200).json(assessment);
   });
 
+  /**
+   * @description API backend for updating a assessment associated by ID
+   * @param {Request} req assessment JSON object with assessment data
+   * @param {Response} res contains JSON object with the organization data
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.patch('/api/asset/:assetId/assessment/:assessmentId', async function(req: Request, res: Response) {
     let assessment = await assessmentRepository.findOne(req.params.assessmentId);
     assessment = req.body;
@@ -516,6 +654,12 @@ createConnection().then((connection) => {
     }
   });
 
+  /**
+   * @description API backend for requesting a report associated by assessmentId
+   * @param {Request} req assessmentId
+   * @param {Response} res contains JSON object with the report data
+   * @returns a JSON object with the proper http response specifying success/fail
+   */
   app.get('/api/assessment/:assessmentId/report', async (req: Request, res: Response) => {
     if (!req.params.assessmentId) {
       return res.status(400).send('Invalid report request');
@@ -546,7 +690,13 @@ createConnection().then((connection) => {
     res.status(200).json(report);
   });
 
-  // Puppeteer report generation functionality
+  /**
+   * @description API backend for report generation with Puppeteer
+   * @param {Request} req orgId, assetId, assessmentId
+   * @param {Response} res contains all data associated and generates a 
+   * new html page with PDF Report
+   * @returns a new page generated by Puppeteer with a Report in PDF format
+   */
   app.post('/api/report/generate', async (req: Request, res: Response) => {
     if (!req.body.orgId || !req.body.assetId || !req.body.assessmentId) {
       return res.status(400).send('Invalid report parameters');
