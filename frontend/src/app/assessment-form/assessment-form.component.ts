@@ -39,14 +39,29 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
     });
   }
 
+  /**
+   * Function responsible to detect changes for the form and rebuild it
+   * @memberof AssessmentFormComponent
+   */
   ngOnChanges() {
     this.rebuildForm();
   }
 
+  /**
+   * Function responsible for formatting the date data in the form for
+   * storage
+   * @param {string} date is the date data from the form
+   * @returns formatted date to be stored
+   * @memberof AssessmentFormComponent
+   */
   transformDate(date: string) {
     return date.substring(0, 10);
   }
 
+  /**
+   * Function responsible for rebuilding the reactive form in Angular
+   * @memberof AssessmentFormComponent
+   */
   rebuildForm() {
     this.assessmentForm.reset({
       name: this.assessmentModel.name,
@@ -61,6 +76,10 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
     });
   }
 
+  /**
+   * Function responsible for creating the reactive form in Angular
+   * @memberof AssessmentFormComponent
+   */
   createForm() {
     this.assessmentForm = this.fb.group({
       name: ['', [Validators.required]],
@@ -75,12 +94,24 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
     });
   }
 
+  /**
+   * Function responsible for handling the form submission and triggers a call
+   * to the createOrUpdateAssessment() function
+   * @param {FormGroup} assessment
+   * @memberof AssessmentFormComponent
+   */
   onSubmit(assessment: FormGroup) {
     this.assessmentModel = assessment.value;
     this.assessmentModel.asset = this.assetId;
     this.createOrUpdateAssessment(this.assessmentModel);
   }
 
+  /**
+   * Function responsible for handling the form data and creating or updating
+   * an Assessment
+   * @param {Assessment} assessment form object data passed from OnSubmit()
+   * @memberof AssessmentFormComponent
+   */
   createOrUpdateAssessment(assessment: Assessment) {
     if (this.assessmentId) {
       this.appService.updateAssessment(assessment, this.assessmentId, this.assetId).subscribe((success) => {
@@ -93,6 +124,10 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
     }
   }
 
+  /**
+   * Function responsible for navigating the user back to the Assessments View
+   * @memberof AssessmentFormComponent
+   */
   navigateToAssessments() {
     this.route.navigate([`organization/${this.orgId}/asset/${this.assetId}`]);
   }

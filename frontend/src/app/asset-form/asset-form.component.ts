@@ -36,22 +36,39 @@ export class AssetFormComponent implements OnInit, OnChanges {
     });
   }
 
+  /**
+   * Function responsible to detect changes for the form and rebuild it
+   * @memberof AssetFormComponent
+   */
   ngOnChanges() {
     this.rebuildForm();
   }
 
+  /**
+   * Function responsible for creating the reactive form in Angular
+   * @memberof AssetFormComponent
+   */
   createForm() {
     this.assetForm = this.fb.group({
       name: ['', [Validators.required]]
     });
   }
 
+  /**
+   * Function responsible for rebuilding the reactive form in Angular
+   * @memberof AssetFormComponent
+   */
   rebuildForm() {
     this.assetForm.reset({
       name: this.assetModel.name
     });
   }
 
+  /**
+   * Function responsible for processing the data from the reactive from
+   * @param {FormGroup} asset data object holding all the form data
+   * @memberof AssetFormComponent
+   */
   onSubmit(asset: FormGroup) {
     this.assetModel = asset.value;
     this.assetModel.organization = this.orgId;
@@ -59,10 +76,20 @@ export class AssetFormComponent implements OnInit, OnChanges {
     this.createOrUpdateAsset(this.assetModel);
   }
 
+  /**
+   * Function responsible for sending the user back to Assets listing
+   * @memberof AssetFormComponent
+   */
   navigateToAssets() {
     this.route.navigate([`organization/${this.orgId}`]);
   }
 
+  /**
+   * Function responsible for creating or updating an asset tied to
+   * an organization
+   * @param {Asset} asset object holding all the asset data
+   * @memberof AssetFormComponent
+   */
   createOrUpdateAsset(asset: Asset) {
     if (this.assetId) {
       this.appService.updateAsset(asset).subscribe((success) => {
