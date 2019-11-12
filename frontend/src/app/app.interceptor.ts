@@ -36,6 +36,9 @@ export class AppInterceptor implements HttpInterceptor {
             case 400:
               this.alertService.error(error.error);
               break;
+            default:
+              error.error = 'Internal Server Error';
+              this.alertService.error(error.error);
           }
         }
         // return an observable with a user-facing error message
