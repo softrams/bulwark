@@ -44,12 +44,21 @@ export class ReportComponent implements OnInit {
     });
   }
 
+  /**
+   * Function responsible for navigating the user to the Vulnerability Listing
+   * @memberof ReportComponent
+   */
   navigateToVulns() {
     this.router.navigate([
       `organization/${this.orgId}/asset/${this.assetId}/assessment/${this.assessmentId}/vulnerability`
     ]);
   }
 
+  /**
+   * Function that triggers when viewing vulnerabilities listing for an assessment
+   * Data is passed from the report component object and handled within the function
+   * @memberof ReportComponent
+   */
   generateReport() {
     this.appService.generateReport(this.orgId, this.assetId, this.assessmentId).subscribe((res: Blob) => {
       const blob = new Blob([res], {

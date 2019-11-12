@@ -45,6 +45,10 @@ export class OrgFormComponent implements OnInit, OnChanges {
     this.rebuildForm();
   }
 
+  /**
+   * Function required to create the active form in Angular
+   * @memberof OrgFormComponent
+   */
   createForm() {
     this.orgForm = this.fb.group({
       name: ['', [Validators.required]],
@@ -52,6 +56,10 @@ export class OrgFormComponent implements OnInit, OnChanges {
     });
   }
 
+  /**
+   * Function required to rebuild the form on changes in Angular
+   * @memberof OrgFormComponent
+   */
   rebuildForm() {
     this.orgForm.reset({
       name: this.orgModel.name,
@@ -59,10 +67,20 @@ export class OrgFormComponent implements OnInit, OnChanges {
     });
   }
 
+  /**
+   * Function required to process the files attached to the form
+   * @param {FileList} files array of files to work with
+   * @memberof OrgFormComponent
+   */
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
   }
 
+  /**
+   * Function required to process the form data
+   * @param {FormGroup} contact form data object holding organization data
+   * @memberof OrgFormComponent
+   */
   onSubmit(contact: FormGroup) {
     this.orgModel = contact.value;
     if (this.fileToUpload) {
@@ -81,6 +99,12 @@ export class OrgFormComponent implements OnInit, OnChanges {
     this.orgForm.reset();
   }
 
+  /**
+   * Function required to create or update an organization based on org ID
+   * navigates the user back to the main dashboard after action is executed
+   * @param {Organization} org contains organization data object
+   * @memberof OrgFormComponent
+   */
   createOrUpdateOrg(org: Organization) {
     if (this.orgId) {
       this.appService.updateOrg(this.orgId, org).subscribe(
@@ -99,6 +123,10 @@ export class OrgFormComponent implements OnInit, OnChanges {
     }
   }
 
+  /**
+   * Function responsible for directing the user back to the main dashboard
+   * @memberof OrgFormComponent
+   */
   navigateToDashboard() {
     this.route.navigate(['dashboard']);
   }
