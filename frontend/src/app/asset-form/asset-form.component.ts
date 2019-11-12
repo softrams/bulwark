@@ -2,8 +2,8 @@ import { Component, OnInit, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Asset } from './Asset';
 import { AppService } from '../app.service';
-import { Router, ActivatedRoute, RouterOutlet } from '@angular/router';
-
+import { Router, ActivatedRoute } from '@angular/router';
+import { AlertService } from '../alert/alert.service';
 @Component({
   selector: 'app-asset-form',
   templateUrl: './asset-form.component.html',
@@ -18,7 +18,8 @@ export class AssetFormComponent implements OnInit, OnChanges {
     private fb: FormBuilder,
     public appService: AppService,
     public route: Router,
-    public activatedRoute: ActivatedRoute
+    public activatedRoute: ActivatedRoute,
+    private alertService: AlertService
   ) {
     this.createForm();
   }
@@ -92,16 +93,15 @@ export class AssetFormComponent implements OnInit, OnChanges {
    */
   createOrUpdateAsset(asset: Asset) {
     if (this.assetId) {
-      this.appService.updateAsset(asset).subscribe((success) => {
+      this.appService.updateAsset(asset).subscribe((res: string) => {
         this.navigateToAssets();
+        this.alertService.success(res);
       });
     } else {
-      this.appService.createAsset(asset).subscribe(
-        (success) => {
-          this.navigateToAssets();
-        },
-        (err) => {}
-      );
+      this.appService.createAsset(asset).subscribe((res: string) => {
+        this.navigateToAssets();
+        this.alertService.success(res);
+      });
     }
   }
 }

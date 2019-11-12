@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AppService } from '../app.service';
+import { AlertService } from '../alert/alert.service';
 import { Vulnerability } from './Vulnerability';
 import { faTrash, faPlus, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { AppFile } from '../classes/App_File';
@@ -40,7 +41,8 @@ export class VulnFormComponent implements OnChanges, OnInit {
     private appService: AppService,
     public activatedRoute: ActivatedRoute,
     public router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private alertService: AlertService
   ) {
     this.createForm();
   }
@@ -51,9 +53,8 @@ export class VulnFormComponent implements OnChanges, OnInit {
    * @memberof VulnFormComponent
    */
   ngOnInit() {
-    this.vulnForm.get('impact').valueChanges.subscribe(
-      value => {
-        if (this.impactAssess === 0) {
+    this.vulnForm.get('impact').valueChanges.subscribe((value) => {
+      if (this.impactAssess === 0) {
         if (value === 'High') {
           this.impactAssess += 3;
         } else if (value === 'Medium') {
@@ -73,11 +74,9 @@ export class VulnFormComponent implements OnChanges, OnInit {
         }
         this.updateRisk();
       }
-    }
-    );
-    this.vulnForm.get('likelihood').valueChanges.subscribe(
-      value => {
-        if (this.likelihoodAssess === 0) {
+    });
+    this.vulnForm.get('likelihood').valueChanges.subscribe((value) => {
+      if (this.likelihoodAssess === 0) {
         if (value === 'High') {
           this.likelihoodAssess += 3;
         } else if (value === 'Medium') {
@@ -97,8 +96,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
         }
         this.updateRisk();
       }
-    }
-    );
+    });
     this.activatedRoute.data.subscribe(({ vulnerability }) => {
       if (vulnerability) {
         this.vulnModel = vulnerability;
@@ -394,19 +392,15 @@ export class VulnFormComponent implements OnChanges, OnInit {
    */
   createOrUpdateVuln(vuln: FormData) {
     if (this.vulnId) {
-      this.appService.updateVulnerability(this.vulnId, vuln).subscribe((success) => {
+      this.appService.updateVulnerability(this.vulnId, vuln).subscribe((res: string) => {
         this.navigateToVulnerabilities();
+        this.alertService.success(res);
       });
     } else {
-      this.appService.createVuln(vuln).subscribe(
-        (success) => {
-          this.navigateToVulnerabilities();
-        },
-        (error) => {
-          // Reset current form data to avoid duplicate inputs
-          this.vulnFormData = new FormData();
-        }
-      );
+      this.appService.createVuln(vuln).subscribe((res: string) => {
+        this.navigateToVulnerabilities();
+        this.alertService.success(res);
+      });
     }
   }
 
@@ -451,25 +445,24 @@ export class VulnFormComponent implements OnChanges, OnInit {
 
     if (value === 6) {
       this.vulnForm.patchValue({
-        risk: 'Critical',
+        risk: 'Critical'
       });
     } else if (value === 5) {
       this.vulnForm.patchValue({
-        risk: 'High',
+        risk: 'High'
       });
-  } else if (value === 4) {
+    } else if (value === 4) {
       this.vulnForm.patchValue({
-        risk: 'Medium',
+        risk: 'Medium'
       });
-  } else if (value === 3) {
+    } else if (value === 3) {
       this.vulnForm.patchValue({
-        risk: 'Low',
+        risk: 'Low'
       });
-  } else {
+    } else {
       this.vulnForm.patchValue({
-        risk: 'Informational',
+        risk: 'Informational'
       });
+    }
   }
-}
-
 }

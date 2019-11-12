@@ -13,6 +13,7 @@ import { ProblemLocation } from './entity/ProblemLocation';
 import { validate } from 'class-validator';
 import { Resource } from './entity/Resource';
 import { status } from './enums/status-enum';
+import { stat } from 'fs';
 
 const puppeteer = require('puppeteer');
 const multer = require('multer');
@@ -104,7 +105,7 @@ createConnection().then((connection) => {
   /**
    * @description API backend for getting organization data
    * returns all organizations when triggered
-   * @param {Request} req 
+   * @param {Request} req
    * @param {Response} res contains JSON object with all organization data
    * @returns an array of organizations with avatar relations
    */
@@ -116,7 +117,7 @@ createConnection().then((connection) => {
   /**
    * @description API backend for getting the organizational status for
    * if the organization is archived or not
-   * @param {Request} req 
+   * @param {Request} req
    * @param {Response} res contains JSON object with archived organizations
    * @returns an array of organizations with avatar relations and archived status
    */
@@ -133,7 +134,13 @@ createConnection().then((connection) => {
    * @returns a JSON object with the given organization referenced by ID
    */
   app.get('/api/organization/:id', async function(req: Request, res: Response) {
+    if (isNaN(+req.params.id)) {
+      return res.status(400).json('Organization ID is not valid');
+    }
     let org = await orgRepository.findOne(req.params.id, { relations: ['avatar'] });
+    if (!org) {
+      return res.status(404).json('Organization not found');
+    }
     let resObj = {
       name: org.name,
       avatarData: org.avatar
@@ -149,15 +156,20 @@ createConnection().then((connection) => {
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.patch('/api/organization/:id/archive', async function(req: Request, res: Response) {
-    let org = new Organization();
-    org.id = +req.params.id;
+    if (isNaN(+req.params.id)) {
+      return res.status(400).json('Organization ID is not valid');
+    }
+    let org = await orgRepository.findOne(req.params.id);
+    if (!org) {
+      return res.status(404).json('Organization does not exist');
+    }
     org.status = status.archived;
     const errors = await validate(org);
     if (errors.length > 0) {
-      return res.status(400).send('Organization archive validation failed');
+      return res.status(400).json('Organization archive validation failed');
     } else {
       await orgRepository.save(org);
-      res.status(200).json('Organization archived succesfully');
+      res.status(200).json('Organization archived successfully');
     }
   });
 
@@ -169,15 +181,20 @@ createConnection().then((connection) => {
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.patch('/api/organization/:id/activate', async function(req: Request, res: Response) {
-    let org = new Organization();
-    org.id = +req.params.id;
+    if (isNaN(+req.params.id)) {
+      return res.status(400).json('Organization ID is not valid');
+    }
+    let org = await orgRepository.findOne(req.params.id);
+    if (!org) {
+      return res.status(404).json('Organization does not exist');
+    }
     org.status = status.active;
     const errors = await validate(org);
     if (errors.length > 0) {
-      return res.status(400).send('Organization activation validation failed');
+      return res.status(400).json('Organization activation validation failed');
     } else {
       await orgRepository.save(org);
-      res.status(200).json('Organization activated succesfully');
+      res.status(200).json('Organization activated successfully');
     }
   });
 
@@ -189,10 +206,18 @@ createConnection().then((connection) => {
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.patch('/api/organization/:id', async function(req: Request, res: Response) {
-    let org = new Organization();
+    if (isNaN(+req.params.id)) {
+      return res.status(400).json('Organization ID is not valid');
+    }
+    let org = await orgRepository.findOne(req.params.id);
+    if (!org) {
+      return res.status(404).json('Organization does not exist');
+    }
     org.name = req.body.name;
-    org.id = +req.params.id;
     if (req.body.avatar) {
+      if (isNaN(+req.body.avatar)) {
+        return res.status(400).json('Avatar is not valid');
+      }
       org.avatar = req.body.avatar;
     }
     const errors = await validate(org);
@@ -200,13 +225,13 @@ createConnection().then((connection) => {
       return res.status(400).send('Organization form validation failed');
     } else {
       await orgRepository.save(org);
-      res.status(200).json('Organization patched succesfully');
+      res.status(200).json('Organization patched successfully');
     }
   });
 
   /**
    * @description API backend for creating an organization
-   * 
+   *
    * @param {Request} req Name, Status, and Avatar
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
@@ -269,7 +294,7 @@ createConnection().then((connection) => {
 
   /**
    * @description API backend for requesting a vulnerability and returns it to the UI
-   * 
+   *
    * @param {Request} req
    * @param {Response} res contains JSON object with the vulnerability data
    * @returns a JSON object with the proper http response specifying success/fail
@@ -301,7 +326,7 @@ createConnection().then((connection) => {
 
   /**
    * @description API backend for deleting a vulnerability associated by ID
-   * 
+   *
    * @param {Request} req vulnID is required
    * @param {Response} res contains JSON object with the success/fail
    * @returns a JSON object with the proper http response specifying success/fail
@@ -337,7 +362,13 @@ createConnection().then((connection) => {
             return res.status(400).send(err.message);
         }
       } else {
-        let vulnerability = new Vulnerability();
+        if (isNaN(+req.params.vulnId)) {
+          return res.status(400).json('Vulnerability ID is invalid');
+        }
+        let vulnerability = await vulnerabilityRepository.findOne(req.params.vulnId);
+        if (!vulnerability) {
+          return res.status(404).json('Vulnerability does not exist');
+        }
         vulnerability.id = +req.params.vulnId;
         vulnerability.impact = req.body.impact;
         vulnerability.likelihood = req.body.likelihood;
@@ -407,7 +438,6 @@ createConnection().then((connection) => {
               }
             }
           }
-
           // Remove deleted resources
           if (req.body.resources.length) {
             const clientResources = JSON.parse(req.body.resources);
@@ -418,7 +448,6 @@ createConnection().then((connection) => {
             for (const resource of resourcesToDelete) {
               resourceRepository.delete(resource);
             }
-
             // Update resources
             for (let clientResource of clientResources) {
               if (clientResource.description && clientResource.url) {
@@ -436,7 +465,7 @@ createConnection().then((connection) => {
               }
             }
           }
-          return res.status(200).json('Vulnerability saved successfully');
+          return res.status(200).json('Vulnerability patched successfully');
         }
       }
     });
@@ -533,24 +562,31 @@ createConnection().then((connection) => {
 
   /**
    * @description API backend for creating an asset associated by org ID
-   * 
+   *
    * @param {Request} req name, organization
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.post('/api/organization/:id/asset', async (req: Request, res: Response) => {
-    let asset = new Asset();
-    if (isNaN(req.body.organization) || !req.body.name) {
-      return res.status(400).send('Invalid Asset request');
+    if (isNaN(+req.params.id)) {
+      return res.status(400).json('Organization ID is not valid');
     }
+    let org = await orgRepository.findOne(req.params.id);
+    if (!org) {
+      return res.status(404).json('Organization does not exist');
+    }
+    if (!req.body.name) {
+      return res.status(400).send('Asset is not valid');
+    }
+    let asset = new Asset();
     asset.name = req.body.name;
-    asset.organization = req.body.organization;
+    asset.organization = org;
     const errors = await validate(asset);
     if (errors.length > 0) {
       res.status(400).send('Asset form validation failed');
     } else {
       const newAsset = await assetRepository.save(asset);
-      res.json(newAsset);
+      res.status(200).json('Asset saved successfully');
     }
   });
 
@@ -577,13 +613,20 @@ createConnection().then((connection) => {
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.patch('/api/organization/:id/asset/:assetId', async function(req: Request, res: Response) {
-    let asset = new Asset();
+    if (isNaN(+req.params.id)) {
+      return res.status(400).json('Asset ID is not valid');
+    }
+    let asset = await assetRepository.findOne(req.params.id);
+    if (!asset) {
+      return res.status(404).json('Asset does not exist');
+    }
+    if (!req.body.name) {
+      return res.status(400).send('Asset is not valid');
+    }
     asset.name = req.body.name;
-    asset.organization = req.body.organization;
-    asset.id = +req.params.assetId;
     const errors = await validate(asset);
     if (errors.length > 0) {
-      return res.status(400).send('Asset form validation failed');
+      res.status(400).send('Asset form validation failed');
     } else {
       await assetRepository.save(asset);
       res.status(200).json('Asset patched successfully');
@@ -592,15 +635,22 @@ createConnection().then((connection) => {
 
   /**
    * @description API backend for creating an assessment
-   * 
+   *
    * @param {Request} req assessment object data
    * @param {Response} res contains JSON object with the success/fail status
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.post('/api/assessment', async (req: Request, res: Response) => {
+    if (isNaN(req.body.asset)) {
+      return res.status(400).json('Asset ID is invalid');
+    }
+    let asset = await assetRepository.findOne(req.body.asset);
+    if (!asset) {
+      return res.status(404).json('Asset does not exist');
+    }
     let assessment = new Assessment();
+    assessment.asset = asset;
     assessment.name = req.body.name;
-    assessment.asset = req.body.asset;
     assessment.executiveSummary = req.body.executiveSummary;
     assessment.jiraId = req.body.jiraId;
     assessment.testUrl = req.body.testUrl;
@@ -650,7 +700,7 @@ createConnection().then((connection) => {
       return res.status(400).send('Assessment form validation failed');
     } else {
       await assessmentRepository.save(assessment);
-      res.status(200).json('Asset patched successfully');
+      res.status(200).json('Assessment patched successfully');
     }
   });
 
@@ -693,7 +743,7 @@ createConnection().then((connection) => {
   /**
    * @description API backend for report generation with Puppeteer
    * @param {Request} req orgId, assetId, assessmentId
-   * @param {Response} res contains all data associated and generates a 
+   * @param {Response} res contains all data associated and generates a
    * new html page with PDF Report
    * @returns a new page generated by Puppeteer with a Report in PDF format
    */
