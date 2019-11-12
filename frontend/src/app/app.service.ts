@@ -16,7 +16,7 @@ export class AppService {
   //       Please forgive me coding gods!
   //       We need to find a better solution than to individually
   //       query for each image.  This will not work well with reports!
-   
+
   /**
    * Function is responsible for initial retrevial of organizations on dashboard loading
    * @returns all organization information to the dashboard
@@ -40,9 +40,6 @@ export class AppService {
               .then(async (blob: Blob) => {
                 orgs[i].imgUrl = this.createObjectUrl(blob, orgs[i].avatar.mimetype);
                 count++;
-              })
-              .catch((err) => {
-                this.handleError(err);
               });
           } else {
             count++;
@@ -51,18 +48,15 @@ export class AppService {
         if (count === orgs.length) {
           return orgs;
         }
-      })
-      .catch((err) => {
-        this.handleError(err);
       });
   }
 
-/**
- * Function responsible for retreval of organizations archived status.
- * @returns Data for organizations that have been archived.
- * @memberof AppService
- */
-getArchivedOrganizations() {
+  /**
+   * Function responsible for retreval of organizations archived status.
+   * @returns Data for organizations that have been archived.
+   * @memberof AppService
+   */
+  getArchivedOrganizations() {
     const httpOptions = {
       responseType: 'blob' as 'json'
     };
@@ -80,9 +74,6 @@ getArchivedOrganizations() {
               .then(async (blob: Blob) => {
                 orgs[i].imgUrl = this.createObjectUrl(blob, orgs[i].avatar.mimetype);
                 count++;
-              })
-              .catch((err) => {
-                this.handleError(err);
               });
           } else {
             count++;
@@ -91,9 +82,6 @@ getArchivedOrganizations() {
         if (count === orgs.length) {
           return orgs;
         }
-      })
-      .catch((err) => {
-        this.handleError(err);
       });
   }
 
@@ -137,12 +125,12 @@ getArchivedOrganizations() {
    * @memberof AppService
    */
   getOrganizationAssets(id: number) {
-      return this.http
-        .get(`${this.api}/organization/asset/${id}`)
-        .toPromise()
-        .then((res) => {
-          return res;
-        });
+    return this.http
+      .get(`${this.api}/organization/asset/${id}`)
+      .toPromise()
+      .then((res) => {
+        return res;
+      });
   }
 
   /**
@@ -213,7 +201,7 @@ getArchivedOrganizations() {
    * @memberof AppService
    */
   updateVulnerability(id: number, vuln: FormData) {
-      return this.http.patch(`${this.api}/vulnerability/${id}`, vuln);
+    return this.http.patch(`${this.api}/vulnerability/${id}`, vuln);
   }
 
   /**
@@ -223,7 +211,7 @@ getArchivedOrganizations() {
    * @memberof AppService
    */
   createVuln(vuln: FormData) {
-      return this.http.post(`${this.api}/vulnerability`, vuln);
+    return this.http.post(`${this.api}/vulnerability`, vuln);
   }
 
   /**
@@ -233,7 +221,7 @@ getArchivedOrganizations() {
    * @memberof AppService
    */
   deleteVuln(vulnId: number) {
-      return this.http.delete(`${this.api}/vulnerability/${vulnId}`);
+    return this.http.delete(`${this.api}/vulnerability/${vulnId}`);
   }
 
   /**
@@ -243,7 +231,7 @@ getArchivedOrganizations() {
    * @memberof AppService
    */
   createOrg(org: Organization) {
-      return this.http.post(`${this.api}/organization`, org);
+    return this.http.post(`${this.api}/organization`, org);
   }
 
   /**
@@ -254,7 +242,7 @@ getArchivedOrganizations() {
    * @memberof AppService
    */
   updateOrg(id: number, org: Organization) {
-      return this.http.patch(`${this.api}/organization/${id}`, org);
+    return this.http.patch(`${this.api}/organization/${id}`, org);
   }
 
   /**
@@ -264,7 +252,7 @@ getArchivedOrganizations() {
    * @memberof AppService
    */
   createAsset(asset: Asset) {
-      return this.http.post(`${this.api}/organization/${asset.organization}/asset`, asset);
+    return this.http.post(`${this.api}/organization/${asset.organization}/asset`, asset);
   }
 
   /**
@@ -275,7 +263,7 @@ getArchivedOrganizations() {
    * @memberof AppService
    */
   getAsset(assetId: number, orgId: number) {
-      return this.http.get(`${this.api}/organization/${orgId}/asset/${assetId}`);
+    return this.http.get(`${this.api}/organization/${orgId}/asset/${assetId}`);
   }
 
   /**
@@ -318,7 +306,7 @@ getArchivedOrganizations() {
    * @memberof AppService
    */
   getAssessment(assetId: number, assessmentId: number) {
-      return this.http.get(`${this.api}/asset/${assetId}/assessment/${assessmentId}`);
+    return this.http.get(`${this.api}/asset/${assetId}/assessment/${assessmentId}`);
   }
 
   /**
@@ -328,9 +316,9 @@ getArchivedOrganizations() {
    * @memberof AppService
    */
   upload(fileToUpload: File) {
-      const formData: FormData = new FormData();
-      formData.append('file', fileToUpload);
-      return this.http.post(`${this.api}/upload`, formData);
+    const formData: FormData = new FormData();
+    formData.append('file', fileToUpload);
+    return this.http.post(`${this.api}/upload`, formData);
   }
 
   /**
@@ -340,7 +328,7 @@ getArchivedOrganizations() {
    * @memberof AppService
    */
   uploadMultiple(fileToUpload: FormData) {
-      return this.http.post(`${this.api}/upload-multiple`, fileToUpload);
+    return this.http.post(`${this.api}/upload-multiple`, fileToUpload);
   }
 
   /**
@@ -350,7 +338,7 @@ getArchivedOrganizations() {
    * @memberof AppService
    */
   getReport(assessmentId: number) {
-      return this.http.get(`${this.api}/assessment/${assessmentId}/report`);
+    return this.http.get(`${this.api}/assessment/${assessmentId}/report`);
   }
 
   /**
@@ -362,15 +350,15 @@ getArchivedOrganizations() {
    * @memberof AppService
    */
   generateReport(orgId: number, assetId: number, assessmentId: number) {
-      const httpOptions = {
-        responseType: 'blob' as 'json'
-      };
-      const generateObject = {
-        orgId,
-        assetId,
-        assessmentId
-      };
-      return this.http.post(`${this.api}/report/generate`, generateObject, httpOptions);
+    const httpOptions = {
+      responseType: 'blob' as 'json'
+    };
+    const generateObject = {
+      orgId,
+      assetId,
+      assessmentId
+    };
+    return this.http.post(`${this.api}/report/generate`, generateObject, httpOptions);
   }
 
   /**
@@ -382,31 +370,11 @@ getArchivedOrganizations() {
    * @memberof AppService
    */
   public createObjectUrl(file, mimetype?: string) {
-      // Preview unsaved form
-      const blob = new Blob([file], {
-        type: mimetype || file.type
-      });
-      const url = window.URL.createObjectURL(blob);
-      return this.sanitizer.bypassSecurityTrustUrl(url);
+    // Preview unsaved form
+    const blob = new Blob([file], {
+      type: mimetype || file.type
+    });
+    const url = window.URL.createObjectURL(blob);
+    return this.sanitizer.bypassSecurityTrustUrl(url);
   }
-
-  /**
-   * Function is responsible for handling errors within the application backend API calls
-   * @private function is private only to avoid public access and/or modification globally
-   * @param {HttpErrorResponse} error specifies the error to be returned to the user
-   * @returns error message response, and logs errors to the console for debugging
-   * @memberof AppService
-   */
-  private handleError(error: HttpErrorResponse) {
-      if (error.error instanceof ErrorEvent) {
-        // A client-side or network error occurred. Handle it accordingly.
-        console.error('An error occurred:', error.error.message);
-      } else {
-        // The backend returned an unsuccessful response code.
-        // The response body may contain clues as to what went wrong,
-        console.error(`Backend returned code ${error.status}, ` + `body was: ${error.error}`);
-      }
-      // return an observable with a user-facing error message
-      return [];
-    }
 }

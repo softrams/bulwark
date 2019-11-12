@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, RouterOutlet } from '@angular/router';
 import { AppService } from '../app.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Assessment } from './Assessment';
+import { AlertService } from '../alert/alert.service';
 
 @Component({
   selector: 'app-assessment-form',
@@ -19,7 +20,8 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
     public appService: AppService,
     private fb: FormBuilder,
     public route: Router,
-    public activatedRoute: ActivatedRoute
+    public activatedRoute: ActivatedRoute,
+    private alertService: AlertService
   ) {
     this.createForm();
   }
@@ -114,12 +116,14 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
    */
   createOrUpdateAssessment(assessment: Assessment) {
     if (this.assessmentId) {
-      this.appService.updateAssessment(assessment, this.assessmentId, this.assetId).subscribe((success) => {
+      this.appService.updateAssessment(assessment, this.assessmentId, this.assetId).subscribe((res: string) => {
         this.navigateToAssessments();
+        this.alertService.success(res);
       });
     } else {
-      this.appService.createAssessment(this.assessmentModel).subscribe((success) => {
+      this.appService.createAssessment(this.assessmentModel).subscribe((res: string) => {
         this.navigateToAssessments();
+        this.alertService.success(res);
       });
     }
   }

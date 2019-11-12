@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from '../app.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Organization } from '../org-form/Organization';
+import { AlertService } from '../alert/alert.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +14,12 @@ export class DashboardComponent implements OnInit {
   assetAry: any = [];
   orgId: number;
   isArchive = false;
-  constructor(private appService: AppService, public activatedRoute: ActivatedRoute, public router: Router) {}
+  constructor(
+    private appService: AppService,
+    public activatedRoute: ActivatedRoute,
+    public router: Router,
+    private alertService: AlertService
+  ) {}
 
   ngOnInit() {
     this.getOrganizations();
@@ -78,8 +84,9 @@ export class DashboardComponent implements OnInit {
   archiveOrganization(org: Organization) {
     const confirmed = confirm(`Archive the organization "${org.name}"?`);
     if (confirmed) {
-      this.appService.archiveOrganization(org.id).subscribe((res) => {
+      this.appService.archiveOrganization(org.id).subscribe((res: string) => {
         this.getOrganizations();
+        this.alertService.success(res);
       });
     }
   }
@@ -93,8 +100,9 @@ export class DashboardComponent implements OnInit {
   activateOrganization(org: Organization) {
     const confirmed = confirm(`Activate the organization "${org.name}"?`);
     if (confirmed) {
-      this.appService.activateOrganization(org.id).subscribe((res) => {
+      this.appService.activateOrganization(org.id).subscribe((res: string) => {
         this.getOrganizations();
+        this.alertService.success(res);
       });
     }
   }

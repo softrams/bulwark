@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Organization } from './Organization';
 import { AppService } from '../app.service';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import { AlertService } from '../alert/alert.service';
 @Component({
   selector: 'app-org-form',
   templateUrl: './org-form.component.html',
@@ -19,7 +19,8 @@ export class OrgFormComponent implements OnInit, OnChanges {
     private fb: FormBuilder,
     public appService: AppService,
     public route: Router,
-    public activatedRoute: ActivatedRoute
+    public activatedRoute: ActivatedRoute,
+    private alertService: AlertService
   ) {
     this.createForm();
   }
@@ -84,15 +85,10 @@ export class OrgFormComponent implements OnInit, OnChanges {
   onSubmit(contact: FormGroup) {
     this.orgModel = contact.value;
     if (this.fileToUpload) {
-      this.appService.upload(this.fileToUpload).subscribe(
-        (fileId) => {
-          this.orgModel.avatar = +fileId;
-          this.createOrUpdateOrg(this.orgModel);
-        },
-        (error) => {
-          // TODO: Handle file upload error
-        }
-      );
+      this.appService.upload(this.fileToUpload).subscribe((fileId) => {
+        this.orgModel.avatar = +fileId;
+        this.createOrUpdateOrg(this.orgModel);
+      });
     } else {
       this.createOrUpdateOrg(this.orgModel);
     }
@@ -107,19 +103,15 @@ export class OrgFormComponent implements OnInit, OnChanges {
    */
   createOrUpdateOrg(org: Organization) {
     if (this.orgId) {
-      this.appService.updateOrg(this.orgId, org).subscribe(
-        (success) => {
-          this.navigateToDashboard();
-        },
-        (err) => {}
-      );
+      this.appService.updateOrg(this.orgId, org).subscribe((success: string) => {
+        this.navigateToDashboard();
+        this.alertService.success(success);
+      });
     } else {
-      this.appService.createOrg(org).subscribe(
-        (success) => {
-          this.navigateToDashboard();
-        },
-        (err) => {}
-      );
+      this.appService.createOrg(org).subscribe((success: string) => {
+        this.navigateToDashboard();
+        this.alertService.success(success);
+      });
     }
   }
 

@@ -7,10 +7,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AlertModule } from './alert/alert.module';
 
 import { AppService } from './app.service';
 import { LoaderService } from './loader.service';
-import { LoadingInterceptor } from './loading.interceptor';
+import { AppInterceptor } from './app.interceptor';
 import { HttpClientModule } from '@angular/common/http';
 import { AssessmentsComponent } from './assessments/assessments.component';
 import { OrganizationComponent } from './organization/organization.component';
@@ -47,13 +48,14 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     HttpClientModule,
     ReactiveFormsModule,
     FontAwesomeModule,
-    MarkdownModule.forRoot()
+    MarkdownModule.forRoot(),
+    AlertModule
   ],
   providers: [
     AppService,
     DatePipe,
     LoaderService,
-    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
