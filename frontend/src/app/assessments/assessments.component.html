@@ -33,7 +33,12 @@
       </tr>
     </tbody>
   </table>
-  <button (click)="navigateToAssessment()" type="button" class="btn btn-primary float-right">
+  <button (click)="navigateToAssessment()" 
+    type="button" 
+    class="btn btn-primary float-right"
+    data-toggle="tooltip" 
+    data-placement="bottom" 
+    title="Create Assessment">
     Create Assessment
   </button>
   <button
@@ -41,6 +46,9 @@
     type="button"
     class="btn btn-secondary float-right"
     style="margin-right: 5px;"
+    data-toggle="tooltip" 
+    data-placement="bottom" 
+    title="Back to Organization"
   >
     Back to Organization
   </button>
