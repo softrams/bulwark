@@ -13,12 +13,11 @@ import { ProblemLocation } from './entity/ProblemLocation';
 import { validate } from 'class-validator';
 import { Resource } from './entity/Resource';
 import { status } from './enums/status-enum';
-import { stat } from 'fs';
 
 const puppeteer = require('puppeteer');
 const multer = require('multer');
 var upload = multer({
-  limits: { fileSize: 1048576 }, // 1 MB in Binary
+  limits: { fileSize: 500000 }, // 500 KB in binary
   fileFilter: (req, file, cb) => {
     // Ext validation
     if (!(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg')) {
@@ -30,7 +29,7 @@ var upload = multer({
   }
 }).single('file');
 var uploadArray = multer({
-  limits: { fileSize: 1048576 }, // 1 MB in Binary
+  limits: { fileSize: 500000 }, // 500 KB in binary
   fileFilter: (req, file, cb) => {
     // Ext validation
     if (!(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg')) {
@@ -87,7 +86,7 @@ createConnection().then((connection) => {
       if (err) {
         switch (err.code) {
           case 'LIMIT_FILE_SIZE':
-            return res.status(400).send(err.message);
+            return res.status(400).send('Only File size up to 500 KB allowed');
         }
       } else {
         if (!req['file']) {
@@ -111,6 +110,9 @@ createConnection().then((connection) => {
    */
   app.get('/api/organization', async function(req: Request, res: Response) {
     const orgs = await orgRepository.find({ relations: ['avatar'], where: { status: status.active } });
+    if (!orgs) {
+      return res.status(404).json('Organizations do not exist');
+    }
     res.json(orgs);
   });
 
@@ -123,6 +125,9 @@ createConnection().then((connection) => {
    */
   app.get('/api/organization/archive', async function(req: Request, res: Response) {
     const orgs = await orgRepository.find({ relations: ['avatar'], where: { status: status.archived } });
+    if (!orgs) {
+      return res.status(404).json('Organizations do not exist');
+    }
     res.json(orgs);
   });
 
@@ -134,12 +139,15 @@ createConnection().then((connection) => {
    * @returns a JSON object with the given organization referenced by ID
    */
   app.get('/api/organization/:id', async function(req: Request, res: Response) {
+    if (!req.params.id) {
+      return res.status(400).json('Invalid Organization request');
+    }
     if (isNaN(+req.params.id)) {
-      return res.status(400).json('Organization ID is not valid');
+      return res.status(400).json('Invalid Organization iD');
     }
     let org = await orgRepository.findOne(req.params.id, { relations: ['avatar'] });
     if (!org) {
-      return res.status(404).json('Organization not found');
+      return res.status(404).json('Organization does not exist');
     }
     let resObj = {
       name: org.name,
@@ -157,7 +165,7 @@ createConnection().then((connection) => {
    */
   app.patch('/api/organization/:id/archive', async function(req: Request, res: Response) {
     if (isNaN(+req.params.id)) {
-      return res.status(400).json('Organization ID is not valid');
+      return res.status(400).json('Invalid Organization ID');
     }
     let org = await orgRepository.findOne(req.params.id);
     if (!org) {
@@ -247,8 +255,8 @@ createConnection().then((connection) => {
     if (errors.length > 0) {
       return res.status(400).send('Organization form validation failed');
     } else {
-      const newOrg = await orgRepository.save(org);
-      res.send(newOrg);
+      await orgRepository.save(org);
+      res.status(200).json('Organization saved successfully');
     }
   });
 
@@ -260,7 +268,16 @@ createConnection().then((connection) => {
    * @returns a buffer with the file data
    */
   app.get('/api/file/:id', async function(req: Request, res: Response) {
+    if (!req.params.id) {
+      return res.status(400).json('Invalid File request');
+    }
+    if (isNaN(+req.params.id)) {
+      return res.status(400).json('Invalid File ID');
+    }
     const file = await fileRepository.findOne(req.params.id);
+    if (!file) {
+      return res.status(404).json('File not found');
+    }
     res.send(file.buffer);
   });
 
@@ -272,9 +289,18 @@ createConnection().then((connection) => {
    * @returns a JSON object with the asset data
    */
   app.get('/api/organization/asset/:id', async function(req: Request, res: Response) {
+    if (!req.params.id) {
+      return res.status(400).json('Invalid Asset request');
+    }
+    if (isNaN(+req.params.id)) {
+      return res.status(400).json('Invalid Organization ID');
+    }
     const asset = await assetRepository.find({
       where: { organization: req.params.id }
     });
+    if (!asset) {
+      return res.status(404).json('Assets not found');
+    }
     res.json(asset);
   });
 
@@ -286,9 +312,18 @@ createConnection().then((connection) => {
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.get('/api/assessment/:id', async function(req: Request, res: Response) {
+    if (!req.params.id) {
+      return res.status(400).json('Invalid Assessment request');
+    }
+    if (isNaN(+req.params.id)) {
+      return res.status(400).json('Invalid Asset ID');
+    }
     const assessment = await assessmentRepository.find({
       where: { asset: req.params.id }
     });
+    if (!assessment) {
+      return res.status(404).json('Assessments do not exist');
+    }
     res.json(assessment);
   });
 
@@ -300,9 +335,18 @@ createConnection().then((connection) => {
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.get('/api/assessment/:id/vulnerability', async function(req: Request, res: Response) {
+    if (!req.params.id) {
+      return res.status(400).json('Invalid Vulnerability request');
+    }
+    if (isNaN(+req.params.id)) {
+      return res.status(400).json('Invalid Assessment ID');
+    }
     const vulnerabilities = await vulnerabilityRepository.find({
       where: { assessment: req.params.id }
     });
+    if (!vulnerabilities) {
+      return res.status(404).json('Vulnerabilities do not exist');
+    }
     res.json(vulnerabilities);
   });
 
@@ -317,10 +361,16 @@ createConnection().then((connection) => {
     if (!req.params.vulnId) {
       return res.status(400).send('Invalid Vulnerability request');
     }
+    if (isNaN(+req.params.vulnId)) {
+      return res.status(400).send('Invalid Vulnerability ID');
+    }
     // TODO: Utilize createQueryBuilder to only return screenshot IDs and not the full object
     let vuln = await vulnerabilityRepository.findOne(req.params.vulnId, {
       relations: ['screenshots', 'problemLocations', 'resources']
     });
+    if (!vuln) {
+      return res.status(404).send('Vulnerability does not exist.');
+    }
     res.status(200).json(vuln);
   });
 
@@ -333,11 +383,14 @@ createConnection().then((connection) => {
    */
   app.delete('/api/vulnerability/:vulnId', async (req: Request, res: Response) => {
     if (!req.params.vulnId) {
-      return res.status(400).send('Vulnerability deletion failed.  Vulnerability does not exist.');
+      return res.status(400).send('Invalid vulnerability request');
+    }
+    if (isNaN(+req.params.vulnId)) {
+      return res.status(400).send('Invalid vulnerability ID');
     }
     let vuln = await vulnerabilityRepository.findOne(req.params.vulnId);
     if (!vuln) {
-      return res.status(400).send('Vulnerability deletion failed.  Vulnerability does not exist.');
+      return res.status(404).send('Vulnerability does not exist.');
     } else {
       await vulnerabilityRepository.delete(vuln);
       res.status(200).json('Vulnerability successfully deleted');
@@ -359,7 +412,7 @@ createConnection().then((connection) => {
       if (err) {
         switch (err.code) {
           case 'LIMIT_FILE_SIZE':
-            return res.status(400).send(err.message);
+            return res.status(400).send('Only File size up to 500 KB allowed');
         }
       } else {
         if (isNaN(+req.params.vulnId)) {
@@ -486,7 +539,7 @@ createConnection().then((connection) => {
       if (err) {
         switch (err.code) {
           case 'LIMIT_FILE_SIZE':
-            return res.status(400).send(err.message);
+            return res.status(400).send('Only File size up to 500 KB allowed');
         }
       } else {
         let vulnerability = new Vulnerability();
@@ -585,7 +638,7 @@ createConnection().then((connection) => {
     if (errors.length > 0) {
       res.status(400).send('Asset form validation failed');
     } else {
-      const newAsset = await assetRepository.save(asset);
+      await assetRepository.save(asset);
       res.status(200).json('Asset saved successfully');
     }
   });
@@ -598,10 +651,16 @@ createConnection().then((connection) => {
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.get('/api/organization/:id/asset/:assetId', async (req: Request, res: Response) => {
-    if (!req.params.id || !req.params.assetId) {
+    if (isNaN(+req.params.assetId)) {
+      return res.status(400).json('Invalid Asset ID');
+    }
+    if (!req.params.assetId) {
       return res.status(400).send('Invalid Asset request');
     }
     let asset = await assetRepository.findOne(req.params.assetId);
+    if (!asset) {
+      return res.status(404).send('Asset does not exist');
+    }
     res.status(200).json(asset);
   });
 
@@ -675,10 +734,16 @@ createConnection().then((connection) => {
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.get('/api/asset/:assetId/assessment/:assessmentId', async (req: Request, res: Response) => {
-    if (!req.params.assetId || !req.params.assessmentId) {
+    if (!req.params.assessmentId) {
       return res.status(400).send('Invalid assessment request');
     }
+    if (isNaN(+req.params.assessmentId)) {
+      return res.status(400).json('Invalid Assessment ID');
+    }
     let assessment = await assessmentRepository.findOne(req.params.assessmentId);
+    if (!assessment) {
+      return res.status(404).json('Assessment does not exist');
+    }
     res.status(200).json(assessment);
   });
 
@@ -689,7 +754,16 @@ createConnection().then((connection) => {
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.patch('/api/asset/:assetId/assessment/:assessmentId', async function(req: Request, res: Response) {
+    if (!req.params.assessmentId) {
+      return res.status(400).send('Invalid assessment request');
+    }
+    if (isNaN(+req.params.assessmentId)) {
+      return res.status(400).json('Invalid Assessment ID');
+    }
     let assessment = await assessmentRepository.findOne(req.params.assessmentId);
+    if (!assessment) {
+      return res.status(404).json('Assessment does not exist');
+    }
     assessment = req.body;
     assessment.id = +req.params.assessmentId;
     if (assessment.startDate > assessment.endDate) {
@@ -714,7 +788,9 @@ createConnection().then((connection) => {
     if (!req.params.assessmentId) {
       return res.status(400).send('Invalid report request');
     }
-    let report = new Report();
+    if (isNaN(+req.params.assessmentId)) {
+      return res.status(400).json('Invalid Assessment ID');
+    }
     let assessment = await assessmentRepository.findOne(req.params.assessmentId, { relations: ['asset'] });
     let asset = await assetRepository.findOne(assessment.asset.id, { relations: ['organization'] });
     let organization = await orgRepository.findOne(asset.organization.id);
@@ -733,6 +809,7 @@ createConnection().then((connection) => {
         'resource'
       ])
       .getMany();
+    let report = new Report();
     report.org = organization;
     report.asset = asset;
     report.assessment = assessment;

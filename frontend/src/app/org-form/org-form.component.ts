@@ -92,7 +92,6 @@ export class OrgFormComponent implements OnInit, OnChanges {
     } else {
       this.createOrUpdateOrg(this.orgModel);
     }
-    this.orgForm.reset();
   }
 
   /**
