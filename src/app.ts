@@ -415,6 +415,13 @@ createConnection().then((connection) => {
             return res.status(400).send('Only File size up to 500 KB allowed');
         }
       } else {
+        if (isNaN(+req.body.assessment) || !req.body.assessment) {
+          return res.status(400).json('Invalid Assessment ID');
+        }
+        const assessment = await assessmentRepository.findOne(req.body.assessment);
+        if (!assessment) {
+          return res.status(404).json('Assessment does not exist');
+        }
         if (isNaN(+req.params.vulnId)) {
           return res.status(400).json('Vulnerability ID is invalid');
         }
@@ -433,7 +440,7 @@ createConnection().then((connection) => {
         vulnerability.cvssScore = req.body.cvssScore;
         vulnerability.cvssUrl = req.body.cvssUrl;
         vulnerability.detailedInfo = req.body.detailedInfo;
-        vulnerability.assessment = req.body.assessment;
+        vulnerability.assessment = assessment;
         vulnerability.name = req.body.name;
         vulnerability.systemic = req.body.systemic;
         const errors = await validate(vulnerability);
@@ -542,6 +549,13 @@ createConnection().then((connection) => {
             return res.status(400).send('Only File size up to 500 KB allowed');
         }
       } else {
+        if (isNaN(+req.body.assessment) || !req.body.assessment) {
+          return res.status(400).json('Invalid Assessment ID');
+        }
+        let assessment = await assessmentRepository.findOne(req.body.assessment);
+        if (!assessment) {
+          return res.status(404).json('Assessment does not exist');
+        }
         let vulnerability = new Vulnerability();
         vulnerability.impact = req.body.impact;
         vulnerability.likelihood = req.body.likelihood;
@@ -553,7 +567,7 @@ createConnection().then((connection) => {
         vulnerability.cvssScore = req.body.cvssScore;
         vulnerability.cvssUrl = req.body.cvssUrl;
         vulnerability.detailedInfo = req.body.detailedInfo;
-        vulnerability.assessment = req.body.assessment;
+        vulnerability.assessment = assessment;
         vulnerability.name = req.body.name;
         vulnerability.systemic = req.body.systemic;
         const errors = await validate(vulnerability);
