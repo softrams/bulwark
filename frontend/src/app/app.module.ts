@@ -26,6 +26,7 @@ import { DatePipe } from '@angular/common';
 import { ReportComponent } from './report/report.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,

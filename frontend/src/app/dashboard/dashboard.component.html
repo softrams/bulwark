@@ -10,6 +10,9 @@
             (click)="navigateToOrganization(org.id)"
             class="btn btn-secondary"
             style="margin-right: 5px;"
+            data-toggle="tooltip" 
+            data-placement="bottom" 
+            title="Edit {{ org.name }}"
           >
             Edit
           </button>
@@ -18,6 +21,9 @@
             (click)="archiveOrganization(org)"
             class="btn btn-warning"
             style="margin-right: 5px;"
+            data-toggle="tooltip" 
+            data-placement="bottom" 
+            title="Archive {{ org.name }}"
           >
             Archive
           </button>
@@ -26,6 +32,9 @@
             (click)="activateOrganization(org)"
             class="btn btn-warning"
             style="margin-right: 5px;"
+            data-toggle="tooltip" 
+            data-placement="bottom" 
+            title="Activate {{ org.name }}"
           >
             Activate
           </button>
@@ -34,6 +43,9 @@
             (click)="navigateToAsset(org.id)"
             class="btn btn-primary"
             style="margin-right: 5px;"
+            data-toggle="tooltip" 
+            data-placement="bottom" 
+            title="View Assets of {{ org.name }}"
           >
             Assets
           </button>
@@ -42,7 +54,12 @@
     </div>
   </div>
   <br />
-  <button (click)="navigateToCreate()" type="button" class="btn btn-primary float-right">
+  <button (click)="navigateToCreate()" 
+    type="button" 
+    class="btn btn-primary float-right" 
+    data-toggle="tooltip" 
+    data-placement="bottom" 
+    title="Add An Organization">
     Add Organization
   </button>
   <button
@@ -51,6 +68,9 @@
     (click)="getArchivedOrganizations()"
     type="button"
     class="btn btn-info float-right"
+    data-toggle="tooltip" 
+    data-placement="bottom" 
+    title="View Archived Organizations"
   >
     View Archive
   </button>
@@ -60,6 +80,9 @@
     (click)="getOrganizations()"
     type="button"
     class="btn btn-info float-right"
+    data-toggle="tooltip" 
+    data-placement="bottom" 
+    title="View Active Organizations"
   >
     View Active
   </button>

@@ -4,7 +4,7 @@
   <form [formGroup]="orgForm" (ngSubmit)="onSubmit(orgForm)">
     <div class="form-group">
       <label for="orgName">Organization Name</label>
-      <input formControlName="name" type="text" class="form-control" id="orgName" />
+      <input formControlName="name" type="text" class="form-control" id="orgName" placeholder="Enter in an organization name" />
     </div>
     <div class="form-group">
       <label for="file">Choose Avatar</label>
@@ -16,7 +16,12 @@
         (change)="handleFileInput($event.target.files)"
       />
     </div>
-    <button [disabled]="!orgForm.valid" class="btn btn-primary float-right" type="submit">
+    <button [disabled]="!orgForm.valid" 
+      class="btn btn-primary float-right" 
+      type="submit"
+      data-toggle="tooltip" 
+      data-placement="bottom" 
+      title="Submit Data">
       Submit
     </button>
     <button
@@ -24,6 +29,9 @@
       class="btn btn-secondary float-right"
       type="submit"
       style="margin-right: 5px"
+      data-toggle="tooltip" 
+      data-placement="bottom" 
+      title="Back to Dashboard"
     >
       Back to Dashboard
     </button>
