@@ -686,15 +686,15 @@ createConnection().then((connection) => {
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.patch('/api/organization/:id/asset/:assetId', async function(req: Request, res: Response) {
-    if (isNaN(+req.params.id)) {
+    if (isNaN(+req.params.assetId) || !req.params.assetId) {
       return res.status(400).json('Asset ID is not valid');
     }
-    let asset = await assetRepository.findOne(req.params.id);
+    let asset = await assetRepository.findOne(req.params.assetId);
     if (!asset) {
       return res.status(404).json('Asset does not exist');
     }
     if (!req.body.name) {
-      return res.status(400).send('Asset is not valid');
+      return res.status(400).json('Asset name is not valid');
     }
     asset.name = req.body.name;
     const errors = await validate(asset);
@@ -778,8 +778,10 @@ createConnection().then((connection) => {
     if (!assessment) {
       return res.status(404).json('Assessment does not exist');
     }
+    const assessmentId = assessment.id;
+    delete req.body.asset;
     assessment = req.body;
-    assessment.id = +req.params.assessmentId;
+    assessment.id = assessmentId;
     if (assessment.startDate > assessment.endDate) {
       return res.status(400).send('The assessment start date can not be later than the end date');
     }

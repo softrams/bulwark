@@ -104,7 +104,6 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
    */
   onSubmit(assessment: FormGroup) {
     this.assessmentModel = assessment.value;
-    this.assessmentModel.asset = this.assetId;
     this.createOrUpdateAssessment(this.assessmentModel);
   }
 
