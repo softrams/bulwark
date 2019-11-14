@@ -120,6 +120,7 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
         this.alertService.success(res);
       });
     } else {
+      this.assessmentModel.asset = this.assetId;
       this.appService.createAssessment(this.assessmentModel).subscribe((res: string) => {
         this.navigateToAssessments();
         this.alertService.success(res);
