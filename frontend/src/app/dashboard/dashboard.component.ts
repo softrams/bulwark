@@ -27,7 +27,6 @@ export class DashboardComponent implements OnInit {
 
   /**
    * Function responsible for retreving all organizational data
-   * @memberof DashboardComponent
    */
   getOrganizations() {
     this.appService.getOrganizations().then((res) => {
@@ -39,7 +38,6 @@ export class DashboardComponent implements OnInit {
   /**
    * Function responsible for checking the status of an organization
    * to determine if it is archived or not
-   * @memberof DashboardComponent
    */
   getArchivedOrganizations() {
     this.appService.getArchivedOrganizations().then((res) => {
@@ -50,8 +48,7 @@ export class DashboardComponent implements OnInit {
 
   /**
    * Function responsible for navigating to assests tied to an organization
-   * @param {number} id is the ID of the organization tied to the assets
-   * @memberof DashboardComponent
+   * @param id is the ID of the organization tied to the assets
    */
   navigateToAsset(id: number) {
     this.router.navigate([`organization/${id}`]);
@@ -60,7 +57,6 @@ export class DashboardComponent implements OnInit {
   /**
    * Function responsible for navigating the user to the organization form to
    * either create or update an organization
-   * @memberof DashboardComponent
    */
   navigateToCreate() {
     this.router.navigate([`organization-form`]);
@@ -68,8 +64,7 @@ export class DashboardComponent implements OnInit {
 
   /**
    * Function responsible for loading the organization the end user selects
-   * @param {number} id is the associated ID of the organization requested
-   * @memberof DashboardComponent
+   * @param id is the associated ID of the organization requested
    */
   navigateToOrganization(id: number) {
     this.router.navigate([`organization-form/${id}`]);
@@ -78,8 +73,7 @@ export class DashboardComponent implements OnInit {
   /**
    * Function responsible for archiving an organization by
    * toggling the associated status
-   * @param {Organization} org is the ID of the organization to alter
-   * @memberof DashboardComponent
+   * @param org is the ID of the organization to alter
    */
   archiveOrganization(org: Organization) {
     const confirmed = confirm(`Archive the organization "${org.name}"?`);
@@ -94,8 +88,7 @@ export class DashboardComponent implements OnInit {
   /**
    * Function responsible for altering an organization status back
    * to active
-   * @param {Organization} org is the ID of the organization to alter
-   * @memberof DashboardComponent
+   * @param org is the ID of the organization to alter
    */
   activateOrganization(org: Organization) {
     const confirmed = confirm(`Activate the organization "${org.name}"?`);

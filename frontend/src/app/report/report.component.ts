@@ -38,15 +38,14 @@ export class ReportComponent implements OnInit {
       }
     });
     this.activatedRoute.params.subscribe((params) => {
-      this.orgId = params['orgId'];
-      this.assetId = params['assetId'];
-      this.assessmentId = params['assessmentId'];
+      this.orgId = params.orgId;
+      this.assetId = params.assetId;
+      this.assessmentId = params.assessmentId;
     });
   }
 
   /**
    * Function responsible for navigating the user to the Vulnerability Listing
-   * @memberof ReportComponent
    */
   navigateToVulns() {
     this.router.navigate([
@@ -57,7 +56,6 @@ export class ReportComponent implements OnInit {
   /**
    * Function that triggers when viewing vulnerabilities listing for an assessment
    * Data is passed from the report component object and handled within the function
-   * @memberof ReportComponent
    */
   generateReport() {
     this.appService.generateReport(this.orgId, this.assetId, this.assessmentId).subscribe((res: Blob) => {

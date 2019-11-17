@@ -1,7 +1,7 @@
 {
   "name": "bulwark",
   "version": "1.0.0",
-  "description": "An asset and vulnerability management single-page application.",
+  "description": "An asset and vulnerability management tool",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -24,13 +24,21 @@
     ]
   },
   "keywords": [
-    "application_security",
-    "vulnerability",
-    "node",
-    "typescript",
-    "appsec"
+    "web security",
+    "web application security",
+    "webappsec",
+    "owasp",
+    "pentest",
+    "pentesting",
+    "security",
+    "vulnerable",
+    "vulnerability"
   ],
   "author": "Alejandro Saenz",
+  "contributors": [
+    "Bill Jones",
+    "Ryan Mathus"
+  ],
   "license": "MIT",
   "devDependencies": {
     "nodemon": "^1.19.3",

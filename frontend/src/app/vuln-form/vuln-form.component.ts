@@ -50,7 +50,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
   /**
    * Specific to the vulnerability form, init is called to retreive all data associated with the vuln-form component
    * Attach subscriptions to likelihood and impact for dynamic risk attribute in the form
-   * @memberof VulnFormComponent
    */
   ngOnInit() {
     this.vulnForm.get('impact').valueChanges.subscribe((value) => {
@@ -118,7 +117,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
             })
           );
         }
-        for (const file of vulnerability['screenshots']) {
+        for (const file of vulnerability.screenshots) {
           const existFile: AppFile = file;
           this.appService.getImageById(existFile).then((url) => {
             existFile.imgUrl = url;
@@ -129,10 +128,10 @@ export class VulnFormComponent implements OnChanges, OnInit {
       }
     });
     this.activatedRoute.params.subscribe((params) => {
-      this.orgId = params['orgId'];
-      this.assetId = params['assetId'];
-      this.assessmentId = params['assessmentId'];
-      this.vulnId = params['vulnId'];
+      this.orgId = params.orgId;
+      this.assetId = params.assetId;
+      this.assessmentId = params.assessmentId;
+      this.vulnId = params.vulnId;
     });
   }
 
@@ -143,7 +142,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
   /**
    * Function responsible for the generation of the Vulnerability form
    * this is a requirement for reactive forms in Angular
-   * @memberof VulnFormComponent
    */
   createForm() {
     this.vulnForm = this.fb.group({
@@ -167,7 +165,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
   /**
    * Function is required to rebuild the form when requested it is required
    * for reactive forms in Angular
-   * @memberof VulnFormComponent
    */
   rebuildForm() {
     this.vulnForm.reset({
@@ -190,8 +187,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
 
   /**
    * Gets array with all stored problem locations for retrevial by the UI
-   * @readonly
-   * @memberof VulnFormComponent
    * @return problem location array data to be passed into the form for submission
    */
   get probLocArr() {
@@ -202,8 +197,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
    * Function responsible for initializing the form fields for location and target
    * needed for pulling data when a vulnerability is edited or a new vulnerability resource
    * is added by the user with the '+' icon, specific to Problem Location
-   * @returns {FormGroup}
-   * @memberof VulnFormComponent
    */
   initProbLocRows(): FormGroup {
     return this.fb.group({
@@ -215,7 +208,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
   /**
    * Function responsible for adding content into the ProbLocArr[]
    * Populates within the reactive form for submission later in the process
-   * @memberof VulnFormComponent
    */
   addProbLoc() {
     this.probLocArr.push(this.initProbLocRows());
@@ -224,8 +216,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
   /**
    * Function responsible for removing content from the ProbLocArr[]
    * Removes elements from the array by index value
-   * @param {number} index is the ID of the index to be removed from the array
-   * @memberof VulnFormComponent
+   * @param index is the ID of the index to be removed from the array
    */
   deleteProbLoc(index: number) {
     this.probLocArr.removeAt(index);
@@ -234,8 +225,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
   /**
    * Get array with all stored resources required within the Vulnerability form
    * later used in the form submission call
-   * @readonly
-   * @memberof VulnFormComponent
    * @return retuns the array of resource locations added into the vulnerability form
    */
   get resourceArr() {
@@ -246,8 +235,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
    * Function responsible for initializing the form fields for description and url
    * needed for pulling data when a vulnerability is edited or a new vulnerability resource
    * is added by the user with the '+' icon, specific to Resources
-   * @returns {FormGroup}
-   * @memberof VulnFormComponent
    */
   initResourceRows(): FormGroup {
     return this.fb.group({
@@ -259,7 +246,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
   /**
    * Function responsible for adding form data to the Resource Array
    * utilizing the data within the reactive form
-   * @memberof VulnFormComponent
    */
   addResource() {
     this.resourceArr.push(this.initResourceRows());
@@ -267,8 +253,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
 
   /**
    * Function responsible for deletion of a resource from the form
-   * @param {number} index is the associated value of the array index value to be removed
-   * @memberof VulnFormComponent
+   * @param index is the associated value of the array index value to be removed
    */
   deleteResource(index: number) {
     this.resourceArr.removeAt(index);
@@ -277,8 +262,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
   /**
    * Function is responsible for processing a file array to be used in the form
    * iterates over all attached files to be processed
-   * @param {FileList} files
-   * @memberof VulnFormComponent
    */
   handleFileInput(files: FileList) {
     for (let i = 0; i < files.length; i++) {
@@ -290,9 +273,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
   /**
    * Function responsible for retreiving an image and processing it back to the UI
    * renders it back to the browser using the createObjectUrl feature
-   * @param {File} file
-   * @param {AppFile} existFile
-   * @memberof VulnFormComponent
    */
   previewScreenshot(file: File, existFile: AppFile) {
     // Image from DB
@@ -316,8 +296,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
 
   /**
    * Function responsible for removal of screenshots from the Vulnerability Form
-   * @param {File} file the associated index of the file to be removed
-   * @memberof VulnFormComponent
+   * @param file the associated index of the file to be removed
    */
   deleteScreenshot(file: File) {
     const index = this.tempScreenshots.indexOf(file);
@@ -330,9 +309,8 @@ export class VulnFormComponent implements OnChanges, OnInit {
   /**
    * Function responsible for populating the screenshot array and removal
    * of screenshots performed during data entry
-   * @param {object[]} screenshots object data for screenshots to be processed
-   * @param {number[]} screenshotsToDelete object data for screenshots to be removed
-   * @memberof VulnFormComponent
+   * @param screenshots object data for screenshots to be processed
+   * @param screenshotsToDelete object data for screenshots to be removed
    */
   finalizeScreenshots(screenshots: object[], screenshotsToDelete: number[]) {
     this.vulnFormData.delete('screenshots');
@@ -348,7 +326,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
 
   /**
    * Function to navigate to Vulnerabilities, takes no input from the user
-   * @memberof VulnFormComponent
    */
   navigateToVulnerabilities() {
     this.router.navigate([
@@ -358,8 +335,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
 
   /**
    * Function responsible for handling the form submission objects and data
-   * @param {FormGroup} vulnForm form object holding data to be processed
-   * @memberof VulnFormComponent
+   * @param vulnForm form object holding data to be processed
    */
   onSubmit(vulnForm: FormGroup) {
     this.vulnFormData = new FormData();
@@ -387,8 +363,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
   /**
    * Function responsible for handling the vulnerability form data
    * processes the data for either creation or updating a vulnerability
-   * @param {FormData} vuln form object holding all data to be processed
-   * @memberof VulnFormComponent
+   * @param vuln form object holding all data to be processed
    */
   createOrUpdateVuln(vuln: FormData) {
     if (this.vulnId) {
@@ -408,7 +383,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
    * Function responsible for either showing a preview or hiding a preview
    * within the form for showing the data in markup or as regular text for
    * Description
-   * @memberof VulnFormComponent
    */
   toggleDescPreview() {
     this.previewDescription = !this.previewDescription;
@@ -418,7 +392,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
    * Function responsible for either showing a preview or hiding a preview
    * within the form showing the data in markup or as regular text for
    * Detailed Information
-   * @memberof VulnFormComponent
    */
   toggleDetailedDescPreview() {
     this.previewDetailedDesc = !this.previewDetailedDesc;
@@ -428,7 +401,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
    * Function responsible for either showing a preview or hiding a preview
    * within the form showing the data in markup or as regular text for
    * Remediation
-   * @memberof VulnFormComponent
    */
   toggleRemediationPreview() {
     this.previewRemediation = !this.previewRemediation;
@@ -437,7 +409,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
   /**
    * Function responsible for updating the risk value on the vulnerability form
    * based on impact and likelihood value held within the vuln-form object
-   * @memberof VulnFormComponent
    */
   updateRisk() {
     const value: number = this.impactAssess + this.likelihoodAssess;

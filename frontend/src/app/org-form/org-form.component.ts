@@ -38,7 +38,7 @@ export class OrgFormComponent implements OnInit, OnChanges {
       }
     });
     this.activatedRoute.params.subscribe((params) => {
-      this.orgId = params['id'];
+      this.orgId = params.id;
     });
   }
 
@@ -48,7 +48,6 @@ export class OrgFormComponent implements OnInit, OnChanges {
 
   /**
    * Function required to create the active form in Angular
-   * @memberof OrgFormComponent
    */
   createForm() {
     this.orgForm = this.fb.group({
@@ -59,7 +58,6 @@ export class OrgFormComponent implements OnInit, OnChanges {
 
   /**
    * Function required to rebuild the form on changes in Angular
-   * @memberof OrgFormComponent
    */
   rebuildForm() {
     this.orgForm.reset({
@@ -70,8 +68,7 @@ export class OrgFormComponent implements OnInit, OnChanges {
 
   /**
    * Function required to process the files attached to the form
-   * @param {FileList} files array of files to work with
-   * @memberof OrgFormComponent
+   * @param files array of files to work with
    */
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
@@ -79,8 +76,7 @@ export class OrgFormComponent implements OnInit, OnChanges {
 
   /**
    * Function required to process the form data
-   * @param {FormGroup} contact form data object holding organization data
-   * @memberof OrgFormComponent
+   * @param contact form data object holding organization data
    */
   onSubmit(contact: FormGroup) {
     this.orgModel = contact.value;
@@ -97,8 +93,7 @@ export class OrgFormComponent implements OnInit, OnChanges {
   /**
    * Function required to create or update an organization based on org ID
    * navigates the user back to the main dashboard after action is executed
-   * @param {Organization} org contains organization data object
-   * @memberof OrgFormComponent
+   * @param org contains organization data object
    */
   createOrUpdateOrg(org: Organization) {
     if (this.orgId) {
@@ -116,7 +111,6 @@ export class OrgFormComponent implements OnInit, OnChanges {
 
   /**
    * Function responsible for directing the user back to the main dashboard
-   * @memberof OrgFormComponent
    */
   navigateToDashboard() {
     this.route.navigate(['dashboard']);

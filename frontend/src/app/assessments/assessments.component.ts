@@ -21,15 +21,14 @@ export class AssessmentsComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ assessments }) => (this.assessmentAry = assessments));
     this.activatedRoute.params.subscribe((params) => {
-      this.assetId = params['assetId'];
-      this.orgId = params['orgId'];
+      this.assetId = params.assetId;
+      this.orgId = params.orgId;
     });
   }
 
   /**
    * Function responsible for directing the user to the vulnerability details
-   * @param {number} id of vulnerability to load
-   * @memberof AssessmentsComponent
+   * @param id of vulnerability to load
    */
   navigateToVulnerability(id: number) {
     this.router.navigate([`organization/${this.orgId}/asset/${this.assetId}/assessment/${id}/vulnerability`]);
@@ -38,7 +37,6 @@ export class AssessmentsComponent implements OnInit {
   /**
    * Function responsible for directing the user back to the assessments view
    * passes organization id to fetch data
-   * @memberof AssessmentsComponent
    */
   navigateToOrganization() {
     this.router.navigate([`organization/${this.orgId}`]);
@@ -46,7 +44,6 @@ export class AssessmentsComponent implements OnInit {
 
   /**
    * Function responsible for directing the user to the main Assessment view
-   * @memberof AssessmentsComponent
    */
   navigateToAssessment() {
     this.router.navigate([`organization/${this.orgId}/asset/${this.assetId}/assessment`]);
@@ -55,8 +52,7 @@ export class AssessmentsComponent implements OnInit {
   /**
    * Function responsible for directing the user to an assessment view with provided
    * ID
-   * @param {number} assessmentId is the ID associated to the assessment to load
-   * @memberof AssessmentsComponent
+   * @param assessmentId is the ID associated to the assessment to load
    */
   navigateToAssessmentById(assessmentId: number) {
     this.router.navigate([`organization/${this.orgId}/asset/${this.assetId}/assessment/${assessmentId}`]);
