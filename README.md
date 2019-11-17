@@ -1,6 +1,6 @@
-<img src="./frontend/src/assets/logo.png" style="width: 400px; height:auto;">
+![bulwark_logo](./frontend/src/assets/logo.png)
 
-Bulwark is an asset and vulnerability management tool.
+Bulwark is an asset and vulnerability management tool utilized for building and generating application security reports.
 
 ## Installation
 
