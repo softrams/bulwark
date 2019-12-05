@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://bulwark-security.herokuapp.com/api'
+  apiUrl: 'http://localhost:5000/api'
 };
