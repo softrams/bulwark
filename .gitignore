@@ -44,6 +44,7 @@ testem.log
 .env.local
 .env.prod
 .env.test
+.env.softrams
 
 # System Files
 .DS_Store
