@@ -32,14 +32,13 @@ export class AssetFormComponent implements OnInit, OnChanges {
       }
     });
     this.activatedRoute.params.subscribe((params) => {
-      this.orgId = params['id'];
-      this.assetId = params['assetId'];
+      this.orgId = params.id;
+      this.assetId = params.assetId;
     });
   }
 
   /**
    * Function responsible to detect changes for the form and rebuild it
-   * @memberof AssetFormComponent
    */
   ngOnChanges() {
     this.rebuildForm();
@@ -47,7 +46,6 @@ export class AssetFormComponent implements OnInit, OnChanges {
 
   /**
    * Function responsible for creating the reactive form in Angular
-   * @memberof AssetFormComponent
    */
   createForm() {
     this.assetForm = this.fb.group({
@@ -57,7 +55,6 @@ export class AssetFormComponent implements OnInit, OnChanges {
 
   /**
    * Function responsible for rebuilding the reactive form in Angular
-   * @memberof AssetFormComponent
    */
   rebuildForm() {
     this.assetForm.reset({
@@ -67,8 +64,7 @@ export class AssetFormComponent implements OnInit, OnChanges {
 
   /**
    * Function responsible for processing the data from the reactive from
-   * @param {FormGroup} asset data object holding all the form data
-   * @memberof AssetFormComponent
+   * @param asset data object holding all the form data
    */
   onSubmit(asset: FormGroup) {
     this.assetModel = asset.value;
@@ -79,7 +75,6 @@ export class AssetFormComponent implements OnInit, OnChanges {
 
   /**
    * Function responsible for sending the user back to Assets listing
-   * @memberof AssetFormComponent
    */
   navigateToAssets() {
     this.route.navigate([`organization/${this.orgId}`]);
@@ -88,8 +83,7 @@ export class AssetFormComponent implements OnInit, OnChanges {
   /**
    * Function responsible for creating or updating an asset tied to
    * an organization
-   * @param {Asset} asset object holding all the asset data
-   * @memberof AssetFormComponent
+   * @param asset object holding all the asset data
    */
   createOrUpdateAsset(asset: Asset) {
     if (this.assetId) {
