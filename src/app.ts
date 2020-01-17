@@ -12,11 +12,14 @@ import { File } from './entity/File';
 import { ProblemLocation } from './entity/ProblemLocation';
 import { validate } from 'class-validator';
 import { Resource } from './entity/Resource';
+import { User } from './entity/User';
 import { status } from './enums/status-enum';
+import * as bcrypt from 'bcrypt';
 
+const jwt = require('jsonwebtoken');
 const puppeteer = require('puppeteer');
 const multer = require('multer');
-var upload = multer({
+const uploadConfig = {
   limits: { fileSize: 500000 }, // 500 KB in binary
   fileFilter: (req, file, cb) => {
     // Ext validation
@@ -27,22 +30,27 @@ var upload = multer({
       cb(null, true);
     }
   }
-}).single('file');
-var uploadArray = multer({
-  limits: { fileSize: 500000 }, // 500 KB in binary
-  fileFilter: (req, file, cb) => {
-    // Ext validation
-    if (!(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg')) {
-      req.fileExtError = 'Only JPEG and PNG file types allowed';
-      cb(null, false);
-    } else {
-      cb(null, true);
-    }
-  }
-}).array('screenshots');
+};
+const upload = multer(uploadConfig).single('file');
+const uploadArray = multer(uploadConfig).array('screenshots');
 const fs = require('fs');
 const helmet = require('helmet');
 const cors = require('cors');
+const saltRounds = 10;
+let passwordValidator = require('password-validator');
+// Create a password schema
+let passwordSchema = new passwordValidator();
+passwordSchema
+  .is()
+  .min(12) // Minimum length 8
+  .has()
+  .uppercase() // Must have uppercase letters
+  .has()
+  .lowercase() // Must have lowercase letters
+  .has()
+  .digits() // Must have digits
+  .has()
+  .symbols(); // Must have symbols
 
 // Setup middlware
 const app = express();
@@ -67,7 +75,7 @@ app.set('server_ip_address', server_ip_address);
 app.listen(server_port, () => console.log(`Server running on ${server_ip_address}:${server_port}`));
 
 // create typeorm connection
-createConnection().then((connection) => {
+createConnection().then(connection => {
   // register respositories for database communication
   const orgRepository = connection.getRepository(Organization);
   const assetRepository = connection.getRepository(Asset);
@@ -76,10 +84,67 @@ createConnection().then((connection) => {
   const fileRepository = connection.getRepository(File);
   const probLocRepository = connection.getRepository(ProblemLocation);
   const resourceRepository = connection.getRepository(Resource);
+  const userRepository = connection.getRepository(User);
+
+  app.post('/api/user/create', async (req: Request, res: Response) => {
+    let user = new User();
+    const { password, confirmPassword, email } = req.body;
+    const existUser = await userRepository.find({ where: { email } });
+    console.log(existUser);
+    if (existUser.length) {
+      return res.status(400).json('A user associated to that email already exists');
+    }
+    if (!email) {
+      return res.status(400).json('Email is invalid');
+    }
+    user.email = email;
+    if (password !== confirmPassword) {
+      return res.status(400).json('Passwords do not match');
+    }
+    if (!passwordSchema.validate(password)) {
+      return res.status(400).json('Insecure password complexity');
+    }
+    bcrypt.genSalt(saltRounds, async (err, salt) => {
+      bcrypt.hash(password, salt, async (err, hash) => {
+        user.password = hash;
+        const errors = await validate(user);
+        if (errors.length > 0) {
+          console.error(errors);
+          return res.status(400).json('User validation failed');
+        } else {
+          await userRepository.save(user);
+          console.log(user);
+          return res.status(200).json('User created successfully');
+        }
+      });
+    });
+  });
+
+  app.post('/api/login', async (req: Request, res: Response) => {
+    const { password, email } = req.body;
+    const user = await userRepository.findOne({ where: { email } });
+    if (user) {
+      bcrypt.compare(password, user.password, (err, valid) => {
+        if (valid) {
+          // TODO: Create JWT Token
+          let token = jwt.sign(
+            { exp: Math.floor(Date.now() / 1000) + 60 * 60, email: user.email, userId: user.id },
+            'keyboardcat'
+          );
+          console.log(token);
+          return res.status(200).json(token);
+        } else {
+          return res.status(400).json('Invalid email or password');
+        }
+      });
+    } else {
+      return res.status(400).json('Invalid email or password');
+    }
+  });
 
   app.post('/api/upload', async (req: Request, res: Response) => {
     // TODO Virus scanning
-    upload(req, res, async (err) => {
+    upload(req, res, async err => {
       if (req['fileExtError']) {
         return res.status(400).send(req['fileExtError']);
       }
@@ -109,7 +174,10 @@ createConnection().then((connection) => {
    * @returns an array of organizations with avatar relations
    */
   app.get('/api/organization', async function(req: Request, res: Response) {
-    const orgs = await orgRepository.find({ relations: ['avatar'], where: { status: status.active } });
+    const orgs = await orgRepository.find({
+      relations: ['avatar'],
+      where: { status: status.active }
+    });
     if (!orgs) {
       return res.status(404).json('Organizations do not exist');
     }
@@ -124,7 +192,10 @@ createConnection().then((connection) => {
    * @returns an array of organizations with avatar relations and archived status
    */
   app.get('/api/organization/archive', async function(req: Request, res: Response) {
-    const orgs = await orgRepository.find({ relations: ['avatar'], where: { status: status.archived } });
+    const orgs = await orgRepository.find({
+      relations: ['avatar'],
+      where: { status: status.archived }
+    });
     if (!orgs) {
       return res.status(404).json('Organizations do not exist');
     }
@@ -145,7 +216,9 @@ createConnection().then((connection) => {
     if (isNaN(+req.params.id)) {
       return res.status(400).json('Invalid Organization iD');
     }
-    let org = await orgRepository.findOne(req.params.id, { relations: ['avatar'] });
+    let org = await orgRepository.findOne(req.params.id, {
+      relations: ['avatar']
+    });
     if (!org) {
       return res.status(404).json('Organization does not exist');
     }
@@ -405,7 +478,7 @@ createConnection().then((connection) => {
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.patch('/api/vulnerability/:vulnId', (req, res) => {
-    uploadArray(req, res, async (err) => {
+    uploadArray(req, res, async err => {
       if (req['fileExtError']) {
         return res.status(400).send(req['fileExtError']);
       }
@@ -450,11 +523,13 @@ createConnection().then((connection) => {
           await vulnerabilityRepository.save(vulnerability);
           // Remove deleted files
           if (req.body.screenshotsToDelete) {
-            let existingScreenshots = await fileRepository.find({ where: { vulnerability: vulnerability.id } });
-            let existingScreenshotIds = existingScreenshots.map((screenshot) => screenshot.id);
+            let existingScreenshots = await fileRepository.find({
+              where: { vulnerability: vulnerability.id }
+            });
+            let existingScreenshotIds = existingScreenshots.map(screenshot => screenshot.id);
             let screenshotsToDelete = JSON.parse(req.body.screenshotsToDelete);
             // We only want to remove the files associated to the vulnerability
-            screenshotsToDelete = existingScreenshotIds.filter((value) => screenshotsToDelete.includes(value));
+            screenshotsToDelete = existingScreenshotIds.filter(value => screenshotsToDelete.includes(value));
             for (const screenshotId of screenshotsToDelete) {
               fileRepository.delete(screenshotId);
             }
@@ -474,10 +549,12 @@ createConnection().then((connection) => {
           // Remove deleted problem locations
           if (req.body.problemLocations.length) {
             const clientProdLocs = JSON.parse(req.body.problemLocations);
-            let clientProdLocsIds = clientProdLocs.map((value) => value.id);
-            let existingProbLocs = await probLocRepository.find({ where: { vulnerability: vulnerability.id } });
-            let existingProbLocIds = existingProbLocs.map((probLoc) => probLoc.id);
-            let prodLocsToDelete = existingProbLocIds.filter((value) => !clientProdLocsIds.includes(value));
+            let clientProdLocsIds = clientProdLocs.map(value => value.id);
+            let existingProbLocs = await probLocRepository.find({
+              where: { vulnerability: vulnerability.id }
+            });
+            let existingProbLocIds = existingProbLocs.map(probLoc => probLoc.id);
+            let prodLocsToDelete = existingProbLocIds.filter(value => !clientProdLocsIds.includes(value));
             for (const probLoc of prodLocsToDelete) {
               probLocRepository.delete(probLoc);
             }
@@ -501,10 +578,12 @@ createConnection().then((connection) => {
           // Remove deleted resources
           if (req.body.resources.length) {
             const clientResources = JSON.parse(req.body.resources);
-            let clientResourceIds = clientResources.map((value) => value.id);
-            let existingResources = await resourceRepository.find({ where: { vulnerability: vulnerability.id } });
-            let existingResourceIds = existingResources.map((resource) => resource.id);
-            let resourcesToDelete = existingResourceIds.filter((value) => !clientResourceIds.includes(value));
+            let clientResourceIds = clientResources.map(value => value.id);
+            let existingResources = await resourceRepository.find({
+              where: { vulnerability: vulnerability.id }
+            });
+            let existingResourceIds = existingResources.map(resource => resource.id);
+            let resourcesToDelete = existingResourceIds.filter(value => !clientResourceIds.includes(value));
             for (const resource of resourcesToDelete) {
               resourceRepository.delete(resource);
             }
@@ -539,7 +618,7 @@ createConnection().then((connection) => {
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.post('/api/vulnerability', async (req, res) => {
-    uploadArray(req, res, async (err) => {
+    uploadArray(req, res, async err => {
       if (req['fileExtError']) {
         return res.status(400).json(req['fileExtError']);
       }
@@ -808,14 +887,18 @@ createConnection().then((connection) => {
       return res.status(400).json('Invalid Assessment ID');
     }
     let assessment = await assessmentRepository.findOne(req.params.assessmentId, { relations: ['asset'] });
-    let asset = await assetRepository.findOne(assessment.asset.id, { relations: ['organization'] });
+    let asset = await assetRepository.findOne(assessment.asset.id, {
+      relations: ['organization']
+    });
     let organization = await orgRepository.findOne(asset.organization.id);
     let vulnerabilities = await vulnerabilityRepository
       .createQueryBuilder('vuln')
       .leftJoinAndSelect('vuln.screenshots', 'screenshot')
       .leftJoinAndSelect('vuln.problemLocations', 'problemLocation')
       .leftJoinAndSelect('vuln.resources', 'resource')
-      .where('vuln.assessmentId = :assessmentId', { assessmentId: assessment.id })
+      .where('vuln.assessmentId = :assessmentId', {
+        assessmentId: assessment.id
+      })
       .select([
         'vuln',
         'screenshot.id',
@@ -855,7 +938,7 @@ createConnection().then((connection) => {
     const filePath = path.join(__dirname, '../temp_report.pdf');
     await page.goto(url, { waitUntil: 'networkidle0' });
     const div_selector_to_remove = '#buttons';
-    await page.evaluate((sel) => {
+    await page.evaluate(sel => {
       var elements = document.querySelectorAll(sel);
       for (var i = 0; i < elements.length; i++) {
         elements[i].parentNode.removeChild(elements[i]);
