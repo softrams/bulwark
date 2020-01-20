@@ -16,6 +16,7 @@ import { User } from './entity/User';
 import { status } from './enums/status-enum';
 import * as bcrypt from 'bcrypt';
 
+const middleware = require('./middleware');
 const jwt = require('jsonwebtoken');
 const puppeteer = require('puppeteer');
 const multer = require('multer');
@@ -86,11 +87,16 @@ createConnection().then(connection => {
   const resourceRepository = connection.getRepository(Resource);
   const userRepository = connection.getRepository(User);
 
-  app.post('/api/user/create', async (req: Request, res: Response) => {
+  /**
+   * @description Create user
+   * @param {Request} req
+   * @param {Response} res
+   * @returns success message
+   */
+  app.post('/api/user/create', middleware.checkToken, async (req: Request, res: Response) => {
     let user = new User();
     const { password, confirmPassword, email } = req.body;
     const existUser = await userRepository.find({ where: { email } });
-    console.log(existUser);
     if (existUser.length) {
       return res.status(400).json('A user associated to that email already exists');
     }
@@ -109,7 +115,6 @@ createConnection().then(connection => {
         user.password = hash;
         const errors = await validate(user);
         if (errors.length > 0) {
-          console.error(errors);
           return res.status(400).json('User validation failed');
         } else {
           await userRepository.save(user);
@@ -120,18 +125,23 @@ createConnection().then(connection => {
     });
   });
 
+  /**
+   * @description Login to the application
+   * @param {Request} req
+   * @param {Response} res
+   * @returns valid JWT token
+   */
   app.post('/api/login', async (req: Request, res: Response) => {
     const { password, email } = req.body;
     const user = await userRepository.findOne({ where: { email } });
     if (user) {
       bcrypt.compare(password, user.password, (err, valid) => {
         if (valid) {
-          // TODO: Create JWT Token
+          // TODO: Generate secret key and store in env var
           let token = jwt.sign(
             { exp: Math.floor(Date.now() / 1000) + 60 * 60, email: user.email, userId: user.id },
             'keyboardcat'
           );
-          console.log(token);
           return res.status(200).json(token);
         } else {
           return res.status(400).json('Invalid email or password');
@@ -142,7 +152,13 @@ createConnection().then(connection => {
     }
   });
 
-  app.post('/api/upload', async (req: Request, res: Response) => {
+  /**
+   * @description Upload a file
+   * @param {Request} req
+   * @param {Response} res
+   * @returns file ID
+   */
+  app.post('/api/upload', middleware.checkToken, async (req: Request, res: Response) => {
     // TODO Virus scanning
     upload(req, res, async err => {
       if (req['fileExtError']) {
@@ -173,7 +189,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with all organization data
    * @returns an array of organizations with avatar relations
    */
-  app.get('/api/organization', async function(req: Request, res: Response) {
+  app.get('/api/organization', middleware.checkToken, async function(req: Request, res: Response) {
     const orgs = await orgRepository.find({
       relations: ['avatar'],
       where: { status: status.active }
@@ -191,7 +207,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with archived organizations
    * @returns an array of organizations with avatar relations and archived status
    */
-  app.get('/api/organization/archive', async function(req: Request, res: Response) {
+  app.get('/api/organization/archive', middleware.checkToken, async function(req: Request, res: Response) {
     const orgs = await orgRepository.find({
       relations: ['avatar'],
       where: { status: status.archived }
@@ -209,7 +225,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the given organization referenced by ID
    */
-  app.get('/api/organization/:id', async function(req: Request, res: Response) {
+  app.get('/api/organization/:id', middleware.checkToken, async function(req: Request, res: Response) {
     if (!req.params.id) {
       return res.status(400).json('Invalid Organization request');
     }
@@ -236,7 +252,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.patch('/api/organization/:id/archive', async function(req: Request, res: Response) {
+  app.patch('/api/organization/:id/archive', middleware.checkToken, async function(req: Request, res: Response) {
     if (isNaN(+req.params.id)) {
       return res.status(400).json('Invalid Organization ID');
     }
@@ -261,7 +277,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.patch('/api/organization/:id/activate', async function(req: Request, res: Response) {
+  app.patch('/api/organization/:id/activate', middleware.checkToken, async function(req: Request, res: Response) {
     if (isNaN(+req.params.id)) {
       return res.status(400).json('Organization ID is not valid');
     }
@@ -286,7 +302,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.patch('/api/organization/:id', async function(req: Request, res: Response) {
+  app.patch('/api/organization/:id', middleware.checkToken, async function(req: Request, res: Response) {
     if (isNaN(+req.params.id)) {
       return res.status(400).json('Organization ID is not valid');
     }
@@ -317,7 +333,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.post('/api/organization', async (req: Request, res: Response) => {
+  app.post('/api/organization', middleware.checkToken, async (req: Request, res: Response) => {
     let org = new Organization();
     org.name = req.body.name;
     org.status = status.active;
@@ -340,7 +356,7 @@ createConnection().then(connection => {
    * @param {Response} res contains a buffer with the file data
    * @returns a buffer with the file data
    */
-  app.get('/api/file/:id', async function(req: Request, res: Response) {
+  app.get('/api/file/:id', middleware.checkToken, async function(req: Request, res: Response) {
     if (!req.params.id) {
       return res.status(400).json('Invalid File request');
     }
@@ -361,7 +377,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the asset data
    * @returns a JSON object with the asset data
    */
-  app.get('/api/organization/asset/:id', async function(req: Request, res: Response) {
+  app.get('/api/organization/asset/:id', middleware.checkToken, async function(req: Request, res: Response) {
     if (!req.params.id) {
       return res.status(400).json('Invalid Asset request');
     }
@@ -384,7 +400,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the assessment data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.get('/api/assessment/:id', async function(req: Request, res: Response) {
+  app.get('/api/assessment/:id', middleware.checkToken, async function(req: Request, res: Response) {
     if (!req.params.id) {
       return res.status(400).json('Invalid Assessment request');
     }
@@ -407,7 +423,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the vulnerability data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.get('/api/assessment/:id/vulnerability', async function(req: Request, res: Response) {
+  app.get('/api/assessment/:id/vulnerability', middleware.checkToken, async function(req: Request, res: Response) {
     if (!req.params.id) {
       return res.status(400).json('Invalid Vulnerability request');
     }
@@ -430,7 +446,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.get('/api/vulnerability/:vulnId', async (req: Request, res: Response) => {
+  app.get('/api/vulnerability/:vulnId', middleware.checkToken, async (req: Request, res: Response) => {
     if (!req.params.vulnId) {
       return res.status(400).send('Invalid Vulnerability request');
     }
@@ -454,7 +470,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the success/fail
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.delete('/api/vulnerability/:vulnId', async (req: Request, res: Response) => {
+  app.delete('/api/vulnerability/:vulnId', middleware.checkToken, async (req: Request, res: Response) => {
     if (!req.params.vulnId) {
       return res.status(400).send('Invalid vulnerability request');
     }
@@ -477,7 +493,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the status of the req
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.patch('/api/vulnerability/:vulnId', (req, res) => {
+  app.patch('/api/vulnerability/:vulnId', middleware.checkToken, (req, res) => {
     uploadArray(req, res, async err => {
       if (req['fileExtError']) {
         return res.status(400).send(req['fileExtError']);
@@ -617,7 +633,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.post('/api/vulnerability', async (req, res) => {
+  app.post('/api/vulnerability', middleware.checkToken, async (req, res) => {
     uploadArray(req, res, async err => {
       if (req['fileExtError']) {
         return res.status(400).json(req['fileExtError']);
@@ -713,7 +729,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.post('/api/organization/:id/asset', async (req: Request, res: Response) => {
+  app.post('/api/organization/:id/asset', middleware.checkToken, async (req: Request, res: Response) => {
     if (isNaN(+req.params.id)) {
       return res.status(400).json('Organization ID is not valid');
     }
@@ -743,7 +759,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the asset data tied to the org
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.get('/api/organization/:id/asset/:assetId', async (req: Request, res: Response) => {
+  app.get('/api/organization/:id/asset/:assetId', middleware.checkToken, async (req: Request, res: Response) => {
     if (isNaN(+req.params.assetId)) {
       return res.status(400).json('Invalid Asset ID');
     }
@@ -764,7 +780,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the asset data tied to the org
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.patch('/api/organization/:id/asset/:assetId', async function(req: Request, res: Response) {
+  app.patch('/api/organization/:id/asset/:assetId', middleware.checkToken, async function(req: Request, res: Response) {
     if (isNaN(+req.params.assetId) || !req.params.assetId) {
       return res.status(400).json('Asset ID is not valid');
     }
@@ -792,7 +808,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the success/fail status
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.post('/api/assessment', async (req: Request, res: Response) => {
+  app.post('/api/assessment', middleware.checkToken, async (req: Request, res: Response) => {
     if (isNaN(req.body.asset)) {
       return res.status(400).json('Asset ID is invalid');
     }
@@ -826,19 +842,23 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the assessment data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.get('/api/asset/:assetId/assessment/:assessmentId', async (req: Request, res: Response) => {
-    if (!req.params.assessmentId) {
-      return res.status(400).send('Invalid assessment request');
+  app.get(
+    '/api/asset/:assetId/assessment/:assessmentId',
+    middleware.checkToken,
+    async (req: Request, res: Response) => {
+      if (!req.params.assessmentId) {
+        return res.status(400).send('Invalid assessment request');
+      }
+      if (isNaN(+req.params.assessmentId)) {
+        return res.status(400).json('Invalid Assessment ID');
+      }
+      let assessment = await assessmentRepository.findOne(req.params.assessmentId);
+      if (!assessment) {
+        return res.status(404).json('Assessment does not exist');
+      }
+      res.status(200).json(assessment);
     }
-    if (isNaN(+req.params.assessmentId)) {
-      return res.status(400).json('Invalid Assessment ID');
-    }
-    let assessment = await assessmentRepository.findOne(req.params.assessmentId);
-    if (!assessment) {
-      return res.status(404).json('Assessment does not exist');
-    }
-    res.status(200).json(assessment);
-  });
+  );
 
   /**
    * @description API backend for updating a assessment associated by ID
@@ -846,7 +866,10 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.patch('/api/asset/:assetId/assessment/:assessmentId', async function(req: Request, res: Response) {
+  app.patch('/api/asset/:assetId/assessment/:assessmentId', middleware.checkToken, async function(
+    req: Request,
+    res: Response
+  ) {
     if (!req.params.assessmentId) {
       return res.status(400).send('Invalid assessment request');
     }
@@ -879,7 +902,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the report data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.get('/api/assessment/:assessmentId/report', async (req: Request, res: Response) => {
+  app.get('/api/assessment/:assessmentId/report', middleware.checkToken, async (req: Request, res: Response) => {
     if (!req.params.assessmentId) {
       return res.status(400).send('Invalid report request');
     }
@@ -923,7 +946,7 @@ createConnection().then(connection => {
    * new html page with PDF Report
    * @returns a new page generated by Puppeteer with a Report in PDF format
    */
-  app.post('/api/report/generate', async (req: Request, res: Response) => {
+  app.post('/api/report/generate', middleware.checkToken, async (req: Request, res: Response) => {
     if (!req.body.orgId || !req.body.assetId || !req.body.assessmentId) {
       return res.status(400).send('Invalid report parameters');
     }
