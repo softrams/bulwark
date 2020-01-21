@@ -11,6 +11,7 @@ import { AlertModule } from './alert/alert.module';
 
 import { AppService } from './app.service';
 import { LoaderService } from './loader.service';
+import { AuthGuard } from './auth.guard';
 import { AppInterceptor } from './app.interceptor';
 import { HttpClientModule } from '@angular/common/http';
 import { AssessmentsComponent } from './assessments/assessments.component';
@@ -25,7 +26,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { DatePipe } from '@angular/common';
 import { ReportComponent } from './report/report.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     FooterComponent,
     AssessmentFormComponent,
     ReportComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +58,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     AppService,
     DatePipe,
     LoaderService,
-    { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true },
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

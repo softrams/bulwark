@@ -9,18 +9,29 @@ import { Observable, throwError } from 'rxjs';
 import { finalize, catchError } from 'rxjs/operators';
 import { LoaderService } from './loader.service';
 import { AlertService } from './alert/alert.service';
+import { AuthService } from './auth.service';
 import { environment } from '../environments/environment';
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {
   constructor(
     public loaderService: LoaderService,
-    public alertService: AlertService
+    public alertService: AlertService,
+    public authService: AuthService
   ) {}
 
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    // Get the auth token from the service.
+    const authToken = this.authService.getUserToken();
+    // Clone the request and replace the original headers with
+    // cloned headers, updated with the authorization.
+    if (authToken) {
+      req = req.clone({
+        headers: req.headers.set('Authorization', authToken)
+      });
+    }
     this.loaderService.show();
     return next.handle(req).pipe(
       finalize(() => this.loaderService.hide()),

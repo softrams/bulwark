@@ -1,5 +1,10 @@
 import { NgModule, Injectable } from '@angular/core';
-import { Routes, RouterModule, Resolve, ActivatedRouteSnapshot } from '@angular/router';
+import {
+  Routes,
+  RouterModule,
+  Resolve,
+  ActivatedRouteSnapshot
+} from '@angular/router';
 
 import { DashboardComponent } from '../app/dashboard/dashboard.component';
 import { AssessmentsComponent } from '../app/assessments/assessments.component';
@@ -13,6 +18,8 @@ import { AssetFormComponent } from './asset-form/asset-form.component';
 import { AssessmentFormComponent } from './assessment-form/assessment-form.component';
 import { ReportComponent } from './report/report.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { AuthGuard } from './auth.guard';
+import { LoginComponent } from './login/login.component';
 @Injectable()
 export class AssetsResolver implements Resolve<any> {
   constructor(private apiService: AppService) {}
@@ -34,7 +41,10 @@ export class AssetResolver implements Resolve<any> {
 export class AssessmentResolver implements Resolve<any> {
   constructor(private apiService: AppService) {}
   resolve(route: ActivatedRouteSnapshot) {
-    return this.apiService.getAssessment(route.params.assetId, route.params.assessmentId);
+    return this.apiService.getAssessment(
+      route.params.assetId,
+      route.params.assessmentId
+    );
   }
 }
 
@@ -90,64 +100,84 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
     path: 'dashboard',
-    component: DashboardComponent
+    component: DashboardComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'organization/:orgId/asset/:assetId',
     component: AssessmentsComponent,
-    resolve: { assessments: AssessmentsResolver }
+    resolve: { assessments: AssessmentsResolver },
+    canActivate: [AuthGuard]
   },
   {
     path: 'organization/:orgId',
     component: OrganizationComponent,
-    resolve: { assets: AssetsResolver }
+    resolve: { assets: AssetsResolver },
+    canActivate: [AuthGuard]
   },
   {
-    path: 'organization/:orgId/asset/:assetId/assessment/:assessmentId/vulnerability',
+    path:
+      'organization/:orgId/asset/:assetId/assessment/:assessmentId/vulnerability',
     component: VulnerabilityComponent,
-    resolve: { vulnerabilities: VulnerabilitiesResolver }
+    resolve: { vulnerabilities: VulnerabilitiesResolver },
+    canActivate: [AuthGuard]
   },
   {
-    path: 'organization/:orgId/asset/:assetId/assessment/:assessmentId/vuln-form/:vulnId',
+    path:
+      'organization/:orgId/asset/:assetId/assessment/:assessmentId/vuln-form/:vulnId',
     component: VulnFormComponent,
-    resolve: { vulnerability: VulnerabilityResolver }
+    resolve: { vulnerability: VulnerabilityResolver },
+    canActivate: [AuthGuard]
   },
   {
-    path: 'organization/:orgId/asset/:assetId/assessment/:assessmentId/vuln-form',
-    component: VulnFormComponent
+    path:
+      'organization/:orgId/asset/:assetId/assessment/:assessmentId/vuln-form',
+    component: VulnFormComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'organization-form',
-    component: OrgFormComponent
+    component: OrgFormComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'organization-form/:id',
     component: OrgFormComponent,
-    resolve: { organization: OrganizationResolver }
+    resolve: { organization: OrganizationResolver },
+    canActivate: [AuthGuard]
   },
   {
     path: 'organization/:id/asset-form',
-    component: AssetFormComponent
+    component: AssetFormComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'organization/:id/asset-form/:assetId',
     component: AssetFormComponent,
-    resolve: { asset: AssetResolver }
+    resolve: { asset: AssetResolver },
+    canActivate: [AuthGuard]
   },
   {
     path: 'organization/:orgId/asset/:assetId/assessment',
-    component: AssessmentFormComponent
+    component: AssessmentFormComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'organization/:orgId/asset/:assetId/assessment/:assessmentId',
     component: AssessmentFormComponent,
-    resolve: { assessment: AssessmentResolver }
+    resolve: { assessment: AssessmentResolver },
+    canActivate: [AuthGuard]
   },
   {
     path: 'organization/:orgId/asset/:assetId/assessment/:assessmentId/report',
     component: ReportComponent,
-    resolve: { report: ReportResolver }
+    resolve: { report: ReportResolver },
+    canActivate: [AuthGuard]
   },
   { path: '**', component: PageNotFoundComponent }
 ];

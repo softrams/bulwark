@@ -138,10 +138,7 @@ createConnection().then(connection => {
       bcrypt.compare(password, user.password, (err, valid) => {
         if (valid) {
           // TODO: Generate secret key and store in env var
-          let token = jwt.sign(
-            { exp: Math.floor(Date.now() / 1000) + 60 * 60, email: user.email, userId: user.id },
-            'keyboardcat'
-          );
+          let token = jwt.sign({ email: user.email, userId: user.id }, 'keyboardcat', { expiresIn: '.5h' });
           return res.status(200).json(token);
         } else {
           return res.status(400).json('Invalid email or password');
