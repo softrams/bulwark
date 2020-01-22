@@ -16,10 +16,12 @@ import { User } from './entity/User';
 import { status } from './enums/status-enum';
 import * as bcrypt from 'bcrypt';
 
+const uuidv4 = require('uuid/v4');
 const middleware = require('./middleware');
 const jwt = require('jsonwebtoken');
 const puppeteer = require('puppeteer');
 const multer = require('multer');
+const emailService = require('./services/email.service');
 const uploadConfig = {
   limits: { fileSize: 500000 }, // 500 KB in binary
   fileFilter: (req, file, cb) => {
@@ -113,16 +115,79 @@ createConnection().then(connection => {
     bcrypt.genSalt(saltRounds, async (err, salt) => {
       bcrypt.hash(password, salt, async (err, hash) => {
         user.password = hash;
+        user.active = false;
+        user.uuid = uuidv4();
         const errors = await validate(user);
         if (errors.length > 0) {
           return res.status(400).json('User validation failed');
         } else {
           await userRepository.save(user);
-          console.log(user);
+          emailService.sendVerificationEmail(user.uuid, user.email);
           return res.status(200).json('User created successfully');
         }
       });
     });
+  });
+
+  /**
+   * @description Verifies user by comparing UUID
+   * @param {Request} req
+   * @param {Response} res
+   * @returns Success message
+   */
+  app.get('/api/user/verify/:uuid', async (req: Request, res: Response) => {
+    if (req.params.uuid) {
+      const user = await userRepository.findOne({ where: { uuid: req.params.uuid } });
+      if (user) {
+        user.active = true;
+        user.uuid = null;
+        userRepository.save(user);
+        return res.status(200).json(`Email verification successful`);
+      } else {
+        return res.status(400).json('Email verification failed.  User does not exist.');
+      }
+    } else {
+      return res.status(400).json('UUID is undefined');
+    }
+  });
+
+  /**
+   * @description Updates user password
+   * @param {Request} req
+   * @param {Response} res
+   * @returns Success message
+   */
+  app.patch('/api/user/password', middleware.checkToken, async (req: Request, res: Response) => {
+    const { oldPassword, newPassword, confirmNewPassword } = req.body;
+    if (newPassword !== confirmNewPassword) {
+      return res.status(400).json('Passwords do not match');
+    }
+    if (newPassword === oldPassword) {
+      return res.status(400).json('New password can not be the same as the old password');
+    }
+    if (!passwordSchema.validate(newPassword)) {
+      return res.status(400).json('Insecure password complexity');
+    }
+    const user = await userRepository.findOne(req['user']);
+    if (user) {
+      bcrypt.compare(oldPassword, user.password, (err, valid) => {
+        if (valid) {
+          bcrypt.genSalt(saltRounds, async (err, salt) => {
+            bcrypt.hash(newPassword, salt, async (err, hash) => {
+              user.password = hash;
+              await userRepository.save(user);
+              return res.status(200).json('Password updated successfully');
+            });
+          });
+        } else {
+          return res.status(400).json('Incorrect previous password');
+        }
+      });
+    } else {
+      return res
+        .status(400)
+        .json('Unable to update user password at this time.  Please contact an administrator for assistance.');
+    }
   });
 
   /**
@@ -135,6 +200,18 @@ createConnection().then(connection => {
     const { password, email } = req.body;
     const user = await userRepository.findOne({ where: { email } });
     if (user) {
+      if (!user.active) {
+        // generate new UUID
+        user.uuid = uuidv4();
+        // No need to validate as validation happend with user creation
+        await userRepository.save(user);
+        emailService.sendVerificationEmail(user.uuid, user.email);
+        return res
+          .status(400)
+          .json(
+            'This account has not been activated.  Please check for email verification or contact an administrator.'
+          );
+      }
       bcrypt.compare(password, user.password, (err, valid) => {
         if (valid) {
           // TODO: Generate secret key and store in env var

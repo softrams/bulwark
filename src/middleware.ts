@@ -12,7 +12,7 @@ let checkToken = (req, res, next) => {
       if (err) {
         return res.status(401).json('Authorization token is not valid');
       } else {
-        req.decoded = decoded;
+        req.user = decoded.userId;
         next();
       }
     });

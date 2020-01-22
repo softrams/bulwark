@@ -11,12 +11,14 @@ import { LoaderService } from './loader.service';
 import { AlertService } from './alert/alert.service';
 import { AuthService } from './auth.service';
 import { environment } from '../environments/environment';
+import { Router } from '@angular/router';
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {
   constructor(
     public loaderService: LoaderService,
     public alertService: AlertService,
-    public authService: AuthService
+    public authService: AuthService,
+    public router: Router
   ) {}
 
   intercept(
@@ -60,6 +62,7 @@ export class AppInterceptor implements HttpInterceptor {
               break;
             case 401:
               this.alertService.error(error.error);
+              this.authService.logout();
               break;
             case 400:
               this.alertService.warn(error.error);
