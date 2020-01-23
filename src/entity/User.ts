@@ -5,7 +5,9 @@ import { IsEmail, IsUUID } from 'class-validator';
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column()
+  @Column({
+    unique: true
+  })
   @IsEmail()
   email: string;
   @Column()

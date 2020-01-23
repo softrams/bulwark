@@ -98,12 +98,12 @@ createConnection().then(connection => {
   app.post('/api/user/create', middleware.checkToken, async (req: Request, res: Response) => {
     let user = new User();
     const { password, confirmPassword, email } = req.body;
+    if (!email) {
+      return res.status(400).json('Email is invalid');
+    }
     const existUser = await userRepository.find({ where: { email } });
     if (existUser.length) {
       return res.status(400).json('A user associated to that email already exists');
-    }
-    if (!email) {
-      return res.status(400).json('Email is invalid');
     }
     user.email = email;
     if (password !== confirmPassword) {
@@ -148,6 +148,42 @@ createConnection().then(connection => {
       }
     } else {
       return res.status(400).json('UUID is undefined');
+    }
+  });
+
+  /**
+   * @description Verifies user by comparing UUID
+   * @param {Request} req
+   * @param {Response} res
+   * @returns Success message
+   */
+  app.patch('/api/forgot-password', async (req: Request, res: Response) => {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json('Email is invalid');
+    }
+    // user query builder
+    const user = await userRepository
+      .createQueryBuilder('user')
+      .where('user.email = :email', {
+        email
+      })
+      .getOne();
+    if (!user) {
+      return res
+        .status(400)
+        .json('Unable to retrieve the user at this time.  Please contact an administrator for assistance.');
+    }
+    user.uuid = uuidv4();
+    await userRepository.save(user);
+    if (!user.active) {
+      emailService.sendVerificationEmail(user.uuid, user.email);
+      return res
+        .status(400)
+        .json('This account has not been activated.  Please check for email verification or contact an administrator.');
+    } else {
+      emailService.sendVerificationEmail(user.uuid, user.email);
+      return res.status(200).json('A password reset request has been initiated.  Please check your email.');
     }
   });
 
@@ -198,7 +234,14 @@ createConnection().then(connection => {
    */
   app.post('/api/login', async (req: Request, res: Response) => {
     const { password, email } = req.body;
-    const user = await userRepository.findOne({ where: { email } });
+    // use querybuilder
+    //const user = await userRepository.findOne({ where: { email } });
+    const user = await userRepository
+      .createQueryBuilder('user')
+      .where('user.email = :email', {
+        email
+      })
+      .getOne();
     if (user) {
       if (!user.active) {
         // generate new UUID
