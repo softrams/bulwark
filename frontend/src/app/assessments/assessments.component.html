@@ -14,9 +14,11 @@
       <tr>
         <th scope="row">{{ assessment.id }}</th>
         <td>{{ assessment?.name }}</td>
-        <td>{{ assessment?.jiraId }}</td>
-        <td>{{ assessment?.startDate | date: 'shortDate' }}</td>
-        <td>{{ assessment?.endDate | date: 'shortDate' }}</td>
+        <a target="_blank" [href]="assessment?.jiraId">{{
+          assessment?.jiraId
+        }}</a>
+        <td>{{ assessment?.startDate | date: "shortDate" }}</td>
+        <td>{{ assessment?.endDate | date: "shortDate" }}</td>
         <td>
           <button
             class="btn btn-secondary"
