@@ -17,7 +17,7 @@ import { status } from './enums/status-enum';
 const puppeteer = require('puppeteer');
 const multer = require('multer');
 var upload = multer({
-  limits: { fileSize: 500000 }, // 500 KB in binary
+  limits: { fileSize: '2mb' },
   fileFilter: (req, file, cb) => {
     // Ext validation
     if (!(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg')) {
@@ -29,7 +29,7 @@ var upload = multer({
   }
 }).single('file');
 var uploadArray = multer({
-  limits: { fileSize: 500000 }, // 500 KB in binary
+  limits: { fileSize: '2mb' },
   fileFilter: (req, file, cb) => {
     // Ext validation
     if (!(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg')) {
@@ -67,7 +67,7 @@ app.set('server_ip_address', server_ip_address);
 app.listen(server_port, () => console.log(`Server running on ${server_ip_address}:${server_port}`));
 
 // create typeorm connection
-createConnection().then((connection) => {
+createConnection().then(connection => {
   // register respositories for database communication
   const orgRepository = connection.getRepository(Organization);
   const assetRepository = connection.getRepository(Asset);
@@ -79,7 +79,7 @@ createConnection().then((connection) => {
 
   app.post('/api/upload', async (req: Request, res: Response) => {
     // TODO Virus scanning
-    upload(req, res, async (err) => {
+    upload(req, res, async err => {
       if (req['fileExtError']) {
         return res.status(400).send(req['fileExtError']);
       }
@@ -405,7 +405,7 @@ createConnection().then((connection) => {
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.patch('/api/vulnerability/:vulnId', (req, res) => {
-    uploadArray(req, res, async (err) => {
+    uploadArray(req, res, async err => {
       if (req['fileExtError']) {
         return res.status(400).send(req['fileExtError']);
       }
@@ -451,10 +451,10 @@ createConnection().then((connection) => {
           // Remove deleted files
           if (req.body.screenshotsToDelete) {
             let existingScreenshots = await fileRepository.find({ where: { vulnerability: vulnerability.id } });
-            let existingScreenshotIds = existingScreenshots.map((screenshot) => screenshot.id);
+            let existingScreenshotIds = existingScreenshots.map(screenshot => screenshot.id);
             let screenshotsToDelete = JSON.parse(req.body.screenshotsToDelete);
             // We only want to remove the files associated to the vulnerability
-            screenshotsToDelete = existingScreenshotIds.filter((value) => screenshotsToDelete.includes(value));
+            screenshotsToDelete = existingScreenshotIds.filter(value => screenshotsToDelete.includes(value));
             for (const screenshotId of screenshotsToDelete) {
               fileRepository.delete(screenshotId);
             }
@@ -474,10 +474,10 @@ createConnection().then((connection) => {
           // Remove deleted problem locations
           if (req.body.problemLocations.length) {
             const clientProdLocs = JSON.parse(req.body.problemLocations);
-            let clientProdLocsIds = clientProdLocs.map((value) => value.id);
+            let clientProdLocsIds = clientProdLocs.map(value => value.id);
             let existingProbLocs = await probLocRepository.find({ where: { vulnerability: vulnerability.id } });
-            let existingProbLocIds = existingProbLocs.map((probLoc) => probLoc.id);
-            let prodLocsToDelete = existingProbLocIds.filter((value) => !clientProdLocsIds.includes(value));
+            let existingProbLocIds = existingProbLocs.map(probLoc => probLoc.id);
+            let prodLocsToDelete = existingProbLocIds.filter(value => !clientProdLocsIds.includes(value));
             for (const probLoc of prodLocsToDelete) {
               probLocRepository.delete(probLoc);
             }
@@ -501,10 +501,10 @@ createConnection().then((connection) => {
           // Remove deleted resources
           if (req.body.resources.length) {
             const clientResources = JSON.parse(req.body.resources);
-            let clientResourceIds = clientResources.map((value) => value.id);
+            let clientResourceIds = clientResources.map(value => value.id);
             let existingResources = await resourceRepository.find({ where: { vulnerability: vulnerability.id } });
-            let existingResourceIds = existingResources.map((resource) => resource.id);
-            let resourcesToDelete = existingResourceIds.filter((value) => !clientResourceIds.includes(value));
+            let existingResourceIds = existingResources.map(resource => resource.id);
+            let resourcesToDelete = existingResourceIds.filter(value => !clientResourceIds.includes(value));
             for (const resource of resourcesToDelete) {
               resourceRepository.delete(resource);
             }
@@ -539,7 +539,7 @@ createConnection().then((connection) => {
    * @returns a JSON object with the proper http response specifying success/fail
    */
   app.post('/api/vulnerability', async (req, res) => {
-    uploadArray(req, res, async (err) => {
+    uploadArray(req, res, async err => {
       if (req['fileExtError']) {
         return res.status(400).json(req['fileExtError']);
       }
@@ -855,7 +855,7 @@ createConnection().then((connection) => {
     const filePath = path.join(__dirname, '../temp_report.pdf');
     await page.goto(url, { waitUntil: 'networkidle0' });
     const div_selector_to_remove = '#buttons';
-    await page.evaluate((sel) => {
+    await page.evaluate(sel => {
       var elements = document.querySelectorAll(sel);
       for (var i = 0; i < elements.length; i++) {
         elements[i].parentNode.removeChild(elements[i]);
