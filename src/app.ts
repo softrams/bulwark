@@ -21,9 +21,8 @@ const middleware = require('./middleware');
 const jwt = require('jsonwebtoken');
 const puppeteer = require('puppeteer');
 const multer = require('multer');
-const emailService = require('./services/email.service');
-const uploadConfig = {
-  limits: { fileSize: 500000 }, // 500 KB in binary
+var upload = multer({
+  limits: { fileSize: '2mb' },
   fileFilter: (req, file, cb) => {
     // Ext validation
     if (!(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg')) {
@@ -33,9 +32,19 @@ const uploadConfig = {
       cb(null, true);
     }
   }
-};
-const upload = multer(uploadConfig).single('file');
-const uploadArray = multer(uploadConfig).array('screenshots');
+}).single('file');
+var uploadArray = multer({
+  limits: { fileSize: '2mb' },
+  fileFilter: (req, file, cb) => {
+    // Ext validation
+    if (!(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg')) {
+      req.fileExtError = 'Only JPEG and PNG file types allowed';
+      cb(null, false);
+    } else {
+      cb(null, true);
+    }
+  }
+}).array('screenshots');
 const fs = require('fs');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -610,7 +619,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the status of the req
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.patch('/api/vulnerability/:vulnId', middleware.checkToken, (req, res) => {
+  app.patch('/api/vulnerability/:vulnId', (req, res) => {
     uploadArray(req, res, async err => {
       if (req['fileExtError']) {
         return res.status(400).send(req['fileExtError']);
@@ -656,9 +665,7 @@ createConnection().then(connection => {
           await vulnerabilityRepository.save(vulnerability);
           // Remove deleted files
           if (req.body.screenshotsToDelete) {
-            let existingScreenshots = await fileRepository.find({
-              where: { vulnerability: vulnerability.id }
-            });
+            let existingScreenshots = await fileRepository.find({ where: { vulnerability: vulnerability.id } });
             let existingScreenshotIds = existingScreenshots.map(screenshot => screenshot.id);
             let screenshotsToDelete = JSON.parse(req.body.screenshotsToDelete);
             // We only want to remove the files associated to the vulnerability
@@ -683,9 +690,7 @@ createConnection().then(connection => {
           if (req.body.problemLocations.length) {
             const clientProdLocs = JSON.parse(req.body.problemLocations);
             let clientProdLocsIds = clientProdLocs.map(value => value.id);
-            let existingProbLocs = await probLocRepository.find({
-              where: { vulnerability: vulnerability.id }
-            });
+            let existingProbLocs = await probLocRepository.find({ where: { vulnerability: vulnerability.id } });
             let existingProbLocIds = existingProbLocs.map(probLoc => probLoc.id);
             let prodLocsToDelete = existingProbLocIds.filter(value => !clientProdLocsIds.includes(value));
             for (const probLoc of prodLocsToDelete) {
@@ -712,9 +717,7 @@ createConnection().then(connection => {
           if (req.body.resources.length) {
             const clientResources = JSON.parse(req.body.resources);
             let clientResourceIds = clientResources.map(value => value.id);
-            let existingResources = await resourceRepository.find({
-              where: { vulnerability: vulnerability.id }
-            });
+            let existingResources = await resourceRepository.find({ where: { vulnerability: vulnerability.id } });
             let existingResourceIds = existingResources.map(resource => resource.id);
             let resourcesToDelete = existingResourceIds.filter(value => !clientResourceIds.includes(value));
             for (const resource of resourcesToDelete) {
@@ -750,7 +753,7 @@ createConnection().then(connection => {
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.post('/api/vulnerability', middleware.checkToken, async (req, res) => {
+  app.post('/api/vulnerability', async (req, res) => {
     uploadArray(req, res, async err => {
       if (req['fileExtError']) {
         return res.status(400).json(req['fileExtError']);
