@@ -21,6 +21,7 @@ const middleware = require('./middleware');
 const jwt = require('jsonwebtoken');
 const puppeteer = require('puppeteer');
 const multer = require('multer');
+const emailService = require('./services/email.service');
 var upload = multer({
   limits: { fileSize: '2mb' },
   fileFilter: (req, file, cb) => {
