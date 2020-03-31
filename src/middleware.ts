@@ -8,7 +8,7 @@ let jwt = require('jsonwebtoken');
 let checkToken = (req, res, next) => {
   let token = req.headers['authorization']; // Express headers are auto converted to lowercase
   if (token) {
-    jwt.verify(token, 'keyboardcat', (err, decoded) => {
+    jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
       if (err) {
         return res.status(401).json('Authorization token is not valid');
       } else {

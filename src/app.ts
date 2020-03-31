@@ -22,6 +22,7 @@ const jwt = require('jsonwebtoken');
 const puppeteer = require('puppeteer');
 const multer = require('multer');
 const emailService = require('./services/email.service');
+const bcryptUtility = require('./utilities/bcrypt.utility');
 var upload = multer({
   limits: { fileSize: '2mb' },
   fileFilter: (req, file, cb) => {
@@ -122,21 +123,17 @@ createConnection().then(connection => {
     if (!passwordSchema.validate(password)) {
       return res.status(400).json('Insecure password complexity');
     }
-    bcrypt.genSalt(saltRounds, async (err, salt) => {
-      bcrypt.hash(password, salt, async (err, hash) => {
-        user.password = hash;
-        user.active = false;
-        user.uuid = uuidv4();
-        const errors = await validate(user);
-        if (errors.length > 0) {
-          return res.status(400).json('User validation failed');
-        } else {
-          await userRepository.save(user);
-          emailService.sendVerificationEmail(user.uuid, user.email);
-          return res.status(200).json('User created successfully');
-        }
-      });
-    });
+    user.password = await bcryptUtility.generateHash(password);
+    user.active = false;
+    user.uuid = uuidv4();
+    const errors = await validate(user);
+    if (errors.length > 0) {
+      return res.status(400).json('User validation failed');
+    } else {
+      await userRepository.save(user);
+      emailService.sendVerificationEmail(user.uuid, user.email);
+      return res.status(200).json('User created successfully');
+    }
   });
 
   /**
@@ -268,7 +265,7 @@ createConnection().then(connection => {
       bcrypt.compare(password, user.password, (err, valid) => {
         if (valid) {
           // TODO: Generate secret key and store in env var
-          let token = jwt.sign({ email: user.email, userId: user.id }, 'keyboardcat', { expiresIn: '.5h' });
+          let token = jwt.sign({ email: user.email, userId: user.id }, process.env.JWT_KEY, { expiresIn: '.5h' });
           return res.status(200).json(token);
         } else {
           return res.status(400).json('Invalid email or password');
