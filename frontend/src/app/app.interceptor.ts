@@ -1,15 +1,39 @@
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest
+} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { finalize, catchError } from 'rxjs/operators';
 import { LoaderService } from './loader.service';
 import { AlertService } from './alert/alert.service';
+import { AuthService } from './auth.service';
 import { environment } from '../environments/environment';
+import { Router } from '@angular/router';
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {
-  constructor(public loaderService: LoaderService, public alertService: AlertService) {}
+  constructor(
+    public loaderService: LoaderService,
+    public alertService: AlertService,
+    public authService: AuthService,
+    public router: Router
+  ) {}
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    // Get the auth token from the service.
+    const authToken = this.authService.getUserToken();
+    // Clone the request and replace the original headers with
+    // cloned headers, updated with the authorization.
+    if (authToken) {
+      req = req.clone({
+        headers: req.headers.set('Authorization', authToken)
+      });
+    }
     this.loaderService.show();
     return next.handle(req).pipe(
       finalize(() => this.loaderService.hide()),
@@ -23,7 +47,10 @@ export class AppInterceptor implements HttpInterceptor {
           // The backend returned an unsuccessful response code.
           // The response body may contain clues as to what went wrong,
           if (environment.production) {
-            console.error(`Backend returned code ${error.status}, ` + `body was: ${error.error}`);
+            console.error(
+              `Backend returned code ${error.status}, ` +
+                `body was: ${error.error}`
+            );
           }
           switch (error.status) {
             case 500:
@@ -33,8 +60,12 @@ export class AppInterceptor implements HttpInterceptor {
             case 404:
               this.alertService.warn(error.error);
               break;
-            case 400:
+            case 401:
               this.alertService.error(error.error);
+              this.authService.logout();
+              break;
+            case 400:
+              this.alertService.warn(error.error);
               break;
             default:
               error.error = 'Internal Server Error';

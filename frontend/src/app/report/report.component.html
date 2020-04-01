@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="row" id="buttons">
+  <div class="row" id="buttons" *ngIf="showButtons">
     <div class="col-12">
       <div class="float-right">
         <button
@@ -29,15 +29,15 @@
     </h1>
     <hr />
     <h4>
-      {{ report?.assessment?.startDate | date: "shortDate" }} -
-      {{ report?.assessment?.endDate | date: "shortDate" }}
+      {{ report?.assessment?.startDate | date: 'shortDate' }} -
+      {{ report?.assessment?.endDate | date: 'shortDate' }}
     </h4>
     <p>
       The Softrams Application Security Team performed a security assessment on
       {{ report?.asset?.name }} & {{ report?.assessment?.name }} (the
-      application) on {{ report?.assessment?.startDate | date: "shortDate" }}.
+      application) on {{ report?.assessment?.startDate | date: 'shortDate' }}.
       The security assessment lasted {{ numOfDays }} days and ended on
-      {{ report?.assessment?.endDate | date: "shortDate" }}. This report
+      {{ report?.assessment?.endDate | date: 'shortDate' }}. This report
       contains detailed information about security vulnerabilities found during
       the assessment.
     </p>

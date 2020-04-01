@@ -1,6 +1,9 @@
+// tslint:disable-next-line: no-var-requires
+require('dotenv').config();
 import * as express from 'express';
 import * as path from 'path';
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { UserRequest } from './interfaces/user-request.interface';
 import * as bodyParser from 'body-parser';
 import { createConnection } from 'typeorm';
 import { Organization } from './entity/Organization';
@@ -12,37 +15,63 @@ import { File } from './entity/File';
 import { ProblemLocation } from './entity/ProblemLocation';
 import { validate } from 'class-validator';
 import { Resource } from './entity/Resource';
+import { User } from './entity/User';
 import { status } from './enums/status-enum';
-
-const puppeteer = require('puppeteer');
-const multer = require('multer');
-var upload = multer({
-  limits: { fileSize: '2mb' },
-  fileFilter: (req, file, cb) => {
-    // Ext validation
-    if (!(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg')) {
-      req.fileExtError = 'Only JPEG and PNG file types allowed';
-      cb(null, false);
-    } else {
-      cb(null, true);
-    }
-  }
-}).single('file');
-var uploadArray = multer({
-  limits: { fileSize: '2mb' },
-  fileFilter: (req, file, cb) => {
-    // Ext validation
-    if (!(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg')) {
-      req.fileExtError = 'Only JPEG and PNG file types allowed';
-      cb(null, false);
-    } else {
-      cb(null, true);
-    }
-  }
-}).array('screenshots');
+import uuidv4 = require('uuid/v4');
+import jwt = require('jsonwebtoken');
+import puppeteer = require('puppeteer');
+import multer = require('multer');
+// tslint:disable-next-line: no-var-requires
+const jwtMiddleware = require('./middleware/jwt.middleware');
+// tslint:disable-next-line: no-var-requires
+const emailService = require('./services/email.service');
+// tslint:disable-next-line: no-var-requires
+const bcryptUtility = require('./utilities/bcrypt.utility');
+// tslint:disable-next-line: no-var-requires
 const fs = require('fs');
+// tslint:disable-next-line: no-var-requires
 const helmet = require('helmet');
+// tslint:disable-next-line: no-var-requires
 const cors = require('cors');
+// tslint:disable-next-line: no-var-requires
+const passwordValidator = require('password-validator');
+const upload = multer({
+  fileFilter: (req, file, cb) => {
+    // Ext validation
+    if (!(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg')) {
+      req.fileExtError = 'Only JPEG and PNG file types allowed';
+      cb(null, false);
+    } else {
+      cb(null, true);
+    }
+  },
+  limits: { fileSize: '2mb' }
+}).single('file');
+const uploadArray = multer({
+  fileFilter: (req, file, cb) => {
+    // Ext validation
+    if (!(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg')) {
+      req.fileExtError = 'Only JPEG and PNG file types allowed';
+      cb(null, false);
+    } else {
+      cb(null, true);
+    }
+  },
+  limits: { fileSize: '2mb' }
+}).array('screenshots');
+// Create a password schema
+const passwordSchema = new passwordValidator();
+passwordSchema
+  .is()
+  .min(12) // Minimum length 8
+  .has()
+  .uppercase() // Must have uppercase letters
+  .has()
+  .lowercase() // Must have lowercase letters
+  .has()
+  .digits() // Must have digits
+  .has()
+  .symbols(); // Must have symbols
 
 // Setup middlware
 const app = express();
@@ -60,11 +89,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const env = process.env.NODE_ENV || 'dev';
 
 // start express server
-const server_port = process.env.PORT || 5000;
-var server_ip_address = process.env.IP || '127.0.0.1';
-app.set('port', server_port);
-app.set('server_ip_address', server_ip_address);
-app.listen(server_port, () => console.log(`Server running on ${server_ip_address}:${server_port}`));
+const serverPort = process.env.PORT || 5000;
+const serverIpAddress = process.env.IP || '127.0.0.1';
+app.set('port', serverPort);
+app.set('serverIpAddress', serverIpAddress);
+// tslint:disable-next-line: no-console
+app.listen(serverPort, () => console.info(`Server running on ${serverIpAddress}:${serverPort}`));
 
 // create typeorm connection
 createConnection().then(connection => {
@@ -76,12 +106,184 @@ createConnection().then(connection => {
   const fileRepository = connection.getRepository(File);
   const probLocRepository = connection.getRepository(ProblemLocation);
   const resourceRepository = connection.getRepository(Resource);
+  const userRepository = connection.getRepository(User);
 
-  app.post('/api/upload', async (req: Request, res: Response) => {
+  /**
+   * @description Create user
+   * @param {UserRequest} req
+   * @param {Response} res
+   * @returns success message
+   */
+  app.post('/api/user/create', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
+    const user = new User();
+    const { password, confirmPassword, email } = req.body;
+    if (!email) {
+      return res.status(400).json('Email is invalid');
+    }
+    const existUser = await userRepository.find({ where: { email } });
+    if (existUser.length) {
+      return res.status(400).json('A user associated to that email already exists');
+    }
+    user.email = email;
+    if (password !== confirmPassword) {
+      return res.status(400).json('Passwords do not match');
+    }
+    if (!passwordSchema.validate(password)) {
+      return res.status(400).json('Insecure password complexity');
+    }
+    user.password = await bcryptUtility.generateHash(password);
+    user.active = false;
+    user.uuid = uuidv4();
+    const errors = await validate(user);
+    if (errors.length > 0) {
+      return res.status(400).json('User validation failed');
+    } else {
+      await userRepository.save(user);
+      emailService.sendVerificationEmail(user.uuid, user.email);
+      return res.status(200).json('User created successfully');
+    }
+  });
+
+  /**
+   * @description Verifies user by comparing UUID
+   * @param {UserRequest} req
+   * @param {Response} res
+   * @returns Success message
+   */
+  app.get('/api/user/verify/:uuid', async (req: UserRequest, res: Response) => {
+    if (req.params.uuid) {
+      const user = await userRepository.findOne({ where: { uuid: req.params.uuid } });
+      if (user) {
+        user.active = true;
+        user.uuid = null;
+        userRepository.save(user);
+        return res.status(200).json('Email verification successful');
+      } else {
+        return res.status(400).json('Email verification failed.  User does not exist.');
+      }
+    } else {
+      return res.status(400).json('UUID is undefined');
+    }
+  });
+
+  /**
+   * @description Verifies user by comparing UUID
+   * @param {UserRequest} req
+   * @param {Response} res
+   * @returns Success message
+   */
+  app.patch('/api/forgot-password', async (req: UserRequest, res: Response) => {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json('Email is invalid');
+    }
+    const user = await userRepository
+      .createQueryBuilder('user')
+      .where('user.email = :email', {
+        email
+      })
+      .getOne();
+    if (!user) {
+      return res
+        .status(400)
+        .json('Unable to retrieve the user at this time.  Please contact an administrator for assistance.');
+    }
+    user.uuid = uuidv4();
+    await userRepository.save(user);
+    if (!user.active) {
+      emailService.sendVerificationEmail(user.uuid, user.email);
+      return res
+        .status(400)
+        .json('This account has not been activated.  Please check for email verification or contact an administrator.');
+    } else {
+      emailService.sendForgotPasswordEmail(user.uuid, user.email);
+      return res.status(200).json('A password reset UserRequest has been initiated.  Please check your email.');
+    }
+  });
+
+  /**
+   * @description Updates user password
+   * @param {UserRequest} req
+   * @param {Response} res
+   * @returns Success message
+   */
+  app.patch('/api/user/password', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
+    const { oldPassword, newPassword, confirmNewPassword } = req.body;
+    if (newPassword !== confirmNewPassword) {
+      return res.status(400).json('Passwords do not match');
+    }
+    if (newPassword === oldPassword) {
+      return res.status(400).json('New password can not be the same as the old password');
+    }
+    if (!passwordSchema.validate(newPassword)) {
+      return res.status(400).json('Insecure password complexity');
+    }
+    const user = await userRepository.findOne(req.user);
+    if (user) {
+      const callback = (resStatus: number, message: any) => {
+        res.status(resStatus).send(message);
+      };
+      user.password = await bcryptUtility.updatePassword(oldPassword, user.password, newPassword, callback);
+      await userRepository.save(user);
+      return res.status(200).json('Password updated successfully');
+    } else {
+      return res
+        .status(400)
+        .json('Unable to update user password at this time.  Please contact an administrator for assistance.');
+    }
+  });
+
+  /**
+   * @description Login to the application
+   * @param {UserRequest} req
+   * @param {Response} res
+   * @returns valid JWT token
+   */
+  app.post('/api/login', async (req: UserRequest, res: Response) => {
+    const { password, email } = req.body;
+    const user = await userRepository
+      .createQueryBuilder('user')
+      .where('user.email = :email', {
+        email
+      })
+      .getOne();
+    if (user) {
+      if (!user.active) {
+        // generate new UUID
+        user.uuid = uuidv4();
+        // No need to validate as validation happend with user creation
+        await userRepository.save(user);
+        emailService.sendVerificationEmail(user.uuid, user.email);
+        return res
+          .status(400)
+          .json(
+            'This account has not been activated.  Please check for email verification or contact an administrator.'
+          );
+      }
+      const valid = await bcryptUtility.compare(password, user.password);
+      if (valid) {
+        // TODO: Generate secret key and store in env var
+        const token = jwt.sign({ email: user.email, userId: user.id }, process.env.JWT_KEY, { expiresIn: '.5h' });
+        return res.status(200).json(token);
+      } else {
+        return res.status(400).json('Invalid email or password');
+      }
+    } else {
+      return res.status(400).json('Invalid email or password');
+    }
+  });
+
+  /**
+   * @description Upload a file
+   * @param {UserRequest} req
+   * @param {Response} res
+   * @returns file ID
+   */
+  app.post('/api/upload', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     // TODO Virus scanning
     upload(req, res, async err => {
-      if (req['fileExtError']) {
-        return res.status(400).send(req['fileExtError']);
+      if (req.fileExtError) {
+        return res.status(400).send(req.fileExtError);
       }
       if (err) {
         switch (err.code) {
@@ -89,11 +291,11 @@ createConnection().then(connection => {
             return res.status(400).send('Only File size up to 500 KB allowed');
         }
       } else {
-        if (!req['file']) {
+        if (!req.file) {
           return res.status(400).send('You must provide a file');
         } else {
           let file = new File();
-          file = req['file'];
+          file = req.file;
           const newFile = await fileRepository.save(file);
           res.json(newFile.id);
         }
@@ -104,12 +306,15 @@ createConnection().then(connection => {
   /**
    * @description API backend for getting organization data
    * returns all organizations when triggered
-   * @param {Request} req
+   * @param {UserRequest} req
    * @param {Response} res contains JSON object with all organization data
    * @returns an array of organizations with avatar relations
    */
-  app.get('/api/organization', async function(req: Request, res: Response) {
-    const orgs = await orgRepository.find({ relations: ['avatar'], where: { status: status.active } });
+  app.get('/api/organization', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
+    const orgs = await orgRepository.find({
+      relations: ['avatar'],
+      where: { status: status.active }
+    });
     if (!orgs) {
       return res.status(404).json('Organizations do not exist');
     }
@@ -119,12 +324,15 @@ createConnection().then(connection => {
   /**
    * @description API backend for getting the organizational status for
    * if the organization is archived or not
-   * @param {Request} req
+   * @param {UserRequest} req
    * @param {Response} res contains JSON object with archived organizations
    * @returns an array of organizations with avatar relations and archived status
    */
-  app.get('/api/organization/archive', async function(req: Request, res: Response) {
-    const orgs = await orgRepository.find({ relations: ['avatar'], where: { status: status.archived } });
+  app.get('/api/organization/archive', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
+    const orgs = await orgRepository.find({
+      relations: ['avatar'],
+      where: { status: status.archived }
+    });
     if (!orgs) {
       return res.status(404).json('Organizations do not exist');
     }
@@ -134,24 +342,26 @@ createConnection().then(connection => {
   /**
    * @description API backend for getting an organization associated by ID
    *
-   * @param {Request} req
+   * @param {UserRequest} req
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the given organization referenced by ID
    */
-  app.get('/api/organization/:id', async function(req: Request, res: Response) {
+  app.get('/api/organization/:id', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     if (!req.params.id) {
-      return res.status(400).json('Invalid Organization request');
+      return res.status(400).json('Invalid Organization UserRequest');
     }
     if (isNaN(+req.params.id)) {
       return res.status(400).json('Invalid Organization iD');
     }
-    let org = await orgRepository.findOne(req.params.id, { relations: ['avatar'] });
+    const org = await orgRepository.findOne(req.params.id, {
+      relations: ['avatar']
+    });
     if (!org) {
       return res.status(404).json('Organization does not exist');
     }
-    let resObj = {
-      name: org.name,
-      avatarData: org.avatar
+    const resObj = {
+      avatarData: org.avatar,
+      name: org.name
     };
     res.json(resObj);
   });
@@ -159,15 +369,15 @@ createConnection().then(connection => {
   /**
    * @description API backend for updating an organization associated by ID
    * and updates archive status to archived
-   * @param {Request} req
+   * @param {UserRequest} req
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.patch('/api/organization/:id/archive', async function(req: Request, res: Response) {
+  app.patch('/api/organization/:id/archive', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     if (isNaN(+req.params.id)) {
       return res.status(400).json('Invalid Organization ID');
     }
-    let org = await orgRepository.findOne(req.params.id);
+    const org = await orgRepository.findOne(req.params.id);
     if (!org) {
       return res.status(404).json('Organization does not exist');
     }
@@ -184,15 +394,15 @@ createConnection().then(connection => {
   /**
    * @description API backend for updating an organization associated by ID
    * and updates archive status to unarchived
-   * @param {Request} req ID and Status of the organization
+   * @param {UserRequest} req ID and Status of the organization
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.patch('/api/organization/:id/activate', async function(req: Request, res: Response) {
+  app.patch('/api/organization/:id/activate', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     if (isNaN(+req.params.id)) {
       return res.status(400).json('Organization ID is not valid');
     }
-    let org = await orgRepository.findOne(req.params.id);
+    const org = await orgRepository.findOne(req.params.id);
     if (!org) {
       return res.status(404).json('Organization does not exist');
     }
@@ -209,15 +419,15 @@ createConnection().then(connection => {
   /**
    * @description API backend for updating an organization associated by ID
    * and updates with supplied data
-   * @param {Request} req name and ID of the organization to alter
+   * @param {UserRequest} req name and ID of the organization to alter
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.patch('/api/organization/:id', async function(req: Request, res: Response) {
+  app.patch('/api/organization/:id', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     if (isNaN(+req.params.id)) {
       return res.status(400).json('Organization ID is not valid');
     }
-    let org = await orgRepository.findOne(req.params.id);
+    const org = await orgRepository.findOne(req.params.id);
     if (!org) {
       return res.status(404).json('Organization does not exist');
     }
@@ -240,12 +450,12 @@ createConnection().then(connection => {
   /**
    * @description API backend for creating an organization
    *
-   * @param {Request} req Name, Status, and Avatar
+   * @param {UserRequest} req Name, Status, and Avatar
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.post('/api/organization', async (req: Request, res: Response) => {
-    let org = new Organization();
+  app.post('/api/organization', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
+    const org = new Organization();
     org.name = req.body.name;
     org.status = status.active;
     if (req.body.avatar) {
@@ -261,15 +471,15 @@ createConnection().then(connection => {
   });
 
   /**
-   * @description API backend for requesting a file by ID
+   * @description API backend for UserRequesting a file by ID
    * and returns the buffer back to the UI
-   * @param {Request} req
+   * @param {UserRequest} req
    * @param {Response} res contains a buffer with the file data
    * @returns a buffer with the file data
    */
-  app.get('/api/file/:id', async function(req: Request, res: Response) {
+  app.get('/api/file/:id', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     if (!req.params.id) {
-      return res.status(400).json('Invalid File request');
+      return res.status(400).json('Invalid File UserRequest');
     }
     if (isNaN(+req.params.id)) {
       return res.status(400).json('Invalid File ID');
@@ -282,15 +492,15 @@ createConnection().then(connection => {
   });
 
   /**
-   * @description API backend for requesting an asset associated by ID
+   * @description API backend for UserRequesting an asset associated by ID
    * and returns it to the UI
-   * @param {Request} req
+   * @param {UserRequest} req
    * @param {Response} res contains JSON object with the asset data
    * @returns a JSON object with the asset data
    */
-  app.get('/api/organization/asset/:id', async function(req: Request, res: Response) {
+  app.get('/api/organization/asset/:id', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     if (!req.params.id) {
-      return res.status(400).json('Invalid Asset request');
+      return res.status(400).json('Invalid Asset UserRequest');
     }
     if (isNaN(+req.params.id)) {
       return res.status(400).json('Invalid Organization ID');
@@ -305,15 +515,15 @@ createConnection().then(connection => {
   });
 
   /**
-   * @description API backend for requesting an assessment associated by ID
+   * @description API backend for UserRequesting an assessment associated by ID
    * and returns it to the UI
-   * @param {Request} req
+   * @param {UserRequest} req
    * @param {Response} res contains JSON object with the assessment data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.get('/api/assessment/:id', async function(req: Request, res: Response) {
+  app.get('/api/assessment/:id', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     if (!req.params.id) {
-      return res.status(400).json('Invalid Assessment request');
+      return res.status(400).json('Invalid Assessment UserRequest');
     }
     if (isNaN(+req.params.id)) {
       return res.status(400).json('Invalid Asset ID');
@@ -328,15 +538,15 @@ createConnection().then(connection => {
   });
 
   /**
-   * @description API backend for requesting a vulnerability and returns it to the UI
+   * @description API backend for UserRequesting a vulnerability and returns it to the UI
    *
-   * @param {Request} req
+   * @param {UserRequest} req
    * @param {Response} res contains JSON object with the vulnerability data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.get('/api/assessment/:id/vulnerability', async function(req: Request, res: Response) {
+  app.get('/api/assessment/:id/vulnerability', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     if (!req.params.id) {
-      return res.status(400).json('Invalid Vulnerability request');
+      return res.status(400).json('Invalid Vulnerability UserRequest');
     }
     if (isNaN(+req.params.id)) {
       return res.status(400).json('Invalid Assessment ID');
@@ -351,21 +561,21 @@ createConnection().then(connection => {
   });
 
   /**
-   * @description API backend for requesting a vulnerability associated by ID
+   * @description API backend for UserRequesting a vulnerability associated by ID
    * and updates archive status
-   * @param {Request} req
+   * @param {UserRequest} req
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.get('/api/vulnerability/:vulnId', async (req: Request, res: Response) => {
+  app.get('/api/vulnerability/:vulnId', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     if (!req.params.vulnId) {
-      return res.status(400).send('Invalid Vulnerability request');
+      return res.status(400).send('Invalid Vulnerability UserRequest');
     }
     if (isNaN(+req.params.vulnId)) {
       return res.status(400).send('Invalid Vulnerability ID');
     }
     // TODO: Utilize createQueryBuilder to only return screenshot IDs and not the full object
-    let vuln = await vulnerabilityRepository.findOne(req.params.vulnId, {
+    const vuln = await vulnerabilityRepository.findOne(req.params.vulnId, {
       relations: ['screenshots', 'problemLocations', 'resources']
     });
     if (!vuln) {
@@ -377,18 +587,18 @@ createConnection().then(connection => {
   /**
    * @description API backend for deleting a vulnerability associated by ID
    *
-   * @param {Request} req vulnID is required
+   * @param {UserRequest} req vulnID is required
    * @param {Response} res contains JSON object with the success/fail
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.delete('/api/vulnerability/:vulnId', async (req: Request, res: Response) => {
+  app.delete('/api/vulnerability/:vulnId', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     if (!req.params.vulnId) {
-      return res.status(400).send('Invalid vulnerability request');
+      return res.status(400).send('Invalid vulnerability UserRequest');
     }
     if (isNaN(+req.params.vulnId)) {
       return res.status(400).send('Invalid vulnerability ID');
     }
-    let vuln = await vulnerabilityRepository.findOne(req.params.vulnId);
+    const vuln = await vulnerabilityRepository.findOne(req.params.vulnId);
     if (!vuln) {
       return res.status(404).send('Vulnerability does not exist.');
     } else {
@@ -400,14 +610,14 @@ createConnection().then(connection => {
   /**
    * @description API backend for updating a vulnerability associated by ID
    * and performs updates
-   * @param {Request} req vulnId is required
+   * @param {UserRequest} req vulnId is required
    * @param {Response} res contains JSON object with the status of the req
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.patch('/api/vulnerability/:vulnId', (req, res) => {
+  app.patch('/api/vulnerability/:vulnId', (req: UserRequest, res) => {
     uploadArray(req, res, async err => {
-      if (req['fileExtError']) {
-        return res.status(400).send(req['fileExtError']);
+      if (req.fileExtError) {
+        return res.status(400).send(req.fileExtError);
       }
       if (err) {
         switch (err.code) {
@@ -425,7 +635,7 @@ createConnection().then(connection => {
         if (isNaN(+req.params.vulnId)) {
           return res.status(400).json('Vulnerability ID is invalid');
         }
-        let vulnerability = await vulnerabilityRepository.findOne(req.params.vulnId);
+        const vulnerability = await vulnerabilityRepository.findOne(req.params.vulnId);
         if (!vulnerability) {
           return res.status(404).json('Vulnerability does not exist');
         }
@@ -450,8 +660,8 @@ createConnection().then(connection => {
           await vulnerabilityRepository.save(vulnerability);
           // Remove deleted files
           if (req.body.screenshotsToDelete) {
-            let existingScreenshots = await fileRepository.find({ where: { vulnerability: vulnerability.id } });
-            let existingScreenshotIds = existingScreenshots.map(screenshot => screenshot.id);
+            const existingScreenshots = await fileRepository.find({ where: { vulnerability: vulnerability.id } });
+            const existingScreenshotIds = existingScreenshots.map(screenshot => screenshot.id);
             let screenshotsToDelete = JSON.parse(req.body.screenshotsToDelete);
             // We only want to remove the files associated to the vulnerability
             screenshotsToDelete = existingScreenshotIds.filter(value => screenshotsToDelete.includes(value));
@@ -460,12 +670,12 @@ createConnection().then(connection => {
             }
           }
           // Save new files added
-          for (let screenshot of req['files']) {
+          for (const screenshot of req.files) {
             let file = new File();
             file = screenshot;
             file.vulnerability = vulnerability;
-            const errors = await validate(file);
-            if (errors.length > 0) {
+            const fileErrors = await validate(file); // fixing shadowed variable
+            if (fileErrors.length > 0) {
               return res.status(400).send('File validation failed');
             } else {
               await fileRepository.save(file);
@@ -474,21 +684,21 @@ createConnection().then(connection => {
           // Remove deleted problem locations
           if (req.body.problemLocations.length) {
             const clientProdLocs = JSON.parse(req.body.problemLocations);
-            let clientProdLocsIds = clientProdLocs.map(value => value.id);
-            let existingProbLocs = await probLocRepository.find({ where: { vulnerability: vulnerability.id } });
-            let existingProbLocIds = existingProbLocs.map(probLoc => probLoc.id);
-            let prodLocsToDelete = existingProbLocIds.filter(value => !clientProdLocsIds.includes(value));
+            const clientProdLocsIds = clientProdLocs.map(value => value.id);
+            const existingProbLocs = await probLocRepository.find({ where: { vulnerability: vulnerability.id } });
+            const existingProbLocIds = existingProbLocs.map(probLoc => probLoc.id);
+            const prodLocsToDelete = existingProbLocIds.filter(value => !clientProdLocsIds.includes(value));
             for (const probLoc of prodLocsToDelete) {
               probLocRepository.delete(probLoc);
             }
             // Update problem locations
-            for (let probLoc of clientProdLocs) {
+            for (const probLoc of clientProdLocs) {
               if (probLoc && probLoc.location && probLoc.target) {
                 let problemLocation = new ProblemLocation();
                 problemLocation = probLoc;
                 problemLocation.vulnerability = vulnerability;
-                const errors = await validate(problemLocation);
-                if (errors.length > 0) {
+                const plErrors = await validate(problemLocation);
+                if (plErrors.length > 0) {
                   return res.status(400).send('Problem Location validation failed');
                 } else {
                   await probLocRepository.save(problemLocation);
@@ -501,21 +711,21 @@ createConnection().then(connection => {
           // Remove deleted resources
           if (req.body.resources.length) {
             const clientResources = JSON.parse(req.body.resources);
-            let clientResourceIds = clientResources.map(value => value.id);
-            let existingResources = await resourceRepository.find({ where: { vulnerability: vulnerability.id } });
-            let existingResourceIds = existingResources.map(resource => resource.id);
-            let resourcesToDelete = existingResourceIds.filter(value => !clientResourceIds.includes(value));
+            const clientResourceIds = clientResources.map(value => value.id);
+            const existingResources = await resourceRepository.find({ where: { vulnerability: vulnerability.id } });
+            const existingResourceIds = existingResources.map(resource => resource.id);
+            const resourcesToDelete = existingResourceIds.filter(value => !clientResourceIds.includes(value));
             for (const resource of resourcesToDelete) {
               resourceRepository.delete(resource);
             }
             // Update resources
-            for (let clientResource of clientResources) {
+            for (const clientResource of clientResources) {
               if (clientResource.description && clientResource.url) {
                 let resource = new Resource();
                 resource = clientResource;
                 resource.vulnerability = vulnerability;
-                const errors = await validate(resource);
-                if (errors.length > 0) {
+                const resourceErrors = await validate(resource);
+                if (resourceErrors.length > 0) {
                   return res.status(400).send('Resource Location validation failed');
                 } else {
                   await resourceRepository.save(resource);
@@ -534,14 +744,14 @@ createConnection().then(connection => {
   /**
    * @description API backend for creating a vulnerability with the
    * provided req data
-   * @param {Request} req array for files, vulnerability form data as JSON
+   * @param {UserRequest} req array for files, vulnerability form data as JSON
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.post('/api/vulnerability', async (req, res) => {
+  app.post('/api/vulnerability', async (req: UserRequest, res: Response) => {
     uploadArray(req, res, async err => {
-      if (req['fileExtError']) {
-        return res.status(400).json(req['fileExtError']);
+      if (req.fileExtError) {
+        return res.status(400).json(req.fileExtError);
       }
       if (err) {
         switch (err.code) {
@@ -552,11 +762,11 @@ createConnection().then(connection => {
         if (isNaN(+req.body.assessment) || !req.body.assessment) {
           return res.status(400).json('Invalid Assessment ID');
         }
-        let assessment = await assessmentRepository.findOne(req.body.assessment);
+        const assessment = await assessmentRepository.findOne(req.body.assessment);
         if (!assessment) {
           return res.status(404).json('Assessment does not exist');
         }
-        let vulnerability = new Vulnerability();
+        const vulnerability = new Vulnerability();
         vulnerability.impact = req.body.impact;
         vulnerability.likelihood = req.body.likelihood;
         vulnerability.risk = req.body.risk;
@@ -576,12 +786,12 @@ createConnection().then(connection => {
         } else {
           await vulnerabilityRepository.save(vulnerability);
           // Save screenshots
-          for (let screenshot of req['files']) {
+          for (const screenshot of req.files) {
             let file = new File();
             file = screenshot;
             file.vulnerability = vulnerability;
-            const errors = await validate(file);
-            if (errors.length > 0) {
+            const fileErrors = await validate(file);
+            if (fileErrors.length > 0) {
               return res.status(400).send('File validation failed');
             } else {
               await fileRepository.save(file);
@@ -589,13 +799,13 @@ createConnection().then(connection => {
           }
           // Save problem locations
           const problemLocations = JSON.parse(req.body.problemLocations);
-          for (let probLoc of problemLocations) {
+          for (const probLoc of problemLocations) {
             if (probLoc && probLoc.location && probLoc.target) {
               let problemLocation = new ProblemLocation();
               problemLocation = probLoc;
               problemLocation.vulnerability = vulnerability;
-              const errors = await validate(problemLocation);
-              if (errors.length > 0) {
+              const plErrors = await validate(problemLocation);
+              if (plErrors.length > 0) {
                 return res.status(400).send('Problem Location validation failed');
               } else {
                 await probLocRepository.save(problemLocation);
@@ -606,13 +816,13 @@ createConnection().then(connection => {
           }
           // Save Resource Locations
           const resources = JSON.parse(req.body.resources);
-          for (let resource of resources) {
+          for (const resource of resources) {
             if (resource.description && resource.url) {
               let newResource = new Resource();
               newResource = resource;
               newResource.vulnerability = vulnerability;
-              const errors = await validate(newResource);
-              if (errors.length > 0) {
+              const nrErrors = await validate(newResource);
+              if (nrErrors.length > 0) {
                 return res.status(400).send('Resource Location validation failed');
               } else {
                 await resourceRepository.save(newResource);
@@ -630,22 +840,22 @@ createConnection().then(connection => {
   /**
    * @description API backend for creating an asset associated by org ID
    *
-   * @param {Request} req name, organization
+   * @param {UserRequest} req name, organization
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.post('/api/organization/:id/asset', async (req: Request, res: Response) => {
+  app.post('/api/organization/:id/asset', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     if (isNaN(+req.params.id)) {
       return res.status(400).json('Organization ID is not valid');
     }
-    let org = await orgRepository.findOne(req.params.id);
+    const org = await orgRepository.findOne(req.params.id);
     if (!org) {
       return res.status(404).json('Organization does not exist');
     }
     if (!req.body.name) {
       return res.status(400).send('Asset is not valid');
     }
-    let asset = new Asset();
+    const asset = new Asset();
     asset.name = req.body.name;
     asset.organization = org;
     const errors = await validate(asset);
@@ -658,20 +868,20 @@ createConnection().then(connection => {
   });
 
   /**
-   * @description API backend for requesting an organization asset associated by ID
+   * @description API backend for UserRequesting an organization asset associated by ID
    * and returns the data
-   * @param {Request} req assetId, orgId
+   * @param {UserRequest} req assetId, orgId
    * @param {Response} res contains JSON object with the asset data tied to the org
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.get('/api/organization/:id/asset/:assetId', async (req: Request, res: Response) => {
+  app.get('/api/organization/:id/asset/:assetId', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     if (isNaN(+req.params.assetId)) {
       return res.status(400).json('Invalid Asset ID');
     }
     if (!req.params.assetId) {
-      return res.status(400).send('Invalid Asset request');
+      return res.status(400).send('Invalid Asset UserRequest');
     }
-    let asset = await assetRepository.findOne(req.params.assetId);
+    const asset = await assetRepository.findOne(req.params.assetId);
     if (!asset) {
       return res.status(404).send('Asset does not exist');
     }
@@ -681,47 +891,51 @@ createConnection().then(connection => {
   /**
    * @description API backend for updating an organization asset associated by ID
    * and updates the data
-   * @param {Request} req name, organization, assetId
+   * @param {UserRequest} req name, organization, assetId
    * @param {Response} res contains JSON object with the asset data tied to the org
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.patch('/api/organization/:id/asset/:assetId', async function(req: Request, res: Response) {
-    if (isNaN(+req.params.assetId) || !req.params.assetId) {
-      return res.status(400).json('Asset ID is not valid');
+  app.patch(
+    '/api/organization/:id/asset/:assetId',
+    jwtMiddleware.checkToken,
+    async (req: UserRequest, res: Response) => {
+      if (isNaN(+req.params.assetId) || !req.params.assetId) {
+        return res.status(400).json('Asset ID is not valid');
+      }
+      const asset = await assetRepository.findOne(req.params.assetId);
+      if (!asset) {
+        return res.status(404).json('Asset does not exist');
+      }
+      if (!req.body.name) {
+        return res.status(400).json('Asset name is not valid');
+      }
+      asset.name = req.body.name;
+      const errors = await validate(asset);
+      if (errors.length > 0) {
+        res.status(400).send('Asset form validation failed');
+      } else {
+        await assetRepository.save(asset);
+        res.status(200).json('Asset patched successfully');
+      }
     }
-    let asset = await assetRepository.findOne(req.params.assetId);
-    if (!asset) {
-      return res.status(404).json('Asset does not exist');
-    }
-    if (!req.body.name) {
-      return res.status(400).json('Asset name is not valid');
-    }
-    asset.name = req.body.name;
-    const errors = await validate(asset);
-    if (errors.length > 0) {
-      res.status(400).send('Asset form validation failed');
-    } else {
-      await assetRepository.save(asset);
-      res.status(200).json('Asset patched successfully');
-    }
-  });
+  );
 
   /**
    * @description API backend for creating an assessment
    *
-   * @param {Request} req assessment object data
+   * @param {UserRequest} req assessment object data
    * @param {Response} res contains JSON object with the success/fail status
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.post('/api/assessment', async (req: Request, res: Response) => {
+  app.post('/api/assessment', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     if (isNaN(req.body.asset)) {
       return res.status(400).json('Asset ID is invalid');
     }
-    let asset = await assetRepository.findOne(req.body.asset);
+    const asset = await assetRepository.findOne(req.body.asset);
     if (!asset) {
       return res.status(404).json('Asset does not exist');
     }
-    let assessment = new Assessment();
+    const assessment = new Assessment();
     assessment.asset = asset;
     assessment.name = req.body.name;
     assessment.executiveSummary = req.body.executiveSummary;
@@ -742,80 +956,92 @@ createConnection().then(connection => {
   });
 
   /**
-   * @description API backend for requesting assessment by ID association
-   * @param {Request} req assetId, assessmentId
+   * @description API backend for UserRequesting assessment by ID association
+   * @param {UserRequest} req assetId, assessmentId
    * @param {Response} res contains JSON object with the assessment data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.get('/api/asset/:assetId/assessment/:assessmentId', async (req: Request, res: Response) => {
-    if (!req.params.assessmentId) {
-      return res.status(400).send('Invalid assessment request');
+  app.get(
+    '/api/asset/:assetId/assessment/:assessmentId',
+    jwtMiddleware.checkToken,
+    async (req: UserRequest, res: Response) => {
+      if (!req.params.assessmentId) {
+        return res.status(400).send('Invalid assessment UserRequest');
+      }
+      if (isNaN(+req.params.assessmentId)) {
+        return res.status(400).json('Invalid Assessment ID');
+      }
+      const assessment = await assessmentRepository.findOne(req.params.assessmentId);
+      if (!assessment) {
+        return res.status(404).json('Assessment does not exist');
+      }
+      res.status(200).json(assessment);
     }
-    if (isNaN(+req.params.assessmentId)) {
-      return res.status(400).json('Invalid Assessment ID');
-    }
-    let assessment = await assessmentRepository.findOne(req.params.assessmentId);
-    if (!assessment) {
-      return res.status(404).json('Assessment does not exist');
-    }
-    res.status(200).json(assessment);
-  });
+  );
 
   /**
    * @description API backend for updating a assessment associated by ID
-   * @param {Request} req assessment JSON object with assessment data
+   * @param {UserRequest} req assessment JSON object with assessment data
    * @param {Response} res contains JSON object with the organization data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.patch('/api/asset/:assetId/assessment/:assessmentId', async function(req: Request, res: Response) {
-    if (!req.params.assessmentId) {
-      return res.status(400).send('Invalid assessment request');
+  app.patch(
+    '/api/asset/:assetId/assessment/:assessmentId',
+    jwtMiddleware.checkToken,
+    async (req: UserRequest, res: Response) => {
+      if (!req.params.assessmentId) {
+        return res.status(400).send('Invalid assessment UserRequest');
+      }
+      if (isNaN(+req.params.assessmentId)) {
+        return res.status(400).json('Invalid Assessment ID');
+      }
+      let assessment = await assessmentRepository.findOne(req.params.assessmentId);
+      if (!assessment) {
+        return res.status(404).json('Assessment does not exist');
+      }
+      const assessmentId = assessment.id;
+      delete req.body.asset;
+      assessment = req.body;
+      assessment.id = assessmentId;
+      if (assessment.startDate > assessment.endDate) {
+        return res.status(400).send('The assessment start date can not be later than the end date');
+      }
+      const errors = await validate(assessment);
+      if (errors.length > 0) {
+        return res.status(400).send('Assessment form validation failed');
+      } else {
+        await assessmentRepository.save(assessment);
+        res.status(200).json('Assessment patched successfully');
+      }
     }
-    if (isNaN(+req.params.assessmentId)) {
-      return res.status(400).json('Invalid Assessment ID');
-    }
-    let assessment = await assessmentRepository.findOne(req.params.assessmentId);
-    if (!assessment) {
-      return res.status(404).json('Assessment does not exist');
-    }
-    const assessmentId = assessment.id;
-    delete req.body.asset;
-    assessment = req.body;
-    assessment.id = assessmentId;
-    if (assessment.startDate > assessment.endDate) {
-      return res.status(400).send('The assessment start date can not be later than the end date');
-    }
-    const errors = await validate(assessment);
-    if (errors.length > 0) {
-      return res.status(400).send('Assessment form validation failed');
-    } else {
-      await assessmentRepository.save(assessment);
-      res.status(200).json('Assessment patched successfully');
-    }
-  });
+  );
 
   /**
-   * @description API backend for requesting a report associated by assessmentId
-   * @param {Request} req assessmentId
+   * @description API backend for UserRequesting a report associated by assessmentId
+   * @param {UserRequest} req assessmentId
    * @param {Response} res contains JSON object with the report data
    * @returns a JSON object with the proper http response specifying success/fail
    */
-  app.get('/api/assessment/:assessmentId/report', async (req: Request, res: Response) => {
+  app.get('/api/assessment/:assessmentId/report', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     if (!req.params.assessmentId) {
-      return res.status(400).send('Invalid report request');
+      return res.status(400).send('Invalid report UserRequest');
     }
     if (isNaN(+req.params.assessmentId)) {
       return res.status(400).json('Invalid Assessment ID');
     }
-    let assessment = await assessmentRepository.findOne(req.params.assessmentId, { relations: ['asset'] });
-    let asset = await assetRepository.findOne(assessment.asset.id, { relations: ['organization'] });
-    let organization = await orgRepository.findOne(asset.organization.id);
-    let vulnerabilities = await vulnerabilityRepository
+    const assessment = await assessmentRepository.findOne(req.params.assessmentId, { relations: ['asset'] });
+    const asset = await assetRepository.findOne(assessment.asset.id, {
+      relations: ['organization']
+    });
+    const organization = await orgRepository.findOne(asset.organization.id);
+    const vulnerabilities = await vulnerabilityRepository
       .createQueryBuilder('vuln')
       .leftJoinAndSelect('vuln.screenshots', 'screenshot')
       .leftJoinAndSelect('vuln.problemLocations', 'problemLocation')
       .leftJoinAndSelect('vuln.resources', 'resource')
-      .where('vuln.assessmentId = :assessmentId', { assessmentId: assessment.id })
+      .where('vuln.assessmentId = :assessmentId', {
+        assessmentId: assessment.id
+      })
       .select([
         'vuln',
         'screenshot.id',
@@ -825,7 +1051,7 @@ createConnection().then(connection => {
         'resource'
       ])
       .getMany();
-    let report = new Report();
+    const report = new Report();
     report.org = organization;
     report.asset = asset;
     report.assessment = assessment;
@@ -835,32 +1061,34 @@ createConnection().then(connection => {
 
   /**
    * @description API backend for report generation with Puppeteer
-   * @param {Request} req orgId, assetId, assessmentId
+   * @param {UserRequest} req orgId, assetId, assessmentId
    * @param {Response} res contains all data associated and generates a
    * new html page with PDF Report
    * @returns a new page generated by Puppeteer with a Report in PDF format
    */
-  app.post('/api/report/generate', async (req: Request, res: Response) => {
+  app.post('/api/report/generate', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
     if (!req.body.orgId || !req.body.assetId || !req.body.assessmentId) {
       return res.status(400).send('Invalid report parameters');
     }
-    let url =
+    const url =
       env === 'production'
-        ? `${process.env.PROD_URL}/#/organization/${req.body.orgId}/asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report`
-        : `${process.env.DEV_URL}/#/organization/${req.body.orgId}/asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report`;
+        ? `${process.env.PROD_URL}/#/organization/${req.body.orgId}
+        /asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report/puppeteer`
+        : `${process.env.DEV_URL}/#/organization/${req.body.orgId}
+        /asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report/puppeteer`;
     const browser = await puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
     const filePath = path.join(__dirname, '../temp_report.pdf');
+    const divSelectorToRemove = '#buttons';
+    const jwtToken = req.headers.authorization;
+    await page.evaluateOnNewDocument(token => {
+      localStorage.clear();
+      localStorage.setItem('AUTH_TOKEN', token);
+    }, jwtToken);
     await page.goto(url, { waitUntil: 'networkidle0' });
-    const div_selector_to_remove = '#buttons';
-    await page.evaluate(sel => {
-      var elements = document.querySelectorAll(sel);
-      for (var i = 0; i < elements.length; i++) {
-        elements[i].parentNode.removeChild(elements[i]);
-      }
-    }, div_selector_to_remove);
+
     await page.pdf({ path: filePath, format: 'A4' });
     await browser.close();
     const file = fs.createReadStream(filePath);
@@ -869,10 +1097,11 @@ createConnection().then(connection => {
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename=report.pdf');
     file.pipe(res);
-    fs.unlink(filePath, (err, res) => {
+    fs.unlink(filePath, (err, response) => {
       if (err) {
         // handle error here
       } else {
+        // tslint:disable-next-line: no-console
         console.info('File removed');
       }
     });
