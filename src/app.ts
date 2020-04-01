@@ -15,7 +15,6 @@ import { validate } from 'class-validator';
 import { Resource } from './entity/Resource';
 import { User } from './entity/User';
 import { status } from './enums/status-enum';
-import * as bcrypt from 'bcrypt';
 
 const uuidv4 = require('uuid/v4');
 const jwtMiddleware = require('./middleware/jwt.middleware');
@@ -51,7 +50,6 @@ var uploadArray = multer({
 const fs = require('fs');
 const helmet = require('helmet');
 const cors = require('cors');
-const saltRounds = 10;
 let passwordValidator = require('password-validator');
 // Create a password schema
 let passwordSchema = new passwordValidator();
@@ -170,7 +168,6 @@ createConnection().then(connection => {
     if (!email) {
       return res.status(400).json('Email is invalid');
     }
-    // user query builder
     const user = await userRepository
       .createQueryBuilder('user')
       .where('user.email = :email', {
@@ -190,7 +187,7 @@ createConnection().then(connection => {
         .status(400)
         .json('This account has not been activated.  Please check for email verification or contact an administrator.');
     } else {
-      emailService.sendVerificationEmail(user.uuid, user.email);
+      emailService.sendForgotPasswordEmail(user.uuid, user.email);
       return res.status(200).json('A password reset request has been initiated.  Please check your email.');
     }
   });
@@ -214,19 +211,12 @@ createConnection().then(connection => {
     }
     const user = await userRepository.findOne(req['user']);
     if (user) {
-      bcrypt.compare(oldPassword, user.password, (err, valid) => {
-        if (valid) {
-          bcrypt.genSalt(saltRounds, async (err, salt) => {
-            bcrypt.hash(newPassword, salt, async (err, hash) => {
-              user.password = hash;
-              await userRepository.save(user);
-              return res.status(200).json('Password updated successfully');
-            });
-          });
-        } else {
-          return res.status(400).json('Incorrect previous password');
-        }
-      });
+      const callback = (status, message) => {
+        res.status(status).send(message);
+      };
+      user.password = await bcryptUtility.updatePassword(oldPassword, user.password, newPassword, callback);
+      await userRepository.save(user);
+      return res.status(200).json('Password updated successfully');
     } else {
       return res
         .status(400)
@@ -242,8 +232,6 @@ createConnection().then(connection => {
    */
   app.post('/api/login', async (req: Request, res: Response) => {
     const { password, email } = req.body;
-    // use querybuilder
-    //const user = await userRepository.findOne({ where: { email } });
     const user = await userRepository
       .createQueryBuilder('user')
       .where('user.email = :email', {
@@ -263,15 +251,14 @@ createConnection().then(connection => {
             'This account has not been activated.  Please check for email verification or contact an administrator.'
           );
       }
-      bcrypt.compare(password, user.password, (err, valid) => {
-        if (valid) {
-          // TODO: Generate secret key and store in env var
-          let token = jwt.sign({ email: user.email, userId: user.id }, process.env.JWT_KEY, { expiresIn: '.5h' });
-          return res.status(200).json(token);
-        } else {
-          return res.status(400).json('Invalid email or password');
-        }
-      });
+      const valid = await bcryptUtility.compare(password, user.password);
+      if (valid) {
+        // TODO: Generate secret key and store in env var
+        let token = jwt.sign({ email: user.email, userId: user.id }, process.env.JWT_KEY, { expiresIn: '.5h' });
+        return res.status(200).json(token);
+      } else {
+        return res.status(400).json('Invalid email or password');
+      }
     } else {
       return res.status(400).json('Invalid email or password');
     }
