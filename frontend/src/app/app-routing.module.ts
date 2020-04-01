@@ -179,6 +179,13 @@ const routes: Routes = [
     resolve: { report: ReportResolver },
     canActivate: [AuthGuard]
   },
+  {
+    path:
+      'organization/:orgId/asset/:assetId/assessment/:assessmentId/report/puppeteer',
+    component: ReportComponent,
+    resolve: { report: ReportResolver },
+    canActivate: [AuthGuard]
+  },
   { path: '**', component: PageNotFoundComponent }
 ];
 

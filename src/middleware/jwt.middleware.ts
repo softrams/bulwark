@@ -1,12 +1,12 @@
-let jwt = require('jsonwebtoken');
+import jwt = require('jsonwebtoken');
 
 /**
  * @description Checks for valid token before API logic
  * @param {Request} req
  * @param {Response} res
  */
-let checkToken = (req, res, next) => {
-  let token = req.headers['authorization']; // Express headers are auto converted to lowercase
+const checkToken = (req, res, next) => {
+  const token = req.headers.authorization; // Express headers are auto converted to lowercase
   if (token) {
     jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
       if (err) {
@@ -22,5 +22,5 @@ let checkToken = (req, res, next) => {
 };
 
 module.exports = {
-  checkToken: checkToken
+  checkToken
 };

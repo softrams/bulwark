@@ -42,7 +42,8 @@
   "license": "MIT",
   "devDependencies": {
     "nodemon": "^1.19.3",
-    "typescript": "^3.6.4"
+    "tslint": "^6.1.0",
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "@types/body-parser": "^1.17.1",
