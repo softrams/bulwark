@@ -32,7 +32,7 @@ Create a `.env` file which will be parsed with [dotenv](https://www.npmjs.com/pa
 
 #### `DB_PASSWORD`
 
-`DB_PASSWORD="qwerty"`
+`DB_PASSWORD="somePassword"`
 
 Set this variable to database password
 
@@ -82,7 +82,7 @@ Only update if a different port is required
 
 #### `JWT_KEY`
 
-`JWT_KEY="changeMe`
+`JWT_KEY="changeMe"`
 
 Set this variable to the JWT secret
 
@@ -94,9 +94,9 @@ Set this variable to sender email
 
 #### `FROM_EMAIL_PASSWORD`
 
-`FROM_EMAIL_PASSWORD`
+`FROM_EMAIL_PASSWORD="somePassword"`
 
-Set this variable to sender email password or [gmail app passwords](https://support.google.com/mail/answer/185833?hl=en)
+Set this variable to sender email password or a [Gmail app passwords](https://support.google.com/mail/answer/185833?hl=en)
 
 ### Empty .env example
 
@@ -120,6 +120,10 @@ FROM_EMAIL_PASSWORD=""
 - [Typeorm](https://typeorm.io/#/) - The ORM used
 - [Angular](https://angular.io/) - The Angular Framework
 - [Express](https://expressjs.com/) - A minimal and flexible Node.js web application framework
+
+## Lead Developer
+
+[Alejandro Saenz](https://github.com/Whamo12)
 
 ## Contributing
 
