@@ -1,4 +1,6 @@
-# Bulwark
+<p align="center">
+  <img width="350" src="frontend/src/assets/logo.png">
+</p>
 
 Bulwark is an asset and vulnerability management tool utilized for building and generating application security reports.
 
