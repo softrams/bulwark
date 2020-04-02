@@ -1,4 +1,20 @@
 import * as bcrypt from 'bcrypt';
+// tslint:disable-next-line: no-var-requires
+const passwordValidator = require('password-validator');
+
+// Create a password schema
+const passwordSchema = new passwordValidator();
+passwordSchema
+  .is()
+  .min(12) // Minimum length 8
+  .has()
+  .uppercase() // Must have uppercase letters
+  .has()
+  .lowercase() // Must have lowercase letters
+  .has()
+  .digits() // Must have digits
+  .has()
+  .symbols(); // Must have symbols
 
 const saltRounds = 10;
 /**
@@ -55,5 +71,6 @@ function compare(oldPassword, currentPassword) {
 module.exports = {
   generateHash,
   updatePassword,
-  compare
+  compare,
+  passwordSchema
 };

@@ -1,5 +1,4 @@
 // tslint:disable-next-line: no-var-requires
-require('dotenv').config();
 import * as express from 'express';
 import * as path from 'path';
 import { Response } from 'express';
@@ -17,16 +16,17 @@ import { validate } from 'class-validator';
 import { Resource } from './entity/Resource';
 import { User } from './entity/User';
 import { status } from './enums/status-enum';
+import { passwordRequirement } from './enums/message-enum';
+import { upload, uploadArray } from './utilities/file.utility';
 import uuidv4 = require('uuid/v4');
 import jwt = require('jsonwebtoken');
 import puppeteer = require('puppeteer');
-import multer = require('multer');
 // tslint:disable-next-line: no-var-requires
 const jwtMiddleware = require('./middleware/jwt.middleware');
 // tslint:disable-next-line: no-var-requires
 const emailService = require('./services/email.service');
 // tslint:disable-next-line: no-var-requires
-const bcryptUtility = require('./utilities/bcrypt.utility');
+const passwordUtility = require('./utilities/password.utility');
 // tslint:disable-next-line: no-var-requires
 const fs = require('fs');
 // tslint:disable-next-line: no-var-requires
@@ -34,45 +34,16 @@ const helmet = require('helmet');
 // tslint:disable-next-line: no-var-requires
 const cors = require('cors');
 // tslint:disable-next-line: no-var-requires
-const passwordValidator = require('password-validator');
-const upload = multer({
-  fileFilter: (req, file, cb) => {
-    // Ext validation
-    if (!(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg')) {
-      req.fileExtError = 'Only JPEG and PNG file types allowed';
-      cb(null, false);
-    } else {
-      cb(null, true);
+const dotenv = require('dotenv');
+// https://github.com/motdotla/dotenv#what-happens-to-environment-variables-that-were-already-set
+const envConfig = dotenv.parse(fs.readFileSync(path.join(__dirname, '../.env')));
+if (envConfig) {
+  for (const key in envConfig) {
+    if (envConfig.hasOwnProperty(key)) {
+      process.env[key] = envConfig[key];
     }
-  },
-  limits: { fileSize: '2mb' }
-}).single('file');
-const uploadArray = multer({
-  fileFilter: (req, file, cb) => {
-    // Ext validation
-    if (!(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg')) {
-      req.fileExtError = 'Only JPEG and PNG file types allowed';
-      cb(null, false);
-    } else {
-      cb(null, true);
-    }
-  },
-  limits: { fileSize: '2mb' }
-}).array('screenshots');
-// Create a password schema
-const passwordSchema = new passwordValidator();
-passwordSchema
-  .is()
-  .min(12) // Minimum length 8
-  .has()
-  .uppercase() // Must have uppercase letters
-  .has()
-  .lowercase() // Must have lowercase letters
-  .has()
-  .digits() // Must have digits
-  .has()
-  .symbols(); // Must have symbols
-
+  }
+}
 // Setup middlware
 const app = express();
 app.use(helmet());
@@ -84,10 +55,8 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 // NODE ENV
 const env = process.env.NODE_ENV || 'dev';
-
 // start express server
 const serverPort = process.env.PORT || 5000;
 const serverIpAddress = process.env.IP || '127.0.0.1';
@@ -95,7 +64,6 @@ app.set('port', serverPort);
 app.set('serverIpAddress', serverIpAddress);
 // tslint:disable-next-line: no-console
 app.listen(serverPort, () => console.info(`Server running on ${serverIpAddress}:${serverPort}`));
-
 // create typeorm connection
 createConnection().then(connection => {
   // register respositories for database communication
@@ -107,7 +75,6 @@ createConnection().then(connection => {
   const probLocRepository = connection.getRepository(ProblemLocation);
   const resourceRepository = connection.getRepository(Resource);
   const userRepository = connection.getRepository(User);
-
   /**
    * @description Create user
    * @param {UserRequest} req
@@ -128,10 +95,10 @@ createConnection().then(connection => {
     if (password !== confirmPassword) {
       return res.status(400).json('Passwords do not match');
     }
-    if (!passwordSchema.validate(password)) {
-      return res.status(400).json('Insecure password complexity');
+    if (!passwordUtility.passwordSchema.validate(password)) {
+      return res.status(400).json(passwordRequirement);
     }
-    user.password = await bcryptUtility.generateHash(password);
+    user.password = await passwordUtility.generateHash(password);
     user.active = false;
     user.uuid = uuidv4();
     const errors = await validate(user);
@@ -143,7 +110,6 @@ createConnection().then(connection => {
       return res.status(200).json('User created successfully');
     }
   });
-
   /**
    * @description Verifies user by comparing UUID
    * @param {UserRequest} req
@@ -165,7 +131,6 @@ createConnection().then(connection => {
       return res.status(400).json('UUID is undefined');
     }
   });
-
   /**
    * @description Verifies user by comparing UUID
    * @param {UserRequest} req
@@ -200,7 +165,6 @@ createConnection().then(connection => {
       return res.status(200).json('A password reset UserRequest has been initiated.  Please check your email.');
     }
   });
-
   /**
    * @description Updates user password
    * @param {UserRequest} req
@@ -215,15 +179,15 @@ createConnection().then(connection => {
     if (newPassword === oldPassword) {
       return res.status(400).json('New password can not be the same as the old password');
     }
-    if (!passwordSchema.validate(newPassword)) {
-      return res.status(400).json('Insecure password complexity');
+    if (!passwordUtility.passwordSchema.validate(newPassword)) {
+      return res.status(400).json(passwordRequirement);
     }
     const user = await userRepository.findOne(req.user);
     if (user) {
       const callback = (resStatus: number, message: any) => {
         res.status(resStatus).send(message);
       };
-      user.password = await bcryptUtility.updatePassword(oldPassword, user.password, newPassword, callback);
+      user.password = await passwordUtility.updatePassword(oldPassword, user.password, newPassword, callback);
       await userRepository.save(user);
       return res.status(200).json('Password updated successfully');
     } else {
@@ -232,7 +196,6 @@ createConnection().then(connection => {
         .json('Unable to update user password at this time.  Please contact an administrator for assistance.');
     }
   });
-
   /**
    * @description Login to the application
    * @param {UserRequest} req
@@ -260,7 +223,7 @@ createConnection().then(connection => {
             'This account has not been activated.  Please check for email verification or contact an administrator.'
           );
       }
-      const valid = await bcryptUtility.compare(password, user.password);
+      const valid = await passwordUtility.compare(password, user.password);
       if (valid) {
         // TODO: Generate secret key and store in env var
         const token = jwt.sign({ email: user.email, userId: user.id }, process.env.JWT_KEY, { expiresIn: '.5h' });
@@ -272,7 +235,6 @@ createConnection().then(connection => {
       return res.status(400).json('Invalid email or password');
     }
   });
-
   /**
    * @description Upload a file
    * @param {UserRequest} req
@@ -302,7 +264,6 @@ createConnection().then(connection => {
       }
     });
   });
-
   /**
    * @description API backend for getting organization data
    * returns all organizations when triggered
@@ -320,7 +281,6 @@ createConnection().then(connection => {
     }
     res.json(orgs);
   });
-
   /**
    * @description API backend for getting the organizational status for
    * if the organization is archived or not
@@ -338,7 +298,6 @@ createConnection().then(connection => {
     }
     res.json(orgs);
   });
-
   /**
    * @description API backend for getting an organization associated by ID
    *
@@ -365,7 +324,6 @@ createConnection().then(connection => {
     };
     res.json(resObj);
   });
-
   /**
    * @description API backend for updating an organization associated by ID
    * and updates archive status to archived
@@ -390,7 +348,6 @@ createConnection().then(connection => {
       res.status(200).json('Organization archived successfully');
     }
   });
-
   /**
    * @description API backend for updating an organization associated by ID
    * and updates archive status to unarchived
@@ -415,7 +372,6 @@ createConnection().then(connection => {
       res.status(200).json('Organization activated successfully');
     }
   });
-
   /**
    * @description API backend for updating an organization associated by ID
    * and updates with supplied data
@@ -446,7 +402,6 @@ createConnection().then(connection => {
       res.status(200).json('Organization patched successfully');
     }
   });
-
   /**
    * @description API backend for creating an organization
    *
@@ -469,7 +424,6 @@ createConnection().then(connection => {
       res.status(200).json('Organization saved successfully');
     }
   });
-
   /**
    * @description API backend for UserRequesting a file by ID
    * and returns the buffer back to the UI
@@ -490,7 +444,6 @@ createConnection().then(connection => {
     }
     res.send(file.buffer);
   });
-
   /**
    * @description API backend for UserRequesting an asset associated by ID
    * and returns it to the UI
@@ -513,7 +466,6 @@ createConnection().then(connection => {
     }
     res.json(asset);
   });
-
   /**
    * @description API backend for UserRequesting an assessment associated by ID
    * and returns it to the UI
@@ -536,7 +488,6 @@ createConnection().then(connection => {
     }
     res.json(assessment);
   });
-
   /**
    * @description API backend for UserRequesting a vulnerability and returns it to the UI
    *
@@ -559,7 +510,6 @@ createConnection().then(connection => {
     }
     res.json(vulnerabilities);
   });
-
   /**
    * @description API backend for UserRequesting a vulnerability associated by ID
    * and updates archive status
@@ -583,7 +533,6 @@ createConnection().then(connection => {
     }
     res.status(200).json(vuln);
   });
-
   /**
    * @description API backend for deleting a vulnerability associated by ID
    *
@@ -606,7 +555,6 @@ createConnection().then(connection => {
       res.status(200).json('Vulnerability successfully deleted');
     }
   });
-
   /**
    * @description API backend for updating a vulnerability associated by ID
    * and performs updates
@@ -740,7 +688,6 @@ createConnection().then(connection => {
       }
     });
   });
-
   /**
    * @description API backend for creating a vulnerability with the
    * provided req data
@@ -836,7 +783,6 @@ createConnection().then(connection => {
       }
     });
   });
-
   /**
    * @description API backend for creating an asset associated by org ID
    *
@@ -866,7 +812,6 @@ createConnection().then(connection => {
       res.status(200).json('Asset saved successfully');
     }
   });
-
   /**
    * @description API backend for UserRequesting an organization asset associated by ID
    * and returns the data
@@ -887,7 +832,6 @@ createConnection().then(connection => {
     }
     res.status(200).json(asset);
   });
-
   /**
    * @description API backend for updating an organization asset associated by ID
    * and updates the data
@@ -919,7 +863,6 @@ createConnection().then(connection => {
       }
     }
   );
-
   /**
    * @description API backend for creating an assessment
    *
@@ -954,7 +897,6 @@ createConnection().then(connection => {
       res.status(200).json('Assessment created succesfully');
     }
   });
-
   /**
    * @description API backend for UserRequesting assessment by ID association
    * @param {UserRequest} req assetId, assessmentId
@@ -978,7 +920,6 @@ createConnection().then(connection => {
       res.status(200).json(assessment);
     }
   );
-
   /**
    * @description API backend for updating a assessment associated by ID
    * @param {UserRequest} req assessment JSON object with assessment data
@@ -1015,7 +956,6 @@ createConnection().then(connection => {
       }
     }
   );
-
   /**
    * @description API backend for UserRequesting a report associated by assessmentId
    * @param {UserRequest} req assessmentId
@@ -1058,7 +998,6 @@ createConnection().then(connection => {
     report.vulns = vulnerabilities;
     res.status(200).json(report);
   });
-
   /**
    * @description API backend for report generation with Puppeteer
    * @param {UserRequest} req orgId, assetId, assessmentId
@@ -1081,7 +1020,6 @@ createConnection().then(connection => {
     });
     const page = await browser.newPage();
     const filePath = path.join(__dirname, '../temp_report.pdf');
-    const divSelectorToRemove = '#buttons';
     const jwtToken = req.headers.authorization;
     await page.evaluateOnNewDocument(token => {
       localStorage.clear();
