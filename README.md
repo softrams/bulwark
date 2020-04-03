@@ -4,11 +4,11 @@
 
 Bulwark is an asset and vulnerability management tool utilized for building and generating application security reports.
 
-### Note
+## Note
 
 Project is the early stages of development!
 
-### Installing
+## Installing
 
 ```
 $ git clone (url)
@@ -103,11 +103,11 @@ Set this variable to sender email password or a [Gmail app passwords](https://su
 ### Empty .env example
 
 ```
-CLEARDB_JADE_PASSWORD=""
-CLEARDB_JADE_URL=""
-CLEARDB_JADE_USERNAME=""
-CLEARDB_JADE_PORT=3306
-CLEARDB_JADE_NAME=""
+DB_PASSWORD=""
+DB_URL=""
+DB_USERNAME=""
+DB_PORT=3306
+DB_NAME=""
 DB_TYPE=""
 NODE_ENV=""
 DEV_URL="http://localhost:4200"

@@ -23,27 +23,30 @@ const saltRounds = 10;
  * @param {Response} res
  * @returns hashed password
  */
-function generateHash(password) {
+const generateHash = password => {
   return new Promise((resolve, reject) => {
     bcrypt.genSalt(saltRounds, async (err, salt) => {
-      bcrypt.hash(password, salt, async (err, hash) => {
-        if (err) {
-          reject();
-          return Error('Unable to create user');
-        } else {
-          resolve(hash);
-        }
-      });
+      if (err) {
+        return Error('Bcrypt hash failed: ' + err);
+      } else {
+        bcrypt.hash(password, salt, async (hashErr, hash) => {
+          if (hashErr) {
+            return Error('Bcrypt hash failed: ' + hashErr);
+          } else {
+            resolve(hash);
+          }
+        });
+      }
     });
   });
-}
+};
 /**
  * @description Generate hash from password
  * @param {Request} req
  * @param {Response} res
  * @returns hashed password
  */
-function updatePassword(oldPassword, currentPassword, newPassword, callback) {
+const updatePassword = (oldPassword, currentPassword, newPassword, callback) => {
   return new Promise(async (resolve, reject) => {
     const valid = await compare(oldPassword, currentPassword);
     if (valid) {
@@ -52,7 +55,7 @@ function updatePassword(oldPassword, currentPassword, newPassword, callback) {
       callback(400, JSON.stringify('Incorrect previous password'));
     }
   });
-}
+};
 
 /**
  * @description Compare password hash
@@ -60,13 +63,13 @@ function updatePassword(oldPassword, currentPassword, newPassword, callback) {
  * @param {Response} res
  * @returns true/false
  */
-function compare(oldPassword, currentPassword) {
+const compare = (oldPassword, currentPassword) => {
   return new Promise((resolve, reject) => {
     bcrypt.compare(oldPassword, currentPassword, (err, valid) => {
       resolve(valid);
     });
   });
-}
+};
 
 module.exports = {
   generateHash,
