@@ -5,18 +5,59 @@ email, or any other method with the owners of this repository before making a ch
 
 Please note we have a code of conduct, please follow it in all your interactions with the project.
 
+## Contributing to Development
+
+Issues will be labelled with `help wanted` or `good first issue`
+
+- `Help wanted` label indicates tasks where the project team would appreciate community help
+- `Good first issue` label indicates a task that introduce developers to the project, have low complexity, and are isolated
+
+## Version Control
+
+The project uses git as its version control system and GitHub as the central server and collaboration platform.
+
+### Branching model
+
+Softrams Bulwark is maintained in a simplified [Gitflow](https://jeffkreeftmeijer.com/git-flow/) fashion, where all active development happens on the develop branch while master is used to maintain stable versions. Tasks with higher complexity, prototypes, and experiments will occur in feature branches
+
+### Versioning
+
+Any release from master will have a unique version
+
+`MAJOR.MINOR.PATCH` will be incremented by:
+
+1. `MAJOR` version when breaking changes occur
+2. `MINOR` version with new functionality that is backwards-compatible
+3. `PATCH` version with backwards-compatible bug fixes
+
 ## Pull Request Process
 
-1. Ensure any install or build dependencies are removed before the end of the layer when doing a
-   build.
-2. Update the README.md with details of changes to the interface, this includes new environment
-   variables, exposed ports, useful file locations and container parameters.
-3. Increase the version numbers in any examples files and the README.md to the new version that this
-   Pull Request would represent. The versioning scheme we use is [SemVer](http://semver.org/).
-4. You may merge the Pull Request in once you have the sign-off of two other developers, or if you
-   do not have permission to do that, you may request the second reviewer to merge it for you.
+1. Ensure any install or build dependencies are removed
+2. Increase version numbers [accordingly](#versioning)
+3. The code must comply to the configured TSLint and Sass Lint rules
+4. Open pull request on the `develop` branch of your fork
+5. All Git commits within a PR must be
+   [signed off](https://git-scm.com/docs/git-commit#Documentation/git-commit.txt--s)
+   to indicate the contributor's agreement with the
+   [Developer Certificate of Origin](https://developercertificate.org/).
+6. Linting should pass (dependent on project)
+7. Tests should pass (dependent on project)
+
+### Linting (Dependent on project)
+
+```
+npm run lint
+```
+
+### Testing (Dependent on project)
+
+```
+npm run test
+```
 
 ## Code of Conduct
+
+-Insert Softrams Code of Conduct Here-
 
 ### Our Pledge
 
