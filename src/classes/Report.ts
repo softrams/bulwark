@@ -4,8 +4,9 @@ import { Assessment } from '../entity/Assessment';
 import { Vulnerability } from '../entity/Vulnerability';
 
 export class Report {
-  org: Organization;
-  asset: Asset;
-  assessment: Assessment;
-  vulns: Vulnerability[];
+  public org: Organization;
+  public asset: Asset;
+  public assessment: Assessment;
+  public vulns: Vulnerability[];
+  public companyName: string;
 }
