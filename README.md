@@ -121,6 +121,7 @@ PROD_URL="http://localhost:5000"
 JWT_KEY=""
 FROM_EMAIL=""
 FROM_EMAIL_PASSWORD=""
+COMPANY_NAME=""
 ```
 
 ## Authentication/Authorization
