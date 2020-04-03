@@ -996,6 +996,7 @@ createConnection().then(connection => {
     report.asset = asset;
     report.assessment = assessment;
     report.vulns = vulnerabilities;
+    report.companyName = process.env.COMPANY_NAME;
     res.status(200).json(report);
   });
   /**

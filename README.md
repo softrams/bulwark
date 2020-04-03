@@ -6,7 +6,7 @@ Bulwark is an asset and vulnerability management tool utilized for building and 
 
 ## Note
 
-Project is the early stages of development!
+Please keep in mind, this project is very early in the development phase.
 
 ## Installing
 
@@ -100,6 +100,12 @@ Set this variable to sender email
 
 Set this variable to sender email password or a [Gmail app passwords](https://support.google.com/mail/answer/185833?hl=en)
 
+#### `COMPANY_NAME`
+
+`COMPANY_NAME="United Nations Space Command"`
+
+Set this variable to the application security company name to be published on the report
+
 ### Empty .env example
 
 ```
@@ -116,6 +122,16 @@ JWT_KEY=""
 FROM_EMAIL=""
 FROM_EMAIL_PASSWORD=""
 ```
+
+## Authentication/Authorization
+
+Most of the application routes are protected by middleware that validates JWT token with each request. Included in these routes is the `/api/user/create` route which creates users. Therefore, to create the initial user there are two options:
+
+1. Remove the `jwtMiddleware.checkToken` middleware on the `/api/user/create` route
+2. Manually insert a user into the database
+   1. Use the Bcrypt library to generate a hash. Here's a [Gist](https://gist.github.com/Whamo12/e16fe650af4a04044768d216f39f0492) that will return a hash.
+   2. Using the hash, manually insert the initial user into the database
+      1. `` INSERT INTO `foobar`.`user` (`email`, `password`, `active`, `uuid`) VALUES ('foo@bar.com', 'changeMeHash', '1', ''); ``
 
 ## Built With
 

@@ -8,4 +8,5 @@ export class Report {
   public asset: Asset;
   public assessment: Assessment;
   public vulns: Vulnerability[];
+  public companyName: string;
 }

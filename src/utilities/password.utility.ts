@@ -16,7 +16,7 @@ passwordSchema
   .has()
   .symbols(); // Must have symbols
 
-const saltRounds = 10;
+const saltRounds = 20;
 /**
  * @description Generate hash from password
  * @param {Request} req
