@@ -1,6 +1,19 @@
 // tslint:disable-next-line: no-var-requires
 import * as express from 'express';
 import * as path from 'path';
+// tslint:disable-next-line: no-var-requires
+const fs = require('fs');
+// tslint:disable-next-line: no-var-requires
+const dotenv = require('dotenv');
+// https://github.com/motdotla/dotenv#what-happens-to-environment-variables-that-were-already-set
+const envConfig = dotenv.parse(fs.readFileSync(path.join(__dirname, '../.env')));
+if (envConfig) {
+  for (const key in envConfig) {
+    if (envConfig.hasOwnProperty(key)) {
+      process.env[key] = envConfig[key];
+    }
+  }
+}
 import { Response } from 'express';
 import { UserRequest } from './interfaces/user-request.interface';
 import * as bodyParser from 'body-parser';
@@ -14,36 +27,19 @@ import { File } from './entity/File';
 import { ProblemLocation } from './entity/ProblemLocation';
 import { validate } from 'class-validator';
 import { Resource } from './entity/Resource';
-import { User } from './entity/User';
 import { status } from './enums/status-enum';
-import { passwordRequirement } from './enums/message-enum';
 import { upload, uploadArray } from './utilities/file.utility';
-import uuidv4 = require('uuid/v4');
-import jwt = require('jsonwebtoken');
 import puppeteer = require('puppeteer');
 // tslint:disable-next-line: no-var-requires
+const authController = require('./routes/authentication.controller');
+// tslint:disable-next-line: no-var-requires
+const userController = require('./routes/user.controller');
+// tslint:disable-next-line: no-var-requires
 const jwtMiddleware = require('./middleware/jwt.middleware');
-// tslint:disable-next-line: no-var-requires
-const emailService = require('./services/email.service');
-// tslint:disable-next-line: no-var-requires
-const passwordUtility = require('./utilities/password.utility');
-// tslint:disable-next-line: no-var-requires
-const fs = require('fs');
 // tslint:disable-next-line: no-var-requires
 const helmet = require('helmet');
 // tslint:disable-next-line: no-var-requires
 const cors = require('cors');
-// tslint:disable-next-line: no-var-requires
-const dotenv = require('dotenv');
-// https://github.com/motdotla/dotenv#what-happens-to-environment-variables-that-were-already-set
-const envConfig = dotenv.parse(fs.readFileSync(path.join(__dirname, '../.env')));
-if (envConfig) {
-  for (const key in envConfig) {
-    if (envConfig.hasOwnProperty(key)) {
-      process.env[key] = envConfig[key];
-    }
-  }
-}
 // Setup middlware
 const app = express();
 app.use(helmet());
@@ -65,7 +61,7 @@ app.set('serverIpAddress', serverIpAddress);
 // tslint:disable-next-line: no-console
 app.listen(serverPort, () => console.info(`Server running on ${serverIpAddress}:${serverPort}`));
 // create typeorm connection
-createConnection().then(connection => {
+createConnection().then((connection) => {
   // register respositories for database communication
   const orgRepository = connection.getRepository(Organization);
   const assetRepository = connection.getRepository(Asset);
@@ -74,167 +70,12 @@ createConnection().then(connection => {
   const fileRepository = connection.getRepository(File);
   const probLocRepository = connection.getRepository(ProblemLocation);
   const resourceRepository = connection.getRepository(Resource);
-  const userRepository = connection.getRepository(User);
-  /**
-   * @description Create user
-   * @param {UserRequest} req
-   * @param {Response} res
-   * @returns success message
-   */
-  app.post('/api/user/create', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    const user = new User();
-    const { password, confirmPassword, email } = req.body;
-    if (!email) {
-      return res.status(400).json('Email is invalid');
-    }
-    const existUser = await userRepository.find({ where: { email } });
-    if (existUser.length) {
-      return res.status(400).json('A user associated to that email already exists');
-    }
-    user.email = email;
-    if (password !== confirmPassword) {
-      return res.status(400).json('Passwords do not match');
-    }
-    if (!passwordUtility.passwordSchema.validate(password)) {
-      return res.status(400).json(passwordRequirement);
-    }
-    user.password = await passwordUtility.generateHash(password);
-    user.active = false;
-    user.uuid = uuidv4();
-    const errors = await validate(user);
-    if (errors.length > 0) {
-      return res.status(400).json('User validation failed');
-    } else {
-      await userRepository.save(user);
-      emailService.sendVerificationEmail(user.uuid, user.email);
-      return res.status(200).json('User created successfully');
-    }
-  });
-  /**
-   * @description Verifies user by comparing UUID
-   * @param {UserRequest} req
-   * @param {Response} res
-   * @returns Success message
-   */
-  app.get('/api/user/verify/:uuid', async (req: UserRequest, res: Response) => {
-    if (req.params.uuid) {
-      const user = await userRepository.findOne({ where: { uuid: req.params.uuid } });
-      if (user) {
-        user.active = true;
-        user.uuid = null;
-        userRepository.save(user);
-        return res.status(200).json('Email verification successful');
-      } else {
-        return res.status(400).json('Email verification failed.  User does not exist.');
-      }
-    } else {
-      return res.status(400).json('UUID is undefined');
-    }
-  });
-  /**
-   * @description Verifies user by comparing UUID
-   * @param {UserRequest} req
-   * @param {Response} res
-   * @returns Success message
-   */
-  app.patch('/api/forgot-password', async (req: UserRequest, res: Response) => {
-    const { email } = req.body;
-    if (!email) {
-      return res.status(400).json('Email is invalid');
-    }
-    const user = await userRepository
-      .createQueryBuilder('user')
-      .where('user.email = :email', {
-        email
-      })
-      .getOne();
-    if (!user) {
-      return res
-        .status(400)
-        .json('Unable to retrieve the user at this time.  Please contact an administrator for assistance.');
-    }
-    user.uuid = uuidv4();
-    await userRepository.save(user);
-    if (!user.active) {
-      emailService.sendVerificationEmail(user.uuid, user.email);
-      return res
-        .status(400)
-        .json('This account has not been activated.  Please check for email verification or contact an administrator.');
-    } else {
-      emailService.sendForgotPasswordEmail(user.uuid, user.email);
-      return res.status(200).json('A password reset UserRequest has been initiated.  Please check your email.');
-    }
-  });
-  /**
-   * @description Updates user password
-   * @param {UserRequest} req
-   * @param {Response} res
-   * @returns Success message
-   */
-  app.patch('/api/user/password', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    const { oldPassword, newPassword, confirmNewPassword } = req.body;
-    if (newPassword !== confirmNewPassword) {
-      return res.status(400).json('Passwords do not match');
-    }
-    if (newPassword === oldPassword) {
-      return res.status(400).json('New password can not be the same as the old password');
-    }
-    if (!passwordUtility.passwordSchema.validate(newPassword)) {
-      return res.status(400).json(passwordRequirement);
-    }
-    const user = await userRepository.findOne(req.user);
-    if (user) {
-      const callback = (resStatus: number, message: any) => {
-        res.status(resStatus).send(message);
-      };
-      user.password = await passwordUtility.updatePassword(oldPassword, user.password, newPassword, callback);
-      await userRepository.save(user);
-      return res.status(200).json('Password updated successfully');
-    } else {
-      return res
-        .status(400)
-        .json('Unable to update user password at this time.  Please contact an administrator for assistance.');
-    }
-  });
-  /**
-   * @description Login to the application
-   * @param {UserRequest} req
-   * @param {Response} res
-   * @returns valid JWT token
-   */
-  app.post('/api/login', async (req: UserRequest, res: Response) => {
-    const { password, email } = req.body;
-    const user = await userRepository
-      .createQueryBuilder('user')
-      .where('user.email = :email', {
-        email
-      })
-      .getOne();
-    if (user) {
-      if (!user.active) {
-        // generate new UUID
-        user.uuid = uuidv4();
-        // No need to validate as validation happend with user creation
-        await userRepository.save(user);
-        emailService.sendVerificationEmail(user.uuid, user.email);
-        return res
-          .status(400)
-          .json(
-            'This account has not been activated.  Please check for email verification or contact an administrator.'
-          );
-      }
-      const valid = await passwordUtility.compare(password, user.password);
-      if (valid) {
-        // TODO: Generate secret key and store in env var
-        const token = jwt.sign({ email: user.email, userId: user.id }, process.env.JWT_KEY, { expiresIn: '.5h' });
-        return res.status(200).json(token);
-      } else {
-        return res.status(400).json('Invalid email or password');
-      }
-    } else {
-      return res.status(400).json('Invalid email or password');
-    }
-  });
+
+  app.post('/api/user/create', jwtMiddleware.checkToken, userController.create);
+  app.get('/api/user/verify/:uuid', userController.verify);
+  app.patch('/api/forgot-password', authController.forgotPassword);
+  app.patch('/api/user/password', jwtMiddleware.checkToken, userController.updatePassword);
+  app.post('/api/login', authController.login);
   /**
    * @description Upload a file
    * @param {UserRequest} req
