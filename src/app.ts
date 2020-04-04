@@ -29,10 +29,10 @@ const authController = require('./routes/authentication.controller');
 const orgController = require('./routes/organization.controller');
 const userController = require('./routes/user.controller');
 const fileUploadController = require('./routes/file-upload.controller');
+const assetController = require('./routes/asset.controller');
 const jwtMiddleware = require('./middleware/jwt.middleware');
 const helmet = require('helmet');
 const cors = require('cors');
-// Setup middlware
 const app = express();
 app.use(helmet());
 app.use(cors());
@@ -43,7 +43,6 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// NODE ENV
 const env = process.env.NODE_ENV || 'dev';
 // start express server
 const serverPort = process.env.PORT || 5000;
@@ -62,7 +61,7 @@ createConnection().then((connection) => {
   const fileRepository = connection.getRepository(File);
   const probLocRepository = connection.getRepository(ProblemLocation);
   const resourceRepository = connection.getRepository(Resource);
-
+  // register routes
   app.post('/api/user/create', jwtMiddleware.checkToken, userController.create);
   app.get('/api/user/verify/:uuid', userController.verify);
   app.patch('/api/forgot-password', authController.forgotPassword);
@@ -77,30 +76,13 @@ createConnection().then((connection) => {
   app.patch('/api/organization/:id/activate', jwtMiddleware.checkToken, orgController.activateOrgById);
   app.patch('/api/organization/:id', jwtMiddleware.checkToken, orgController.updateOrgById);
   app.post('/api/organization', jwtMiddleware.checkToken, orgController.createOrg);
+  app.get('/api/organization/asset/:id', jwtMiddleware.checkToken, assetController.getOrgAssets);
+  app.post('/api/organization/:id/asset', jwtMiddleware.checkToken, assetController.createAsset);
+  app.get('/api/organization/:id/asset/:assetId', jwtMiddleware.checkToken, assetController.getAssetById);
+  app.patch('/api/organization/:id/asset/:assetId', jwtMiddleware.checkToken, assetController.updateAssetById);
+
   /**
-   * @description API backend for UserRequesting an asset associated by ID
-   * and returns it to the UI
-   * @param {UserRequest} req
-   * @param {Response} res contains JSON object with the asset data
-   * @returns a JSON object with the asset data
-   */
-  app.get('/api/organization/asset/:id', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    if (!req.params.id) {
-      return res.status(400).json('Invalid Asset UserRequest');
-    }
-    if (isNaN(+req.params.id)) {
-      return res.status(400).json('Invalid Organization ID');
-    }
-    const asset = await assetRepository.find({
-      where: { organization: req.params.id }
-    });
-    if (!asset) {
-      return res.status(404).json('Assets not found');
-    }
-    res.json(asset);
-  });
-  /**
-   * @description API backend for UserRequesting an assessment associated by ID
+   * @description API backend for requesting an assessment associated by ID
    * and returns it to the UI
    * @param {UserRequest} req
    * @param {Response} res contains JSON object with the assessment data
@@ -394,86 +376,6 @@ createConnection().then((connection) => {
       res.status(200).json('Vulnerability saved successfully');
     }
   });
-  /**
-   * @description API backend for creating an asset associated by org ID
-   *
-   * @param {UserRequest} req name, organization
-   * @param {Response} res contains JSON object with the organization data
-   * @returns a JSON object with the proper http response specifying success/fail
-   */
-  app.post('/api/organization/:id/asset', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    if (isNaN(+req.params.id)) {
-      return res.status(400).json('Organization ID is not valid');
-    }
-    const org = await orgRepository.findOne(req.params.id);
-    if (!org) {
-      return res.status(404).json('Organization does not exist');
-    }
-    if (!req.body.name) {
-      return res.status(400).send('Asset is not valid');
-    }
-    const asset = new Asset();
-    asset.name = req.body.name;
-    asset.organization = org;
-    const errors = await validate(asset);
-    if (errors.length > 0) {
-      res.status(400).send('Asset form validation failed');
-    } else {
-      await assetRepository.save(asset);
-      res.status(200).json('Asset saved successfully');
-    }
-  });
-  /**
-   * @description API backend for UserRequesting an organization asset associated by ID
-   * and returns the data
-   * @param {UserRequest} req assetId, orgId
-   * @param {Response} res contains JSON object with the asset data tied to the org
-   * @returns a JSON object with the proper http response specifying success/fail
-   */
-  app.get('/api/organization/:id/asset/:assetId', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    if (isNaN(+req.params.assetId)) {
-      return res.status(400).json('Invalid Asset ID');
-    }
-    if (!req.params.assetId) {
-      return res.status(400).send('Invalid Asset UserRequest');
-    }
-    const asset = await assetRepository.findOne(req.params.assetId);
-    if (!asset) {
-      return res.status(404).send('Asset does not exist');
-    }
-    res.status(200).json(asset);
-  });
-  /**
-   * @description API backend for updating an organization asset associated by ID
-   * and updates the data
-   * @param {UserRequest} req name, organization, assetId
-   * @param {Response} res contains JSON object with the asset data tied to the org
-   * @returns a JSON object with the proper http response specifying success/fail
-   */
-  app.patch(
-    '/api/organization/:id/asset/:assetId',
-    jwtMiddleware.checkToken,
-    async (req: UserRequest, res: Response) => {
-      if (isNaN(+req.params.assetId) || !req.params.assetId) {
-        return res.status(400).json('Asset ID is not valid');
-      }
-      const asset = await assetRepository.findOne(req.params.assetId);
-      if (!asset) {
-        return res.status(404).json('Asset does not exist');
-      }
-      if (!req.body.name) {
-        return res.status(400).json('Asset name is not valid');
-      }
-      asset.name = req.body.name;
-      const errors = await validate(asset);
-      if (errors.length > 0) {
-        res.status(400).send('Asset form validation failed');
-      } else {
-        await assetRepository.save(asset);
-        res.status(200).json('Asset patched successfully');
-      }
-    }
-  );
   /**
    * @description API backend for creating an assessment
    *
