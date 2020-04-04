@@ -1,9 +1,6 @@
-// tslint:disable-next-line: no-var-requires
 import * as express from 'express';
 import * as path from 'path';
-// tslint:disable-next-line: no-var-requires
 const fs = require('fs');
-// tslint:disable-next-line: no-var-requires
 const dotenv = require('dotenv');
 // https://github.com/motdotla/dotenv#what-happens-to-environment-variables-that-were-already-set
 const envConfig = dotenv.parse(fs.readFileSync(path.join(__dirname, '../.env')));
@@ -27,19 +24,13 @@ import { File } from './entity/File';
 import { ProblemLocation } from './entity/ProblemLocation';
 import { validate } from 'class-validator';
 import { Resource } from './entity/Resource';
-import { status } from './enums/status-enum';
 import puppeteer = require('puppeteer');
-// tslint:disable-next-line: no-var-requires
 const authController = require('./routes/authentication.controller');
-// tslint:disable-next-line: no-var-requires
+const orgController = require('./routes/organization.controller');
 const userController = require('./routes/user.controller');
-// tslint:disable-next-line: no-var-requires
 const fileUploadController = require('./routes/file-upload.controller');
-// tslint:disable-next-line: no-var-requires
 const jwtMiddleware = require('./middleware/jwt.middleware');
-// tslint:disable-next-line: no-var-requires
 const helmet = require('helmet');
-// tslint:disable-next-line: no-var-requires
 const cors = require('cors');
 // Setup middlware
 const app = express();
@@ -79,167 +70,13 @@ createConnection().then((connection) => {
   app.post('/api/login', authController.login);
   app.post('/api/upload', jwtMiddleware.checkToken, fileUploadController.uploadFile);
   app.get('/api/file/:id', jwtMiddleware.checkToken, fileUploadController.getFileById);
-
-  /**
-   * @description API backend for getting organization data
-   * returns all organizations when triggered
-   * @param {UserRequest} req
-   * @param {Response} res contains JSON object with all organization data
-   * @returns an array of organizations with avatar relations
-   */
-  app.get('/api/organization', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    const orgs = await orgRepository.find({
-      relations: ['avatar'],
-      where: { status: status.active }
-    });
-    if (!orgs) {
-      return res.status(404).json('Organizations do not exist');
-    }
-    res.json(orgs);
-  });
-  /**
-   * @description API backend for getting the organizational status for
-   * if the organization is archived or not
-   * @param {UserRequest} req
-   * @param {Response} res contains JSON object with archived organizations
-   * @returns an array of organizations with avatar relations and archived status
-   */
-  app.get('/api/organization/archive', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    const orgs = await orgRepository.find({
-      relations: ['avatar'],
-      where: { status: status.archived }
-    });
-    if (!orgs) {
-      return res.status(404).json('Organizations do not exist');
-    }
-    res.json(orgs);
-  });
-  /**
-   * @description API backend for getting an organization associated by ID
-   *
-   * @param {UserRequest} req
-   * @param {Response} res contains JSON object with the organization data
-   * @returns a JSON object with the given organization referenced by ID
-   */
-  app.get('/api/organization/:id', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    if (!req.params.id) {
-      return res.status(400).json('Invalid Organization UserRequest');
-    }
-    if (isNaN(+req.params.id)) {
-      return res.status(400).json('Invalid Organization iD');
-    }
-    const org = await orgRepository.findOne(req.params.id, {
-      relations: ['avatar']
-    });
-    if (!org) {
-      return res.status(404).json('Organization does not exist');
-    }
-    const resObj = {
-      avatarData: org.avatar,
-      name: org.name
-    };
-    res.json(resObj);
-  });
-  /**
-   * @description API backend for updating an organization associated by ID
-   * and updates archive status to archived
-   * @param {UserRequest} req
-   * @param {Response} res contains JSON object with the organization data
-   * @returns a JSON object with the proper http response specifying success/fail
-   */
-  app.patch('/api/organization/:id/archive', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    if (isNaN(+req.params.id)) {
-      return res.status(400).json('Invalid Organization ID');
-    }
-    const org = await orgRepository.findOne(req.params.id);
-    if (!org) {
-      return res.status(404).json('Organization does not exist');
-    }
-    org.status = status.archived;
-    const errors = await validate(org);
-    if (errors.length > 0) {
-      return res.status(400).json('Organization archive validation failed');
-    } else {
-      await orgRepository.save(org);
-      res.status(200).json('Organization archived successfully');
-    }
-  });
-  /**
-   * @description API backend for updating an organization associated by ID
-   * and updates archive status to unarchived
-   * @param {UserRequest} req ID and Status of the organization
-   * @param {Response} res contains JSON object with the organization data
-   * @returns a JSON object with the proper http response specifying success/fail
-   */
-  app.patch('/api/organization/:id/activate', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    if (isNaN(+req.params.id)) {
-      return res.status(400).json('Organization ID is not valid');
-    }
-    const org = await orgRepository.findOne(req.params.id);
-    if (!org) {
-      return res.status(404).json('Organization does not exist');
-    }
-    org.status = status.active;
-    const errors = await validate(org);
-    if (errors.length > 0) {
-      return res.status(400).json('Organization activation validation failed');
-    } else {
-      await orgRepository.save(org);
-      res.status(200).json('Organization activated successfully');
-    }
-  });
-  /**
-   * @description API backend for updating an organization associated by ID
-   * and updates with supplied data
-   * @param {UserRequest} req name and ID of the organization to alter
-   * @param {Response} res contains JSON object with the organization data
-   * @returns a JSON object with the proper http response specifying success/fail
-   */
-  app.patch('/api/organization/:id', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    if (isNaN(+req.params.id)) {
-      return res.status(400).json('Organization ID is not valid');
-    }
-    const org = await orgRepository.findOne(req.params.id);
-    if (!org) {
-      return res.status(404).json('Organization does not exist');
-    }
-    org.name = req.body.name;
-    if (req.body.avatar) {
-      if (isNaN(+req.body.avatar)) {
-        return res.status(400).json('Avatar is not valid');
-      }
-      org.avatar = req.body.avatar;
-    }
-    const errors = await validate(org);
-    if (errors.length > 0) {
-      return res.status(400).send('Organization form validation failed');
-    } else {
-      await orgRepository.save(org);
-      res.status(200).json('Organization patched successfully');
-    }
-  });
-  /**
-   * @description API backend for creating an organization
-   *
-   * @param {UserRequest} req Name, Status, and Avatar
-   * @param {Response} res contains JSON object with the organization data
-   * @returns a JSON object with the proper http response specifying success/fail
-   */
-  app.post('/api/organization', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    const org = new Organization();
-    org.name = req.body.name;
-    org.status = status.active;
-    if (req.body.avatar) {
-      org.avatar = req.body.avatar;
-    }
-    const errors = await validate(org);
-    if (errors.length > 0) {
-      return res.status(400).send('Organization form validation failed');
-    } else {
-      await orgRepository.save(org);
-      res.status(200).json('Organization saved successfully');
-    }
-  });
+  app.get('/api/organization', jwtMiddleware.checkToken, orgController.getActiveOrgs);
+  app.get('/api/organization/archive', jwtMiddleware.checkToken, orgController.getArchivedOrgs);
+  app.get('/api/organization/:id', jwtMiddleware.checkToken, orgController.getOrgById);
+  app.patch('/api/organization/:id/archive', jwtMiddleware.checkToken, orgController.archiveOrgById);
+  app.patch('/api/organization/:id/activate', jwtMiddleware.checkToken, orgController.activateOrgById);
+  app.patch('/api/organization/:id', jwtMiddleware.checkToken, orgController.updateOrgById);
+  app.post('/api/organization', jwtMiddleware.checkToken, orgController.createOrg);
   /**
    * @description API backend for UserRequesting an asset associated by ID
    * and returns it to the UI

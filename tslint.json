@@ -2,9 +2,16 @@
   "extends": "tslint:recommended",
   "rules": {
     "max-line-length": {
-      "options": [120]
+      "options": [
+        120
+      ]
     },
-    "quotemark": [true, "single", "avoid-escape", "avoid-template"],
+    "quotemark": [
+      true,
+      "single",
+      "avoid-escape",
+      "avoid-template"
+    ],
     "new-parens": true,
     "no-arg": true,
     "no-bitwise": true,
@@ -12,15 +19,25 @@
     "no-consecutive-blank-lines": false,
     "no-console": {
       "severity": "warning",
-      "options": ["debug", "info", "log", "time", "timeEnd", "trace"]
+      "options": [
+        "debug",
+        "info",
+        "log",
+        "time",
+        "timeEnd",
+        "trace"
+      ]
     },
     "arrow-parens": false,
     "trailing-comma": false,
-    "ordered-imports": false
+    "ordered-imports": false,
+    "no-var-requires": false
   },
   "jsRules": {
     "max-line-length": {
-      "options": [120]
+      "options": [
+        120
+      ]
     }
   }
 }
