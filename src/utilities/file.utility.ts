@@ -1,5 +1,6 @@
 import multer = require('multer');
 
+const maxFileSize = 2097152
 export const upload = multer({
   fileFilter: (req, file, cb) => {
     // Ext validation
@@ -10,7 +11,7 @@ export const upload = multer({
       cb(null, true);
     }
   },
-  limits: { fileSize: '2mb' }
+  limits: { fileSize: maxFileSize }
 }).single('file');
 export const uploadArray = multer({
   fileFilter: (req, file, cb) => {
@@ -22,5 +23,5 @@ export const uploadArray = multer({
       cb(null, true);
     }
   },
-  limits: { fileSize: '2mb' }
+  limits: { fileSize: maxFileSize }
 }).array('screenshots');

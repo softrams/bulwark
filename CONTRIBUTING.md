@@ -32,27 +32,21 @@ Any release from master will have a unique version
 
 ## Pull Request Process
 
-1. Ensure any install or build dependencies are removed
-2. Increase version numbers [accordingly](#versioning)
-3. The code must comply to the configured TSLint and Sass Lint rules
-4. Open pull request on the `develop` branch of your fork
-5. All Git commits within a PR must be
+1. All work must be done in a fork off the dev branch
+2. Ensure any install or build dependencies are removed
+3. Increase version numbers [accordingly](#versioning)
+4. The code must comply to the configured TSLint and Sass Lint rules
+5. Open pull request on the `develop` branch of your fork
+6. All Git commits within a PR must be
    [signed off](https://git-scm.com/docs/git-commit#Documentation/git-commit.txt--s)
    to indicate the contributor's agreement with the
    [Developer Certificate of Origin](https://developercertificate.org/).
-6. Linting should pass (dependent on project)
-7. Tests should pass (dependent on project)
+7. Linting should pass (dependent on project)
 
 ### Linting (Dependent on project)
 
 ```
 npm run lint
-```
-
-### Testing (Dependent on project)
-
-```
-npm run test
 ```
 
 ## Code of Conduct

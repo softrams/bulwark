@@ -1,8 +1,5 @@
 import nodemailer = require('nodemailer');
 
-// NODE ENV
-const env = process.env.NODE_ENV || 'dev';
-
 const transporter = nodemailer.createTransport({
   auth: {
     pass: process.env.FROM_EMAIL_PASSWORD,
