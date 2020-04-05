@@ -57,10 +57,9 @@ const uploadFileArray = (req: UserRequest, res: Response) => {
     })
 }
 /**
- * @description API backend for UserRequesting a file by ID
- * and returns the buffer back to the UI
+ * @description Get file by ID
  * @param {UserRequest} req
- * @param {Response} res contains a buffer with the file data
+ * @param {Response} res
  * @returns a buffer with the file data
  */
 const getFileById = async (req: Request, res: Response) => {

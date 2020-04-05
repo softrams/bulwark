@@ -6,11 +6,10 @@ import { validate } from 'class-validator';
 import { Organization } from '../entity/Organization';
 
 /**
- * @description API backend for requesting an asset associated by ID
- * and returns it to the UI
+ * @description Get organization assets
  * @param {UserRequest} req
- * @param {Response} res contains JSON object with the asset data
- * @returns a JSON object with the asset data
+ * @param {Response} res
+ * @returns assets
  */
 const getOrgAssets = async (req: UserRequest, res: Response) => {
     if (!req.params.id) {
@@ -29,9 +28,9 @@ const getOrgAssets = async (req: UserRequest, res: Response) => {
 }
 /**
  * @description API backend for creating an asset associated by org ID
- * @param {UserRequest} req name, organization
- * @param {Response} res contains JSON object with the organization data
- * @returns a JSON object with the proper http response specifying success/fail
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns success/error message
  */
 const createAsset = async (req: UserRequest, res: Response) => {
     if (isNaN(+req.params.id)) {
@@ -56,10 +55,10 @@ const createAsset = async (req: UserRequest, res: Response) => {
     }
 }
 /**
- * @description API backend for requesting an organization asset associated by ID
- * @param {UserRequest} req assetId, orgId
- * @param {Response} res contains JSON object with the asset data tied to the org
- * @returns a JSON object with the proper http response specifying success/fail
+ * @description Get asset by ID
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns asset
  */
 const getAssetById = async (req: UserRequest, res: Response) => {
     if (isNaN(+req.params.assetId)) {
@@ -76,11 +75,10 @@ const getAssetById = async (req: UserRequest, res: Response) => {
 };
 
 /**
- * @description API backend for updating an organization asset associated by ID
- * and updates the data
- * @param {UserRequest} req name, organization, assetId
- * @param {Response} res contains JSON object with the asset data tied to the org
- * @returns a JSON object with the proper http response specifying success/fail
+ * @description Update asset by ID
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @return success/error message
  */
 const updateAssetById = async (req: UserRequest, res: Response) => {
     if (isNaN(+req.params.assetId) || !req.params.assetId) {
@@ -103,4 +101,9 @@ const updateAssetById = async (req: UserRequest, res: Response) => {
     }
 }
 
-module.exports = { getOrgAssets, createAsset, getAssetById, updateAssetById }
+module.exports = {
+    getOrgAssets,
+    createAsset,
+    getAssetById,
+    updateAssetById
+}

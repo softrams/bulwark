@@ -84,5 +84,5 @@ const forgotPassword = async (req: UserRequest, res: Response) => {
 };
 module.exports = {
   login,
-  forgotPassword,
+  forgotPassword
 };

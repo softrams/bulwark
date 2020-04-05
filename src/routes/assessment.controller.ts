@@ -9,10 +9,10 @@ import { Organization } from '../entity/Organization';
 import { Report } from '../classes/Report';
 
 /**
- * @description API backend for requesting an assessment associated by ID
+ * @description Get assessments by asset ID
  * @param {UserRequest} req
- * @param {Response} res contains JSON object with the assessment data
- * @returns a JSON object with the proper http response specifying success/fail
+ * @param {Response} res
+ * @returns Asset assessments
  */
 const getAssessmentsByAssetId = async (req: UserRequest, res: Response) => {
     if (!req.params.id) {
@@ -32,7 +32,7 @@ const getAssessmentsByAssetId = async (req: UserRequest, res: Response) => {
 /**
  * @description Get all vulnerabilities by assessment
  * @param {UserRequest} req
- * @param {Response} res 
+ * @param {Response} res
  * @returns assessment vulnerabilities
  */
 const getAssessmentVulns = async (req: UserRequest, res: Response) => {
@@ -52,7 +52,7 @@ const getAssessmentVulns = async (req: UserRequest, res: Response) => {
 }
 /**
  * @description Create assessment
- * @param {UserRequest} req 
+ * @param {UserRequest} req
  * @param {Response} res c
  * @returns success message
  */

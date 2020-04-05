@@ -128,7 +128,7 @@ COMPANY_NAME=""
 
 Most of the application routes are protected by middleware that validates JWT token with each request. Included in these routes is the `/api/user/create` route which creates users. Therefore, to create the initial user there are two options:
 
-1. Remove the `jwtMiddleware.checkToken` middleware on the `/api/user/create` route
+1. temporarily remove the `jwtMiddleware.checkToken` middleware on the `/api/user/create` route
 2. Manually insert a user into the database
    1. Use the Bcrypt library to generate a hash. Here's a [Gist](https://gist.github.com/Whamo12/e16fe650af4a04044768d216f39f0492) that will return a hash.
    2. Using the hash, manually insert the initial user into the database

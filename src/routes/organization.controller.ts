@@ -6,11 +6,10 @@ import { status } from '../enums/status-enum';
 import { validate } from 'class-validator';
 
 /**
- * @description API backend for getting organization data
- * returns all organizations when triggered
+ * @description Get active organizations
  * @param {UserRequest} req
- * @param {Response} res contains JSON object with all organization data
- * @returns an array of organizations with avatar relations
+ * @param {Response} res
+ * @returns active organizations
  */
 const getActiveOrgs = async (req: UserRequest, res: Response) => {
     const orgs = await getConnection().getRepository(Organization).find({
@@ -24,11 +23,10 @@ const getActiveOrgs = async (req: UserRequest, res: Response) => {
 }
 
 /**
- * @description API backend for getting the organizational status for
- * if the organization is archived or not
+ * @description Get archived organizations
  * @param {UserRequest} req
- * @param {Response} res contains JSON object with archived organizations
- * @returns an array of organizations with avatar relations and archived status
+ * @param {Response} res
+ * @returns archived organizations
  */
 const getArchivedOrgs = async (req: UserRequest, res: Response) => {
     const orgs = await getConnection().getRepository(Organization).find({
@@ -41,11 +39,10 @@ const getArchivedOrgs = async (req: UserRequest, res: Response) => {
     res.json(orgs);
 }
 /**
- * @description API backend for getting an organization associated by ID
- *
+ * @description Get organization by ID
  * @param {UserRequest} req
- * @param {Response} res contains JSON object with the organization data
- * @returns a JSON object with the given organization referenced by ID
+ * @param {Response} res
+ * @returns organization
  */
 const getOrgById = async (req: UserRequest, res: Response) => {
     if (!req.params.id) {
@@ -67,11 +64,10 @@ const getOrgById = async (req: UserRequest, res: Response) => {
     res.json(resObj);
 }
 /**
- * @description API backend for updating an organization associated by ID
- * and updates archive status to archived
+ * @description Archive organization by ID
  * @param {UserRequest} req
- * @param {Response} res contains JSON object with the organization data
- * @returns a JSON object with the proper http response specifying success/fail
+ * @param {Response} res
+ * @returns success/error message
  */
 const archiveOrgById = async (req: UserRequest, res: Response) => {
     if (isNaN(+req.params.id)) {
@@ -91,11 +87,10 @@ const archiveOrgById = async (req: UserRequest, res: Response) => {
     }
 }
 /**
- * @description API backend for updating an organization associated by ID
- * and updates archive status to unarchived
- * @param {UserRequest} req ID and Status of the organization
- * @param {Response} res contains JSON object with the organization data
- * @returns a JSON object with the proper http response specifying success/fail
+ * @description Activate organization by ID
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns success/error
  */
 const activateOrgById = async (req: UserRequest, res: Response) => {
     if (isNaN(+req.params.id)) {
@@ -115,11 +110,10 @@ const activateOrgById = async (req: UserRequest, res: Response) => {
     }
 };
 /**
- * @description API backend for updating an organization associated by ID
- * and updates with supplied data
- * @param {UserRequest} req name and ID of the organization to alter
- * @param {Response} res contains JSON object with the organization data
- * @returns a JSON object with the proper http response specifying success/fail
+ * @description Update organization by ID
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns success/error message
  */
 const updateOrgById = async (req: UserRequest, res: Response) => {
     if (isNaN(+req.params.id)) {
@@ -145,11 +139,10 @@ const updateOrgById = async (req: UserRequest, res: Response) => {
     }
 }
 /**
- * @description API backend for creating an organization
- *
- * @param {UserRequest} req Name, Status, and Avatar
- * @param {Response} res contains JSON object with the organization data
- * @returns a JSON object with the proper http response specifying success/fail
+ * @description Create organization
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns success/error message
  */
 const createOrg = async (req: UserRequest, res: Response) => {
     const org = new Organization();
