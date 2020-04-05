@@ -2,7 +2,7 @@
   <img width="350" src="frontend/src/assets/logo.png">
 </p>
 
-Bulwark is an asset and vulnerability management tool utilized for building and generating application security reports.
+Bulwark is an asset and vulnerability management tool designed for building and generating application security reports.
 
 ## Note
 
