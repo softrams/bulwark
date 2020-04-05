@@ -19,18 +19,18 @@ import { Organization } from './entity/Organization';
 import { Asset } from './entity/Asset';
 import { Assessment } from './entity/Assessment';
 import { Vulnerability } from './entity/Vulnerability';
-import { Report } from './classes/Report';
 import { File } from './entity/File';
 import { ProblemLocation } from './entity/ProblemLocation';
 import { validate } from 'class-validator';
 import { Resource } from './entity/Resource';
-import puppeteer = require('puppeteer');
 const authController = require('./routes/authentication.controller');
 const orgController = require('./routes/organization.controller');
 const userController = require('./routes/user.controller');
 const fileUploadController = require('./routes/file-upload.controller');
 const assetController = require('./routes/asset.controller');
+const assessmentController = require('./routes/assessment.controller');
 const jwtMiddleware = require('./middleware/jwt.middleware');
+const puppeteerUtility = require('./utilities/puppeteer.utility');
 const helmet = require('helmet');
 const cors = require('cors');
 const app = express();
@@ -80,53 +80,21 @@ createConnection().then((connection) => {
   app.post('/api/organization/:id/asset', jwtMiddleware.checkToken, assetController.createAsset);
   app.get('/api/organization/:id/asset/:assetId', jwtMiddleware.checkToken, assetController.getAssetById);
   app.patch('/api/organization/:id/asset/:assetId', jwtMiddleware.checkToken, assetController.updateAssetById);
+  app.get('/api/assessment/:id', jwtMiddleware.checkToken, assessmentController.getAssessmentsByAssetId);
+  app.get('/api/assessment/:id/vulnerability', jwtMiddleware.checkToken, assessmentController.getAssessmentVulns)
+  app.post('/api/assessment', jwtMiddleware.checkToken, assessmentController.createAssessment);
+  app.get('/api/asset/:assetId/assessment/:assessmentId', jwtMiddleware.checkToken,
+    assessmentController.getAssessmentById)
+  app.patch('/api/asset/:assetId/assessment/:assessmentId', jwtMiddleware.checkToken,
+    assessmentController.updateAssessmentById);
+  app.get('/api/assessment/:assessmentId/report', jwtMiddleware.checkToken,
+    assessmentController.queryReportDataByAssessment);
+  app.post('/api/report/generate', jwtMiddleware.checkToken, puppeteerUtility.generateReport);
+
+
 
   /**
-   * @description API backend for requesting an assessment associated by ID
-   * and returns it to the UI
-   * @param {UserRequest} req
-   * @param {Response} res contains JSON object with the assessment data
-   * @returns a JSON object with the proper http response specifying success/fail
-   */
-  app.get('/api/assessment/:id', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    if (!req.params.id) {
-      return res.status(400).json('Invalid Assessment UserRequest');
-    }
-    if (isNaN(+req.params.id)) {
-      return res.status(400).json('Invalid Asset ID');
-    }
-    const assessment = await assessmentRepository.find({
-      where: { asset: req.params.id }
-    });
-    if (!assessment) {
-      return res.status(404).json('Assessments do not exist');
-    }
-    res.json(assessment);
-  });
-  /**
-   * @description API backend for UserRequesting a vulnerability and returns it to the UI
-   *
-   * @param {UserRequest} req
-   * @param {Response} res contains JSON object with the vulnerability data
-   * @returns a JSON object with the proper http response specifying success/fail
-   */
-  app.get('/api/assessment/:id/vulnerability', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    if (!req.params.id) {
-      return res.status(400).json('Invalid Vulnerability UserRequest');
-    }
-    if (isNaN(+req.params.id)) {
-      return res.status(400).json('Invalid Assessment ID');
-    }
-    const vulnerabilities = await vulnerabilityRepository.find({
-      where: { assessment: req.params.id }
-    });
-    if (!vulnerabilities) {
-      return res.status(404).json('Vulnerabilities do not exist');
-    }
-    res.json(vulnerabilities);
-  });
-  /**
-   * @description API backend for UserRequesting a vulnerability associated by ID
+   * @description API backend for requesting a vulnerability associated by ID
    * and updates archive status
    * @param {UserRequest} req
    * @param {Response} res contains JSON object with the organization data
@@ -375,187 +343,5 @@ createConnection().then((connection) => {
       }
       res.status(200).json('Vulnerability saved successfully');
     }
-  });
-  /**
-   * @description API backend for creating an assessment
-   *
-   * @param {UserRequest} req assessment object data
-   * @param {Response} res contains JSON object with the success/fail status
-   * @returns a JSON object with the proper http response specifying success/fail
-   */
-  app.post('/api/assessment', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    if (isNaN(req.body.asset)) {
-      return res.status(400).json('Asset ID is invalid');
-    }
-    const asset = await assetRepository.findOne(req.body.asset);
-    if (!asset) {
-      return res.status(404).json('Asset does not exist');
-    }
-    const assessment = new Assessment();
-    assessment.asset = asset;
-    assessment.name = req.body.name;
-    assessment.executiveSummary = req.body.executiveSummary;
-    assessment.jiraId = req.body.jiraId;
-    assessment.testUrl = req.body.testUrl;
-    assessment.prodUrl = req.body.prodUrl;
-    assessment.scope = req.body.scope;
-    assessment.tag = req.body.tag;
-    assessment.startDate = new Date(req.body.startDate);
-    assessment.endDate = new Date(req.body.endDate);
-    const errors = await validate(assessment);
-    if (errors.length > 0) {
-      return res.status(400).send('Assessment form validation failed');
-    } else {
-      await assessmentRepository.save(assessment);
-      res.status(200).json('Assessment created succesfully');
-    }
-  });
-  /**
-   * @description API backend for UserRequesting assessment by ID association
-   * @param {UserRequest} req assetId, assessmentId
-   * @param {Response} res contains JSON object with the assessment data
-   * @returns a JSON object with the proper http response specifying success/fail
-   */
-  app.get(
-    '/api/asset/:assetId/assessment/:assessmentId',
-    jwtMiddleware.checkToken,
-    async (req: UserRequest, res: Response) => {
-      if (!req.params.assessmentId) {
-        return res.status(400).send('Invalid assessment UserRequest');
-      }
-      if (isNaN(+req.params.assessmentId)) {
-        return res.status(400).json('Invalid Assessment ID');
-      }
-      const assessment = await assessmentRepository.findOne(req.params.assessmentId);
-      if (!assessment) {
-        return res.status(404).json('Assessment does not exist');
-      }
-      res.status(200).json(assessment);
-    }
-  );
-  /**
-   * @description API backend for updating a assessment associated by ID
-   * @param {UserRequest} req assessment JSON object with assessment data
-   * @param {Response} res contains JSON object with the organization data
-   * @returns a JSON object with the proper http response specifying success/fail
-   */
-  app.patch(
-    '/api/asset/:assetId/assessment/:assessmentId',
-    jwtMiddleware.checkToken,
-    async (req: UserRequest, res: Response) => {
-      if (!req.params.assessmentId) {
-        return res.status(400).send('Invalid assessment UserRequest');
-      }
-      if (isNaN(+req.params.assessmentId)) {
-        return res.status(400).json('Invalid Assessment ID');
-      }
-      let assessment = await assessmentRepository.findOne(req.params.assessmentId);
-      if (!assessment) {
-        return res.status(404).json('Assessment does not exist');
-      }
-      const assessmentId = assessment.id;
-      delete req.body.asset;
-      assessment = req.body;
-      assessment.id = assessmentId;
-      if (assessment.startDate > assessment.endDate) {
-        return res.status(400).send('The assessment start date can not be later than the end date');
-      }
-      const errors = await validate(assessment);
-      if (errors.length > 0) {
-        return res.status(400).send('Assessment form validation failed');
-      } else {
-        await assessmentRepository.save(assessment);
-        res.status(200).json('Assessment patched successfully');
-      }
-    }
-  );
-  /**
-   * @description API backend for UserRequesting a report associated by assessmentId
-   * @param {UserRequest} req assessmentId
-   * @param {Response} res contains JSON object with the report data
-   * @returns a JSON object with the proper http response specifying success/fail
-   */
-  app.get('/api/assessment/:assessmentId/report', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    if (!req.params.assessmentId) {
-      return res.status(400).send('Invalid report UserRequest');
-    }
-    if (isNaN(+req.params.assessmentId)) {
-      return res.status(400).json('Invalid Assessment ID');
-    }
-    const assessment = await assessmentRepository.findOne(req.params.assessmentId, { relations: ['asset'] });
-    const asset = await assetRepository.findOne(assessment.asset.id, {
-      relations: ['organization']
-    });
-    const organization = await orgRepository.findOne(asset.organization.id);
-    const vulnerabilities = await vulnerabilityRepository
-      .createQueryBuilder('vuln')
-      .leftJoinAndSelect('vuln.screenshots', 'screenshot')
-      .leftJoinAndSelect('vuln.problemLocations', 'problemLocation')
-      .leftJoinAndSelect('vuln.resources', 'resource')
-      .where('vuln.assessmentId = :assessmentId', {
-        assessmentId: assessment.id
-      })
-      .select([
-        'vuln',
-        'screenshot.id',
-        'screenshot.originalname',
-        'screenshot.mimetype',
-        'problemLocation',
-        'resource'
-      ])
-      .getMany();
-    const report = new Report();
-    report.org = organization;
-    report.asset = asset;
-    report.assessment = assessment;
-    report.vulns = vulnerabilities;
-    report.companyName = process.env.COMPANY_NAME;
-    res.status(200).json(report);
-  });
-  /**
-   * @description API backend for report generation with Puppeteer
-   * @param {UserRequest} req orgId, assetId, assessmentId
-   * @param {Response} res contains all data associated and generates a
-   * new html page with PDF Report
-   * @returns a new page generated by Puppeteer with a Report in PDF format
-   */
-  app.post('/api/report/generate', jwtMiddleware.checkToken, async (req: UserRequest, res: Response) => {
-    if (!req.body.orgId || !req.body.assetId || !req.body.assessmentId) {
-      return res.status(400).send('Invalid report parameters');
-    }
-    const url =
-      env === 'production'
-        ? `${process.env.PROD_URL}/#/organization/${req.body.orgId}
-        /asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report/puppeteer`
-        : `${process.env.DEV_URL}/#/organization/${req.body.orgId}
-        /asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report/puppeteer`;
-    const browser = await puppeteer.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
-    const page = await browser.newPage();
-    const filePath = path.join(__dirname, '../temp_report.pdf');
-    const jwtToken = req.headers.authorization;
-    await page.evaluateOnNewDocument(token => {
-      localStorage.clear();
-      localStorage.setItem('AUTH_TOKEN', token);
-    }, jwtToken);
-    await page.goto(url, { waitUntil: 'networkidle0' });
-
-    await page.pdf({ path: filePath, format: 'A4' });
-    await browser.close();
-    const file = fs.createReadStream(filePath);
-    const stat = fs.statSync(filePath);
-    res.setHeader('Content-Length', stat.size);
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename=report.pdf');
-    file.pipe(res);
-    fs.unlink(filePath, (err, response) => {
-      if (err) {
-        // handle error here
-      } else {
-        // tslint:disable-next-line: no-console
-        console.info('File removed');
-      }
-    });
   });
 });
