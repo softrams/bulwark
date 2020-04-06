@@ -2,8 +2,6 @@
 
 When contributing to this repository, please first discuss the change you wish to make via issue with the owners of this repository before making a change.
 
-Please note we have a code of conduct, please follow it in all your interactions with the project.
-
 ## Contributing to Development
 
 Issues will be labelled with `help wanted` or `good first issue`
@@ -47,10 +45,6 @@ Any release from master will have a unique version
 ```
 npm run lint
 ```
-
-## Code of Conduct
-
--Insert Softrams Code of Conduct Here-
 
 ### Our Pledge
 
