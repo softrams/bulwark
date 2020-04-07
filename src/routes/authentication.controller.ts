@@ -20,7 +20,7 @@ const login = async (req: UserRequest, res: Response) => {
   const user = await getConnection()
     .getRepository(User)
     .createQueryBuilder()
-    .where('user.email = :email', {
+    .where('User.email = :email', {
       email
     })
     .getOne();
