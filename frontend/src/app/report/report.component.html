@@ -2,19 +2,10 @@
   <div class="row" id="buttons" *ngIf="showButtons">
     <div class="col-12">
       <div class="float-right">
-        <button
-          (click)="navigateToVulns()"
-          type="button"
-          class="btn btn-secondary"
-          style="margin-right: 5px"
-        >
+        <button (click)="navigateToVulns()" type="button" class="btn btn-secondary" style="margin-right: 5px">
           Back to Assessments
         </button>
-        <button
-          (click)="generateReport()"
-          type="button"
-          class="btn btn-primary"
-        >
+        <button (click)="generateReport()" type="button" class="btn btn-primary">
           Generate Report
         </button>
       </div>
@@ -77,40 +68,26 @@
         <h4>Tools and Methodology</h4>
         <ul>
           <li>
-            <a href="https://portswigger.net/burp" target="_blank"
-              >Burp Suite Professional</a
-            >
+            <a href="https://portswigger.net/burp" target="_blank">Burp Suite Professional</a>
           </li>
           <li>
-            <a
-              href="https://developers.google.com/web/tools/chrome-devtools/"
-              target="_blank"
-              >Chrome Developer Tools</a
-            >
+            <a href="https://developers.google.com/web/tools/chrome-devtools/" target="_blank">Chrome Developer
+              Tools</a>
           </li>
           <li>
-            <a
-              href="https://developer.mozilla.org/en-US/docs/Tools"
-              target="_blank"
-              >Firefox Developer Tools</a
-            >
+            <a href="https://developer.mozilla.org/en-US/docs/Tools" target="_blank">Firefox Developer Tools</a>
           </li>
           <li>
-            <a href="https://www.ssllabs.com/ssltest/" target="_blank"
-              >SSL Labs</a
-            >
+            <a href="https://www.ssllabs.com/ssltest/" target="_blank">SSL Labs</a>
           </li>
           <li>
-            <a
-              href="https://www.owasp.org/index.php/OWASP_Dependency_Check"
-              target="_blank"
-              >Owasp Dependency Check</a
-            >
+            <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check" target="_blank">Owasp Dependency Check</a>
           </li>
         </ul>
       </div>
       <div class="col-4">
         <h4>Finding Severity</h4>
+        <!--Source: https://owasp.org/www-community/OWASP_Risk_Rating_Methodology-->
         <img src="../../assets/overallRiskSeverity.png" />
       </div>
     </div>
