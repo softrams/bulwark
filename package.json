@@ -1,6 +1,6 @@
 {
   "name": "bulwark",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "An asset and vulnerability management tool",
   "main": "index.js",
   "scripts": {
@@ -9,9 +9,8 @@
     "ngServe": "cd frontend && ./node_modules/@angular/cli/bin/ng build && ./node_modules/@angular/cli/bin/ng serve",
     "nodemon:watch": "nodemon -e ts --exec \"npm run tsc\"",
     "start:dev": "concurrently --kill-others \"npm run nodemon:watch\" \"npm run ngServe\"",
-    "build": "npm run lint && rm -rf dist && tsc && cd frontend && node ./node_modules/@angular/cli/bin/ng build --aot --prod",
+    "build": "rm -rf dist && tsc && cd frontend && node ./node_modules/@angular/cli/bin/ng build --aot --prod",
     "postinstall": "cd frontend && npm install && cd .. && npm run build",
-    "preinstall": " npx npm-force-resolutions",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
     "migration:generate": "typeorm migration:generate -n refactor",
@@ -69,8 +68,5 @@
     "tsconfig-paths": "^3.9.0",
     "typeorm": "^0.2.19",
     "uuid": "^3.4.0"
-  },
-  "resolutions": {
-    "minimist": "^1.2.3"
   }
 }

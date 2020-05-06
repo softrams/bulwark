@@ -7,8 +7,7 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "preinstall": "npx npm-force-resolutions"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
@@ -50,8 +49,5 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0"
-  },
-  "resolutions": {
-    "minimist": "^1.2.3"
   }
 }

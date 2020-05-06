@@ -140,13 +140,13 @@ Most of the application routes are protected by middleware that validates JWT to
 - [Angular](https://angular.io/) - The Angular Framework
 - [Express](https://expressjs.com/) - A minimal and flexible Node.js web application framework
 
-## Lead Developer
+## Team
 
 [Alejandro Saenz](https://github.com/Whamo12)
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.  Read the [contribution guidelines](CONTRIBUTING.md) first.
 
 ## License
 
