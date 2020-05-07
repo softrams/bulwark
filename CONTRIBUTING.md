@@ -38,7 +38,7 @@ Any release from master will have a unique version
    [signed off](https://git-scm.com/docs/git-commit#Documentation/git-commit.txt--s)
    to indicate the contributor's agreement with the
    [Developer Certificate of Origin](https://developercertificate.org/).
-7. Linting should pass (dependent on project)
+7. Linting should pass
 
 ### Linting (Dependent on project)
 
