@@ -1,4 +1,4 @@
-<nav class="navbar navbar-light bg-light" style="margin-bottom: 50px">
+<nav class="navbar navbar-light bg-light" style="margin-bottom: 50px;">
   <a class="navbar-brand" href="#">
     <img src="../../assets/logo.png" width="250" height="115" alt=""
   /></a>
@@ -11,7 +11,21 @@
       <span class="sr-only">Loading...</span>
     </div>
   </div>
-  <div *ngIf="loggedIn$ | async as loggedIn">
-    <a href="" (click)="logout()">Logout</a>
+  <div class="nav-item dropdown" *ngIf="loggedIn$ | async as loggedIn">
+    <a
+      class="nav-link dropdown-toggle"
+      id="navbarDropdown"
+      role="button"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      Menu
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <a class="dropdown-item" href="#/invite">Invite User</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" (click)="logout()" href="">Logout</a>
+    </div>
   </div>
 </nav>
