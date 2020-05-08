@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
  * @param {object} mailOptions
  * @returns string
  */
-const sendEmail = mailOptions => {
+const sendEmail = (mailOptions) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.error(error);
@@ -61,7 +61,25 @@ const sendForgotPasswordEmail = (uuid, userEmail) => {
   sendEmail(mailOptions);
 };
 
+/**
+ * @description Prepare invitation email
+ * @param {string} uuid
+ * @returns string
+ */
+const sendInvitationEmail = (uuid, userEmail) => {
+  const mailOptions = {
+    from: process.env.FROM_EMAIL,
+    subject: 'Bulwark - Welcome!',
+    text: `You have been invited to Bulwark!
+                Please click the link below to initiate the process.
+                \n ${process.env.PROD_URL}/#/register/${uuid}`,
+    to: userEmail
+  };
+  sendEmail(mailOptions);
+};
+
 module.exports = {
   sendForgotPasswordEmail,
-  sendVerificationEmail
+  sendVerificationEmail,
+  sendInvitationEmail
 };

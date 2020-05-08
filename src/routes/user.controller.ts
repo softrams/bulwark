@@ -45,6 +45,62 @@ const create = async (req: UserRequest, res: Response) => {
   }
 };
 /**
+ * @description Register user
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns success message
+ */
+const register = async (req: UserRequest, res: Response) => {
+  const { password, confirmPassword, uuid } = req.body;
+  if (password !== confirmPassword) {
+    return res.status(400).json('Passwords do not match');
+  }
+  if (!passwordUtility.passwordSchema.validate(password)) {
+    return res.status(400).json(passwordRequirement);
+  }
+  const user = await getConnection()
+    .getRepository(User)
+    .createQueryBuilder()
+    .where('User.uuid = :uuid', {
+      uuid
+    })
+    .getOne();
+  if (user) {
+    user.password = await passwordUtility.generateHash(password);
+    user.uuid = null;
+    user.active = true;
+    await getConnection().getRepository(User).save(user);
+    return res.status(200).json('Registration Complete');
+  } else {
+    return res
+      .status(400)
+      .json('Unable to register user password at this time.  Please contact an administrator for assistance.');
+  }
+};
+/**
+ * @description Invite user
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns success message
+ */
+const invite = async (req: UserRequest, res: Response) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json('Email is invalid');
+  }
+  const existUser = await getConnection().getRepository(User).find({ where: { email } });
+  if (existUser.length) {
+    return res.status(400).json('A user associated to that email has already been invited');
+  }
+  const user = new User();
+  user.active = false;
+  user.uuid = uuidv4();
+  user.email = email;
+  await getConnection().getRepository(User).save(user);
+  emailService.sendInvitationEmail(user.uuid, user.email);
+  return res.status(200).json('User invited successfully');
+};
+/**
  * @description Verifies user by comparing UUID
  * @param {UserRequest} req
  * @param {Response} res
@@ -102,4 +158,6 @@ module.exports = {
   create,
   verify,
   updatePassword,
+  invite,
+  register
 };

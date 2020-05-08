@@ -27,6 +27,10 @@ import { DatePipe } from '@angular/common';
 import { ReportComponent } from './report/report.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { LoginComponent } from './login/login.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { PasswordResetComponent } from './password-reset/password-reset.component';
+import { InviteUserComponent } from './invite-user/invite-user.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +47,11 @@ import { LoginComponent } from './login/login.component';
     AssessmentFormComponent,
     ReportComponent,
     PageNotFoundComponent,
-    LoginComponent
+    LoginComponent,
+    ForgotPasswordComponent,
+    PasswordResetComponent,
+    InviteUserComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

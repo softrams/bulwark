@@ -4,7 +4,7 @@ import { environment } from '../environments/environment';
 import { GlobalManagerService } from './global-manager.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   constructor(
@@ -25,5 +25,21 @@ export class AuthService {
 
   getUserToken() {
     return localStorage.getItem('AUTH_TOKEN');
+  }
+
+  forgotPassword(email) {
+    return this.http.patch(`${this.api}/forgot-password`, email);
+  }
+
+  passwordReset(creds) {
+    return this.http.patch(`${this.api}/password-reset`, creds);
+  }
+
+  registerUser(creds) {
+    return this.http.post(`${this.api}/user/register`, creds);
+  }
+
+  inviteUser(email) {
+    return this.http.post(`${this.api}/user/invite`, email);
   }
 }

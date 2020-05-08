@@ -1,0 +1,22 @@
+<div class="container col-4">
+  <h5>Send email invitation</h5>
+  <div id="formContent">
+    <form [formGroup]="inviteForm" (ngSubmit)="onSubmit(inviteForm)">
+      <input
+        formControlName="email"
+        type="text"
+        id="email"
+        class="form-control"
+        name="email"
+        placeholder="Email"
+        style="margin-bottom: 5px;"
+      />
+      <input
+        [disabled]="!inviteForm.valid"
+        type="submit"
+        class="btn btn-success float-right"
+        value="Submit"
+      />
+    </form>
+  </div>
+</div>

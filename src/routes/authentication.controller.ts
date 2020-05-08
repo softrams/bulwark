@@ -6,6 +6,7 @@ import { Response } from 'express';
 import jwt = require('jsonwebtoken');
 // tslint:disable-next-line: no-var-requires
 const passwordUtility = require('../utilities/password.utility');
+import { passwordRequirement } from '../enums/message-enum';
 // tslint:disable-next-line: no-var-requires
 const emailService = require('../services/email.service');
 
@@ -66,23 +67,47 @@ const forgotPassword = async (req: UserRequest, res: Response) => {
     })
     .getOne();
   if (!user) {
-    return res
-      .status(400)
-      .json('Unable to retrieve the user at this time.  Please contact an administrator for assistance.');
+    return res.status(200).json('A password reset request has been initiated.  Please check your email.');
   }
   user.uuid = uuidv4();
   await getConnection().getRepository(User).save(user);
-  if (!user.active) {
-    emailService.sendVerificationEmail(user.uuid, user.email);
+  emailService.sendForgotPasswordEmail(user.uuid, user.email);
+  return res.status(200).json('A password reset request has been initiated.  Please check your email.');
+};
+/**
+ * @description Reset user password
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns Success message
+ */
+const resetPassword = async (req: UserRequest, res: Response) => {
+  const { password, confirmPassword, uuid } = req.body;
+  if (password !== confirmPassword) {
+    return res.status(400).json('Passwords do not match');
+  }
+  if (!passwordUtility.passwordSchema.validate(password)) {
+    return res.status(400).json(passwordRequirement);
+  }
+  const user = await getConnection()
+    .getRepository(User)
+    .createQueryBuilder()
+    .where('User.uuid = :uuid', {
+      uuid
+    })
+    .getOne();
+  if (user) {
+    user.password = await passwordUtility.generateHash(password);
+    user.uuid = null;
+    await getConnection().getRepository(User).save(user);
+    return res.status(200).json('Password updated successfully');
+  } else {
     return res
       .status(400)
-      .json('This account has not been activated.  Please check for email verification or contact an administrator.');
-  } else {
-    emailService.sendForgotPasswordEmail(user.uuid, user.email);
-    return res.status(200).json('A password reset UserRequest has been initiated.  Please check your email.');
+      .json('Unable to reset user password at this time.  Please contact an administrator for assistance.');
   }
 };
 module.exports = {
   login,
-  forgotPassword
+  forgotPassword,
+  resetPassword
 };
