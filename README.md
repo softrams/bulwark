@@ -4,6 +4,8 @@
 
 Bulwark is an organizational asset and vulnerability management tool designed for building and generating application security reports.
 
+![Running Bulwark](https://github.com/Whamo12/media/blob/master/bulwark_walkthrough.gif)
+
 ## Note
 
 Please keep in mind, this project is very early in the development phase.
