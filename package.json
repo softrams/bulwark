@@ -1,15 +1,15 @@
 {
   "name": "bulwark",
   "version": "0.0.0",
-  "description": "An asset and vulnerability management tool",
+  "description": "An organizational asset and vulnerability management tool",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/app.js",
-    "ngServe": "cd frontend && ./node_modules/@angular/cli/bin/ng build && ./node_modules/@angular/cli/bin/ng serve",
+    "ngServe": "cd frontend && npm run-script build && npm run-script start",
     "nodemon:watch": "nodemon -e ts --exec \"npm run tsc\"",
     "start:dev": "concurrently --kill-others \"npm run nodemon:watch\" \"npm run ngServe\"",
-    "build": "rimraf dist && tsc && cd frontend && node ./node_modules/@angular/cli/bin/ng build --aot --prod",
+    "build": "rimraf dist && tsc && cd frontend && npm run-script build --aot --prod",
     "postinstall": "cd frontend && npm install && cd .. && npm run build",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
@@ -17,8 +17,8 @@
     "migration:create": "typeorm migration:create -n newInit",
     "migration:revert": "typeorm migration:revert",
     "tsc": "rimraf dist && tsc && npm start",
-    "lint": "tslint --project '.' && cd frontend && node ./node_modules/@angular/cli/bin/ng lint",
-    "lint:fix": "tslint --fix --project '.' && cd frontend && node ./node_modules/@angular/cli/bin/ng lint --fix=true"
+    "lint": "tslint --project . && cd frontend && npm run-script lint",
+    "lint:fix": "tslint --fix --project . && cd frontend && npm run-script lint --fix=true"
   },
   "nodemonConfig": {
     "ignore": [
@@ -41,6 +41,10 @@
     "Bill Jones",
     "Ryan Mathus"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/softrams/bulwark.git"
+  },
   "license": "MIT",
   "devDependencies": {
     "nodemon": "^1.19.3",
