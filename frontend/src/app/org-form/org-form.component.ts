@@ -29,8 +29,8 @@ export class OrgFormComponent implements OnInit, OnChanges {
     this.activatedRoute.data.subscribe(({ organization }) => {
       if (organization) {
         this.orgModel = organization;
-        if (this.orgModel['avatarData']) {
-          this.appService.getImageById(this.orgModel['avatarData']).then((res) => {
+        if (this.orgModel.avatar) {
+          this.appService.getImageById(this.orgModel.avatar).then((res) => {
             this.avatar = res;
           });
         }
@@ -97,10 +97,12 @@ export class OrgFormComponent implements OnInit, OnChanges {
    */
   createOrUpdateOrg(org: Organization) {
     if (this.orgId) {
-      this.appService.updateOrg(this.orgId, org).subscribe((success: string) => {
-        this.navigateToDashboard();
-        this.alertService.success(success);
-      });
+      this.appService
+        .updateOrg(this.orgId, org)
+        .subscribe((success: string) => {
+          this.navigateToDashboard();
+          this.alertService.success(success);
+        });
     } else {
       this.appService.createOrg(org).subscribe((success: string) => {
         this.navigateToDashboard();

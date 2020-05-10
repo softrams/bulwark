@@ -7,7 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AppService {
   constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
@@ -23,7 +23,7 @@ export class AppService {
    */
   getOrganizations() {
     const httpOptions = {
-      responseType: 'blob' as 'json'
+      responseType: 'blob' as 'json',
     };
     return this.http
       .get(`${this.api}/organization`)
@@ -31,13 +31,13 @@ export class AppService {
       .then(async (res) => {
         const orgs: any = res;
         let count = 0;
-        for (let i = 0; i < orgs.length; i++) {
-          if (orgs[i].avatar && orgs[i].avatar.buffer) {
+        for (const org of orgs) {
+          if (org.avatar && org.avatar.buffer) {
             await this.http
-              .get(`${this.api}/file/${orgs[i].avatar.id}`, httpOptions)
+              .get(`${this.api}/file/${org.avatar.id}`, httpOptions)
               .toPromise()
               .then(async (blob: Blob) => {
-                orgs[i].imgUrl = this.createObjectUrl(blob, orgs[i].avatar.mimetype);
+                org.imgUrl = this.createObjectUrl(blob, org.avatar.mimetype);
                 count++;
               });
           } else {
@@ -56,7 +56,7 @@ export class AppService {
    */
   getArchivedOrganizations() {
     const httpOptions = {
-      responseType: 'blob' as 'json'
+      responseType: 'blob' as 'json',
     };
     return this.http
       .get(`${this.api}/organization/archive`)
@@ -64,13 +64,13 @@ export class AppService {
       .then(async (res) => {
         const orgs: any = res;
         let count = 0;
-        for (let i = 0; i < orgs.length; i++) {
-          if (orgs[i].avatar && orgs[i].avatar.buffer) {
+        for (const org of orgs) {
+          if (org.avatar && org.avatar.buffer) {
             await this.http
-              .get(`${this.api}/file/${orgs[i].avatar.id}`, httpOptions)
+              .get(`${this.api}/file/${org.avatar.id}`, httpOptions)
               .toPromise()
               .then(async (blob: Blob) => {
-                orgs[i].imgUrl = this.createObjectUrl(blob, orgs[i].avatar.mimetype);
+                org.imgUrl = this.createObjectUrl(blob, org.avatar.mimetype);
                 count++;
               });
           } else {
@@ -90,7 +90,7 @@ export class AppService {
    */
   getImageById(file: any) {
     const httpOptions = {
-      responseType: 'blob' as 'json'
+      responseType: 'blob' as 'json',
     };
     return this.http
       .get(`${this.api}/file/${file.id}`, httpOptions)
@@ -236,7 +236,10 @@ export class AppService {
    * @returns http status code of the request
    */
   createAsset(asset: Asset) {
-    return this.http.post(`${this.api}/organization/${asset.organization}/asset`, asset);
+    return this.http.post(
+      `${this.api}/organization/${asset.organization}/asset`,
+      asset
+    );
   }
 
   /**
@@ -255,7 +258,10 @@ export class AppService {
    * @returns http status code of the request
    */
   updateAsset(asset: Asset) {
-    return this.http.patch(`${this.api}/organization/${asset.organization}/asset/${asset.id}`, asset);
+    return this.http.patch(
+      `${this.api}/organization/${asset.organization}/asset/${asset.id}`,
+      asset
+    );
   }
 
   /**
@@ -274,8 +280,15 @@ export class AppService {
    * @param assetId asset ID attached to the request ties into the assessment ID
    * @returns http status code of the request
    */
-  updateAssessment(assessment: Assessment, assessmentId: number, assetId: number) {
-    return this.http.patch(`${this.api}/asset/${assetId}/assessment/${assessmentId}`, assessment);
+  updateAssessment(
+    assessment: Assessment,
+    assessmentId: number,
+    assetId: number
+  ) {
+    return this.http.patch(
+      `${this.api}/asset/${assetId}/assessment/${assessmentId}`,
+      assessment
+    );
   }
 
   /**
@@ -285,7 +298,9 @@ export class AppService {
    * @returns http status code with object data from the API call
    */
   getAssessment(assetId: number, assessmentId: number) {
-    return this.http.get(`${this.api}/asset/${assetId}/assessment/${assessmentId}`);
+    return this.http.get(
+      `${this.api}/asset/${assetId}/assessment/${assessmentId}`
+    );
   }
 
   /**
@@ -326,14 +341,18 @@ export class AppService {
    */
   generateReport(orgId: number, assetId: number, assessmentId: number) {
     const httpOptions = {
-      responseType: 'blob' as 'json'
+      responseType: 'blob' as 'json',
     };
     const generateObject = {
       orgId,
       assetId,
-      assessmentId
+      assessmentId,
     };
-    return this.http.post(`${this.api}/report/generate`, generateObject, httpOptions);
+    return this.http.post(
+      `${this.api}/report/generate`,
+      generateObject,
+      httpOptions
+    );
   }
 
   /**
@@ -346,7 +365,7 @@ export class AppService {
   public createObjectUrl(file, mimetype?: string) {
     // Preview unsaved form
     const blob = new Blob([file], {
-      type: mimetype || file.type
+      type: mimetype || file.type,
     });
     const url = window.URL.createObjectURL(blob);
     return this.sanitizer.bypassSecurityTrustUrl(url);
