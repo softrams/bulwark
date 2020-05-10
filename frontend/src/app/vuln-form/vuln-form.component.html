@@ -22,10 +22,8 @@
       <div class="col-4">
         <label for="name">Jira URL</label>
         <input formControlName="jiraId" type="text" class="form-control form-control-sm" id="jiraId" />
-        <div
-          *ngIf="vulnForm.controls['name'].errors && !vulnForm.controls['jiraId'].pristine"
-          class="alert alert-danger"
-        >
+        <div *ngIf="vulnForm.controls['name'].errors && !vulnForm.controls['jiraId'].pristine"
+          class="alert alert-danger">
           Jira ticket is required
         </div>
       </div>
@@ -35,10 +33,8 @@
           <option>Yes</option>
           <option>No</option>
         </select>
-        <div
-          *ngIf="vulnForm.controls['systemic'].errors && !vulnForm.controls['systemic'].pristine"
-          class="alert alert-danger"
-        >
+        <div *ngIf="vulnForm.controls['systemic'].errors && !vulnForm.controls['systemic'].pristine"
+          class="alert alert-danger">
           Systemic value is required
         </div>
       </div>
@@ -52,10 +48,8 @@
           <option>Medium</option>
           <option>Low</option>
         </select>
-        <div
-          *ngIf="vulnForm.controls['impact'].errors && !vulnForm.controls['impact'].pristine"
-          class="alert alert-danger"
-        >
+        <div *ngIf="vulnForm.controls['impact'].errors && !vulnForm.controls['impact'].pristine"
+          class="alert alert-danger">
           Impact is not valid
         </div>
       </div>
@@ -66,10 +60,8 @@
           <option>Medium</option>
           <option>Low</option>
         </select>
-        <div
-          *ngIf="vulnForm.controls['likelihood'].errors && !vulnForm.controls['likelihood'].pristine"
-          class="alert alert-danger"
-        >
+        <div *ngIf="vulnForm.controls['likelihood'].errors && !vulnForm.controls['likelihood'].pristine"
+          class="alert alert-danger">
           Likelihood is not valid
         </div>
       </div>
@@ -91,20 +83,16 @@
       <div class="col-6">
         <label for="cvssScore">CVSS Score</label>
         <input formControlName="cvssScore" type="text" class="form-control form-control-sm" id="cvssScore" />
-        <div
-          *ngIf="vulnForm.controls['cvssScore'].errors && !vulnForm.controls['cvssScore'].pristine"
-          class="alert alert-danger"
-        >
+        <div *ngIf="vulnForm.controls['cvssScore'].errors && !vulnForm.controls['cvssScore'].pristine"
+          class="alert alert-danger">
           CVSS Score is not valid
         </div>
       </div>
       <div class="col-6">
         <label for="cvssUrl">CVSS URL</label>
         <input formControlName="cvssUrl" type="text" class="form-control form-control-sm" id="cvssUrl" />
-        <div
-          *ngIf="vulnForm.controls['cvssUrl'].errors && !vulnForm.controls['cvssUrl'].pristine"
-          class="alert alert-danger"
-        >
+        <div *ngIf="vulnForm.controls['cvssUrl'].errors && !vulnForm.controls['cvssUrl'].pristine"
+          class="alert alert-danger">
           CVSS URL is not valid
         </div>
       </div>
@@ -147,17 +135,10 @@
       </div>
     </div>
     <div *ngIf="!previewDescription">
-      <textarea
-        formControlName="description"
-        class="form-control"
-        id="description"
-        rows="6"
-        maxlength="4000"
-      ></textarea>
-      <div
-        *ngIf="vulnForm.controls['description'].errors && !vulnForm.controls['description'].pristine"
-        class="alert alert-danger"
-      >
+      <textarea formControlName="description" class="form-control" id="description" rows="6"
+        maxlength="4000"></textarea>
+      <div *ngIf="vulnForm.controls['description'].errors && !vulnForm.controls['description'].pristine"
+        class="alert alert-danger">
         Description is not valid
       </div>
     </div>
@@ -175,17 +156,10 @@
       </div>
     </div>
     <div *ngIf="!previewDetailedDesc">
-      <textarea
-        formControlName="detailedInfo"
-        class="form-control"
-        id="detailedInfo"
-        rows="6"
-        maxlength="4000"
-      ></textarea>
-      <div
-        *ngIf="vulnForm.controls['detailedInfo'].errors && !vulnForm.controls['detailedInfo'].pristine"
-        class="alert alert-danger"
-      >
+      <textarea formControlName="detailedInfo" class="form-control" id="detailedInfo" rows="6"
+        maxlength="4000"></textarea>
+      <div *ngIf="vulnForm.controls['detailedInfo'].errors && !vulnForm.controls['detailedInfo'].pristine"
+        class="alert alert-danger">
         Detailed information is not valid
       </div>
     </div>
@@ -203,17 +177,10 @@
       </div>
     </div>
     <div *ngIf="!previewRemediation">
-      <textarea
-        formControlName="remediation"
-        class="form-control"
-        id="remediation"
-        rows="6"
-        maxlength="4000"
-      ></textarea>
-      <div
-        *ngIf="vulnForm.controls['remediation'].errors && !vulnForm.controls['remediation'].pristine"
-        class="alert alert-danger"
-      >
+      <textarea formControlName="remediation" class="form-control" id="remediation" rows="6"
+        maxlength="4000"></textarea>
+      <div *ngIf="vulnForm.controls['remediation'].errors && !vulnForm.controls['remediation'].pristine"
+        class="alert alert-danger">
         Remediation information is not valid
       </div>
     </div>
@@ -250,19 +217,14 @@
     </div>
     <div>
       <label for="screenshot">Screenshot Upload</label>
-      <input
-        name="screenshots"
-        type="file"
-        class="form-control-file"
-        id="screenshots"
-        (change)="handleFileInput($event.target.files)"
-        multiple
-        enctype="multipart/form-data"
-      />
+      <input name="screenshots" type="file" class="form-control-file" id="screenshots"
+        (change)="handleFileInput($event.target.files)" multiple enctype="multipart/form-data" />
       <div *ngFor="let screenshot of tempScreenshots">
         <span>
-          <a [href]="screenshot.url" target="_blank">{{ screenshot?.file?.originalname }}</a>
-          <a><fa-icon (click)="deleteScreenshot(screenshot)" [icon]="faTrash"></fa-icon></a>
+          <a [href]="screenshot.url" target="_blank">{{ screenshot?.fileName}}</a>
+          <a>
+            <fa-icon (click)="deleteScreenshot(screenshot)" [icon]="faTrash"></fa-icon>
+          </a>
         </span>
       </div>
     </div>
@@ -270,12 +232,8 @@
     <button [disabled]="!vulnForm.valid" type="submit" class="btn btn-primary float-right">
       Submit
     </button>
-    <button
-      (click)="navigateToVulnerabilities()"
-      type="button"
-      class="btn btn-secondary float-right"
-      style="margin-right: 5px;"
-    >
+    <button (click)="navigateToVulnerabilities()" type="button" class="btn btn-secondary float-right"
+      style="margin-right: 5px;">
       Back to Vulnerabilities
     </button>
   </form>

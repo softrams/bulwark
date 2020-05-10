@@ -17,7 +17,8 @@
     "migration:create": "typeorm migration:create -n newInit",
     "migration:revert": "typeorm migration:revert",
     "tsc": "rimraf dist && tsc && npm start",
-    "lint": "tslint --project '.'"
+    "lint": "tslint --project '.' && cd frontend && node ./node_modules/@angular/cli/bin/ng lint",
+    "lint:fix": "tslint --fix --project '.' && cd frontend && node ./node_modules/@angular/cli/bin/ng lint --fix=true"
   },
   "nodemonConfig": {
     "ignore": [

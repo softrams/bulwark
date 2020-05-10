@@ -6,7 +6,8 @@ import { AppService } from '../app.service';
 import { AlertService } from '../alert/alert.service';
 import { Vulnerability } from './Vulnerability';
 import { faTrash, faPlus, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { AppFile } from '../classes/App_File';
+import { AppFile } from '../interfaces/App_File';
+import { Screenshot } from '../interfaces/Screenshot';
 
 @Component({
   selector: 'app-vuln-form',
@@ -24,7 +25,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
   assessmentId: string;
   vulnId: number;
   vulnFormData: FormData;
-  tempScreenshots: object[] = [];
+  tempScreenshots: Screenshot[] = [];
   screenshotsToDelete: number[] = [];
   faTrash = faTrash;
   faPlus = faPlus;
@@ -277,20 +278,21 @@ export class VulnFormComponent implements OnChanges, OnInit {
   previewScreenshot(file: File, existFile: AppFile) {
     // Image from DB
     if (existFile) {
-      const renderObj = {
+      const screenshot: Screenshot = {
         url: existFile.imgUrl,
-        file: existFile
+        file: existFile,
+        fileName: existFile.originalname,
+        fileId: existFile.id
       };
-      this.tempScreenshots.push(renderObj);
+      this.tempScreenshots.push(screenshot);
     } else {
-      const url = this.appService.createObjectUrl(file);
-      // File objects do not have an `originalname` property so we need to add it
-      file['originalname'] = file.name;
-      const renderObj = {
-        url,
-        file
+      const screenshot: Screenshot = {
+        url: this.appService.createObjectUrl(file),
+        file,
+        fileName: file.name,
+        fileId: null
       };
-      this.tempScreenshots.push(renderObj);
+      this.tempScreenshots.push(screenshot);
     }
   }
 
@@ -298,10 +300,10 @@ export class VulnFormComponent implements OnChanges, OnInit {
    * Function responsible for removal of screenshots from the Vulnerability Form
    * @param file the associated index of the file to be removed
    */
-  deleteScreenshot(file: File) {
-    const index = this.tempScreenshots.indexOf(file);
+  deleteScreenshot(screenshot: Screenshot) {
+    const index = this.tempScreenshots.indexOf(screenshot);
     if (index > -1) {
-      this.screenshotsToDelete.push(file['file']['id']);
+      this.screenshotsToDelete.push(screenshot.fileId);
       this.tempScreenshots.splice(index, 1);
     }
   }
@@ -312,11 +314,11 @@ export class VulnFormComponent implements OnChanges, OnInit {
    * @param screenshots object data for screenshots to be processed
    * @param screenshotsToDelete object data for screenshots to be removed
    */
-  finalizeScreenshots(screenshots: object[], screenshotsToDelete: number[]) {
+  finalizeScreenshots(screenshots: Screenshot[], screenshotsToDelete: number[]) {
     this.vulnFormData.delete('screenshots');
     if (screenshots.length) {
       for (const screenshot of screenshots) {
-        this.vulnFormData.append('screenshots', screenshot['file']);
+        this.vulnFormData.append('screenshots', screenshot.file);
       }
     }
     if (screenshotsToDelete.length) {
@@ -339,7 +341,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
    */
   onSubmit(vulnForm: FormGroup) {
     this.vulnFormData = new FormData();
-    const newScreenshots = this.tempScreenshots.filter((screenshot) => !screenshot['file'].id);
+    const newScreenshots = this.tempScreenshots.filter((screenshot) => !screenshot.fileId);
     this.finalizeScreenshots(newScreenshots, this.screenshotsToDelete);
     this.vulnModel = vulnForm.value;
     this.vulnFormData.append('impact', this.vulnModel.impact);
