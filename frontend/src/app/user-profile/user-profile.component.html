@@ -1,0 +1,38 @@
+<div class="container">
+  <div id="formContent">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit(userForm)">
+      <div class="form-row col-md-6">
+        <div class="col">
+          <input
+            [disabled]="!isEdit"
+            formControlName="firstName"
+            type="text"
+            id="password"
+            class="form-control"
+            name="firstName"
+            placeholder="First Name"
+            style="margin-bottom: 5px;"
+          />
+        </div>
+        <div class="col">
+          <input
+            [disabled]="!isEdit"
+            formControlName="lastName"
+            type="text"
+            id="lastName"
+            class="form-control"
+            name="lastName"
+            placeholder="Last Name"
+            style="margin-bottom: 5px;"
+          />
+        </div>
+        <input
+          [disabled]="isEdit ? !userForm.valid : false"
+          type="submit"
+          class="btn btn-primary float-right"
+          [value]="isEdit ? 'Update' : 'Edit'"
+        />
+      </div>
+    </form>
+  </div>
+</div>

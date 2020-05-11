@@ -24,9 +24,10 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { InviteUserComponent } from './invite-user/invite-user.component';
 import { RegisterComponent } from './register/register.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 @Injectable()
 export class AssetsResolver implements Resolve<any> {
-  constructor(private apiService: AppService) {}
+  constructor(private apiService: AppService) { }
 
   resolve(route: ActivatedRouteSnapshot) {
     return this.apiService.getOrganizationAssets(route.params.orgId);
@@ -35,7 +36,7 @@ export class AssetsResolver implements Resolve<any> {
 
 @Injectable()
 export class AssetResolver implements Resolve<any> {
-  constructor(private apiService: AppService) {}
+  constructor(private apiService: AppService) { }
   resolve(route: ActivatedRouteSnapshot) {
     return this.apiService.getAsset(route.params.assetId, route.params.id);
   }
@@ -43,7 +44,7 @@ export class AssetResolver implements Resolve<any> {
 
 @Injectable()
 export class AssessmentResolver implements Resolve<any> {
-  constructor(private apiService: AppService) {}
+  constructor(private apiService: AppService) { }
   resolve(route: ActivatedRouteSnapshot) {
     return this.apiService.getAssessment(
       route.params.assetId,
@@ -54,7 +55,7 @@ export class AssessmentResolver implements Resolve<any> {
 
 @Injectable()
 export class AssessmentsResolver implements Resolve<any> {
-  constructor(private apiService: AppService) {}
+  constructor(private apiService: AppService) { }
 
   resolve(route: ActivatedRouteSnapshot) {
     return this.apiService.getAssessments(route.params.assetId);
@@ -63,7 +64,7 @@ export class AssessmentsResolver implements Resolve<any> {
 
 @Injectable()
 export class VulnerabilitiesResolver implements Resolve<any> {
-  constructor(private apiService: AppService) {}
+  constructor(private apiService: AppService) { }
 
   resolve(route: ActivatedRouteSnapshot) {
     return this.apiService.getVulnerabilities(route.params.assessmentId);
@@ -72,7 +73,7 @@ export class VulnerabilitiesResolver implements Resolve<any> {
 
 @Injectable()
 export class VulnerabilityResolver implements Resolve<any> {
-  constructor(private apiService: AppService) {}
+  constructor(private apiService: AppService) { }
 
   resolve(route: ActivatedRouteSnapshot) {
     return this.apiService.getVulnerability(route.params.vulnId);
@@ -81,7 +82,7 @@ export class VulnerabilityResolver implements Resolve<any> {
 
 @Injectable()
 export class OrganizationResolver implements Resolve<any> {
-  constructor(private apiService: AppService) {}
+  constructor(private apiService: AppService) { }
 
   resolve(route: ActivatedRouteSnapshot) {
     return this.apiService.getOrganizationById(route.params.id);
@@ -90,7 +91,7 @@ export class OrganizationResolver implements Resolve<any> {
 
 @Injectable()
 export class ReportResolver implements Resolve<any> {
-  constructor(private apiService: AppService) {}
+  constructor(private apiService: AppService) { }
 
   resolve(route: ActivatedRouteSnapshot) {
     return this.apiService.getReport(route.params.assessmentId);
@@ -118,6 +119,11 @@ const routes: Routes = [
   {
     path: 'register/:uuid',
     component: RegisterComponent,
+  },
+  {
+    path: 'user/profile',
+    component: UserProfileComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'invite',
@@ -224,4 +230,4 @@ const routes: Routes = [
     ReportResolver,
   ],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
