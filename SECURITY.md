@@ -12,7 +12,7 @@ currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-If a vulnerability is found, create an issue with the label `Security`.  Please include the following information:
+For any vulnerabilities found within Bulwark, please contact <a href="mailto:oss-security-reports@softrams.com">oss-security-reports@softrams.com</a>
 
 ### Description
 
