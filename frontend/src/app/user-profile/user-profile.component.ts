@@ -27,6 +27,7 @@ export class UserProfileComponent implements OnInit {
     this.userForm = this.fb.group({
       firstName: [{ value: '', disabled: !this.isEdit }, Validators.required],
       lastName: [{ value: '', disabled: !this.isEdit }, Validators.required],
+      title: [{ value: '', disabled: !this.isEdit }, Validators.required],
     });
   }
 
@@ -34,6 +35,8 @@ export class UserProfileComponent implements OnInit {
     if (!this.isEdit) {
       this.isEdit = true;
       this.userForm.enable();
+    } else {
+      console.log(form.value);
     }
   }
 }
