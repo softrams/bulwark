@@ -1,16 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
-import { GlobalManagerService } from './global-manager.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(
-    private http: HttpClient,
-    private globalManager: GlobalManagerService
-  ) {}
+  constructor(private http: HttpClient) {}
 
   api = environment.apiUrl;
   isLoggedIn = false;
@@ -33,13 +29,5 @@ export class AuthService {
 
   passwordReset(creds) {
     return this.http.patch(`${this.api}/password-reset`, creds);
-  }
-
-  registerUser(creds) {
-    return this.http.post(`${this.api}/user/register`, creds);
-  }
-
-  inviteUser(email) {
-    return this.http.post(`${this.api}/user/invite`, email);
   }
 }

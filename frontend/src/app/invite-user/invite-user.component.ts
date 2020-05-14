@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from '../auth.service';
+import { UserService } from '../user.service';
 import { Router } from '@angular/router';
 import { AlertService } from '../alert/alert.service';
 @Component({
@@ -12,7 +12,7 @@ export class InviteUserComponent implements OnInit {
   inviteForm: FormGroup;
   constructor(
     private fb: FormBuilder,
-    public authService: AuthService,
+    public userService: UserService,
     public router: Router,
     public alertService: AlertService
   ) {
@@ -29,7 +29,7 @@ export class InviteUserComponent implements OnInit {
 
   onSubmit(form) {
     const email = { email: form.value.email };
-    this.authService.inviteUser(email).subscribe((res: string) => {
+    this.userService.inviteUser(email).subscribe((res: string) => {
       this.router.navigate(['dashboard']);
       this.alertService.success(res);
     });
