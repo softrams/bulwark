@@ -134,7 +134,7 @@ On initial startup, Bulwark will not have any users. Therefore, it is necessary 
 
 1. `$ npm install`
 2. `$ npm run start:dev`
-3. Navigate to [seed-user.ts](https://github.com/softrams/bulwark/tree/master/src/temp/seed-user.ts)
+3. Navigate to [seed-user.ts](https://github.com/softrams/bulwark/blob/develop/src/temp/seed-user.ts)
 4. Update the `userConfig` objecy with user credentials, save, and wait for the JS to compile
 5. `$ node ./dist/temp/seed-user.js`
 6. Log into Bulwark with credentials used in step 4
