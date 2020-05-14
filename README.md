@@ -21,13 +21,13 @@ $ npm i
 Run in development mode:
 
 ```
-npm run start:dev
+$ npm run start:dev
 ```
 
 Run in production mode:
 
 ```
-npm start
+$ npm start
 ```
 
 ### Environment variables
@@ -126,15 +126,18 @@ FROM_EMAIL_PASSWORD=""
 COMPANY_NAME=""
 ```
 
-## Authentication/Authorization
+## Seed Initial User
 
-Most of the application routes are protected by middleware that validates JWT token with each request. Included in these routes is the `/api/user/create` route which creates users. Therefore, to create the initial user there are two options:
+On initial startup, Bulwark will not have any users. Therefore, it is necessary to seed the **first** user.
 
-1. temporarily remove the `jwtMiddleware.checkToken` middleware on the `/api/user/create` route
-2. Manually insert a user into the database
-   1. Use the Bcrypt library to generate a hash. Here's a [Gist](https://gist.github.com/Whamo12/e16fe650af4a04044768d216f39f0492) that will return a hash.
-   2. Using the hash, manually insert the initial user into the database
-      1. `` INSERT INTO `foobar`.`user` (`email`, `password`, `active`, `uuid`) VALUES ('foo@bar.com', 'changeMeHash', '1', ''); ``
+<!-- Afterwords, subsequent users should be invited. -->
+
+1. `$ npm install`
+2. `$ npm run start:dev`
+3. Navigate to [seed-user.ts](https://github.com/softrams/bulwark/tree/master/src/temp/seed-user.ts)
+4. Update the `userConfig` objecy with user credentials, save, and wait for the JS to compile
+5. `$ node ./dist/temp/seed-user.js`
+6. Log into Bulwark with credentials used in step 4
 
 ## Built With
 
@@ -151,7 +154,7 @@ The Softrams Bulwark core development team are:
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.  Read the [contribution guidelines](CONTRIBUTING.md) first.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Read the [contribution guidelines](CONTRIBUTING.md) first.
 
 ## License
 
