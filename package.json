@@ -1,6 +1,6 @@
 {
   "name": "bulwark",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "An organizational asset and vulnerability management tool",
   "main": "index.js",
   "scripts": {
@@ -39,7 +39,8 @@
   "author": "Alejandro Saenz",
   "contributors": [
     "Bill Jones",
-    "Ryan Mathus"
+    "Ryan Mathus",
+    "Joshua Seidel"
   ],
   "repository": {
     "type": "git",
