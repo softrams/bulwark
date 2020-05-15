@@ -58,7 +58,7 @@ const getOrgById = async (req: UserRequest, res: Response) => {
         return res.status(404).json('Organization does not exist');
     }
     const resObj = {
-        avatarData: org.avatar,
+        avatar: org.avatar,
         name: org.name
     };
     res.json(resObj);
