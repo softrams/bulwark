@@ -18,7 +18,8 @@
     "migration:revert": "typeorm migration:revert",
     "tsc": "rimraf dist && tsc && npm start",
     "lint": "tslint --project . && cd frontend && npm run-script lint",
-    "lint:fix": "tslint --fix --project . && cd frontend && npm run-script lint --fix=true"
+    "lint:fix": "tslint --fix --project . && cd frontend && npm run-script lint --fix=true",
+    "release": "standard-version"
   },
   "nodemonConfig": {
     "ignore": [
@@ -54,6 +55,7 @@
     "husky": "^4.2.5",
     "nodemon": "^1.19.3",
     "rimraf": "^3.0.2",
+    "standard-version": "^8.0.0",
     "tslint": "^6.1.0",
     "typescript": "^3.8.3"
   },
