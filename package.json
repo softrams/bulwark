@@ -1,6 +1,6 @@
 {
   "name": "bulwark",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "An organizational asset and vulnerability management tool",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,8 @@
     "migration:revert": "typeorm migration:revert",
     "tsc": "rimraf dist && tsc && npm start",
     "lint": "tslint --project . && cd frontend && npm run-script lint",
-    "lint:fix": "tslint --fix --project . && cd frontend && npm run-script lint --fix=true"
+    "lint:fix": "tslint --fix --project . && cd frontend && npm run-script lint --fix=true",
+    "release": "standard-version"
   },
   "nodemonConfig": {
     "ignore": [
@@ -39,7 +40,8 @@
   "author": "Alejandro Saenz",
   "contributors": [
     "Bill Jones",
-    "Ryan Mathus"
+    "Ryan Mathus",
+    "Joshua Seidel"
   ],
   "repository": {
     "type": "git",
@@ -47,8 +49,13 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "cz-conventional-changelog": "^3.2.0",
+    "husky": "^4.2.5",
     "nodemon": "^1.19.3",
     "rimraf": "^3.0.2",
+    "standard-version": "^8.0.0",
     "tslint": "^6.1.0",
     "typescript": "^3.8.3"
   },
@@ -74,5 +81,16 @@
     "tsconfig-paths": "^3.9.0",
     "typeorm": "^0.2.19",
     "uuid": "^3.4.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }

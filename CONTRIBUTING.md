@@ -31,16 +31,13 @@ Any release from master will have a unique version
 
 1. All work must be done in a fork off the dev branch
 2. Ensure any install or build dependencies are removed
-3. Increase version numbers [accordingly](#versioning)
-4. The code must comply to the configured TSLint and Sass Lint rules
-5. Open pull request on the `develop` branch of your fork
-6. All Git commits within a PR must be
-   [signed off](https://git-scm.com/docs/git-commit#Documentation/git-commit.txt--s)
-   to indicate the contributor's agreement with the
-   [Developer Certificate of Origin](https://developercertificate.org/).
-7. Linting should pass
+3. All Git commits within a PR must be conventional commits using [commitizen](https://github.com/commitizen/cz-cli) and enforced by [husky](https://github.com/typicode/husky)
+   1. Run `$ git cz` when committing changes
+4. Increase version numbers [accordingly](#versioning)
+5. The code must comply to the configured TSLint and Sass Lint rules
+6. Open pull request on the `develop` branch of your fork
 
-### Linting (Dependent on project)
+### Linting
 
 ```
 npm run lint
