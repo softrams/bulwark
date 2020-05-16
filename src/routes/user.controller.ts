@@ -62,7 +62,7 @@ const register = async (req: UserRequest, res: Response) => {
     .getRepository(User)
     .createQueryBuilder()
     .where('User.uuid = :uuid', {
-      uuid
+      uuid,
     })
     .getOne();
   if (user) {
@@ -154,10 +154,54 @@ const updatePassword = async (req: UserRequest, res: Response) => {
       .json('Unable to update user password at this time.  Please contact an administrator for assistance.');
   }
 };
+/**
+ * @description Patch user
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns Success message
+ */
+const patch = async (req: UserRequest, res: Response) => {
+  const { firstName, lastName, title } = req.body;
+  const user = await getConnection().getRepository(User).findOne(req.user);
+  if (firstName) {
+    user.firstName = firstName;
+  }
+  if (lastName) {
+    user.lastName = lastName;
+  }
+  if (title) {
+    user.title = title;
+  }
+  user.uuid = null;
+  const errors = await validate(user);
+  if (errors.length > 0) {
+    return res.status(400).json(errors);
+  } else {
+    await getConnection().getRepository(User).save(user);
+    return res.status(200).json('User patched successfully');
+  }
+};
+/**
+ * @description Get user
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns User
+ */
+const getUser = async (req: UserRequest, res: Response) => {
+  const user = await getConnection().getRepository(User).findOne(req.user);
+  if (!user) return res.status(404).json('User not found');
+  delete user.active;
+  delete user.password;
+  delete user.uuid;
+  delete user.id;
+  return res.status(200).json(user);
+};
 module.exports = {
   create,
   verify,
   updatePassword,
   invite,
-  register
+  register,
+  patch,
+  getUser,
 };

@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="col-md-9">
+  <div class="col-md-9 mx-auto">
     <div class="card">
       <div class="card-body">
         <div class="row">
@@ -12,21 +12,21 @@
           <form [formGroup]="userForm" (ngSubmit)="onSubmit(userForm)">
             <div class="col-md-12">
               <div class="form-group row">
-                <label for="firstName" class="col-4 col-form-label">First Name</label>
+                <label for="firstName" class="col-4 col-form-label">First Name:</label>
                 <div class="col-8">
                   <input formControlName="firstName" type="text" id="password" class="form-control" name="firstName"
                     placeholder="First Name" style="margin-bottom: 5px;" />
                 </div>
               </div>
               <div class="form-group row">
-                <label for="lastName" class="col-4 col-form-label">Last Name</label>
+                <label for="lastName" class="col-4 col-form-label">Last Name:</label>
                 <div class="col-8">
                   <input formControlName="lastName" type="text" id="lastName" class="form-control" name="lastName"
                     placeholder="Last Name" style="margin-bottom: 5px;" />
                 </div>
               </div>
               <div class="form-group row">
-                <label for="title" class="col-4 col-form-label">Title</label>
+                <label for="title" class="col-4 col-form-label">Title:</label>
                 <div class="col-8">
                   <input formControlName="title" type="text" id="title" class="form-control" name="title"
                     placeholder="Title" style="margin-bottom: 5px;" />
