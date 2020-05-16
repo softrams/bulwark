@@ -4,7 +4,7 @@
   "description": "An organizational asset and vulnerability management tool",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cd frontend && npm run-script test",
     "start": "node dist/app.js",
     "ngServe": "cd frontend && npm run-script build && npm run-script start",
     "nodemon:watch": "nodemon -e ts --exec \"npm run tsc\"",
@@ -19,7 +19,8 @@
     "tsc": "rimraf dist && tsc && npm start",
     "lint": "tslint --project . && cd frontend && npm run-script lint",
     "lint:fix": "tslint --fix --project . && cd frontend && npm run-script lint --fix=true",
-    "release": "standard-version"
+    "release": "standard-version",
+    "commit": "git cz"
   },
   "nodemonConfig": {
     "ignore": [

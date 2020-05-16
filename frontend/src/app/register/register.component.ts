@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from '../auth.service';
+import { UserService } from '../user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService } from '../alert/alert.service';
 
@@ -15,7 +15,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
-    public authService: AuthService,
+    public userService: UserService,
     public router: Router,
     public alertService: AlertService
   ) {
@@ -38,7 +38,7 @@ export class RegisterComponent implements OnInit {
       confirmPassword: form.value.confirmPassword,
       uuid: this.uuid,
     };
-    this.authService.registerUser(registerObj).subscribe((res: string) => {
+    this.userService.registerUser(registerObj).subscribe((res: string) => {
       this.router.navigate(['login']);
       this.alertService.success(res);
     });

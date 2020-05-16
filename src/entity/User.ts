@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { IsEmail, IsUUID } from 'class-validator';
+import { IsEmail, IsUUID, IsAlpha, IsOptional } from 'class-validator';
 
 @Entity()
 export class User {
@@ -15,6 +15,13 @@ export class User {
   @Column()
   active: boolean;
   @Column()
+  @IsOptional()
   @IsUUID()
   uuid: string;
+  @Column()
+  firstName: string;
+  @Column()
+  lastName: string;
+  @Column()
+  title: string;
 }
