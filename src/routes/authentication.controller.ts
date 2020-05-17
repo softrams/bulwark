@@ -38,9 +38,8 @@ const login = async (req: UserRequest, res: Response) => {
     }
     const valid = await passwordUtility.compare(password, user.password);
     if (valid) {
-      // TODO: Generate secret key and store in env var
-      const token = jwt.sign({ email: user.email, userId: user.id }, process.env.JWT_KEY, { expiresIn: '.5h' });
-      return res.status(200).json(token);
+      const tokens = generateTokens(user);
+      return res.status(200).json(tokens);
     } else {
       return res.status(400).json('Invalid email or password');
     }
@@ -106,8 +105,39 @@ const resetPassword = async (req: UserRequest, res: Response) => {
       .json('Unable to reset user password at this time.  Please contact an administrator for assistance.');
   }
 };
+/**
+ * @description Refresh Session
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns Tokens
+ */
+const refreshSession = async (req: UserRequest, res: Response) => {
+  const user = await getConnection().getRepository(User).findOne(req.user);
+  if (user) {
+    const tokens = generateTokens(user);
+    res.status(200).json(tokens);
+  } else {
+    res.status(404).json('User not found');
+  }
+};
+/**
+ * @description Generate Tokens
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns Tokens
+ */
+const generateTokens = (user: User) => {
+  const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, { expiresIn: '.5m' });
+  const refreshToken = jwt.sign({ userId: user.id }, process.env.JWT_REFRESH_KEY, { expiresIn: '1h' });
+  const tokens = {
+    token,
+    refreshToken
+  };
+  return tokens;
+};
 module.exports = {
   login,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  refreshSession
 };

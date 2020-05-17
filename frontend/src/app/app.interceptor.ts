@@ -3,15 +3,17 @@ import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
-  HttpRequest
+  HttpRequest,
+  HttpResponse,
 } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { finalize, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, catchError, switchMap } from 'rxjs/operators';
 import { LoaderService } from './loader.service';
 import { AlertService } from './alert/alert.service';
 import { AuthService } from './auth.service';
 import { environment } from '../environments/environment';
 import { Router } from '@angular/router';
+import { Tokens } from './interfaces/Tokens';
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {
   constructor(
@@ -31,7 +33,7 @@ export class AppInterceptor implements HttpInterceptor {
     // cloned headers, updated with the authorization.
     if (authToken) {
       req = req.clone({
-        headers: req.headers.set('Authorization', authToken)
+        headers: req.headers.set('Authorization', authToken),
       });
     }
     this.loaderService.show();
@@ -61,8 +63,21 @@ export class AppInterceptor implements HttpInterceptor {
               this.alertService.warn(error.error);
               break;
             case 401:
-              this.alertService.error(error.error);
-              this.authService.logout();
+              if (error.url === environment.apiUrl + '/refresh') {
+                this.alertService.error(error.error);
+                this.authService.logout();
+                return Observable.throw(error);
+              }
+              this.authService
+                .refreshSession(localStorage.getItem('REFRESH_TOKEN'))
+                .subscribe((res: Tokens) => {
+                  localStorage.setItem('AUTH_TOKEN', res.token);
+                  localStorage.setItem('REFRESH_TOKEN', res.refreshToken);
+                  const clonedRequest = req.clone({
+                    headers: req.headers.set('Authorization', res.token),
+                  });
+                  return next.handle(clonedRequest);
+                });
               break;
             case 400:
               this.alertService.warn(error.error);

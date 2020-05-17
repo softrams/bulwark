@@ -16,11 +16,16 @@ export class AuthService {
   }
 
   logout() {
+    localStorage.removeItem('REFRESH_TOKEN');
     return localStorage.removeItem('AUTH_TOKEN');
   }
 
   getUserToken() {
     return localStorage.getItem('AUTH_TOKEN');
+  }
+
+  getRefreshToken() {
+    return localStorage.getItem('REFRESH_TOKEN');
   }
 
   forgotPassword(email) {
@@ -29,5 +34,9 @@ export class AuthService {
 
   passwordReset(creds) {
     return this.http.patch(`${this.api}/password-reset`, creds);
+  }
+
+  refreshSession(refreshToken) {
+    return this.http.post(`${this.api}/refresh`, { refreshToken });
   }
 }
