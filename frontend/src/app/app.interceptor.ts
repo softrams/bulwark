@@ -4,7 +4,6 @@ import {
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
-  HttpResponse,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { finalize, catchError, switchMap } from 'rxjs/operators';
@@ -23,14 +22,15 @@ export class AppInterceptor implements HttpInterceptor {
     public router: Router
   ) {}
 
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['login']);
+  }
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    // Get the auth token from the service.
     const authToken = this.authService.getUserToken();
-    // Clone the request and replace the original headers with
-    // cloned headers, updated with the authorization.
     if (authToken) {
       req = req.clone({
         headers: req.headers.set('Authorization', authToken),
@@ -63,22 +63,23 @@ export class AppInterceptor implements HttpInterceptor {
               this.alertService.warn(error.error);
               break;
             case 401:
-              if (error.url === environment.apiUrl + '/refresh') {
-                this.alertService.error(error.error);
-                this.authService.logout();
-                return Observable.throw(error);
+              const url = environment.apiUrl;
+              if (error.url === url + '/refresh') {
+                this.logout();
+                this.alertService.error(
+                  'You have been logged out due to inactivity'
+                );
+                break;
               }
-              this.authService
-                .refreshSession(localStorage.getItem('REFRESH_TOKEN'))
-                .subscribe((res: Tokens) => {
-                  localStorage.setItem('AUTH_TOKEN', res.token);
-                  localStorage.setItem('REFRESH_TOKEN', res.refreshToken);
-                  const clonedRequest = req.clone({
-                    headers: req.headers.set('Authorization', res.token),
+              return this.authService.refreshSession().pipe(
+                switchMap((tokens: Tokens) => {
+                  this.authService.setTokens(tokens);
+                  req = req.clone({
+                    headers: req.headers.set('Authorization', tokens.token),
                   });
-                  return next.handle(clonedRequest);
-                });
-              break;
+                  return next.handle(req);
+                })
+              );
             case 400:
               this.alertService.warn(error.error);
               break;

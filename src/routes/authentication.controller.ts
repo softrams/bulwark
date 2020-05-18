@@ -127,8 +127,8 @@ const refreshSession = async (req: UserRequest, res: Response) => {
  * @returns Tokens
  */
 const generateTokens = (user: User) => {
-  const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, { expiresIn: '.5m' });
-  const refreshToken = jwt.sign({ userId: user.id }, process.env.JWT_REFRESH_KEY, { expiresIn: '1h' });
+  const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, { expiresIn: '15m' });
+  const refreshToken = jwt.sign({ userId: user.id }, process.env.JWT_REFRESH_KEY, { expiresIn: '8h' });
   const tokens = {
     token,
     refreshToken
