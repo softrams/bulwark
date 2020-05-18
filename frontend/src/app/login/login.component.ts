@@ -32,10 +32,8 @@ export class LoginComponent implements OnInit {
 
   onSubmit(creds) {
     const login = { email: creds.value.email, password: creds.value.password };
-    this.authService.login(login).subscribe((res: Tokens) => {
-      console.log(res);
-      localStorage.setItem('AUTH_TOKEN', res.token);
-      localStorage.setItem('REFRESH_TOKEN', res.refreshToken);
+    this.authService.login(login).subscribe((tokens: Tokens) => {
+      this.authService.setTokens(tokens);
       this.router.navigate(['dashboard']);
     });
   }
