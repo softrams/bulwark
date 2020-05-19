@@ -3,15 +3,16 @@ import {
   HttpEvent,
   HttpHandler,
   HttpInterceptor,
-  HttpRequest
+  HttpRequest,
 } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { finalize, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, catchError, switchMap } from 'rxjs/operators';
 import { LoaderService } from './loader.service';
 import { AlertService } from './alert/alert.service';
 import { AuthService } from './auth.service';
 import { environment } from '../environments/environment';
 import { Router } from '@angular/router';
+import { Tokens } from './interfaces/Tokens';
 @Injectable()
 export class AppInterceptor implements HttpInterceptor {
   constructor(
@@ -21,17 +22,18 @@ export class AppInterceptor implements HttpInterceptor {
     public router: Router
   ) {}
 
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['login']);
+  }
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    // Get the auth token from the service.
     const authToken = this.authService.getUserToken();
-    // Clone the request and replace the original headers with
-    // cloned headers, updated with the authorization.
     if (authToken) {
       req = req.clone({
-        headers: req.headers.set('Authorization', authToken)
+        headers: req.headers.set('Authorization', authToken),
       });
     }
     this.loaderService.show();
@@ -61,9 +63,23 @@ export class AppInterceptor implements HttpInterceptor {
               this.alertService.warn(error.error);
               break;
             case 401:
-              this.alertService.error(error.error);
-              this.authService.logout();
-              break;
+              const url = environment.apiUrl;
+              if (error.url === url + '/refresh') {
+                this.logout();
+                this.alertService.error(
+                  'You have been logged out due to inactivity'
+                );
+                break;
+              }
+              return this.authService.refreshSession().pipe(
+                switchMap((tokens: Tokens) => {
+                  this.authService.setTokens(tokens);
+                  req = req.clone({
+                    headers: req.headers.set('Authorization', tokens.token),
+                  });
+                  return next.handle(req);
+                })
+              );
             case 400:
               this.alertService.warn(error.error);
               break;

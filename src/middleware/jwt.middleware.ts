@@ -21,6 +21,28 @@ const checkToken = (req, res, next) => {
   }
 };
 
+/**
+ * @description Checks for valid token before API logic
+ * @param {Request} req
+ * @param {Response} res
+ */
+const checkRefreshToken = (req, res, next) => {
+  const token = req.body.refreshToken;
+  if (token) {
+    jwt.verify(token, process.env.JWT_REFRESH_KEY, (err, decoded) => {
+      if (err) {
+        return res.status(401).json('Refresh token is not valid');
+      } else {
+        req.user = decoded.userId;
+        next();
+      }
+    });
+  } else {
+    return res.status(401).json('Refresh token not supplied');
+  }
+};
+
 module.exports = {
-  checkToken
+  checkToken,
+  checkRefreshToken
 };
