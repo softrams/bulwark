@@ -90,6 +90,12 @@ Only update if a different port is required
 
 Set this variable to the JWT secret
 
+#### `JWT_REFRESH_KEY`
+
+`JWT_REFRESH_KEY="changeMe"`
+
+Set this variable to the refresh JWT secret
+
 #### `FROM_EMAIL`
 
 `FROM_EMAIL="foo@bar.com"`
@@ -121,6 +127,7 @@ NODE_ENV=""
 DEV_URL="http://localhost:4200"
 PROD_URL="http://localhost:5000"
 JWT_KEY=""
+JWT_REFRESH_KEY=""
 FROM_EMAIL=""
 FROM_EMAIL_PASSWORD=""
 COMPANY_NAME=""
@@ -135,7 +142,7 @@ On initial startup, Bulwark will not have any users. Therefore, it is necessary 
 1. `$ npm install`
 2. `$ npm run start:dev`
 3. Navigate to [seed-user.ts](https://github.com/softrams/bulwark/blob/develop/src/temp/seed-user.ts)
-4. Update the `userConfig` objecy with user credentials, save, and wait for the JS to compile
+4. Update the `userConfig` object with user credentials, save, and wait for the JS to compile
 5. `$ node ./dist/temp/seed-user.js`
 6. Log into Bulwark with credentials used in step 4
 
