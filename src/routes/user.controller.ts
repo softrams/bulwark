@@ -51,7 +51,10 @@ const create = async (req: UserRequest, res: Response) => {
  * @returns success message
  */
 const register = async (req: UserRequest, res: Response) => {
-  const { password, confirmPassword, uuid } = req.body;
+  const { firstName, lastName, title, password, confirmPassword, uuid } = req.body;
+  if (!firstName || !lastName || !title) {
+    return res.status(400).json('Invalid registration form');
+  }
   if (password !== confirmPassword) {
     return res.status(400).json('Passwords do not match');
   }
@@ -62,15 +65,23 @@ const register = async (req: UserRequest, res: Response) => {
     .getRepository(User)
     .createQueryBuilder()
     .where('User.uuid = :uuid', {
-      uuid,
+      uuid
     })
     .getOne();
   if (user) {
     user.password = await passwordUtility.generateHash(password);
     user.uuid = null;
     user.active = true;
-    await getConnection().getRepository(User).save(user);
-    return res.status(200).json('Registration Complete');
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.title = title;
+    const errors = await validate(user);
+    if (errors.length > 0) {
+      return res.status(400).json('Invalid registration form');
+    } else {
+      await getConnection().getRepository(User).save(user);
+      return res.status(200).json('Registration Complete');
+    }
   } else {
     return res
       .status(400)
@@ -203,5 +214,5 @@ module.exports = {
   invite,
   register,
   patch,
-  getUser,
+  getUser
 };
