@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/softrams/bulwark/compare/v2.0.0...v2.0.1) (2020-05-20)
+
+
+### Docs
+
+* **readme.md:** added new env var and fixed typo ([5ccf6ac](https://github.com/softrams/bulwark/commit/5ccf6ac022ee1012141b2518848443de04b5f19c))
+
 ## 2.0.0 (2020-05-20)
 
 
