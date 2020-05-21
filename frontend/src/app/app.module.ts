@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AlertModule } from './alert/alert.module';
-
+import { NgSelectModule } from '@ng-select/ng-select';
 import { AppService } from './app.service';
 import { LoaderService } from './loader.service';
 import { AuthGuard } from './auth.guard';
@@ -53,7 +53,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     PasswordResetComponent,
     InviteUserComponent,
     RegisterComponent,
-    UserProfileComponent
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,15 +62,16 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     ReactiveFormsModule,
     FontAwesomeModule,
     MarkdownModule.forRoot(),
-    AlertModule
+    AlertModule,
+    NgSelectModule,
   ],
   providers: [
     AppService,
     DatePipe,
     LoaderService,
     { provide: HTTP_INTERCEPTORS, useClass: AppInterceptor, multi: true },
-    AuthGuard
+    AuthGuard,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

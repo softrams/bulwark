@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { Asset } from './Asset';
 import { Vulnerability } from './Vulnerability';
 import { IsUrl, IsDate, MaxLength, IsString } from 'class-validator';
+import { User } from './User';
 
 @Entity()
 export class Assessment {
@@ -34,4 +35,7 @@ export class Assessment {
   asset: Asset;
   @OneToMany((type) => Vulnerability, (vuln) => vuln.assessment)
   vulnerabilities: Vulnerability[];
+  @ManyToMany((type) => User)
+  @JoinTable()
+  testers: User[];
 }

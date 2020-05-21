@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
-import { User } from './interfaces/User';
+import { User } from './classes/User';
 @Injectable({
   providedIn: 'root',
 })
@@ -21,6 +21,9 @@ export class UserService {
     return this.http.get<User>(`${this.api}/user`);
   }
 
+  getUsers() {
+    return this.http.get<User>(`${this.api}/users`);
+  }
   patchUser(user: User) {
     return this.http.patch(`${this.api}/user`, user);
   }

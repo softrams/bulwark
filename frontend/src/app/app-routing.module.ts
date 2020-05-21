@@ -26,6 +26,8 @@ import { InviteUserComponent } from './invite-user/invite-user.component';
 import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { UserService } from './user.service';
+import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/internal/operators/map';
 @Injectable()
 export class AssetsResolver implements Resolve<any> {
   constructor(private apiService: AppService) {}
@@ -43,12 +45,29 @@ export class AssetResolver implements Resolve<any> {
 }
 @Injectable()
 export class AssessmentResolver implements Resolve<any> {
-  constructor(private apiService: AppService) {}
+  constructor(
+    private apiService: AppService,
+    private userService: UserService
+  ) {}
   resolve(route: ActivatedRouteSnapshot) {
-    return this.apiService.getAssessment(
-      route.params.assetId,
-      route.params.assessmentId
-    );
+    if (route.params.assetId && route.params.assessmentId) {
+      return forkJoin([
+        this.apiService.getAssessment(
+          route.params.assetId,
+          route.params.assessmentId
+        ),
+        this.userService.getUsers(),
+      ]).pipe(
+        map((result) => {
+          return {
+            assessment: result[0],
+            testers: result[1],
+          };
+        })
+      );
+    } else {
+      return this.userService.getUsers();
+    }
   }
 }
 @Injectable()
@@ -194,12 +213,13 @@ const routes: Routes = [
   {
     path: 'organization/:orgId/asset/:assetId/assessment',
     component: AssessmentFormComponent,
+    resolve: { result: AssessmentResolver },
     canActivate: [AuthGuard],
   },
   {
     path: 'organization/:orgId/asset/:assetId/assessment/:assessmentId',
     component: AssessmentFormComponent,
-    resolve: { assessment: AssessmentResolver },
+    resolve: { result: AssessmentResolver },
     canActivate: [AuthGuard],
   },
   {

@@ -207,6 +207,37 @@ const getUser = async (req: UserRequest, res: Response) => {
   delete user.id;
   return res.status(200).json(user);
 };
+/**
+ * @description Get Users
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns user array
+ */
+const getUsers = async (req: UserRequest, res: Response) => {
+  const users = await getConnection()
+    .getRepository(User)
+    .createQueryBuilder('user')
+    .where('user.active = true')
+    .select(['user.id', 'user.firstName', 'user.lastName', 'user.title'])
+    .getMany();
+  return res.status(200).json(users);
+};
+/**
+ * @description Get user IDs and validate users
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns User array
+ */
+const getUsersById = async (userIds: number[]) => {
+  const userArray: User[] = [];
+  for (const iterator of userIds) {
+    const user = await getConnection().getRepository(User).findOne(iterator);
+    if (user) {
+      userArray.push(user);
+    }
+  }
+  return userArray;
+};
 module.exports = {
   create,
   verify,
@@ -214,5 +245,7 @@ module.exports = {
   invite,
   register,
   patch,
-  getUser
+  getUser,
+  getUsers,
+  getUsersById
 };
