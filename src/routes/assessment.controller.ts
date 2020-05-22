@@ -17,7 +17,7 @@ const userController = require('../routes/user.controller');
  */
 const getAssessmentsByAssetId = async (req: UserRequest, res: Response) => {
   if (!req.params.id) {
-    return res.status(400).json('Invalid Assessment UserRequest');
+    return res.status(400).json('Invalid Assessment request');
   }
   if (isNaN(+req.params.id)) {
     return res.status(400).json('Invalid Asset ID');
@@ -40,7 +40,7 @@ const getAssessmentsByAssetId = async (req: UserRequest, res: Response) => {
  */
 const getAssessmentVulns = async (req: UserRequest, res: Response) => {
   if (!req.params.id) {
-    return res.status(400).json('Invalid Vulnerability UserRequest');
+    return res.status(400).json('Invalid Vulnerability request');
   }
   if (isNaN(+req.params.id)) {
     return res.status(400).json('Invalid Assessment ID');
@@ -128,7 +128,7 @@ const getAssessmentById = async (req: UserRequest, res: Response) => {
  */
 const updateAssessmentById = async (req: UserRequest, res: Response) => {
   if (!req.params.assessmentId) {
-    return res.status(400).send('Invalid assessment UserRequest');
+    return res.status(400).send('Invalid assessment request');
   }
   if (isNaN(+req.params.assessmentId)) {
     return res.status(400).json('Invalid Assessment ID');
@@ -166,7 +166,7 @@ const updateAssessmentById = async (req: UserRequest, res: Response) => {
  */
 const queryReportDataByAssessment = async (req: UserRequest, res: Response) => {
   if (!req.params.assessmentId) {
-    return res.status(400).send('Invalid report UserRequest');
+    return res.status(400).send('Invalid report request');
   }
   if (isNaN(+req.params.assessmentId)) {
     return res.status(400).json('Invalid Assessment ID');
@@ -179,7 +179,7 @@ const queryReportDataByAssessment = async (req: UserRequest, res: Response) => {
       assessmentId: req.params.assessmentId
     })
     .leftJoinAndSelect('assessment.asset', 'asset')
-    .select(['assessment', 'tester.firstName', 'tester.lastName', 'tester.title', 'tester.id'])
+    .select(['assessment', 'tester.firstName', 'tester.lastName', 'tester.title'])
     .getOne();
   const assessmentForId = await getConnection()
     .getRepository(Assessment)
