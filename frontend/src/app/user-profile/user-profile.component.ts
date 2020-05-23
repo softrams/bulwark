@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService } from '../alert/alert.service';
-import { User } from '../interfaces/User';
+import { User } from '../classes/User';
 import { UserService } from '../user.service';
 
 @Component({
@@ -57,6 +57,7 @@ export class UserProfileComponent implements OnInit {
       this.userForm.enable();
     } else {
       const userInfo: User = {
+        id: null,
         firstName: form.value.firstName,
         lastName: form.value.lastName,
         title: form.value.title,

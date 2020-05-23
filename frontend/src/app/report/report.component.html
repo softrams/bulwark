@@ -42,25 +42,25 @@
     </div>
     <br />
     <div class="row">
-      <div class="col-4">
+      <div class="col-5">
         <h4>Application Security Team</h4>
         <!--TODO:  Dynamically fill these out-->
         <table class="table">
-          <tr>
-            <th>Name</th>
-            <th>Position</th>
-          </tr>
-          <tr>
-            <td>John 117</td>
-            <td>Master Chief</td>
-          </tr>
-          <tr>
-            <td>Cortana</td>
-            <td>Pr. Artificial Intelligence</td>
-          </tr>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Position</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let tester of report.assessment.testers">
+            <tr>
+              <td>{{ tester?.firstName }} {{tester?.lastName}}</td>
+              <td>{{ tester?.title }}</td>
+            </tr>
+          </tbody>
         </table>
       </div>
-      <div class="col-4">
+      <div class="col-3">
         <h4>Tools and Methodology</h4>
         <ul>
           <li>

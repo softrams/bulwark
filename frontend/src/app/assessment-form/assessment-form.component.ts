@@ -4,11 +4,12 @@ import { AppService } from '../app.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Assessment } from './Assessment';
 import { AlertService } from '../alert/alert.service';
+import { User } from '../classes/User';
 
 @Component({
   selector: 'app-assessment-form',
   templateUrl: './assessment-form.component.html',
-  styleUrls: ['./assessment-form.component.sass']
+  styleUrls: ['./assessment-form.component.sass'],
 })
 export class AssessmentFormComponent implements OnInit, OnChanges {
   public assessmentModel: Assessment;
@@ -16,6 +17,7 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
   public assetId: number;
   public assessmentId: number;
   public orgId: number;
+  public testers: User[] = [];
   constructor(
     public appService: AppService,
     private fb: FormBuilder,
@@ -27,11 +29,18 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.activatedRoute.data.subscribe(({ assessment }) => {
-      if (assessment) {
-        assessment.startDate = this.transformDate(assessment.startDate);
-        assessment.endDate = this.transformDate(assessment.endDate);
-        this.assessmentForm.patchValue(assessment);
+    this.activatedRoute.data.subscribe(({ result }) => {
+      if (result.assessment) {
+        result.assessment.startDate = this.transformDate(
+          result.assessment.startDate
+        );
+        result.assessment.endDate = this.transformDate(
+          result.assessment.endDate
+        );
+        this.testers = result.testers;
+        this.assessmentForm.patchValue(result.assessment);
+      } else {
+        this.testers = result;
       }
     });
     this.activatedRoute.params.subscribe((params) => {
@@ -71,7 +80,8 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
       scope: this.assessmentModel.scope,
       tag: this.assessmentModel.tag,
       startDate: this.assessmentModel.startDate,
-      endDate: this.assessmentModel.endDate
+      endDate: this.assessmentModel.endDate,
+      testers: this.assessmentModel.testers,
     });
   }
 
@@ -88,7 +98,8 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
       scope: ['', [Validators.required]],
       tag: ['', []],
       startDate: ['', [Validators.required]],
-      endDate: ['', [Validators.required]]
+      endDate: ['', [Validators.required]],
+      testers: ['', [Validators.required]],
     });
   }
 
@@ -108,16 +119,20 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
    */
   createOrUpdateAssessment(assessment: Assessment) {
     if (this.assessmentId) {
-      this.appService.updateAssessment(assessment, this.assessmentId, this.assetId).subscribe((res: string) => {
-        this.navigateToAssessments();
-        this.alertService.success(res);
-      });
+      this.appService
+        .updateAssessment(assessment, this.assessmentId, this.assetId)
+        .subscribe((res: string) => {
+          this.navigateToAssessments();
+          this.alertService.success(res);
+        });
     } else {
       this.assessmentModel.asset = this.assetId;
-      this.appService.createAssessment(this.assessmentModel).subscribe((res: string) => {
-        this.navigateToAssessments();
-        this.alertService.success(res);
-      });
+      this.appService
+        .createAssessment(this.assessmentModel)
+        .subscribe((res: string) => {
+          this.navigateToAssessments();
+          this.alertService.success(res);
+        });
     }
   }
 

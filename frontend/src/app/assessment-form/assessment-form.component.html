@@ -2,85 +2,42 @@
   <form [formGroup]="assessmentForm" (ngSubmit)="onSubmit(assessmentForm)">
     <div class="form-group col-6 mx-auto">
       <label for="assessmentName">Assessment Name</label>
-      <input
-        formControlName="name"
-        type="text"
-        class="form-control"
-        id="assessmentName"
-      />
+      <input formControlName="name" type="text" class="form-control" id="assessmentName" />
       <label for="executiveSummary">Executive Summary</label>
-      <textarea
-        formControlName="executiveSummary"
-        type="text"
-        class="form-control"
-        id="executiveSummary"
-        maxlength="4000"
-        rows="6"
-      ></textarea>
+      <textarea formControlName="executiveSummary" type="text" class="form-control" id="executiveSummary"
+        maxlength="4000" rows="6"></textarea>
       <label for="jiraId">JIRA URL</label>
-      <input
-        formControlName="jiraId"
-        type="text"
-        class="form-control"
-        id="jiraId"
-      />
+      <input formControlName="jiraId" type="text" class="form-control" id="jiraId" />
       <label for="testUrl">Test URL</label>
-      <input
-        formControlName="testUrl"
-        type="text"
-        class="form-control"
-        id="testUrl"
-      />
+      <input formControlName="testUrl" type="text" class="form-control" id="testUrl" />
       <label for="prodUrl">Production URL</label>
-      <input
-        formControlName="prodUrl"
-        type="text"
-        class="form-control"
-        id="prodUrl"
-      />
+      <input formControlName="prodUrl" type="text" class="form-control" id="prodUrl" />
       <label for="scope">Scope of the Assessment</label>
-      <textarea
-        formControlName="scope"
-        type="text"
-        class="form-control"
-        id="scope"
-      ></textarea>
+      <textarea formControlName="scope" type="text" class="form-control" id="scope"></textarea>
       <label for="tag">Source Code Tag</label>
       <input formControlName="tag" type="text" class="form-control" id="tag" />
+      <label for="testers">Testers</label>
+      <ng-select [items]="testers" bindLabel="firstName" labelForId="testerList" [multiple]="true" clearAllText="Clear"
+        formControlName="testers">
+        <ng-template ng-label-tmp let-item="item" let-clear="clear">
+          <span class="ng-value-icon right" (click)="clear(item)">×</span>
+          {{item.firstName}} {{item.lastName}}
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+          {{item.firstName}} {{item.lastName}}
+        </ng-template>
+      </ng-select>
       <label for="startDate" class="col-form-label">Start Date</label>
-      <input
-        formControlName="startDate"
-        class="form-control"
-        type="date"
-        id="startDate"
-      />
+      <input formControlName="startDate" class="form-control" type="date" id="startDate" />
       <label for="endDate" class="col-form-label">End Date</label>
-      <input
-        formControlName="endDate"
-        class="form-control"
-        type="date"
-        id="endDate"
-      />
+      <input formControlName="endDate" class="form-control" type="date" id="endDate" />
       <br />
-      <button
-        [disabled]="!assessmentForm.valid"
-        class="btn btn-primary float-right"
-        type="submit"
-        data-toggle="tooltip"
-        data-placement="bottom"
-        title="Submit"
-      >
+      <button [disabled]="!assessmentForm.valid" class="btn btn-primary float-right" type="submit" data-toggle="tooltip"
+        data-placement="bottom" title="Submit">
         Submit
       </button>
-      <button
-        style="margin-right: 5px;"
-        (click)="navigateToAssessments()"
-        class="btn btn-secondary float-right"
-        type="button"
-        data-toggle="tooltip"
-        data-placement="bottom"
-        title="Back to Assessments"
-      >
+      <button style="margin-right: 5px;" (click)="navigateToAssessments()" class="btn btn-secondary float-right"
+        type="button" data-toggle="tooltip" data-placement="bottom" title="Back to Assessments">
         Back to Assessments
       </button>
     </div>

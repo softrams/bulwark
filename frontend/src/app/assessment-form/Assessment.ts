@@ -1,4 +1,5 @@
 import { Url } from 'url';
+import { User } from '../classes/User';
 
 export class Assessment {
   constructor(
@@ -12,6 +13,7 @@ export class Assessment {
     public scope: string,
     public tag: number,
     public startDate: Date,
-    public endDate: Date
+    public endDate: Date,
+    public testers: User[]
   ) {}
 }
