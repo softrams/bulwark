@@ -6,7 +6,7 @@ import { passwordRequirement } from '../enums/message-enum';
 /**
  * WARNING: THIS SHOULD ONLY BE USED TO SEED THE INITIAL USER
  * 1) Run the server in development mode: 'npm run start:dev'
- * 2) Update the `userConfig` object with the user's email and password
+ * 2) Update the `userConfig` object with the user information
  * 3) Save the file.  This will automatically compile to JS.
  * 4) Execute:  'node ./dist/temp/seed-user.js'
  * Password Requirements:
