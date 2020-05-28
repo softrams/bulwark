@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/softrams/bulwark/compare/v3.0.0...v3.0.1) (2020-05-28)
+
+
+### Bug Fixes
+
+* **seed-user.ts:** update seed user with new fields ([a7881b8](https://github.com/softrams/bulwark/commit/a7881b80d2baf4a017d1cb70661002dce65f20b8)), closes [#57](https://github.com/softrams/bulwark/issues/57)
+
 ## [3.0.0](https://github.com/softrams/bulwark/compare/v2.0.1...v3.0.0) (2020-05-28)
 
 
