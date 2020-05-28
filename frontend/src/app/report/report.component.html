@@ -20,16 +20,16 @@
     </h1>
     <hr />
     <h4>
-      {{ report?.assessment?.startDate | date: 'shortDate' }} -
-      {{ report?.assessment?.endDate | date: 'shortDate' }}
+      {{ report?.assessment?.startDate | date: 'shortDate':'UTC' }} -
+      {{ report?.assessment?.endDate | date: 'shortDate':'UTC' }}
     </h4>
     <p>
       The {{ report?.companyName }} Application Security Team performed a
       security assessment on {{ report?.asset?.name }} &
       {{ report?.assessment?.name }} (the application) on
-      {{ report?.assessment?.startDate | date: 'shortDate' }}. The security
+      {{ report?.assessment?.startDate | date: 'shortDate':'UTC' }}. The security
       assessment lasted {{ numOfDays }} days and ended on
-      {{ report?.assessment?.endDate | date: 'shortDate' }}. This report
+      {{ report?.assessment?.endDate | date: 'shortDate':'UTC' }}. This report
       contains detailed information about security vulnerabilities found during
       the assessment.
     </p>

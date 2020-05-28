@@ -17,53 +17,27 @@
         <a target="_blank" [href]="assessment?.jiraId">{{
           assessment?.jiraId
         }}</a>
-        <td>{{ assessment?.startDate | date: "shortDate" }}</td>
-        <td>{{ assessment?.endDate | date: "shortDate" }}</td>
+        <td>{{ assessment?.startDate | date: "shortDate":'UTC' }}</td>
+        <td>{{ assessment?.endDate | date: "shortDate":'UTC' }}</td>
         <td>
-          <button
-            class="btn btn-secondary"
-            type="button"
-            (click)="navigateToAssessmentById(assessment.id)"
-            style="margin-right: 10px;"
-            data-toggle="tooltip"
-            data-placement="bottom"
-            title="Edit Assessment"
-          >
+          <button class="btn btn-secondary" type="button" (click)="navigateToAssessmentById(assessment.id)"
+            style="margin-right: 10px;" data-toggle="tooltip" data-placement="bottom" title="Edit Assessment">
             <fa-icon [icon]="faPencilAlt"></fa-icon>
           </button>
-          <button
-            class="btn btn-primary"
-            type="button"
-            (click)="navigateToVulnerability(assessment.id)"
-            data-toggle="tooltip"
-            data-placement="bottom"
-            title="View Vulnerabilities"
-          >
+          <button class="btn btn-primary" type="button" (click)="navigateToVulnerability(assessment.id)"
+            data-toggle="tooltip" data-placement="bottom" title="View Vulnerabilities">
             <fa-icon [icon]="faHaykal"></fa-icon>
           </button>
         </td>
       </tr>
     </tbody>
   </table>
-  <button
-    (click)="navigateToAssessment()"
-    type="button"
-    class="btn btn-primary float-right"
-    data-toggle="tooltip"
-    data-placement="bottom"
-    title="Create Assessment"
-  >
+  <button (click)="navigateToAssessment()" type="button" class="btn btn-primary float-right" data-toggle="tooltip"
+    data-placement="bottom" title="Create Assessment">
     Create Assessment
   </button>
-  <button
-    (click)="navigateToOrganization()"
-    type="button"
-    class="btn btn-secondary float-right"
-    style="margin-right: 5px;"
-    data-toggle="tooltip"
-    data-placement="bottom"
-    title="Back to Organization"
-  >
+  <button (click)="navigateToOrganization()" type="button" class="btn btn-secondary float-right"
+    style="margin-right: 5px;" data-toggle="tooltip" data-placement="bottom" title="Back to Organization">
     Back to Organization
   </button>
 </div>
