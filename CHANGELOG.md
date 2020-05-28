@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/softrams/bulwark/compare/v2.0.1...v3.0.0) (2020-05-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* **assessment form and report:** ManyToMany relationship has been created between the User and Assessment models.
+API's have been updated for this change.  New API's created to retrieve users.
+
+### Features
+
+* **assessment form and report:** dynamic tester association to asssment ([3bbfc9c](https://github.com/softrams/bulwark/commit/3bbfc9c4d3d3a8f801ef3691298de223cea10dcc)), closes [#52](https://github.com/softrams/bulwark/issues/52)
+
+
+### Bug Fixes
+
+* **angular datepipe:** added UTC property to datepipe ([701611f](https://github.com/softrams/bulwark/commit/701611f94970502b327bd29f22cd99c090892359)), closes [#3](https://github.com/softrams/bulwark/issues/3)
+
+
+### Code Refactoring
+
+* **assessment controller:** updated response message. Removed usrId ([c2d2555](https://github.com/softrams/bulwark/commit/c2d2555e48aa86be0e13f1778297d1cdb73efb75)), closes [#52](https://github.com/softrams/bulwark/issues/52)
+
 ### [2.0.1](https://github.com/softrams/bulwark/compare/v2.0.0...v2.0.1) (2020-05-20)
 
 
