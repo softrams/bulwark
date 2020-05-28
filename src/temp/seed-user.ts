@@ -19,7 +19,10 @@ import { passwordRequirement } from '../enums/message-enum';
 
 const userConfig = {
   email: '',
-  password: ''
+  password: '',
+  firstName: '',
+  lastName: '',
+  title: ''
 };
 
 const seedUser = async () => {
@@ -33,6 +36,9 @@ const seedUser = async () => {
       try {
         const user = new User();
         user.email = userConfig.email;
+        user.firstName = userConfig.firstName;
+        user.lastName = userConfig.lastName;
+        user.title = userConfig.title;
         user.password = await passwordUtility.generateHash(userConfig.password);
         user.active = true;
         const userRepository = connection.getRepository(User);
