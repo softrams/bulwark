@@ -19,7 +19,7 @@ Bulwark is maintained in a simplified [Gitflow](https://jeffkreeftmeijer.com/git
 
 ### Versioning
 
-Any release from master will have a unique version
+Any release from master will have a unique version automated by [standard-version](https://github.com/conventional-changelog/standard-version)
 
 `MAJOR.MINOR.PATCH` will be incremented by:
 
@@ -33,9 +33,8 @@ Any release from master will have a unique version
 2. Ensure any install or build dependencies are removed
 3. All Git commits within a PR must be conventional commits using [commitizen](https://github.com/commitizen/cz-cli) and enforced by [husky](https://github.com/typicode/husky)
    1. Run `$ npm run commit` when committing changes
-4. Increase version numbers [accordingly](#versioning)
-5. The code must comply to the configured TSLint and Sass Lint rules
-6. Open pull request on the `develop` branch of your fork
+4. The code must comply to the configured TSLint and Sass Lint rules
+5. Open pull request on the `develop` branch of your fork
 
 ### Linting
 
