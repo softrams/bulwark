@@ -10,6 +10,6 @@
     "removeComments": true,
     "baseUrl": "./"
   },
-  "exclude": ["./frontend", "./migration"],
+  "exclude": ["./frontend", "./migration", "src/**/*.spec.ts"],
   "include": ["src/**/*"]
 }
