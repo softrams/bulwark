@@ -3,7 +3,7 @@
 # Testing Requirements
 - At least 80% code coverage is required for all tests.
 - Follow the recommended guidelines for Front-End [Testing](https://angular.io/guide/testing)
-- Follow the recommended guidesline for Back-End [Testing](https://jestjs.io/)
+- Follow the recommended guidelines for Back-End [Testing](https://jestjs.io/)
 
 
 ## Running Front-End unit tests
