@@ -100,9 +100,18 @@ export class UserProfileComponent implements OnInit {
       this.isSecurityEdit = true;
       this.securityForm.enable();
     } else {
-      console.log(form);
-      this.isSecurityEdit = false;
-      this.securityForm.disable();
+      this.authService
+        .updatePassword(
+          form.value.oldPassword,
+          form.value.newPassword,
+          form.value.confirmNewPassword
+        )
+        .subscribe((res: string) => {
+          this.alertService.success(res);
+          this.isSecurityEdit = false;
+          this.securityForm.disable();
+          this.securityForm.reset();
+        });
     }
   }
 }
