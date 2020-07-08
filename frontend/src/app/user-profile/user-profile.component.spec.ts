@@ -11,7 +11,7 @@ const userService = {
   patchUser: () => {},
 };
 
-fdescribe('UserProfileComponent', () => {
+describe('UserProfileComponent', () => {
   let component: UserProfileComponent;
   let fixture: ComponentFixture<UserProfileComponent>;
 
