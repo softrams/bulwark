@@ -42,3 +42,16 @@ Any release from master will have a unique version
 ```
 npm run lint
 ```
+
+### Testing
+
+```
+// Node Testing
+npm run test:node
+
+// Angular Testing
+npm run test:front
+
+// Project Testing
+npm run test
+```
