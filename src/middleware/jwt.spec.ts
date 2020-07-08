@@ -3,6 +3,7 @@ import jwt = require('jsonwebtoken');
 const { checkToken, checkRefreshToken } = require('./jwt.middleware');
 
 describe('jwt.middleware.ts', () => {
+    // Mocks the Request Object that is returned
     const mockRequest = () => {
         const req = {
             headers: {
@@ -14,7 +15,7 @@ describe('jwt.middleware.ts', () => {
         req.user = jest.fn().mockReturnValue(req);
         return req;
     };
-    
+    // Mocks the Response Object that is returned
     const mockResponse = () => {
         const res = {
             status: Function,
@@ -78,4 +79,4 @@ describe('jwt.middleware.ts', () => {
         await checkRefreshToken(req, res, jest.fn());
         expect(req.user).toBe('2222');  
     });
-})
+});
