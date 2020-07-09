@@ -13,7 +13,9 @@ import { UserService } from '../user.service';
 })
 export class UserProfileComponent implements OnInit {
   userForm: FormGroup;
+  securityForm: FormGroup;
   isEdit = false;
+  isSecurityEdit = false;
   user: User;
   constructor(
     private fb: FormBuilder,
@@ -23,7 +25,7 @@ export class UserProfileComponent implements OnInit {
     public activatedRoute: ActivatedRoute,
     public userService: UserService
   ) {
-    this.createForm();
+    this.createForms();
   }
 
   ngOnInit(): void {
@@ -31,15 +33,30 @@ export class UserProfileComponent implements OnInit {
       if (user) {
         this.user = user;
         this.rebuildForm();
+        this.rebuildSecurityForm();
       }
     });
   }
 
-  createForm() {
+  createForms() {
     this.userForm = this.fb.group({
       firstName: [{ value: '', disabled: !this.isEdit }, Validators.required],
       lastName: [{ value: '', disabled: !this.isEdit }, Validators.required],
       title: [{ value: '', disabled: !this.isEdit }, Validators.required],
+    });
+    this.securityForm = this.fb.group({
+      oldPassword: [
+        { value: '', disabled: !this.isSecurityEdit },
+        Validators.required,
+      ],
+      newPassword: [
+        { value: '', disabled: !this.isSecurityEdit },
+        Validators.required,
+      ],
+      confirmNewPassword: [
+        { value: '', disabled: !this.isSecurityEdit },
+        Validators.required,
+      ],
     });
   }
 
@@ -48,6 +65,14 @@ export class UserProfileComponent implements OnInit {
       firstName: this.user.firstName,
       lastName: this.user.lastName,
       title: this.user.title,
+    });
+  }
+
+  rebuildSecurityForm() {
+    this.userForm.reset({
+      oldPassword: '',
+      newPassword: '',
+      confirmNewPassword: '',
     });
   }
 
@@ -67,6 +92,26 @@ export class UserProfileComponent implements OnInit {
         this.isEdit = false;
         this.userForm.disable();
       });
+    }
+  }
+
+  onSecuritySubmit(form: FormGroup) {
+    if (!this.isSecurityEdit) {
+      this.isSecurityEdit = true;
+      this.securityForm.enable();
+    } else {
+      this.authService
+        .updatePassword(
+          form.value.oldPassword,
+          form.value.newPassword,
+          form.value.confirmNewPassword
+        )
+        .subscribe((res: string) => {
+          this.alertService.success(res);
+          this.isSecurityEdit = false;
+          this.securityForm.disable();
+          this.securityForm.reset();
+        });
     }
   }
 }

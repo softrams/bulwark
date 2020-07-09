@@ -42,6 +42,18 @@ export class AuthService {
     return this.http.patch(`${this.api}/password-reset`, creds);
   }
 
+  updatePassword(
+    oldPassword: string,
+    newPassword: string,
+    confirmNewPassword: string
+  ) {
+    return this.http.patch(`${this.api}/user/password`, {
+      oldPassword,
+      newPassword,
+      confirmNewPassword,
+    });
+  }
+
   refreshSession() {
     const refreshToken = this.getRefreshToken();
     return this.http.post(`${this.api}/refresh`, { refreshToken });

@@ -39,5 +39,45 @@
         </div>
       </div>
     </div>
+    <br />
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <h4>Security</h4>
+            <hr />
+          </div>
+        </div>
+        <div id="securityFormContent">
+          <form [formGroup]="securityForm" (ngSubmit)="onSecuritySubmit(securityForm)" id="securityForm">
+            <div class="col-md-12">
+              <div class="form-group row">
+                <label for="oldPassword" class="col-4 col-form-label">Old Password:</label>
+                <div class="col-8">
+                  <input formControlName="oldPassword" type="password" id="oldPassword" class="form-control"
+                    name="oldPassword" style="margin-bottom: 5px;" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="newPassword" class="col-4 col-form-label">New Password:</label>
+                <div class="col-8">
+                  <input formControlName="newPassword" type="password" id="newPassword" class="form-control"
+                    name="newPassword" style="margin-bottom: 5px;" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="confirmNewPassword" class="col-4 col-form-label">Confirm New Password:</label>
+                <div class="col-8">
+                  <input formControlName="confirmNewPassword" type="password" id="confirmNewPassword"
+                    class="form-control" name="confirmNewPassword" style="margin-bottom: 5px;" />
+                </div>
+              </div>
+              <input [disabled]="isSecurityEdit ? !securityForm.valid : false" type="submit"
+                class="btn btn-primary float-right" [value]="isSecurityEdit ? 'Update' : 'Edit'" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
