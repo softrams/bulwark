@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/softrams/bulwark/compare/v3.0.2...v3.1.0) (2020-07-09)
+
+
+### Features
+
+* **user-profile component:** ability to update user password ([9855987](https://github.com/softrams/bulwark/commit/985598765c7e7a4002bc5dd679a2096a1833dbc6)), closes [#50](https://github.com/softrams/bulwark/issues/50)
+* **user-profile.component.ts:** wired API to auth service and user prof ([6b6eb36](https://github.com/softrams/bulwark/commit/6b6eb36b1a361d2c3601e6cb7d4bac24a80b5c0c)), closes [#50](https://github.com/softrams/bulwark/issues/50)
+
+
+### Bug Fixes
+
+* **babel.config.js:** added new line ([e0617dd](https://github.com/softrams/bulwark/commit/e0617dd8e0d7c5c3b71ec88cc903e22632f5c418))
+* **jest.config.js:** removed tsx and jsx ([a269233](https://github.com/softrams/bulwark/commit/a26923324c0fbff7a32617fb5cc9298ef53df816))
+* **jwt.spec.ts:** added comments ([3b1505b](https://github.com/softrams/bulwark/commit/3b1505bbe7a449a32188f97f1fdbee4f6f1de63e))
+* **jwt.spec.ts:** added process.env to beforeAll to fix the issue ([51ab6e8](https://github.com/softrams/bulwark/commit/51ab6e805df007f3dbc41c9864670b2716ed9afd))
+* **jwt.spec.ts:** readded dotenv.config per PR ([e6ff159](https://github.com/softrams/bulwark/commit/e6ff1590f177c0460976360682e84935a8cc848b))
+* **jwt.spec.ts:** removed need for process.env ([c8ab992](https://github.com/softrams/bulwark/commit/c8ab99274859d9287ff21f9e82416dd2ef1d73db))
+* **package.json:** added needed packages to package.json ([15708b7](https://github.com/softrams/bulwark/commit/15708b7a19eed9a65be054876e4b231d2cee02ca))
+* **testing.md:** fixed a typo issue ([5441e7b](https://github.com/softrams/bulwark/commit/5441e7b43bba629bff0eaef374355e2f45163938))
+* **tsconfig.json:** added spec.ts to the exclude list ([66321e1](https://github.com/softrams/bulwark/commit/66321e1284adc186fdc645a4cdc65f6b74b992f5))
+
+
+### Code Refactoring
+
+* **user-profile.component.html .spec.ts:** updated element ID ([e91f40c](https://github.com/softrams/bulwark/commit/e91f40c820bd340f0b8f8f1472be7ecf737ba342)), closes [#50](https://github.com/softrams/bulwark/issues/50)
+
+
+### Docs
+
+* **contributing.md:** added a testing section under the linting section ([332e174](https://github.com/softrams/bulwark/commit/332e174f34a3b1bb996c7af567478b9a33dcfe9f))
+* **contributing.md:** removed testing information and added testing.md ([f3bdc44](https://github.com/softrams/bulwark/commit/f3bdc443cea498a8ce1fcf6f6687475b2c4c3c61))
+* **testing.md:** added a line to open the test coverage ([95d4862](https://github.com/softrams/bulwark/commit/95d48623d0a929bc667b92e0ee6b93484bdb1b54))
+* **testing.md:** removed comment of early stages ([f4ccdb9](https://github.com/softrams/bulwark/commit/f4ccdb92c1ac9dfe30f9a8241f15f7162c058a3e))
+* **testings.md:** added testing doc to run down requirements ([4dc0672](https://github.com/softrams/bulwark/commit/4dc0672e7cd267201ff3126a9363b8758e3fe037))
+
 ### [3.0.2](https://github.com/softrams/bulwark/compare/v3.0.1...v3.0.2) (2020-05-28)
 
 
