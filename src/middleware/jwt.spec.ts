@@ -1,3 +1,4 @@
+require('dotenv').config({ path: '.env' });
 import jwt = require('jsonwebtoken');
 const { checkToken, checkRefreshToken } = require('./jwt.middleware');
 
@@ -27,8 +28,6 @@ describe('jwt.middleware.ts', () => {
     let token: string;
     let refreshToken: string;
     beforeAll(() => {
-        process.env.JWT_KEY = 'testJWT';
-        process.env.JWT_REFRESH_KEY = 'testJWT';
         token = jwt.sign({ userId: '2222' }, process.env.JWT_KEY, { expiresIn: '15m' });
         refreshToken = jwt.sign({ userId: '2222' }, process.env.JWT_REFRESH_KEY, { expiresIn: '8h' });
     });
