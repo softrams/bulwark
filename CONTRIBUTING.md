@@ -45,13 +45,4 @@ npm run lint
 
 ### Testing
 
-```
-// Node Testing
-npm run test:node
-
-// Angular Testing
-npm run test:front
-
-// Project Testing
-npm run test
-```
+All testing should following the guildline stated within the [Testing Documention](TESTING.md)
