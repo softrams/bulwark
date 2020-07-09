@@ -27,8 +27,10 @@ describe('jwt.middleware.ts', () => {
     let token: string;
     let refreshToken: string;
     beforeAll(() => {
-        token = jwt.sign({ userId: '2222' }, 'testJWT', { expiresIn: '15m' });
-        refreshToken = jwt.sign({ userId: '2222' }, 'testJWT', { expiresIn: '8h' });
+        process.env.JWT_KEY = 'testJWT';
+        process.env.JWT_REFRESH_KEY = 'testJWT';
+        token = jwt.sign({ userId: '2222' }, process.env.JWT_KEY, { expiresIn: '15m' });
+        refreshToken = jwt.sign({ userId: '2222' }, process.env.JWT_REFRESH_KEY, { expiresIn: '8h' });
     });
 
     test('running checkToken should return a 401 with Authorization', async () => {
