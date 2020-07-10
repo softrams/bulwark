@@ -63,7 +63,7 @@
     "cz-conventional-changelog": "^3.2.0",
     "husky": "^4.2.5",
     "jest": "^26.1.0",
-    "nodemon": "^1.19.3",
+    "nodemon": "^2.0.4",
     "rimraf": "^3.0.2",
     "standard-version": "^8.0.0",
     "ts-jest": "^26.1.1",
