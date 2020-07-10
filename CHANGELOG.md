@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.1](https://github.com/softrams/bulwark/compare/v3.1.0...v3.1.1) (2020-07-10)
+
+
+### Others
+
+* **add dependabot config:** add dependabot configuration ([bcf46b1](https://github.com/softrams/bulwark/commit/bcf46b146b2240c4d7269caf3df2ee413771d431)), closes [#65](https://github.com/softrams/bulwark/issues/65)
+
 ## [3.1.0](https://github.com/softrams/bulwark/compare/v3.0.2...v3.1.0) (2020-07-09)
 
 
