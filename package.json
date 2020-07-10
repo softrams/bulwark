@@ -90,7 +90,7 @@
     "reflect-metadata": "^0.1.13",
     "ts-node": "^8.4.1",
     "tsconfig-paths": "^3.9.0",
-    "typeorm": "^0.2.19",
+    "typeorm": "^0.2.25",
     "uuid": "^3.4.0"
   },
   "husky": {
