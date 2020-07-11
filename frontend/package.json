@@ -23,8 +23,8 @@
     "@angular/platform-browser-dynamic": "~9.1.0",
     "@angular/router": "~9.1.0",
     "@fortawesome/angular-fontawesome": "^0.3.0",
-    "@fortawesome/fontawesome-svg-core": "^1.2.25",
-    "@fortawesome/free-brands-svg-icons": "^5.11.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.29",
+    "@fortawesome/free-brands-svg-icons": "^5.13.1",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@ng-select/ng-select": "^4.0.4",
     "core-js": "^3.6.5",
@@ -35,7 +35,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular/language-service": "~9.1.0",
+    "@angular/language-service": "~10.0.3",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
@@ -48,7 +48,7 @@
     "karma-jasmine": "~3.3.1",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.4.0",
-    "ts-node": "~7.0.0",
+    "ts-node": "~8.10.2",
     "tslint": "~6.1.2"
   }
 }
