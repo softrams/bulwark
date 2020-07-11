@@ -26,10 +26,10 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-brands-svg-icons": "^5.11.2",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
-    "@ng-select/ng-select": "^4.0.0",
-    "core-js": "^2.5.4",
-    "ngx-markdown": "^8.2.1",
-    "rxjs": "~6.5.4",
+    "@ng-select/ng-select": "^4.0.4",
+    "core-js": "^3.6.5",
+    "ngx-markdown": "^9.1.1",
+    "rxjs": "~6.6.0",
     "tslib": "^1.10.0",
     "typescript": "^3.8.3",
     "zone.js": "~0.10.2"
@@ -42,13 +42,13 @@
     "codelyzer": "^5.1.2",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
-    "karma": "~4.0.0",
+    "karma": "~5.1.0",
     "karma-chrome-launcher": "~2.2.0",
     "karma-coverage-istanbul-reporter": "~2.0.1",
-    "karma-jasmine": "~1.1.2",
+    "karma-jasmine": "~3.3.1",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
-    "tslint": "~5.11.0"
+    "tslint": "~6.1.2"
   }
 }
