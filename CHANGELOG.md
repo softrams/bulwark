@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.5](https://github.com/softrams/bulwark/compare/v3.1.4...v3.1.5) (2020-07-11)
+
+
+### Others
+
+* **deps:** bump @ng-select/ng-select from 4.0.0 to 4.0.4 in /frontend ([be713d0](https://github.com/softrams/bulwark/commit/be713d01a50ca36270948e7e1773968d31579605))
+* **deps:** bump bcrypt from 3.0.7 to 5.0.0 ([39f0eeb](https://github.com/softrams/bulwark/commit/39f0eeb7b55d9e98c1252959e3b09cd31869368b))
+* **deps:** bump class-validator from 0.10.2 to 0.12.2 ([c5402ca](https://github.com/softrams/bulwark/commit/c5402ca4a77cc09bbd819183606353fec646ed88))
+* **deps:** bump core-js from 2.6.10 to 3.6.5 in /frontend ([ff968bc](https://github.com/softrams/bulwark/commit/ff968bc39584897fe166869d26f809633cc0b64b))
+* **deps:** bump ngx-markdown from 8.2.1 to 9.1.1 in /frontend ([2d5574b](https://github.com/softrams/bulwark/commit/2d5574b71f55e5671b96cb78e04f519c253f9ba3))
+* **deps:** bump puppeteer from 1.20.0 to 5.0.0 ([ba72380](https://github.com/softrams/bulwark/commit/ba723801dd54a121a33bdf7dbfba4db4c8245e0a))
+* **deps:** bump rxjs from 6.5.4 to 6.6.0 in /frontend ([e28f1ed](https://github.com/softrams/bulwark/commit/e28f1ede03893fe2f12896250c0633c386caeed2))
+* **deps:** bump ts-node from 8.4.1 to 8.10.2 ([12dc1fc](https://github.com/softrams/bulwark/commit/12dc1fc8abe24842869f4aa19f574f59be63e921))
+* **deps:** bump typeorm from 0.2.24 to 0.2.25 ([dd663d9](https://github.com/softrams/bulwark/commit/dd663d98e0444f40d07e08b7fc92086167f3a3f6))
+* **deps-dev:** bump @commitlint/cli from 8.3.5 to 9.0.1 ([cfe0308](https://github.com/softrams/bulwark/commit/cfe030877f9607d896852c905dde2c46b2ad8dc4))
+* **deps-dev:** bump @commitlint/config-conventional ([0be3d9b](https://github.com/softrams/bulwark/commit/0be3d9bda8154c9e4a26a332287e6412c4bd983f))
+* **deps-dev:** bump karma from 4.0.1 to 5.1.0 in /frontend ([6e63c60](https://github.com/softrams/bulwark/commit/6e63c606da20e29d802bd344dc0110bdd6cbbcac))
+* **deps-dev:** bump karma-jasmine from 1.1.2 to 3.3.1 in /frontend ([3a25383](https://github.com/softrams/bulwark/commit/3a2538313299bdb7dfecdd8f0bb087908c47ffcb))
+* **deps-dev:** bump nodemon from 1.19.3 to 2.0.4 ([b5ce69b](https://github.com/softrams/bulwark/commit/b5ce69b31822ef59bc9825c8ca4a032385bf182e))
+* **deps-dev:** bump tslint from 5.11.0 to 6.1.2 in /frontend ([14e7ab5](https://github.com/softrams/bulwark/commit/14e7ab56a245c533698d0fb5d17dacddcdb8892f))
+* **deps-dev:** bump tslint from 6.1.0 to 6.1.2 ([24b1ed8](https://github.com/softrams/bulwark/commit/24b1ed8db6c8fbf8159b48b2324f583b3ec9e071))
+
 ### [3.1.4](https://github.com/softrams/bulwark/compare/v3.1.3...v3.1.4) (2020-07-11)
 
 ### [3.1.3](https://github.com/softrams/bulwark/compare/v3.1.2...v3.1.3) (2020-07-10)
