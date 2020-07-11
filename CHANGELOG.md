@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.6](https://github.com/softrams/bulwark/compare/v3.1.5...v3.1.6) (2020-07-11)
+
+
+### CI
+
+* **node.js.yml:** initial commit for github action ([7a87e2b](https://github.com/softrams/bulwark/commit/7a87e2b4ee5dcf7fb09e9d2ca66051a61c4a09a6)), closes [#6](https://github.com/softrams/bulwark/issues/6)
+
 ### [3.1.5](https://github.com/softrams/bulwark/compare/v3.1.4...v3.1.5) (2020-07-11)
 
 
