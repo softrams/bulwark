@@ -91,7 +91,7 @@
     "ts-node": "^8.10.2",
     "tsconfig-paths": "^3.9.0",
     "typeorm": "^0.2.25",
-    "uuid": "^3.4.0"
+    "uuid": "^8.2.0"
   },
   "husky": {
     "hooks": {
@@ -100,6 +100,7 @@
   },
   "config": {
     "commitizen": {
+      "pre-commit": "npm run lint",
       "path": "./node_modules/cz-conventional-changelog"
     }
   }

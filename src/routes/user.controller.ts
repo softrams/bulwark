@@ -2,7 +2,7 @@ import { UserRequest } from '../interfaces/user-request.interface';
 import { getConnection } from 'typeorm';
 import { User } from '../entity/User';
 import { Response } from 'express';
-import uuidv4 = require('uuid/v4');
+import { v4 as uuidv4 } from 'uuid';
 import { validate } from 'class-validator';
 import { passwordRequirement } from '../enums/message-enum';
 // tslint:disable-next-line: no-var-requires
