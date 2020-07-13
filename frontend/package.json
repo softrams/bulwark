@@ -25,7 +25,7 @@
     "@fortawesome/angular-fontawesome": "^0.7.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.29",
     "@fortawesome/free-brands-svg-icons": "^5.13.1",
-    "@fortawesome/free-solid-svg-icons": "^5.11.2",
+    "@fortawesome/free-solid-svg-icons": "^5.13.1",
     "@ng-select/ng-select": "^4.0.4",
     "core-js": "^3.6.5",
     "ngx-markdown": "^10.0.0",
