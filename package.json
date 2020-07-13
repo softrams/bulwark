@@ -65,7 +65,7 @@
     "jest": "^26.1.0",
     "nodemon": "^2.0.4",
     "rimraf": "^3.0.2",
-    "standard-version": "^8.0.0",
+    "standard-version": "^8.0.1",
     "ts-jest": "^26.1.2",
     "tslint": "^6.1.2",
     "typescript": "^3.9.6"
