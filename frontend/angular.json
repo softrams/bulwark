@@ -23,7 +23,10 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
             "styles": [
               "src/styles.scss",
               "./node_modules/prismjs/themes/prism-okaidia.css"
@@ -31,8 +34,7 @@
             "scripts": [
               "./node_modules/marked/lib/marked.js",
               "./node_modules/prismjs/prism.js"
-            ],
-            "es5BrowserSupport": true
+            ]
           },
           "configurations": {
             "production": {
