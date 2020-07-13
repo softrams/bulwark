@@ -28,6 +28,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@ng-select/ng-select": "^4.0.4",
     "core-js": "^3.6.5",
+    "lru-cache": "^6.0.0",
     "ngx-markdown": "^9.1.1",
     "rxjs": "~6.6.0",
     "tslib": "^1.10.0",
