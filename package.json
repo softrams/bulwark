@@ -66,7 +66,7 @@
     "nodemon": "^2.0.4",
     "rimraf": "^3.0.2",
     "standard-version": "^8.0.0",
-    "ts-jest": "^26.1.1",
+    "ts-jest": "^26.1.2",
     "tslint": "^6.1.2",
     "typescript": "^3.9.6"
   },
@@ -86,7 +86,7 @@
     "mysql": "^2.18.1",
     "nodemailer": "^6.4.10",
     "password-validator": "^5.0.3",
-    "puppeteer": "^5.0.0",
+    "puppeteer": "^5.1.0",
     "reflect-metadata": "^0.1.13",
     "ts-node": "^8.10.2",
     "tsconfig-paths": "^3.9.0",
