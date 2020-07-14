@@ -53,7 +53,7 @@ createConnection().then((_) => {
   app.patch('/api/forgot-password', authController.forgotPassword);
   app.patch('/api/password-reset', authController.resetPassword);
   app.post('/api/refresh', jwtMiddleware.checkRefreshToken, authController.refreshSession);
-  app.patch('/api/user/password', userController.updatePassword);
+  app.patch('/api/user/password', userController.updateUserPassword);
   app.post('/api/login', authController.login);
   app.post('/api/upload', jwtMiddleware.checkToken, fileUploadController.uploadFile);
   app.get('/api/file/:id', jwtMiddleware.checkToken, fileUploadController.getFileById);

@@ -5,8 +5,8 @@ import { Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { validate } from 'class-validator';
 import { passwordRequirement } from '../enums/message-enum';
-// tslint:disable-next-line: no-var-requires
-const passwordUtility = require('../utilities/password.utility');
+import { generateHash, passwordSchema, updatePassword } from '../utilities/password.utility';
+
 // tslint:disable-next-line: no-var-requires
 const emailService = require('../services/email.service');
 /**
@@ -29,10 +29,10 @@ const create = async (req: UserRequest, res: Response) => {
   if (password !== confirmPassword) {
     return res.status(400).json('Passwords do not match');
   }
-  if (!passwordUtility.passwordSchema.validate(password)) {
+  if (!passwordSchema.validate(password)) {
     return res.status(400).json(passwordRequirement);
   }
-  user.password = await passwordUtility.generateHash(password);
+  user.password = await generateHash(password);
   user.active = false;
   user.uuid = uuidv4();
   const errors = await validate(user);
@@ -58,7 +58,7 @@ const register = async (req: UserRequest, res: Response) => {
   if (password !== confirmPassword) {
     return res.status(400).json('Passwords do not match');
   }
-  if (!passwordUtility.passwordSchema.validate(password)) {
+  if (!passwordSchema.validate(password)) {
     return res.status(400).json(passwordRequirement);
   }
   const user = await getConnection()
@@ -69,7 +69,7 @@ const register = async (req: UserRequest, res: Response) => {
     })
     .getOne();
   if (user) {
-    user.password = await passwordUtility.generateHash(password);
+    user.password = await generateHash(password);
     user.uuid = null;
     user.active = true;
     user.firstName = firstName;
@@ -140,7 +140,7 @@ const verify = async (req: UserRequest, res: Response) => {
  * @param {Response} res
  * @returns Success message
  */
-const updatePassword = async (req: UserRequest, res: Response) => {
+const updateUserPassword = async (req: UserRequest, res: Response) => {
   const { oldPassword, newPassword, confirmNewPassword } = req.body;
   if (newPassword !== confirmNewPassword) {
     return res.status(400).json('Passwords do not match');
@@ -148,15 +148,16 @@ const updatePassword = async (req: UserRequest, res: Response) => {
   if (newPassword === oldPassword) {
     return res.status(400).json('New password can not be the same as the old password');
   }
-  if (!passwordUtility.passwordSchema.validate(newPassword)) {
+  if (!passwordSchema.validate(newPassword)) {
     return res.status(400).json(passwordRequirement);
   }
   const user = await getConnection().getRepository(User).findOne(req.user);
   if (user) {
-    const callback = (resStatus: number, message: any) => {
-      res.status(resStatus).send(message);
-    };
-    user.password = await passwordUtility.updatePassword(oldPassword, user.password, newPassword, callback);
+    try {
+      user.password = await updatePassword(user.password, oldPassword, newPassword);
+    } catch (err) {
+      return res.status(400).json(err);
+    }
     await getConnection().getRepository(User).save(user);
     return res.status(200).json('Password updated successfully');
   } else {
@@ -241,7 +242,7 @@ const getUsersById = async (userIds: number[]) => {
 module.exports = {
   create,
   verify,
-  updatePassword,
+  updateUserPassword,
   invite,
   register,
   patch,
