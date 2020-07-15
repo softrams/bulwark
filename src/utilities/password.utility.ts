@@ -3,7 +3,7 @@ import * as bcrypt from 'bcrypt';
 const passwordValidator = require('password-validator');
 
 // Create a password schema
-const passwordSchema = new passwordValidator();
+export const passwordSchema = new passwordValidator();
 passwordSchema
   .is()
   .min(12) // Minimum length 8
@@ -23,15 +23,15 @@ const saltRounds = 10;
  * @param {Response} res
  * @returns hashed password
  */
-const generateHash = password => {
+export const generateHash = (password: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     bcrypt.genSalt(saltRounds, async (err, salt) => {
       if (err) {
-        return Error('Bcrypt hash failed: ' + err);
+        reject('Bcrypt hash failed: ' + err);
       } else {
-        bcrypt.hash(password, salt, async (hashErr, hash) => {
+        bcrypt.hash(password, salt, async (hashErr, hash: string) => {
           if (hashErr) {
-            return Error('Bcrypt hash failed: ' + hashErr);
+            reject('Bcrypt hash failed: ' + hashErr);
           } else {
             resolve(hash);
           }
@@ -46,13 +46,14 @@ const generateHash = password => {
  * @param {Response} res
  * @returns hashed password
  */
-const updatePassword = (oldPassword, currentPassword, newPassword, callback) => {
+export const updatePassword = (oldPassword, currentPassword, newPassword): Promise<string> => {
   return new Promise(async (resolve, reject) => {
-    const valid = await compare(oldPassword, currentPassword);
+    const valid = await compare(currentPassword, oldPassword);
     if (valid) {
-      resolve(await generateHash(newPassword));
+      const newPasswordHash = await generateHash(newPassword);
+      resolve(newPasswordHash);
     } else {
-      callback(400, JSON.stringify('Incorrect previous password'));
+      reject('Incorrect previous password');
     }
   });
 };
@@ -63,17 +64,13 @@ const updatePassword = (oldPassword, currentPassword, newPassword, callback) => 
  * @param {Response} res
  * @returns true/false
  */
-const compare = (oldPassword, currentPassword) => {
+export const compare = (currentPassword, oldPassword): Promise<boolean> => {
   return new Promise((resolve, reject) => {
-    bcrypt.compare(oldPassword, currentPassword, (err, valid) => {
+    bcrypt.compare(currentPassword, oldPassword, (err, valid) => {
+      if (err) {
+        reject('Bcrypt comparison failure');
+      }
       resolve(valid);
     });
   });
-};
-
-module.exports = {
-  generateHash,
-  updatePassword,
-  compare,
-  passwordSchema
 };
