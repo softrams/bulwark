@@ -3,25 +3,35 @@ import { IsEmail, IsUUID, IsAlpha, IsOptional } from 'class-validator';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({})
   id: number;
   @Column({
     unique: true
   })
   @IsEmail()
   email: string;
-  @Column()
+  @Column({
+    nullable: true
+  })
   password: string;
   @Column()
   active: boolean;
-  @Column()
+  @Column({
+    nullable: true
+  })
   @IsOptional()
   @IsUUID()
   uuid: string;
-  @Column()
+  @Column({
+    nullable: true
+  })
   firstName: string;
-  @Column()
+  @Column({
+    nullable: true
+  })
   lastName: string;
-  @Column()
+  @Column({
+    nullable: true
+  })
   title: string;
 }
