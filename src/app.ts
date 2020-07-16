@@ -43,7 +43,6 @@ app.listen(serverPort, () => console.info(`Server running on ${serverIpAddress}:
 // create typeorm connection
 createConnection().then((_) => {
   // register routes
-  app.post('/api/user/create', jwtMiddleware.checkToken, userController.create);
   app.post('/api/user/register', userController.register);
   app.post('/api/user/invite', jwtMiddleware.checkToken, userController.invite);
   app.patch('/api/user', jwtMiddleware.checkToken, userController.patch);

@@ -9,41 +9,7 @@ import { generateHash, passwordSchema, updatePassword } from '../utilities/passw
 
 // tslint:disable-next-line: no-var-requires
 const emailService = require('../services/email.service');
-/**
- * @description Create user
- * @param {UserRequest} req
- * @param {Response} res
- * @returns success message
- */
-const create = async (req: UserRequest, res: Response) => {
-  const user = new User();
-  const { password, confirmPassword, email } = req.body;
-  if (!email) {
-    return res.status(400).json('Email is invalid');
-  }
-  const existUser = await getConnection().getRepository(User).find({ where: { email } });
-  if (existUser.length) {
-    return res.status(400).json('A user associated to that email already exists');
-  }
-  user.email = email;
-  if (password !== confirmPassword) {
-    return res.status(400).json('Passwords do not match');
-  }
-  if (!passwordSchema.validate(password)) {
-    return res.status(400).json(passwordRequirement);
-  }
-  user.password = await generateHash(password);
-  user.active = false;
-  user.uuid = uuidv4();
-  const errors = await validate(user);
-  if (errors.length > 0) {
-    return res.status(400).json('User validation failed');
-  } else {
-    await getConnection().getRepository(User).save(user);
-    emailService.sendVerificationEmail(user.uuid, user.email);
-    return res.status(200).json('User created successfully');
-  }
-};
+
 /**
  * @description Register user
  * @param {UserRequest} req
@@ -125,7 +91,7 @@ const verify = async (req: UserRequest, res: Response) => {
     if (user) {
       user.active = true;
       user.uuid = null;
-      getConnection().getRepository(User).save(user);
+      await getConnection().getRepository(User).save(user);
       return res.status(200).json('Email verification successful');
     } else {
       return res.status(400).json('Email verification failed.  User does not exist.');
@@ -240,7 +206,6 @@ const getUsersById = async (userIds: number[]) => {
   return userArray;
 };
 module.exports = {
-  create,
   verify,
   updateUserPassword,
   invite,
