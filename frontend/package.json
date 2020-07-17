@@ -31,7 +31,7 @@
     "ngx-markdown": "^10.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
-    "typescript": "^3.9.6",
+    "typescript": "^3.9.7",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
