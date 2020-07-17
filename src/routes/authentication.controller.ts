@@ -6,8 +6,7 @@ import { Response } from 'express';
 import jwt = require('jsonwebtoken');
 import { generateHash, passwordSchema, compare } from '../utilities/password.utility';
 import { passwordRequirement } from '../enums/message-enum';
-// tslint:disable-next-line: no-var-requires
-const emailService = require('../services/email.service');
+import * as emailService from '../services/email.service';
 
 /**
  * @description Login to the application

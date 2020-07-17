@@ -6,10 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { validate } from 'class-validator';
 import { passwordRequirement } from '../enums/message-enum';
 import { generateHash, passwordSchema, updatePassword } from '../utilities/password.utility';
-
-// tslint:disable-next-line: no-var-requires
-const emailService = require('../services/email.service');
-
+import * as emailService from '../services/email.service';
 /**
  * @description Register user
  * @param {UserRequest} req
