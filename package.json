@@ -4,7 +4,7 @@
   "description": "An organizational asset and vulnerability management tool",
   "main": "index.js",
   "scripts": {
-    "test:node": "jest --config=jest.config.js --collectCoverage",
+    "test:node": "node_modules/.bin/jest --config=jest.config.js --collectCoverage",
     "test:front": "cd frontend && npm run-script test",
     "test": "npm run-script test:node && npm run-script test:front",
     "start": "node dist/app.js",
