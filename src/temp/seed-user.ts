@@ -1,6 +1,6 @@
-const passwordUtility = require('../utilities/password.utility');
+import { generateHash, passwordSchema } from '../utilities/password.utility';
 import { User } from '../entity/User';
-import { createConnection } from 'typeorm';
+import { getConnection } from 'typeorm';
 import { passwordRequirement } from '../enums/message-enum';
 
 /**
@@ -16,49 +16,40 @@ import { passwordRequirement } from '../enums/message-enum';
  *      at least one digit,
  *      and at least one symbol.
  */
+const userConfig = new User();
+userConfig.email = '';
+userConfig.password = '';
+userConfig.firstName = '';
+userConfig.lastName = '';
+userConfig.title = '';
 
-const userConfig = {
-  email: '',
-  password: '',
-  firstName: '',
-  lastName: '',
-  title: ''
-};
-
-const seedUser = async () => {
-  if (!passwordUtility.passwordSchema.validate(userConfig.password)) {
+export const seedUser = async (user: User) => {
+  if (!passwordSchema.validate(user.password)) {
     // tslint:disable-next-line:no-console
     console.error(passwordRequirement);
-    return;
+    return false;
   }
-  createConnection(/*...*/)
-    .then(async (connection) => {
-      try {
-        const user = new User();
-        user.email = userConfig.email;
-        user.firstName = userConfig.firstName;
-        user.lastName = userConfig.lastName;
-        user.title = userConfig.title;
-        user.password = await passwordUtility.generateHash(userConfig.password);
-        user.active = true;
-        const userRepository = connection.getRepository(User);
-        const existUser = await userRepository.find({ where: { email: user.email } });
-        if (existUser.length) {
-          console.warn('A user with that email already exists');
-          connection.close();
-        } else {
-          await userRepository.save(user);
-          // tslint:disable-next-line:no-console
-          console.info(`The user: ${user.email} has been created and may now be used to log into Bulwark!`);
-          connection.close();
-        }
-      } catch (err) {
-        console.error(err);
-        connection.close();
-      }
-    })
-    // tslint:disable-next-line:no-console
-    .catch((error) => console.log(error));
+  try {
+    user.password = await generateHash(user.password);
+    user.active = true;
+    const existUser = await getConnection()
+      .getRepository(User)
+      .find({ where: { email: user.email } });
+    if (existUser.length) {
+      console.warn('A user with that email already exists');
+      getConnection().close();
+      return false;
+    } else {
+      await getConnection().getRepository(User).save(user);
+      // tslint:disable-next-line:no-console
+      console.info(`The user: ${user.email} has been created and may now be used to log into Bulwark!`);
+      getConnection().close();
+      return true;
+    }
+  } catch (err) {
+    console.error(err);
+    getConnection().close();
+  }
 };
 
-seedUser();
+seedUser(userConfig);
