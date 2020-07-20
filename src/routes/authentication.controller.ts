@@ -4,11 +4,9 @@ import { User } from '../entity/User';
 import { v4 as uuidv4 } from 'uuid';
 import { Response } from 'express';
 import jwt = require('jsonwebtoken');
-// tslint:disable-next-line: no-var-requires
-const passwordUtility = require('../utilities/password.utility');
+import { generateHash, passwordSchema, compare } from '../utilities/password.utility';
 import { passwordRequirement } from '../enums/message-enum';
-// tslint:disable-next-line: no-var-requires
-const emailService = require('../services/email.service');
+import * as emailService from '../services/email.service';
 
 /**
  * @description Login to the application
@@ -36,7 +34,12 @@ const login = async (req: UserRequest, res: Response) => {
         .status(400)
         .json('This account has not been activated.  Please check for email verification or contact an administrator.');
     }
-    const valid = await passwordUtility.compare(password, user.password);
+    let valid: boolean;
+    try {
+      valid = await compare(password, user.password);
+    } catch (err) {
+      return res.status(400).json(err);
+    }
     if (valid) {
       const tokens = generateTokens(user);
       return res.status(200).json(tokens);
@@ -84,7 +87,7 @@ const resetPassword = async (req: UserRequest, res: Response) => {
   if (password !== confirmPassword) {
     return res.status(400).json('Passwords do not match');
   }
-  if (!passwordUtility.passwordSchema.validate(password)) {
+  if (!passwordSchema.validate(password)) {
     return res.status(400).json(passwordRequirement);
   }
   const user = await getConnection()
@@ -95,7 +98,7 @@ const resetPassword = async (req: UserRequest, res: Response) => {
     })
     .getOne();
   if (user) {
-    user.password = await passwordUtility.generateHash(password);
+    user.password = await generateHash(password);
     user.uuid = null;
     await getConnection().getRepository(User).save(user);
     return res.status(200).json('Password updated successfully');

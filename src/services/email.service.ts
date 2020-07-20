@@ -1,26 +1,27 @@
 import nodemailer = require('nodemailer');
 
-const transporter = nodemailer.createTransport({
-  auth: {
-    pass: process.env.FROM_EMAIL_PASSWORD,
-    user: process.env.FROM_EMAIL
-  },
-  service: 'Gmail'
-});
-
 /**
  * @description Send email
  * @param {object} mailOptions
  * @returns string
  */
-const sendEmail = (mailOptions) => {
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error(error);
-      return 'Error sending email';
-    } else {
-      return 'email sent successfully';
-    }
+export const sendEmail = (mailOptions): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const transporter = nodemailer.createTransport({
+      auth: {
+        pass: process.env.FROM_EMAIL_PASSWORD,
+        user: process.env.FROM_EMAIL
+      },
+      service: 'Gmail'
+    });
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+        reject('Error sending email');
+      } else {
+        resolve('email sent successfully');
+      }
+    });
   });
 };
 
@@ -29,7 +30,7 @@ const sendEmail = (mailOptions) => {
  * @param {string} uuid
  * @returns string
  */
-const sendVerificationEmail = (uuid, userEmail) => {
+export const sendVerificationEmail = (uuid: string, userEmail: string) => {
   const mailOptions = {
     from: process.env.FROM_EMAIL,
     subject: 'Bulwark - Please confirm your email address',
@@ -48,7 +49,7 @@ const sendVerificationEmail = (uuid, userEmail) => {
  * @param {string} uuid
  * @returns string
  */
-const sendForgotPasswordEmail = (uuid, userEmail) => {
+export const sendForgotPasswordEmail = (uuid, userEmail) => {
   const mailOptions = {
     from: process.env.FROM_EMAIL,
     subject: 'Bulwark - Forgot Password Request',
@@ -66,7 +67,7 @@ const sendForgotPasswordEmail = (uuid, userEmail) => {
  * @param {string} uuid
  * @returns string
  */
-const sendInvitationEmail = (uuid, userEmail) => {
+export const sendInvitationEmail = (uuid, userEmail) => {
   const mailOptions = {
     from: process.env.FROM_EMAIL,
     subject: 'Bulwark - Welcome!',
@@ -76,10 +77,4 @@ const sendInvitationEmail = (uuid, userEmail) => {
     to: userEmail
   };
   sendEmail(mailOptions);
-};
-
-module.exports = {
-  sendForgotPasswordEmail,
-  sendVerificationEmail,
-  sendInvitationEmail
 };

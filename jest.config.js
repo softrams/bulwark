@@ -6,15 +6,19 @@ module.exports = {
   clearMocks: true,
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: "coverage",
+  coverageDirectory: 'coverage',
   roots: ['<rootDir>/src'],
   transform: {
-    '^.+\\.ts?$': 'ts-jest',
+    '^.+\\.ts?$': 'ts-jest'
   },
   testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.ts?$',
   collectCoverage: true,
-  collectCoverageFrom: [
-    "src/**/*.ts"
-  ],
+  collectCoverageFrom: ['src/**/*.ts'],
   moduleFileExtensions: ['ts', 'js', 'json', 'node'],
+  coveragePathIgnorePatterns: [
+    '<rootDir>/src/interfaces',
+    '<rootDir>/src/classes',
+    '<rootDir>/src/entity',
+    '<rootDir>/src/enums'
+  ]
 };

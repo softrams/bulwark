@@ -43,7 +43,6 @@ app.listen(serverPort, () => console.info(`Server running on ${serverIpAddress}:
 // create typeorm connection
 createConnection().then((_) => {
   // register routes
-  app.post('/api/user/create', jwtMiddleware.checkToken, userController.create);
   app.post('/api/user/register', userController.register);
   app.post('/api/user/invite', jwtMiddleware.checkToken, userController.invite);
   app.patch('/api/user', jwtMiddleware.checkToken, userController.patch);
@@ -53,7 +52,7 @@ createConnection().then((_) => {
   app.patch('/api/forgot-password', authController.forgotPassword);
   app.patch('/api/password-reset', authController.resetPassword);
   app.post('/api/refresh', jwtMiddleware.checkRefreshToken, authController.refreshSession);
-  app.patch('/api/user/password', userController.updatePassword);
+  app.patch('/api/user/password', userController.updateUserPassword);
   app.post('/api/login', authController.login);
   app.post('/api/upload', jwtMiddleware.checkToken, fileUploadController.uploadFile);
   app.get('/api/file/:id', jwtMiddleware.checkToken, fileUploadController.getFileById);
