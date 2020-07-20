@@ -2,6 +2,61 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.1](https://github.com/softrams/bulwark/compare/v3.2.0...v3.2.1) (2020-07-20)
+
+
+### Build System
+
+* **lru-cache:** added lru-cache to remove angular error ([adaa65b](https://github.com/softrams/bulwark/commit/adaa65ba4c4c1451e0dd7100036e293abb1db824)), closes [#111](https://github.com/softrams/bulwark/issues/111)
+
+
+### Tests
+
+* **assessment controller:** assessment controller unit tests ([c3d7fa8](https://github.com/softrams/bulwark/commit/c3d7fa8f92170657fd4729fa6935af6ed32a6d8c)), closes [#64](https://github.com/softrams/bulwark/issues/64)
+* **email.service.ts:** unit tests for email service ([799132f](https://github.com/softrams/bulwark/commit/799132fa94466abf9ab137920e5d2382cb6124b9)), closes [#136](https://github.com/softrams/bulwark/issues/136)
+* **package.json:** update test node script ([6e32fcc](https://github.com/softrams/bulwark/commit/6e32fccea777d9c6aa670a13457767c0ba5169cd)), closes [#137](https://github.com/softrams/bulwark/issues/137)
+* **password.utility.spec.ts:** unit tests for password utility ([e76fcee](https://github.com/softrams/bulwark/commit/e76fceec53a3d1ee4dd9bb223693c4f1befa7b66)), closes [#64](https://github.com/softrams/bulwark/issues/64)
+* **seed-user.ts:** initial seed user test ([b8ac8b8](https://github.com/softrams/bulwark/commit/b8ac8b8c2eb34b72efe433111e2291c1dc90ceae)), closes [#137](https://github.com/softrams/bulwark/issues/137)
+* **user controller:** user controller unit test ([aa53b54](https://github.com/softrams/bulwark/commit/aa53b5469814ed3158cbb3f2436369dadb5a4e07)), closes [#122](https://github.com/softrams/bulwark/issues/122)
+* **user.controller.spec.ts:** complete unit tests for user controller ([b96af41](https://github.com/softrams/bulwark/commit/b96af417d6b2f49dd95704ead526139c975cffe6)), closes [#122](https://github.com/softrams/bulwark/issues/122)
+
+
+### Others
+
+* **angular 10:** upgrade to Angular 10 ([3fe70f5](https://github.com/softrams/bulwark/commit/3fe70f5498f6367446bed15dedbf92a725de3e00)), closes [#111](https://github.com/softrams/bulwark/issues/111)
+* **deps:** bump @angular-devkit/build-angular in /frontend ([9aa1a9d](https://github.com/softrams/bulwark/commit/9aa1a9de50bfe870012b3cd0a07870d123f8fc6b))
+* **deps:** bump @angular/cli from 10.0.2 to 10.0.3 in /frontend ([cdf5e50](https://github.com/softrams/bulwark/commit/cdf5e50a63d0a97b192afcee6e64098ea6ff3aec))
+* **deps:** bump @fortawesome/angular-fontawesome in /frontend ([e7b7aa1](https://github.com/softrams/bulwark/commit/e7b7aa1fc8c0f1e35b27fcad222cabb711ea03b2))
+* **deps:** bump @fortawesome/fontawesome-svg-core in /frontend ([a982d4f](https://github.com/softrams/bulwark/commit/a982d4fc8af1d5029a9da26a3b67fc6050e16d6b))
+* **deps:** bump @fortawesome/free-brands-svg-icons in /frontend ([7367d70](https://github.com/softrams/bulwark/commit/7367d708a7f08b334e4dedc6a819423e573ddc32))
+* **deps:** bump ngx-markdown from 9.1.1 to 10.0.0 in /frontend ([de9eae4](https://github.com/softrams/bulwark/commit/de9eae48f4da2f234d26911c4e118be5930920b4))
+* **deps:** bump puppeteer from 5.0.0 to 5.1.0 ([b024375](https://github.com/softrams/bulwark/commit/b0243757789f0341e83eaa1983f782346426f7fd))
+* **deps:** bump puppeteer from 5.1.0 to 5.2.0 ([094b493](https://github.com/softrams/bulwark/commit/094b493ec72e1a5003d5691a2f16d69dd69a096f))
+* **deps:** bump tslib from 1.10.0 to 1.13.0 in /frontend ([7b031cb](https://github.com/softrams/bulwark/commit/7b031cb6bd5268857f0381b9316c87deb371966a))
+* **deps:** bump typescript from 3.9.6 to 3.9.7 in /frontend ([d2fc168](https://github.com/softrams/bulwark/commit/d2fc168e33af7b9c2d24e916c53338a95904093d))
+* **deps-dev:** bump @angular/language-service in /frontend ([a1cafaa](https://github.com/softrams/bulwark/commit/a1cafaa370db2ca41f4ae4d05c9a96b23d367f9c))
+* **deps-dev:** bump @babel/core from 7.10.4 to 7.10.5 ([cff5ac3](https://github.com/softrams/bulwark/commit/cff5ac3365bb67e4907341d2e1cda3e4a39a5304))
+* **deps-dev:** bump @commitlint/cli from 9.0.1 to 9.1.1 ([9670c1a](https://github.com/softrams/bulwark/commit/9670c1a9545c090711639ade18011dae3bfe42b6))
+* **deps-dev:** bump @commitlint/config-conventional ([9f987bf](https://github.com/softrams/bulwark/commit/9f987bfd4ee17e9c2dfdd8e2f67bd192374ca634))
+* **deps-dev:** bump @types/jasmine from 2.8.16 to 3.5.11 in /frontend ([d529063](https://github.com/softrams/bulwark/commit/d5290638d3ca493428664149591e4829bcff6cef))
+* **deps-dev:** bump @types/jest from 26.0.4 to 26.0.5 ([2d442c5](https://github.com/softrams/bulwark/commit/2d442c5629399b815b322ef2c85eb097698ce967))
+* **deps-dev:** bump @types/node from 12.12.34 to 14.0.23 in /frontend ([de699d6](https://github.com/softrams/bulwark/commit/de699d6e9ad978ec4613012a7e260977719ccc84))
+* **deps-dev:** bump codelyzer from 5.2.2 to 6.0.0 in /frontend ([0cbedf9](https://github.com/softrams/bulwark/commit/0cbedf98485b155c6a459b79a70f9e5ad9817771))
+* **deps-dev:** bump karma-coverage-istanbul-reporter in /frontend ([da3906d](https://github.com/softrams/bulwark/commit/da3906d320540c816536c7b77312be6907537992))
+* **deps-dev:** bump protractor from 5.4.2 to 7.0.0 in /frontend ([943642e](https://github.com/softrams/bulwark/commit/943642eb31bebe326d6ea55ac757500192a9a704))
+* **deps-dev:** bump standard-version from 8.0.0 to 8.0.1 ([c1dc9c2](https://github.com/softrams/bulwark/commit/c1dc9c21d351d7220bba87ef660b2565360edfcc))
+* **deps-dev:** bump standard-version from 8.0.0 to 8.0.1 ([5f213bd](https://github.com/softrams/bulwark/commit/5f213bd3532a1857a6425efb48dcf0ad1c8caedf))
+* **deps-dev:** bump standard-version from 8.0.1 to 8.0.2 ([7d9979a](https://github.com/softrams/bulwark/commit/7d9979a45300c976d0ecf12d35f5339f6cc111a3))
+* **deps-dev:** bump ts-jest from 26.1.1 to 26.1.2 ([13563c8](https://github.com/softrams/bulwark/commit/13563c8036df275f3abd665327df3811c98d14f8))
+* **deps-dev:** bump ts-jest from 26.1.2 to 26.1.3 ([aac7b80](https://github.com/softrams/bulwark/commit/aac7b8088eac3cbd1cd1e15c91994b5b1fc1e993))
+* **deps-dev:** bump typescript from 3.9.6 to 3.9.7 ([6ba20aa](https://github.com/softrams/bulwark/commit/6ba20aa27d413b209cabd21d5f62111fdc8f1eb2))
+* **lodash:** update lodash to mitigate low severity vulnerability ([9fa5682](https://github.com/softrams/bulwark/commit/9fa568233c342224c6042b90b7a5f0db7d454c64))
+* **package.json:** move pre-commit hook to hooks ([e2062d6](https://github.com/softrams/bulwark/commit/e2062d639b0a009fca1deb541445f4aada885036))
+* **package.json frontend/package.json:** fix merge conflcits ([620e320](https://github.com/softrams/bulwark/commit/620e32043ac680b9b4edc75abd6dec8ba84e881e)), closes [#111](https://github.com/softrams/bulwark/issues/111)
+* **package.json frontend/package.json:** fix merge conflicts ([244d123](https://github.com/softrams/bulwark/commit/244d1238305041510b570081022d32469ab17877)), closes [#111](https://github.com/softrams/bulwark/issues/111)
+* **package.json frontend/package.json:** merge from develop.  Remove sinon and sqlite3 ([8021985](https://github.com/softrams/bulwark/commit/8021985bfdd45e860a3db54e4643f2d3a92815a7)), closes [#64](https://github.com/softrams/bulwark/issues/64)
+* **tslint revert:** revert tslint version ([d3f3d97](https://github.com/softrams/bulwark/commit/d3f3d97da8676039262f6355480d79228fe7d0c7)), closes [#111](https://github.com/softrams/bulwark/issues/111)
+
 ## [3.2.0](https://github.com/softrams/bulwark/compare/v3.1.3...v3.2.0) (2020-07-13)
 
 
