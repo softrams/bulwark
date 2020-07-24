@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.2](https://github.com/softrams/bulwark/compare/v3.2.1...v3.2.2) (2020-07-24)
+
+
+### Others
+
+* **deps:** bump @angular-devkit/build-angular in /frontend ([0e7ed13](https://github.com/softrams/bulwark/commit/0e7ed135e28e9529a823a615d1170732bb972ad0))
+* **deps:** bump @angular/cli from 10.0.3 to 10.0.4 in /frontend ([9f28641](https://github.com/softrams/bulwark/commit/9f286413a4ea59a5a0d2319a5cfdaf7874f3189b))
+* **deps:** bump ngx-markdown from 10.0.0 to 10.1.0 in /frontend ([124ade3](https://github.com/softrams/bulwark/commit/124ade35bcdc635ba8b6a7556e2b91be792c1801))
+* **deps:** bump puppeteer from 5.2.0 to 5.2.1 ([21512c8](https://github.com/softrams/bulwark/commit/21512c891e9a719293498f20f0e38314f9bf206f))
+* **deps-dev:** bump @angular/language-service in /frontend ([0a5ea43](https://github.com/softrams/bulwark/commit/0a5ea4390fb120edd73a4282431ab4e17153bba7))
+* **deps-dev:** bump @types/jest from 26.0.5 to 26.0.7 ([efb36ae](https://github.com/softrams/bulwark/commit/efb36ae6f9d6063f30f1f0a6511cd1f3c5add224))
+* **deps-dev:** bump @types/node from 14.0.23 to 14.0.24 in /frontend ([ec93f25](https://github.com/softrams/bulwark/commit/ec93f2539362cc2cf707f3ced68b6a21352bb9ab))
+* **deps-dev:** bump @types/node from 14.0.24 to 14.0.25 in /frontend ([49dbb50](https://github.com/softrams/bulwark/commit/49dbb507e7629d7560af0839f2e321083e4c2abf))
+* **deps-dev:** bump jasmine-core from 3.5.0 to 3.6.0 in /frontend ([84f70ae](https://github.com/softrams/bulwark/commit/84f70ae75044f8ed1da2635900d47b1521136e95))
+
 ### [3.2.1](https://github.com/softrams/bulwark/compare/v3.2.0...v3.2.1) (2020-07-20)
 
 
