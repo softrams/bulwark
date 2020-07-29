@@ -9,19 +9,12 @@
       <div class="card text-center">
         <div class="card-body">
           <h5 class="card-title">{{ asset.name }}</h5>
-          <button (click)="navigateToAsset(asset.id)" 
-          class="btn btn-secondary" 
-          style="margin-right: 5px;"
-          data-toggle="tooltip" 
-          data-placement="bottom" 
-          title="Edit {{ asset.name }}">
+          <button (click)="navigateToAsset(asset.id)" class="btn btn-secondary" style="margin-right: 5px;"
+            data-toggle="tooltip" data-placement="bottom" title="Edit {{ asset.name }}">
             Edit
           </button>
-          <button (click)="navigateToAssessment(asset.id)" 
-          class="btn btn-primary"
-          data-toggle="tooltip" 
-          data-placement="bottom" 
-          title="Assessments">
+          <button (click)="navigateToAssessment(asset.id)" class="btn btn-primary" data-toggle="tooltip"
+            data-placement="bottom" title="Assessments">
             Assessments
           </button>
         </div>
@@ -32,12 +25,8 @@
   <button (click)="navigateToCreateAsset()" type="button" class="btn btn-primary float-right">
     Add Asset
   </button>
-  <button
-    style="margin-right: 5px;"
-    (click)="navigateToDashboard()"
-    type="button"
-    class="btn btn-secondary float-right"
-  >
+  <button style="margin-right: 5px;" (click)="navigateToDashboard()" type="button"
+    class="btn btn-secondary float-right">
     Back to Dashboard
   </button>
 </div>

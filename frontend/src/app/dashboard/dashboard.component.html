@@ -1,52 +1,25 @@
 <div class="container">
   <div class="row card-group">
     <div class="col-4" *ngFor="let org of orgAry">
-      <div class="card text-center" style="margin-top: 10px;">
+      <div class="card text-center">
         <img *ngIf="org.imgUrl" class="card-img-top" [src]="org.imgUrl" alt="Card image cap" />
         <div class="card-body">
           <h5 class="card-title">{{ org.name }}</h5>
-          <button
-            *ngIf="!isArchive"
-            (click)="navigateToOrganization(org.id)"
-            class="btn btn-secondary"
-            style="margin-right: 5px;"
-            data-toggle="tooltip"
-            data-placement="bottom"
-            title="Edit {{ org.name }}"
-          >
+          <button *ngIf="!isArchive" (click)="navigateToOrganization(org.id)" class="btn btn-secondary"
+            style="margin-right: 5px;" data-toggle="tooltip" data-placement="bottom" title="Edit {{ org.name }}">
             Edit
           </button>
-          <button
-            *ngIf="!isArchive"
-            (click)="archiveOrganization(org)"
-            class="btn btn-warning"
-            style="margin-right: 5px;"
-            data-toggle="tooltip"
-            data-placement="bottom"
-            title="Archive {{ org.name }}"
-          >
+          <button *ngIf="!isArchive" (click)="archiveOrganization(org)" class="btn btn-warning"
+            style="margin-right: 5px;" data-toggle="tooltip" data-placement="bottom" title="Archive {{ org.name }}">
             Archive
           </button>
-          <button
-            *ngIf="isArchive"
-            (click)="activateOrganization(org)"
-            class="btn btn-warning"
-            style="margin-right: 5px;"
-            data-toggle="tooltip"
-            data-placement="bottom"
-            title="Activate {{ org.name }}"
-          >
+          <button *ngIf="isArchive" (click)="activateOrganization(org)" class="btn btn-warning"
+            style="margin-right: 5px;" data-toggle="tooltip" data-placement="bottom" title="Activate {{ org.name }}">
             Activate
           </button>
-          <button
-            *ngIf="!isArchive"
-            (click)="navigateToAsset(org.id)"
-            class="btn btn-primary"
-            style="margin-right: 5px;"
-            data-toggle="tooltip"
-            data-placement="bottom"
-            title="View Assets of {{ org.name }}"
-          >
+          <button *ngIf="!isArchive" (click)="navigateToAsset(org.id)" class="btn btn-primary"
+            style="margin-right: 5px;" data-toggle="tooltip" data-placement="bottom"
+            title="View Assets of {{ org.name }}">
             Assets
           </button>
         </div>
@@ -54,39 +27,16 @@
     </div>
   </div>
   <br />
-  <button
-    (click)="navigateToCreate()"
-    *ngIf="!isArchive"
-    type="button"
-    class="btn btn-primary float-right"
-    data-toggle="tooltip"
-    data-placement="bottom"
-    title="Add An Organization"
-  >
+  <button (click)="navigateToCreate()" *ngIf="!isArchive" type="button" class="btn btn-primary float-right"
+    data-toggle="tooltip" data-placement="bottom" title="Add An Organization">
     Add Organization
   </button>
-  <button
-    style="margin-right: 5px;"
-    *ngIf="!isArchive"
-    (click)="getArchivedOrganizations()"
-    type="button"
-    class="btn btn-info float-right"
-    data-toggle="tooltip"
-    data-placement="bottom"
-    title="View Archived Organizations"
-  >
+  <button style="margin-right: 5px;" *ngIf="!isArchive" (click)="getArchivedOrganizations()" type="button"
+    class="btn btn-info float-right" data-toggle="tooltip" data-placement="bottom" title="View Archived Organizations">
     View Archive
   </button>
-  <button
-    style="margin-right: 5px;"
-    *ngIf="isArchive"
-    (click)="getOrganizations()"
-    type="button"
-    class="btn btn-info float-right"
-    data-toggle="tooltip"
-    data-placement="bottom"
-    title="View Active Organizations"
-  >
+  <button style="margin-right: 5px;" *ngIf="isArchive" (click)="getOrganizations()" type="button"
+    class="btn btn-info float-right" data-toggle="tooltip" data-placement="bottom" title="View Active Organizations">
     View Active
   </button>
 </div>
