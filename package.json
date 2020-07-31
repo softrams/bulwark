@@ -62,7 +62,7 @@
     "babel-jest": "^26.1.0",
     "cz-conventional-changelog": "^3.2.0",
     "husky": "^4.2.5",
-    "jest": "^26.1.0",
+    "jest": "^26.2.1",
     "nodemon": "^2.0.4",
     "rimraf": "^3.0.2",
     "sqlite3": "^5.0.0",
