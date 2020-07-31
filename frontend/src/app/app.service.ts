@@ -115,7 +115,7 @@ export class AppService {
   }
 
   /**
-   * Function returns all assests related to the organization ID
+   * Function returns all active assets related to the organization ID
    * @param id is the ID of the organization
    * @returns all assets related to the organization passed
    */
@@ -126,6 +126,15 @@ export class AppService {
       .then((res) => {
         return res;
       });
+  }
+
+  /**
+   * Function returns all archived assets related to the organization ID
+   * @param id is the ID of the organization
+   * @returns all assets related to the organization passed
+   */
+  getOrganizationArchiveAssets(id: number) {
+    return this.http.get(`${this.api}/organization/${id}/asset/archive`);
   }
 
   /**
@@ -262,6 +271,24 @@ export class AppService {
       `${this.api}/organization/${asset.organization}/asset/${asset.id}`,
       asset
     );
+  }
+
+  /**
+   * Function is responsible for archiving an asset
+   * @param asset is the ID associated to the asset
+   * @returns http status code of the request
+   */
+  archiveAsset(asset: Asset) {
+    return this.http.patch(`${this.api}/asset/archive/${asset.id}`, {});
+  }
+
+  /**
+   * Function is responsible for activating an asset
+   * @param asset is the ID associated to the asset
+   * @returns http status code of the request
+   */
+  activateAsset(asset: Asset) {
+    return this.http.patch(`${this.api}/asset/activate/${asset.id}`, {});
   }
 
   /**

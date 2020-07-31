@@ -20,5 +20,6 @@ module.exports = {
     '<rootDir>/src/classes',
     '<rootDir>/src/entity',
     '<rootDir>/src/enums'
-  ]
+  ],
+  setupFiles: ['<rootDir>/.jest/setEnvVars.js']
 };
