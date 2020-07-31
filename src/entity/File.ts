@@ -1,25 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, ColumnType, ColumnOptions } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Vulnerability } from './Vulnerability';
+import { DbAwareColumn } from '../utilities/column-mapper.utility';
 
-// TODO: Move to common file for reuse
-const mysqlSqliteTypeMapping: { [key: string]: ColumnType } = {
-  mediumblob: 'blob'
-};
-
-export function resolveDbType(mySqlType: ColumnType): ColumnType {
-  const isTestEnv = process.env.NODE_ENV === 'test';
-  if (isTestEnv && mySqlType in mysqlSqliteTypeMapping) {
-    return mysqlSqliteTypeMapping[mySqlType.toString()];
-  }
-  return mySqlType;
-}
-
-export function DbAwareColumn(columnOptions: ColumnOptions) {
-  if (columnOptions.type) {
-    columnOptions.type = resolveDbType(columnOptions.type);
-  }
-  return Column(columnOptions);
-}
 @Entity()
 export class File {
   @PrimaryGeneratedColumn()

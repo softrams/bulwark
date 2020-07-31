@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { IsEmail, IsUUID, IsAlpha, IsOptional } from 'class-validator';
+import { dynamicNullable } from '../utilities/column-mapper.utility';
 
 @Entity()
 export class User {
@@ -10,28 +11,18 @@ export class User {
   })
   @IsEmail()
   email: string;
-  @Column({
-    nullable: true
-  })
+  @dynamicNullable()
   password: string;
   @Column()
   active: boolean;
-  @Column({
-    nullable: true
-  })
+  @dynamicNullable()
   @IsOptional()
   @IsUUID()
   uuid: string;
-  @Column({
-    nullable: true
-  })
+  @dynamicNullable()
   firstName: string;
-  @Column({
-    nullable: true
-  })
+  @dynamicNullable()
   lastName: string;
-  @Column({
-    nullable: true
-  })
+  @dynamicNullable()
   title: string;
 }
