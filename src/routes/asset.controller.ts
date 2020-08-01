@@ -50,7 +50,7 @@ export const getArchivedOrgAssets = async (req: Request, res: Response) => {
   if (!asset) {
     return res.status(404).json('Assets not found');
   }
-  res.json(asset);
+  return res.status(200).json(asset);
 };
 /**
  * @description API backend for creating an asset associated by org ID

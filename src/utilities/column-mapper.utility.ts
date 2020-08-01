@@ -11,14 +11,21 @@ const resolveDbType = (mySqlType: ColumnType): ColumnType => {
   }
   return mySqlType;
 };
-
+/**
+ * @description Wrapper function for resolving DB Type
+ * @param {ColumnOptions} columnOptions
+ * @returns Custom Column
+ */
 export const DbAwareColumn = (columnOptions: ColumnOptions) => {
   if (columnOptions.type) {
     columnOptions.type = resolveDbType(columnOptions.type);
   }
   return Column(columnOptions);
 };
-
+/**
+ * @description Addes nullabe column option if test DB is active
+ * @returns Custom Column
+ */
 export const dynamicNullable = () => {
   const columnOptions: ColumnOptions = {
     nullable: process.env.NODE_ENV === 'test' ? true : false
