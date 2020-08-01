@@ -29,13 +29,13 @@
     "@ng-select/ng-select": "^4.0.4",
     "core-js": "^3.6.5",
     "ngx-markdown": "^10.1.0",
-    "rxjs": "~6.6.0",
+    "rxjs": "~6.6.2",
     "tslib": "^2.0.0",
     "typescript": "^3.9.7",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular/language-service": "~10.0.6",
+    "@angular/language-service": "~10.0.7",
     "@types/jasmine": "~3.5.11",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^14.0.27",
