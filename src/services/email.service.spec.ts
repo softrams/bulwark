@@ -13,7 +13,9 @@ describe('email service', () => {
                   \n dev/api/user/verify/123`,
       to: 'pentester2@gmail.com'
     };
-    await expect(emailService.sendEmail(mailOptions)).rejects.toContain('Error sending email');
+    await emailService.sendEmail(mailOptions, (err, data) => {
+      expect(err).toBe('Error sending email');
+    });
   });
   test('send verification email success', async () => {
     const uuid = 'abc';

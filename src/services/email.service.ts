@@ -1,27 +1,24 @@
 import nodemailer = require('nodemailer');
 
+export const transporter = nodemailer.createTransport({
+  auth: {
+    pass: process.env.FROM_EMAIL_PASSWORD,
+    user: process.env.FROM_EMAIL
+  },
+  service: 'Gmail'
+});
 /**
  * @description Send email
  * @param {object} mailOptions
  * @returns string
  */
-export const sendEmail = (mailOptions): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const transporter = nodemailer.createTransport({
-      auth: {
-        pass: process.env.FROM_EMAIL_PASSWORD,
-        user: process.env.FROM_EMAIL
-      },
-      service: 'Gmail'
-    });
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error(error);
-        reject('Error sending email');
-      } else {
-        resolve('email sent successfully');
-      }
-    });
+export const sendEmail = (mailOptions, callback) => {
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return callback('Error sending email');
+    } else {
+      return callback('email sent successfully');
+    }
   });
 };
 
@@ -41,7 +38,13 @@ export const sendVerificationEmail = (uuid: string, userEmail: string) => {
               \n ${process.env.PROD_URL}/api/user/verify/${uuid}`,
     to: userEmail
   };
-  sendEmail(mailOptions);
+  sendEmail(mailOptions, (err, info) => {
+    if (err) {
+      console.error(err);
+    } else {
+      return info;
+    }
+  });
 };
 
 /**
@@ -59,7 +62,13 @@ export const sendForgotPasswordEmail = (uuid, userEmail) => {
                 \n ${process.env.PROD_URL}/#/password-reset/${uuid}`,
     to: userEmail
   };
-  sendEmail(mailOptions);
+  sendEmail(mailOptions, (err, info) => {
+    if (err) {
+      console.error(err);
+    } else {
+      return info;
+    }
+  });
 };
 
 /**
@@ -76,5 +85,11 @@ export const sendInvitationEmail = (uuid, userEmail) => {
                 \n ${process.env.PROD_URL}/#/register/${uuid}`,
     to: userEmail
   };
-  sendEmail(mailOptions);
+  sendEmail(mailOptions, (err, info) => {
+    if (err) {
+      console.error(err);
+    } else {
+      return info;
+    }
+  });
 };

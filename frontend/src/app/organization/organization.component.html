@@ -1,32 +1,57 @@
-<div class="container">
+<div class="container-fluid">
   <div class="row">
-    <h3 class="mx-auto">{{ org?.name }} Assets</h3>
+    <h3 class="mx-auto">{{ org?.name }} {{isArchive ? 'Archived':'Active'}} Assets</h3>
   </div>
   <br />
-  <div class="row card-group">
-    <h4 *ngIf="!assetAry.length">The organization {{ org?.name }} does not have any assets.</h4>
-    <div class="col-3" *ngFor="let asset of assetAry">
-      <div class="card text-center">
-        <div class="card-body">
-          <h5 class="card-title">{{ asset.name }}</h5>
-          <button (click)="navigateToAsset(asset.id)" class="btn btn-secondary" style="margin-right: 5px;"
-            data-toggle="tooltip" data-placement="bottom" title="Edit {{ asset.name }}">
-            Edit
-          </button>
-          <button (click)="navigateToAssessment(asset.id)" class="btn btn-primary" data-toggle="tooltip"
-            data-placement="bottom" title="Assessments">
-            Assessments
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <h4 *ngIf="!assetAry.length">The organization {{ org?.name }} does not have any assets.</h4>
+  <table class="table" *ngIf="assetAry && assetAry.length">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Status</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let asset of assetAry">
+      <td scope="row">{{ asset?.id }}</td>
+      <td>{{ asset?.name }}</td>
+      <td>{{ asset?.status === 'A' ? 'Active':'Archived' }}</td>
+      <td>
+        <button *ngIf="!isArchive" class="btn btn-secondary" type="button" style="margin-right: 10px;"
+          data-toggle="tooltip" (click)="navigateToAsset(asset.id)" c data-placement="bottom" title="Edit Asset">
+          <fa-icon [icon]="faPencilAlt"></fa-icon>
+        </button>
+        <button *ngIf="!isArchive" (click)="navigateToAssessment(asset.id)" class="btn btn-primary"
+          style="margin-right: 10px;" type="button" data-toggle="tooltip" data-placement="bottom"
+          title="View Assessments">
+          <fa-icon [icon]="faList"></fa-icon>
+        </button>
+        <button (click)="archiveAsset(asset);" *ngIf="!isArchive" class="btn btn-dark" type="button"
+          data-toggle="tooltip" data-placement="bottom" title="Archive">
+          <fa-icon [icon]="faBox"></fa-icon>
+        </button>
+        <button (click)="activateAsset(asset);" *ngIf="isArchive" class="btn btn-dark" type="button"
+          data-toggle="tooltip" data-placement="bottom" title="Activate">
+          <fa-icon [icon]="faBoxOpen"></fa-icon>
+        </button>
+      </td>
+    </tbody>
+  </table>
   <br />
-  <button (click)="navigateToCreateAsset()" type="button" class="btn btn-primary float-right">
-    Add Asset
-  </button>
-  <button style="margin-right: 5px;" (click)="navigateToDashboard()" type="button"
-    class="btn btn-secondary float-right">
-    Back to Dashboard
-  </button>
-</div>
+  <div class="float-right">
+    <button style="margin-right: 5px;" (click)="navigateToDashboard()" type="button" class="btn btn-secondary ">
+      Back to Dashboard
+    </button>
+    <button style="margin-right: 5px;" *ngIf="!isArchive" (click)="getArchivedAssets()" type="button"
+      class="btn btn-dark " data-toggle="tooltip" data-placement="bottom" title="View Archived Assets">
+      View Archive
+    </button>
+    <button style="margin-right: 5px;" *ngIf="isArchive" (click)="getActiveAssets()" type="button" class="btn btn-dark "
+      data-toggle="tooltip" data-placement="bottom" title="View Active Assets">
+      View Active
+    </button>
+    <button (click)="navigateToCreateAsset()" *ngIf="!isArchive" type="button" class="btn btn-primary ">
+      Add Asset
+    </button>
+  </div>

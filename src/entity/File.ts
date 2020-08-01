@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Vulnerability } from './Vulnerability';
+import { DbAwareColumn } from '../utilities/column-mapper.utility';
 
 @Entity()
 export class File {
@@ -13,7 +14,7 @@ export class File {
   encoding: string;
   @Column()
   mimetype: string;
-  @Column('mediumblob')
+  @DbAwareColumn({ name: 'buffer', type: 'mediumblob' })
   buffer: Buffer;
   @Column()
   size: number;
