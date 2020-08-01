@@ -5,7 +5,7 @@ import jwt = require('jsonwebtoken');
  * @param {Request} req
  * @param {Response} res
  */
-const checkToken = (req, res, next) => {
+export const checkToken = (req, res, next) => {
   const token = req.headers.authorization; // Express headers are auto converted to lowercase
   if (token) {
     jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
@@ -26,7 +26,7 @@ const checkToken = (req, res, next) => {
  * @param {Request} req
  * @param {Response} res
  */
-const checkRefreshToken = (req, res, next) => {
+export const checkRefreshToken = (req, res, next) => {
   const token = req.body.refreshToken;
   if (token) {
     jwt.verify(token, process.env.JWT_REFRESH_KEY, (err, decoded) => {
@@ -40,9 +40,4 @@ const checkRefreshToken = (req, res, next) => {
   } else {
     return res.status(401).json('Refresh token not supplied');
   }
-};
-
-module.exports = {
-  checkToken,
-  checkRefreshToken
 };

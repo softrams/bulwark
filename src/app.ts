@@ -18,9 +18,9 @@ const orgController = require('./routes/organization.controller');
 const userController = require('./routes/user.controller');
 const fileUploadController = require('./routes/file-upload.controller');
 import * as assetController from './routes/asset.controller';
-const assessmentController = require('./routes/assessment.controller');
+import * as assessmentController from './routes/assessment.controller';
 const vulnController = require('./routes/vulnerability.controller');
-const jwtMiddleware = require('./middleware/jwt.middleware');
+import * as jwtMiddleware from './middleware/jwt.middleware';
 const puppeteerUtility = require('./utilities/puppeteer.utility');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -73,6 +73,7 @@ createConnection().then((_) => {
   app.get('/api/assessment/:id', jwtMiddleware.checkToken, assessmentController.getAssessmentsByAssetId);
   app.get('/api/assessment/:id/vulnerability', jwtMiddleware.checkToken, assessmentController.getAssessmentVulns);
   app.post('/api/assessment', jwtMiddleware.checkToken, assessmentController.createAssessment);
+  app.delete('/api/assessment/:assessmentId', jwtMiddleware.checkToken, assessmentController.deleteAssessmentById);
   app.get(
     '/api/asset/:assetId/assessment/:assessmentId',
     jwtMiddleware.checkToken,

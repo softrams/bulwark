@@ -15,7 +15,7 @@ const userController = require('../routes/user.controller');
  * @param {Response} res
  * @returns Asset assessments
  */
-const getAssessmentsByAssetId = async (req: UserRequest, res: Response) => {
+export const getAssessmentsByAssetId = async (req: UserRequest, res: Response) => {
   if (!req.params.id) {
     return res.status(400).json('Invalid Assessment request');
   }
@@ -38,7 +38,7 @@ const getAssessmentsByAssetId = async (req: UserRequest, res: Response) => {
  * @param {Response} res
  * @returns assessment vulnerabilities
  */
-const getAssessmentVulns = async (req: UserRequest, res: Response) => {
+export const getAssessmentVulns = async (req: UserRequest, res: Response) => {
   if (!req.params.id) {
     return res.status(400).json('Invalid Vulnerability request');
   }
@@ -61,7 +61,7 @@ const getAssessmentVulns = async (req: UserRequest, res: Response) => {
  * @param {Response} res c
  * @returns success message
  */
-const createAssessment = async (req: UserRequest, res: Response) => {
+export const createAssessment = async (req: UserRequest, res: Response) => {
   if (isNaN(req.body.asset)) {
     return res.status(400).json('Asset ID is invalid');
   }
@@ -99,7 +99,7 @@ const createAssessment = async (req: UserRequest, res: Response) => {
  * @param {Response} res
  * @returns assessment
  */
-const getAssessmentById = async (req: UserRequest, res: Response) => {
+export const getAssessmentById = async (req: UserRequest, res: Response) => {
   if (!req.params.assessmentId) {
     return res.status(400).send('Invalid assessment request');
   }
@@ -126,7 +126,7 @@ const getAssessmentById = async (req: UserRequest, res: Response) => {
  * @param {Response} res
  * @returns success message
  */
-const updateAssessmentById = async (req: UserRequest, res: Response) => {
+export const updateAssessmentById = async (req: UserRequest, res: Response) => {
   if (!req.params.assessmentId) {
     return res.status(400).send('Invalid assessment request');
   }
@@ -164,7 +164,7 @@ const updateAssessmentById = async (req: UserRequest, res: Response) => {
  * @param {Response} res
  * @returns report information
  */
-const queryReportDataByAssessment = async (req: UserRequest, res: Response) => {
+export const queryReportDataByAssessment = async (req: UserRequest, res: Response) => {
   if (!req.params.assessmentId) {
     return res.status(400).send('Invalid report request');
   }
@@ -210,11 +210,21 @@ const queryReportDataByAssessment = async (req: UserRequest, res: Response) => {
   res.status(200).json(report);
 };
 
-module.exports = {
-  getAssessmentsByAssetId,
-  getAssessmentVulns,
-  createAssessment,
-  getAssessmentById,
-  updateAssessmentById,
-  queryReportDataByAssessment
+/**
+ * @description Delete assessment by ID
+ * @param {UserRequest} req vulnID is required
+ * @param {Response} res contains JSON object with the success/fail
+ * @returns success/error message
+ */
+export const deleteAssessmentById = async (req: UserRequest, res: Response) => {
+  if (!req.params.assessmentId && isNaN(+req.params.assessmentId)) {
+    return res.status(400).send('Invalid assessment ID');
+  }
+  const assessment = await getConnection().getRepository(Assessment).findOne(req.params.assessmentId);
+  if (!assessment) {
+    return res.status(404).send('Assessment does not exist.');
+  } else {
+    await getConnection().getRepository(Assessment).delete(assessment);
+    res.status(200).json(`Assessment #${assessment.id}: "${assessment.name}" successfully deleted`);
+  }
 };
