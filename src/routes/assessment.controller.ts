@@ -217,7 +217,10 @@ export const queryReportDataByAssessment = async (req: UserRequest, res: Respons
  * @returns success/error message
  */
 export const deleteAssessmentById = async (req: UserRequest, res: Response) => {
-  if (!req.params.assessmentId && isNaN(+req.params.assessmentId)) {
+  if (!req.params.assessmentId) {
+    return res.status(400).send('Invalid assessment ID');
+  }
+  if (isNaN(+req.params.assessmentId)) {
     return res.status(400).send('Invalid assessment ID');
   }
   const assessment = await getConnection().getRepository(Assessment).findOne(req.params.assessmentId);
