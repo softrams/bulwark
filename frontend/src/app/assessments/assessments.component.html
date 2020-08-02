@@ -24,9 +24,13 @@
             style="margin-right: 10px;" data-toggle="tooltip" data-placement="bottom" title="Edit Assessment">
             <fa-icon [icon]="faPencilAlt"></fa-icon>
           </button>
-          <button class="btn btn-primary" type="button" (click)="navigateToVulnerability(assessment.id)"
-            data-toggle="tooltip" data-placement="bottom" title="View Vulnerabilities">
+          <button style="margin-right: 10px;" class="btn btn-primary" type="button"
+            (click)="navigateToVulnerability(assessment.id)" data-toggle="tooltip" data-placement="bottom"
+            title="View Vulnerabilities">
             <fa-icon [icon]="faHaykal"></fa-icon>
+          </button>
+          <button (click)="deleteAssessment(assessment)" class="btn btn-dark" type="button">
+            <fa-icon [icon]="faTrash"></fa-icon>
           </button>
         </td>
       </tr>

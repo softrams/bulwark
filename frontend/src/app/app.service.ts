@@ -170,6 +170,14 @@ export class AppService {
   }
 
   /**
+   * Delete assessment by ID
+   * @returns success/error message
+   */
+  deleteAssessment(assessmentId: number) {
+    return this.http.delete(`${this.api}/assessment/${assessmentId}`);
+  }
+
+  /**
    * Function is responsible for returning all vulnerabilites related to an assessment
    * @param assessmentId is the ID associated with the assessment
    * @returns all vulnerablities related to the assessment
