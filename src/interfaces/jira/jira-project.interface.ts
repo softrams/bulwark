@@ -1,5 +1,5 @@
 export interface JiraProject {
-  id?: number;
+  id?: string;
   key?: string;
   style?: string;
   name?: string;

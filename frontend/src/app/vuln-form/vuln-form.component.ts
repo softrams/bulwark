@@ -5,14 +5,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from '../app.service';
 import { AlertService } from '../alert/alert.service';
 import { Vulnerability } from './Vulnerability';
-import { faTrash, faPlus, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import {
+  faTrash,
+  faPlus,
+  faEye,
+  faEyeSlash,
+} from '@fortawesome/free-solid-svg-icons';
 import { AppFile } from '../interfaces/App_File';
 import { Screenshot } from '../interfaces/Screenshot';
 
 @Component({
   selector: 'app-vuln-form',
   templateUrl: './vuln-form.component.html',
-  styleUrls: ['./vuln-form.component.sass']
+  styleUrls: ['./vuln-form.component.sass'],
 })
 export class VulnFormComponent implements OnChanges, OnInit {
   vulnModel: Vulnerability;
@@ -105,7 +110,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
             this.fb.group({
               id: probLoc.id,
               location: probLoc.location,
-              target: probLoc.target
+              target: probLoc.target,
             })
           );
         }
@@ -114,7 +119,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
             this.fb.group({
               id: resource.id,
               description: resource.description,
-              url: resource.url
+              url: resource.url,
             })
           );
         }
@@ -159,7 +164,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
       cvssUrl: ['', Validators.required],
       detailedInfo: ['', [Validators.required, Validators.maxLength(4000)]],
       problemLocations: this.fb.array([]),
-      resources: this.fb.array([])
+      resources: this.fb.array([]),
     });
   }
 
@@ -182,7 +187,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
       cvssUrl: this.vulnModel.cvssUrl,
       detailedInfo: this.vulnModel.detailedInfo,
       problemLocations: this.vulnModel.problemLocations,
-      resources: this.vulnModel.resources
+      resources: this.vulnModel.resources,
     });
   }
 
@@ -202,7 +207,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
   initProbLocRows(): FormGroup {
     return this.fb.group({
       location: '',
-      target: ''
+      target: '',
     });
   }
 
@@ -240,7 +245,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
   initResourceRows(): FormGroup {
     return this.fb.group({
       description: '',
-      url: ''
+      url: '',
     });
   }
 
@@ -282,7 +287,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
         url: existFile.imgUrl,
         file: existFile,
         fileName: existFile.originalname,
-        fileId: existFile.id
+        fileId: existFile.id,
       };
       this.tempScreenshots.push(screenshot);
     } else {
@@ -290,7 +295,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
         url: this.appService.createObjectUrl(file),
         file,
         fileName: file.name,
-        fileId: null
+        fileId: null,
       };
       this.tempScreenshots.push(screenshot);
     }
@@ -314,7 +319,10 @@ export class VulnFormComponent implements OnChanges, OnInit {
    * @param screenshots object data for screenshots to be processed
    * @param screenshotsToDelete object data for screenshots to be removed
    */
-  finalizeScreenshots(screenshots: Screenshot[], screenshotsToDelete: number[]) {
+  finalizeScreenshots(
+    screenshots: Screenshot[],
+    screenshotsToDelete: number[]
+  ) {
     this.vulnFormData.delete('screenshots');
     if (screenshots.length) {
       for (const screenshot of screenshots) {
@@ -322,7 +330,10 @@ export class VulnFormComponent implements OnChanges, OnInit {
       }
     }
     if (screenshotsToDelete.length) {
-      this.vulnFormData.append('screenshotsToDelete', JSON.stringify(screenshotsToDelete));
+      this.vulnFormData.append(
+        'screenshotsToDelete',
+        JSON.stringify(screenshotsToDelete)
+      );
     }
   }
 
@@ -331,7 +342,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
    */
   navigateToVulnerabilities() {
     this.router.navigate([
-      `organization/${this.orgId}/asset/${this.assetId}/assessment/${this.assessmentId}/vulnerability`
+      `organization/${this.orgId}/asset/${this.assetId}/assessment/${this.assessmentId}/vulnerability`,
     ]);
   }
 
@@ -341,7 +352,9 @@ export class VulnFormComponent implements OnChanges, OnInit {
    */
   onSubmit(vulnForm: FormGroup) {
     this.vulnFormData = new FormData();
-    const newScreenshots = this.tempScreenshots.filter((screenshot) => !screenshot.fileId);
+    const newScreenshots = this.tempScreenshots.filter(
+      (screenshot) => !screenshot.fileId
+    );
     this.finalizeScreenshots(newScreenshots, this.screenshotsToDelete);
     this.vulnModel = vulnForm.value;
     this.vulnFormData.append('impact', this.vulnModel.impact);
@@ -357,8 +370,14 @@ export class VulnFormComponent implements OnChanges, OnInit {
     this.vulnFormData.append('detailedInfo', this.vulnModel.detailedInfo);
     this.vulnFormData.append('assessment', this.assessmentId);
     this.vulnFormData.append('name', this.vulnModel.name);
-    this.vulnFormData.append('problemLocations', JSON.stringify(this.vulnModel.problemLocations));
-    this.vulnFormData.append('resources', JSON.stringify(this.vulnModel.resources));
+    this.vulnFormData.append(
+      'problemLocations',
+      JSON.stringify(this.vulnModel.problemLocations)
+    );
+    this.vulnFormData.append(
+      'resources',
+      JSON.stringify(this.vulnModel.resources)
+    );
     this.createOrUpdateVuln(this.vulnFormData);
   }
 
@@ -369,10 +388,12 @@ export class VulnFormComponent implements OnChanges, OnInit {
    */
   createOrUpdateVuln(vuln: FormData) {
     if (this.vulnId) {
-      this.appService.updateVulnerability(this.vulnId, vuln).subscribe((res: string) => {
-        this.navigateToVulnerabilities();
-        this.alertService.success(res);
-      });
+      this.appService
+        .updateVulnerability(this.vulnId, vuln)
+        .subscribe((res: string) => {
+          this.navigateToVulnerabilities();
+          this.alertService.success(res);
+        });
     } else {
       this.appService.createVuln(vuln).subscribe((res: string) => {
         this.navigateToVulnerabilities();
@@ -418,24 +439,31 @@ export class VulnFormComponent implements OnChanges, OnInit {
 
     if (value === 6) {
       this.vulnForm.patchValue({
-        risk: 'Critical'
+        risk: 'Critical',
       });
     } else if (value === 5) {
       this.vulnForm.patchValue({
-        risk: 'High'
+        risk: 'High',
       });
     } else if (value === 4) {
       this.vulnForm.patchValue({
-        risk: 'Medium'
+        risk: 'Medium',
       });
     } else if (value === 3) {
       this.vulnForm.patchValue({
-        risk: 'Low'
+        risk: 'Low',
       });
     } else {
       this.vulnForm.patchValue({
-        risk: 'Informational'
+        risk: 'Informational',
       });
     }
+  }
+
+  exportToJira() {
+    this.appService.exportToJira(this.vulnId).subscribe((res: string) => {
+      this.navigateToVulnerabilities();
+      this.alertService.success(`The `);
+    });
   }
 }

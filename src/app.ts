@@ -19,8 +19,9 @@ const userController = require('./routes/user.controller');
 const fileUploadController = require('./routes/file-upload.controller');
 import * as assetController from './routes/asset.controller';
 import * as assessmentController from './routes/assessment.controller';
-const vulnController = require('./routes/vulnerability.controller');
+import * as vulnController from './routes/vulnerability.controller';
 import * as jwtMiddleware from './middleware/jwt.middleware';
+import * as JiraApi from 'jira-client';
 const puppeteerUtility = require('./utilities/puppeteer.utility');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -34,6 +35,14 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+export const jira = new JiraApi({
+  protocol: 'https',
+  host: process.env.JIRA_HOST,
+  username: process.env.JIRA_USERNAME,
+  password: process.env.JIRA_API_KEY,
+  apiVersion: '3',
+  strictSSL: true
+});
 const serverPort = process.env.PORT || 5000;
 const serverIpAddress = process.env.IP || '127.0.0.1';
 app.set('port', serverPort);
@@ -94,4 +103,5 @@ createConnection().then((_) => {
   app.delete('/api/vulnerability/:vulnId', jwtMiddleware.checkToken, vulnController.deleteVulnById);
   app.patch('/api/vulnerability/:vulnId', jwtMiddleware.checkToken, vulnController.patchVulnById);
   app.post('/api/vulnerability', jwtMiddleware.checkToken, vulnController.createVuln);
+  app.get('/api/vulnerability/jira/:vulnId', jwtMiddleware.checkToken, vulnController.exportToJira);
 });
