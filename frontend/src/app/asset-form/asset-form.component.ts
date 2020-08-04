@@ -7,7 +7,7 @@ import { AlertService } from '../alert/alert.service';
 @Component({
   selector: 'app-asset-form',
   templateUrl: './asset-form.component.html',
-  styleUrls: ['./asset-form.component.sass']
+  styleUrls: ['./asset-form.component.sass'],
 })
 export class AssetFormComponent implements OnInit, OnChanges {
   public assetModel: Asset;
@@ -49,7 +49,10 @@ export class AssetFormComponent implements OnInit, OnChanges {
    */
   createForm() {
     this.assetForm = this.fb.group({
-      name: ['', [Validators.required]]
+      name: ['', [Validators.required]],
+      jiraUsername: ['', []],
+      jiraHost: ['', []],
+      jiraApiKey: ['', []],
     });
   }
 
@@ -58,7 +61,10 @@ export class AssetFormComponent implements OnInit, OnChanges {
    */
   rebuildForm() {
     this.assetForm.reset({
-      name: this.assetModel.name
+      name: this.assetModel.name,
+      jiraApiKey: this.assetModel.jiraApiKey,
+      jiraHost: this.assetModel.jiraHost,
+      jiraUsername: this.assetModel.jiraUsername,
     });
   }
 

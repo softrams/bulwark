@@ -5,7 +5,7 @@ import { Asset } from '../entity/Asset';
 import { validate } from 'class-validator';
 import { Organization } from '../entity/Organization';
 import { status } from '../enums/status-enum';
-
+import { generateHash } from '../utilities/password.utility';
 /**
  * @description Get organization assets
  * @param {UserRequest} req
@@ -70,10 +70,23 @@ export const createAsset = async (req: UserRequest, res: Response) => {
     return res.status(400).send('Asset is not valid');
   }
   const asset = new Asset();
+  if (req.body.jiraUsername || req.body.jiraHost || req.body.jiraApiKey) {
+    if (!req.body.jiraUsername || !req.body.jiraHost || !req.body.jiraApiKey) {
+      return res.status(400).send('JIRA integration requires username, host, and API key.');
+    } else {
+      asset.jiraApiKey = await generateHash(req.body.jiraApiKey);
+      asset.jiraHost = req.body.jiraHost;
+      asset.jiraUsername = req.body.jiraUsername;
+    }
+  } else {
+    asset.jiraApiKey = null;
+    asset.jiraHost = null;
+    asset.jiraUsername = null;
+  }
   asset.name = req.body.name;
   asset.organization = org;
   asset.status = status.active;
-  const errors = await validate(asset);
+  const errors = await validate(asset, { skipMissingProperties: true });
   if (errors.length > 0) {
     res.status(400).send('Asset form validation failed');
   } else {
@@ -118,8 +131,21 @@ export const updateAssetById = async (req: UserRequest, res: Response) => {
   if (!req.body.name) {
     return res.status(400).json('Asset name is not valid');
   }
+  if (req.body.jiraUsername || req.body.jiraHost || req.body.jiraApiKey) {
+    if (!req.body.jiraUsername || !req.body.jiraHost || !req.body.jiraApiKey) {
+      return res.status(400).send('JIRA integration requires username, host, and API key.');
+    } else {
+      asset.jiraApiKey = await generateHash(req.body.jiraApiKey);
+      asset.jiraHost = req.body.jiraHost;
+      asset.jiraUsername = req.body.jiraUsername;
+    }
+  } else {
+    asset.jiraApiKey = null;
+    asset.jiraHost = null;
+    asset.jiraUsername = null;
+  }
   asset.name = req.body.name;
-  const errors = await validate(asset);
+  const errors = await validate(asset, { skipMissingProperties: true });
   if (errors.length > 0) {
     res.status(400).send('Asset form validation failed');
   } else {

@@ -2,33 +2,20 @@
   <form [formGroup]="assetForm" (ngSubmit)="onSubmit(assetForm)">
     <div class="form-group">
       <label for="assetName">Asset Name</label>
-      <input
-        formControlName="name"
-        type="text"
-        class="form-control"
-        id="assetName"
-        placeholder="Enter in an asset name"
-      />
+      <input formControlName="name" type="text" class="form-control" id="assetName" />
+      <label for="assetName">JIRA Username</label>
+      <input formControlName="jiraUsername" type="text" class="form-control" id="jiraUsername" />
+      <label for="assetName">JIRA Host</label>
+      <input formControlName="jiraHost" type="text" class="form-control" id="jiraHost" />
+      <label for="assetName">JIRA API Key</label>
+      <input formControlName="jiraApiKey" type="password" class="form-control" id="jiraApiKey" />
     </div>
-    <button
-      [disabled]="!assetForm.valid"
-      class="btn btn-primary float-right"
-      type="submit"
-      data-toggle="tooltip"
-      data-placement="bottom"
-      title="Submit"
-    >
+    <button [disabled]="!assetForm.valid" class="btn btn-primary float-right" type="submit" data-toggle="tooltip"
+      data-placement="bottom" title="Submit">
       Submit
     </button>
-    <button
-      (click)="navigateToAssets()"
-      class="btn btn-secondary float-right"
-      type="button"
-      style="margin-right: 5px"
-      data-toggle="tooltip"
-      data-placement="bottom"
-      title="Back to Assets"
-    >
+    <button (click)="navigateToAssets()" class="btn btn-secondary float-right" type="button" style="margin-right: 5px"
+      data-toggle="tooltip" data-placement="bottom" title="Back to Assets">
       Back to Assets
     </button>
   </form>

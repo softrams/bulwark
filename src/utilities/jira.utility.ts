@@ -6,7 +6,6 @@ import { Vulnerability } from 'src/entity/Vulnerability';
 import { UserRequest } from 'src/interfaces/user-request.interface';
 import { JiraUser } from 'src/interfaces/jira/jira-user.interface';
 import { JiraPriority } from 'src/interfaces/jira/jira-issue-priority.interface';
-import { DescriptionContent } from 'src/interfaces/jira/jira-issue-description-content.interface';
 
 export const addNewIssue = (vuln: Vulnerability) => {
   return new Promise(async (resolve, reject) => {
@@ -32,12 +31,7 @@ const mapVulnToJiraIssue = (vuln: Vulnerability): JiraIssue => {
   const issueType: IssueType = {
     id: '10000'
   };
-  const descriptionContent: DescriptionContent = {
-    text: vuln.description + vuln.detailedInfo,
-    type: 'text'
-  };
-  const ary: DescriptionContent[] = [];
-  ary.push(descriptionContent);
+
   const jiraIssue: JiraIssue = {
     update: {},
     fields: {

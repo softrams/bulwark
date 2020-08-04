@@ -63,7 +63,10 @@ describe('Asset Controller', () => {
       name: 'testAsset',
       status: 'AH',
       organization: savedOrg,
-      assessment: assessments
+      assessment: assessments,
+      jiraApiKey: '',
+      jiraHost: '',
+      jiraUsername: ''
     };
     await getConnection().getRepository(Asset).insert(insertAsset);
     const response3 = new MockExpressResponse();
@@ -107,7 +110,10 @@ describe('Asset Controller', () => {
       name: 'testAsset',
       status: 'A',
       organization: savedOrg,
-      assessment: assessments
+      assessment: assessments,
+      jiraApiKey: '',
+      jiraHost: '',
+      jiraUsername: ''
     };
     await getConnection().getRepository(Asset).insert(insertAsset);
     const response3 = new MockExpressResponse();
@@ -151,7 +157,10 @@ describe('Asset Controller', () => {
       name: 'testAsset',
       status: 'A',
       organization: savedOrg,
-      assessment: assessments
+      assessment: assessments,
+      jiraApiKey: '',
+      jiraHost: '',
+      jiraUsername: ''
     };
     await getConnection().getRepository(Asset).insert(insertAsset);
     const request3 = new MockExpressRequest({
@@ -195,7 +204,10 @@ describe('Asset Controller', () => {
       name: 'testAsset',
       status: 'AH',
       organization: savedOrg,
-      assessment: assessments
+      assessment: assessments,
+      jiraApiKey: '',
+      jiraHost: '',
+      jiraUsername: ''
     };
     await getConnection().getRepository(Asset).insert(insertAsset);
     const request3 = new MockExpressRequest({
