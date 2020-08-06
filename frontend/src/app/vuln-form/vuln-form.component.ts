@@ -461,9 +461,15 @@ export class VulnFormComponent implements OnChanges, OnInit {
   }
 
   exportToJira() {
-    this.appService.exportToJira(this.vulnId).subscribe((res: string) => {
-      this.navigateToVulnerabilities();
-      this.alertService.success(`The `);
-    });
+    if (this.vulnForm.dirty) {
+      this.alertService.warn(
+        'Vulnerability form updates detected.  Please save the vulnerability before exporting to JIRA.'
+      );
+    } else {
+      this.appService.exportVulnToJira(this.vulnId).subscribe((res: string) => {
+        this.navigateToVulnerabilities();
+        this.alertService.success(res);
+      });
+    }
   }
 }

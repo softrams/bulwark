@@ -5,7 +5,7 @@ import { Asset } from '../entity/Asset';
 import { validate } from 'class-validator';
 import { Organization } from '../entity/Organization';
 import { status } from '../enums/status-enum';
-import { generateHash } from '../utilities/password.utility';
+import { encrypt } from '../utilities/crypto.utility';
 /**
  * @description Get organization assets
  * @param {UserRequest} req
@@ -74,7 +74,7 @@ export const createAsset = async (req: UserRequest, res: Response) => {
     if (!req.body.jiraUsername || !req.body.jiraHost || !req.body.jiraApiKey) {
       return res.status(400).send('JIRA integration requires username, host, and API key.');
     } else {
-      asset.jiraApiKey = await generateHash(req.body.jiraApiKey);
+      asset.jiraApiKey = encrypt(req.body.jiraApiKey);
       asset.jiraHost = req.body.jiraHost;
       asset.jiraUsername = req.body.jiraUsername;
     }
@@ -135,7 +135,7 @@ export const updateAssetById = async (req: UserRequest, res: Response) => {
     if (!req.body.jiraUsername || !req.body.jiraHost || !req.body.jiraApiKey) {
       return res.status(400).send('JIRA integration requires username, host, and API key.');
     } else {
-      asset.jiraApiKey = await generateHash(req.body.jiraApiKey);
+      asset.jiraApiKey = encrypt(req.body.jiraApiKey);
       asset.jiraHost = req.body.jiraHost;
       asset.jiraUsername = req.body.jiraUsername;
     }
@@ -168,13 +168,8 @@ export const archiveAssetById = async (req: UserRequest, res: Response) => {
     return res.status(404).json('Asset does not exist');
   }
   asset.status = status.archived;
-  const errors = await validate(asset);
-  if (errors.length > 0) {
-    res.status(400).send('Asset form validation failed');
-  } else {
-    await getConnection().getRepository(Asset).save(asset);
-    res.status(200).json('Asset archived successfully');
-  }
+  await getConnection().getRepository(Asset).save(asset);
+  res.status(200).json('Asset archived successfully');
 };
 /**
  * @description Activate an asset by ID
@@ -191,11 +186,6 @@ export const activateAssetById = async (req: UserRequest, res: Response) => {
     return res.status(404).json('Asset does not exist');
   }
   asset.status = status.active;
-  const errors = await validate(asset);
-  if (errors.length > 0) {
-    res.status(400).send('Asset form validation failed');
-  } else {
-    await getConnection().getRepository(Asset).save(asset);
-    res.status(200).json('Asset activated successfully');
-  }
+  await getConnection().getRepository(Asset).save(asset);
+  res.status(200).json('Asset activated successfully');
 };

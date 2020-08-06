@@ -1,26 +1,82 @@
-import { jira } from '../app';
 import { JiraProject } from 'src/interfaces/jira/jira-project.interface';
 import { IssueType } from 'src/interfaces/jira/jira-issue-type.interface';
 import { JiraIssue } from 'src/interfaces/jira/jira-issue.interface';
 import { Vulnerability } from 'src/entity/Vulnerability';
-import { UserRequest } from 'src/interfaces/user-request.interface';
-import { JiraUser } from 'src/interfaces/jira/jira-user.interface';
 import { JiraPriority } from 'src/interfaces/jira/jira-issue-priority.interface';
-
-export const addNewIssue = (vuln: Vulnerability) => {
+import { JiraInit } from 'src/interfaces/jira/jira-init.interface';
+import { decrypt } from './crypto.utility';
+import { JiraResult } from 'src/interfaces/jira/jira-result.interface';
+import * as fs from 'fs';
+import * as mime from 'mime-types';
+const JiraApi = require('jira-client');
+let jira = null;
+export const addNewVulnIssue = (vuln: Vulnerability, jiraInit: JiraInit): Promise<JiraResult> => {
   return new Promise(async (resolve, reject) => {
+    initializeJira(jiraInit);
     const jiraIssue = mapVulnToJiraIssue(vuln);
-    try {
-      const saved = await jira.addNewIssue(jiraIssue);
-      resolve(saved);
-      return saved;
-    } catch (err) {
-      console.error(err.message);
-      reject(err);
+    if (!vuln.jiraId) {
+      let saved: any;
+      try {
+        saved = await jira.addNewIssue(jiraIssue);
+      } catch (err) {
+        console.error(err);
+        reject('The JIRA export has failed.  If the issue continues, please contact an administrator');
+      }
+      const returnObj: JiraResult = {
+        id: saved.id,
+        key: saved.key,
+        self: saved.self,
+        message: `The vulnerability for "${vuln.name}" has been exported to JIRA.  Key: ${saved.key}`
+      };
+      if (vuln.screenshots) {
+        for await (const screenshot of vuln.screenshots) {
+          // TODO: Figure out a way to create a stream from the buffer and pass that in
+          // Instead of creating a temporary file on the file system
+          const extension = mime.extension(screenshot.mimetype);
+          const path = `./src/temp/${screenshot.originalname}.${extension}`;
+          await fs.writeFileSync(path, screenshot.buffer);
+          const stream = await fs.createReadStream(path);
+          await fs.unlinkSync(path);
+          try {
+            jira.addAttachmentOnIssue(returnObj.id, stream);
+          } catch (err) {
+            console.error(err);
+          }
+        }
+      }
+      resolve(returnObj);
+    } else {
+      let issueKey: string;
+      try {
+        const ary: string[] = vuln.jiraId.split('/');
+        issueKey = ary[ary.length - 1];
+        const existingIssue = await jira.getIssue(issueKey);
+        const returnObj: JiraResult = {
+          id: existingIssue.id,
+          key: existingIssue.key,
+          self: existingIssue.self,
+          message: `The vulnerability for "${vuln.name}" has been updated in JIRA.  Key: ${existingIssue.key}`
+        };
+        resolve(returnObj);
+      } catch (err) {
+        reject(
+          `An error has occured. The JIRA issue ${issueKey} does not exist. Please update the JIRA URL and try again`
+        );
+      }
     }
   });
 };
 
+const initializeJira = (jiraInit: JiraInit) => {
+  jira = new JiraApi({
+    protocol: 'https',
+    host: jiraInit.host,
+    username: jiraInit.username,
+    password: decrypt(jiraInit.apiKey),
+    apiVersion: '3',
+    strictSSL: true
+  });
+};
 const mapVulnToJiraIssue = (vuln: Vulnerability): JiraIssue => {
   const project: JiraProject = {
     id: '10000'

@@ -200,8 +200,12 @@ export class AppService {
     return this.http.get(`${this.api}/vulnerability/${id}`);
   }
 
-  exportToJira(vulnId: number) {
+  exportVulnToJira(vulnId: number) {
     return this.http.get(`${this.api}/vulnerability/jira/${vulnId}`);
+  }
+
+  exportAssessmentToJira(assessmentId: number) {
+    return this.http.get(`${this.api}/assessment/jira/${assessmentId}`);
   }
 
   /**
