@@ -30,7 +30,7 @@
     "core-js": "^3.6.5",
     "ngx-markdown": "^10.1.0",
     "rxjs": "~6.6.2",
-    "tslib": "^2.0.0",
+    "tslib": "^2.0.1",
     "typescript": "^3.9.7",
     "zone.js": "~0.10.2"
   },
