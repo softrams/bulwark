@@ -88,7 +88,7 @@
     "multer": "^1.4.2",
     "mysql": "^2.18.1",
     "nodemailer": "^6.4.11",
-    "password-validator": "^5.0.3",
+    "password-validator": "^5.1.0",
     "puppeteer": "^5.2.1",
     "reflect-metadata": "^0.1.13",
     "ts-node": "^8.10.2",
