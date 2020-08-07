@@ -14,6 +14,7 @@ export class AssetFormComponent implements OnInit, OnChanges {
   public assetForm: FormGroup;
   public orgId: number;
   public assetId: number;
+  public keyPlaceholder = '************************';
   constructor(
     private fb: FormBuilder,
     public appService: AppService,

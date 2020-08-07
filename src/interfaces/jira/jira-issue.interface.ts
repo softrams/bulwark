@@ -15,7 +15,9 @@ export interface JiraIssue {
     id?: number;
     key?: string;
     summary?: string;
-    parent?: JiraIssue;
+    parent?: {
+      key: string;
+    };
     subtasks?: JiraIssue[];
     description?: any;
     environment?: string;

@@ -2,30 +2,11 @@
   <div id="formContent">
     <!-- Login Form -->
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm)">
-      <input
-        formControlName="email"
-        type="text"
-        id="email"
-        class="form-control"
-        name="email"
-        placeholder="Email"
-        style="margin-bottom: 5px;"
-      />
-      <input
-        formControlName="password"
-        type="password"
-        id="password"
-        class="form-control"
-        name="password"
-        placeholder="Password"
-        style="margin-bottom: 5px;"
-      />
-      <input
-        [disabled]="!loginForm.valid"
-        type="submit"
-        class="btn btn-success float-right"
-        value="Log In"
-      />
+      <input formControlName="email" type="text" id="email" class="form-control text-center" name="email"
+        placeholder="Email" style="margin-bottom: 5px;" />
+      <input formControlName="password" type="password" id="password" class="form-control text-center" name="password"
+        placeholder="Password" style="margin-bottom: 5px;" />
+      <input [disabled]="!loginForm.valid" type="submit" class="btn btn-success float-right" value="Log In" />
     </form>
 
     <!-- TODO: Set up email registration -->

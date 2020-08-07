@@ -22,6 +22,7 @@ export const getOrgAssets = async (req: UserRequest, res: Response) => {
   const asset = await getConnection()
     .getRepository(Asset)
     .find({
+      select: ['id', 'name', 'status'],
       where: { organization: req.params.id, status: status.active }
     });
   if (!asset) {
@@ -45,6 +46,7 @@ export const getArchivedOrgAssets = async (req: Request, res: Response) => {
   const asset = await getConnection()
     .getRepository(Asset)
     .find({
+      select: ['id', 'name', 'status'],
       where: { organization: req.params.id, status: status.archived }
     });
   if (!asset) {
@@ -108,6 +110,7 @@ export const getAssetById = async (req: UserRequest, res: Response) => {
     return res.status(400).send('Invalid Asset Request');
   }
   const asset = await getConnection().getRepository(Asset).findOne(req.params.assetId);
+  delete asset.jiraApiKey;
   if (!asset) {
     return res.status(404).send('Asset does not exist');
   }

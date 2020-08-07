@@ -8,7 +8,8 @@
       <label for="assetName">JIRA Host</label>
       <input formControlName="jiraHost" type="text" class="form-control" id="jiraHost" />
       <label for="assetName">JIRA API Key</label>
-      <input formControlName="jiraApiKey" type="password" class="form-control" id="jiraApiKey" />
+      <input formControlName="jiraApiKey" type="password" class="form-control" id="jiraApiKey"
+        [placeholder]="keyPlaceholder" />
     </div>
     <button [disabled]="!assetForm.valid" class="btn btn-primary float-right" type="submit" data-toggle="tooltip"
       data-placement="bottom" title="Submit">
