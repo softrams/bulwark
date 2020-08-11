@@ -70,6 +70,7 @@ createConnection().then((_) => {
   app.patch('/api/organization/:id/asset/:assetId', jwtMiddleware.checkToken, assetController.updateAssetById);
   app.patch('/api/asset/archive/:assetId', jwtMiddleware.checkToken, assetController.archiveAssetById);
   app.patch('/api/asset/activate/:assetId', jwtMiddleware.checkToken, assetController.activateAssetById);
+  app.delete('/api/asset/jira/:assetId', jwtMiddleware.checkToken, assetController.purgeJiraInfo);
   app.get('/api/assessment/:id', jwtMiddleware.checkToken, assessmentController.getAssessmentsByAssetId);
   app.get('/api/assessment/:id/vulnerability', jwtMiddleware.checkToken, assessmentController.getAssessmentVulns);
   app.post('/api/assessment', jwtMiddleware.checkToken, assessmentController.createAssessment);

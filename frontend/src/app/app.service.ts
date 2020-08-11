@@ -267,6 +267,10 @@ export class AppService {
     );
   }
 
+  purgeJira(assetId: number) {
+    return this.http.delete(`${this.api}/asset/jira/${assetId}`);
+  }
+
   /**
    * Function is responsible for fetching assets
    * @param assetId asset ID being requested

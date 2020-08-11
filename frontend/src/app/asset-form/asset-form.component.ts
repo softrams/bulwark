@@ -63,9 +63,9 @@ export class AssetFormComponent implements OnInit, OnChanges {
   rebuildForm() {
     this.assetForm.reset({
       name: this.assetModel.name,
-      jiraApiKey: this.assetModel.jiraApiKey,
-      jiraHost: this.assetModel.jiraHost,
-      jiraUsername: this.assetModel.jiraUsername,
+      jiraApiKey: this.assetModel?.jira?.apiKey,
+      jiraHost: this.assetModel?.jira?.host,
+      jiraUsername: this.assetModel?.jira?.username,
     });
   }
 
@@ -85,6 +85,23 @@ export class AssetFormComponent implements OnInit, OnChanges {
    */
   navigateToAssets() {
     this.route.navigate([`organization/${this.orgId}`]);
+  }
+
+  purgeJiraInfo() {
+    const r = confirm(
+      `Purge API Key for username: "${this.assetModel.jira.username}"?`
+    );
+    if (r) {
+      this.appService.purgeJira(this.assetForm['']).subscribe((res: string) => {
+        this.alertService.success(res);
+        this.appService
+          .getAsset(this.assetId, this.orgId)
+          .subscribe((asset: Asset) => {
+            this.assetModel = asset;
+            this.rebuildForm();
+          });
+      });
+    }
   }
 
   /**

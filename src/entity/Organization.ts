@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, OneToMany } from 'typeorm';
 import { File } from './File';
 import { Asset } from './Asset';
-import { IsUrl, IsIn, MaxLength, IsAlpha, IsDecimal } from 'class-validator';
+import { IsIn } from 'class-validator';
 
 @Entity()
 export class Organization {
@@ -12,7 +12,7 @@ export class Organization {
   @Column()
   @IsIn(['A', 'AH'])
   status: string;
-  @OneToOne((type) => File, { onDelete: 'CASCADE' })
+  @OneToOne((type) => File)
   @JoinColumn()
   avatar: number;
   @OneToMany((type) => Asset, (asset) => asset.organization)
