@@ -1,14 +1,9 @@
 import { JiraProject } from './jira-project.interface';
 import { JiraPriority } from './jira-issue-priority.interface';
-import { JiraUser } from './jira-user.interface';
 import { IssueType } from './jira-issue-type.interface';
 import { IssueStatus } from './jira-issue-status.interface';
-import { Resolution } from './jira-resolution.interface';
-import { SecurityLevel } from './jira-security-level.interface';
-import { Version } from './jira-version.interface';
-import { Component } from './jira-component.interface';
-import { Attachment } from './jira-attachment.interface';
 import { IssueLink } from './jira-issue-link.interface';
+// Add interfaces as you need them
 export interface JiraIssue {
   update?: object;
   fields: {
@@ -23,25 +18,25 @@ export interface JiraIssue {
     environment?: string;
     project?: JiraProject;
     priority?: JiraPriority;
-    assignee?: JiraUser;
-    reporter?: JiraUser;
-    creator?: JiraUser;
+    assignee?: any;
+    reporter?: any;
+    creator?: any;
     issuetype?: IssueType;
     issueStatus?: IssueStatus;
     created?: Date;
     updated?: Date;
     dueDate?: Date;
-    resolution?: Resolution;
+    resolution?: any;
     originalEstimate?: number;
     remainingEstimate?: number;
     timeSpent?: number;
-    securityLevel?: SecurityLevel;
+    securityLevel?: any;
     labels?: string[];
-    versions?: Version[];
-    fixVersions?: Version[];
-    components?: Component[];
+    versions?: any[];
+    fixVersions?: any[];
+    components?: [];
     comments?: Comment[];
-    attachments?: Attachment[];
+    attachments?: [];
     links?: IssueLink[];
     properties?: any;
   };
