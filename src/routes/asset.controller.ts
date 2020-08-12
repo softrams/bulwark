@@ -22,10 +22,16 @@ export const getOrgAssets = async (req: UserRequest, res: Response) => {
   }
   const asset = await getConnection()
     .getRepository(Asset)
-    .find({
-      select: ['id', 'name', 'status'],
-      where: { organization: req.params.id, status: status.active }
-    });
+    .createQueryBuilder('asset')
+    .leftJoinAndSelect('asset.jira', 'jira')
+    .where('asset.organization = :orgId', {
+      orgId: req.params.id
+    })
+    .andWhere('asset.status = :status', {
+      status: status.active
+    })
+    .select(['asset.id', 'asset.name', 'asset.status', 'jira.id'])
+    .getMany();
   if (!asset) {
     return res.status(404).json('Assets not found');
   }
@@ -46,10 +52,16 @@ export const getArchivedOrgAssets = async (req: Request, res: Response) => {
   }
   const asset = await getConnection()
     .getRepository(Asset)
-    .find({
-      select: ['id', 'name', 'status'],
-      where: { organization: req.params.id, status: status.archived }
-    });
+    .createQueryBuilder('asset')
+    .leftJoinAndSelect('asset.jira', 'jira')
+    .where('asset.organization = :orgId', {
+      orgId: req.params.id
+    })
+    .andWhere('asset.status = :status', {
+      status: status.archived
+    })
+    .select(['asset.id', 'asset.name', 'asset.status', 'jira.id'])
+    .getMany();
   if (!asset) {
     return res.status(404).json('Assets not found');
   }
@@ -108,17 +120,34 @@ export const purgeJiraInfo = async (req: Request, res: Response) => {
   await getConnection().getRepository(Jira).delete(asset.jira);
   res.status(200).json('The API Key has been purged successfully');
 };
+/**
+ * @description Associates Asset to JIRA integration
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns success/error message
+ */
 const addJiraIntegration = (username: string, host: string, apiKey: string, asset: Asset): Promise<Jira> => {
   return new Promise(async (resolve, reject) => {
-    console.log(apiKey);
-    apiKey = encrypt(apiKey);
+    const existingAsset = await getConnection().getRepository(Asset).findOne(asset.id);
+    if (existingAsset.jira) {
+      reject(
+        `The Asset: ${existingAsset.name} contains an existing JIRA integration.  Please purge the existing JIRA integration before providing a new one.`
+      );
+      return;
+    }
     const jiraInit: Jira = {
       id: null,
       username,
       host,
-      apiKey,
-      asset
+      asset,
+      apiKey
     };
+    try {
+      jiraInit.apiKey = encrypt(apiKey);
+    } catch (err) {
+      reject(err);
+      return;
+    }
     const errors = await validate(jiraInit);
     if (errors.length > 0) {
       reject('JIRA integration requires username, host, and API key.');
@@ -171,17 +200,19 @@ export const updateAssetById = async (req: UserRequest, res: Response) => {
     return res.status(400).json('Asset name is not valid');
   }
   try {
-    await addJiraIntegration(req.body.jiraUsername, req.body.jiraHost, req.body.jiraApiKey, asset);
+    if (req.body.jira) {
+      await addJiraIntegration(req.body.jira.username, req.body.jira.host, req.body.jira.apiKey, asset);
+    }
   } catch (err) {
-    res.status(400).json('JIRA integration validation failed');
+    return res.status(400).json('JIRA integration validation failed');
   }
   asset.name = req.body.name;
   const errors = await validate(asset, { skipMissingProperties: true });
   if (errors.length > 0) {
-    res.status(400).send('Asset form validation failed');
+    return res.status(400).send('Asset form validation failed');
   } else {
     await getConnection().getRepository(Asset).save(asset);
-    res.status(200).json('Asset patched successfully');
+    return res.status(200).json('Asset patched successfully');
   }
 };
 /**

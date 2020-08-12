@@ -9,15 +9,19 @@
             <h5>Jira Integration</h5>
             <hr />
           </div>
-          <label for="assetName">JIRA Username</label>
-          <input formControlName="jiraUsername" type="text" class="form-control" id="jiraUsername" />
-          <label for="assetName">JIRA Host</label>
-          <input formControlName="jiraHost" type="text" class="form-control" id="jiraHost" />
-          <label for="assetName">JIRA API Key</label>
-          <input formControlName="jiraApiKey" type="password" class="form-control" id="jiraApiKey"
-            [placeholder]="keyPlaceholder" />
+          <div formGroupName="jira">
+            <label for="username">Username</label>
+            <input [readonly]="!canAddApiKey" formControlName="username" type="text" class="form-control"
+              id="username" />
+            <label for="host">Host</label>
+            <input [readonly]="!canAddApiKey" formControlName="host" type="text" class="form-control" id="host" />
+            <label for="apiKey">API Key</label>
+            <input [readonly]="!canAddApiKey" formControlName="apiKey" type="password" class="form-control" id="apiKey"
+              [placeholder]="canAddApiKey ? '':keyPlaceholder" />
+          </div>
           <br>
-          <button type="button" class="float-right btn btn-warning" (click)="purgeJiraInfo()">Purge</button>
+          <button [disabled]="canAddApiKey" type="button" class="float-right btn btn-warning"
+            (click)="purgeJiraInfo()">Purge</button>
         </div>
       </div>
     </div>

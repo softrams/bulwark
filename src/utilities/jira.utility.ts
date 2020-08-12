@@ -10,7 +10,13 @@ import * as mime from 'mime-types';
 import { IssueLink } from 'src/interfaces/jira/jira-issue-link.interface';
 const JiraApi = require('jira-client');
 let jira = null;
-export const addNewVulnIssue = (vuln: Vulnerability, jiraInit: JiraInit): Promise<JiraResult> => {
+/**
+ * @description Entry function to create or update a JIRA ticket associated to a vulnerability
+ * @param {JiraInit} jiraInit
+ * @param {Vulnerability} vulnerability
+ * @returns success: return object errror: error message
+ */
+export const exportToJiraIssue = (vuln: Vulnerability, jiraInit: JiraInit): Promise<JiraResult> => {
   return new Promise(async (resolve, reject) => {
     initializeJira(jiraInit);
     const assessment = vuln.assessment;
@@ -24,70 +30,127 @@ export const addNewVulnIssue = (vuln: Vulnerability, jiraInit: JiraInit): Promis
           vuln.jiraId
         )} does not exist. Please update the JIRA URL and try again`
       );
+      return;
     }
     const jiraIssue = await mapVulnToJiraIssue(vuln, assessmentIssue.fields.project.id);
     if (!vuln.jiraId) {
-      let saved: any;
       try {
-        saved = await jira.addNewIssue(jiraIssue);
-        if (parentKey) {
-          await issueLink(parentKey, saved.key, (err, res) => {
-            if (err) {
-              console.error(err);
-            }
-          });
-        }
+        const result = await addNewJiraIssue(jiraIssue, parentKey, vuln);
+        resolve(result);
       } catch (err) {
-        console.error(err);
-        reject('The JIRA export has failed.  If the issue continues, please contact an administrator');
+        reject(err);
+        return;
       }
-      const returnObj: JiraResult = {
-        id: saved.id,
-        key: saved.key,
-        self: saved.self,
-        message: `The vulnerability for "${vuln.name}" has been exported to JIRA.  Key: ${saved.key}`
-      };
-      if (vuln.screenshots) {
-        attachImages(vuln, returnObj.id);
-      }
-      resolve(returnObj);
     } else {
-      let issueKey: string;
-      let existingIssue: any;
       try {
-        issueKey = getIssueKey(vuln.jiraId);
-        existingIssue = await jira.getIssue(issueKey);
-        const updatedJiraIssue = await mapVulnToJiraIssue(vuln, assessmentIssue.fields.project.id);
-        await jira.updateIssue(existingIssue.id, updatedJiraIssue);
-        if (parentKey) {
-          await issueLink(parentKey, existingIssue.key, (err, res) => {
-            if (err) {
-              console.error(err);
-            }
-          });
-        }
-      } catch (err) {
-        reject(
-          `An error has occured. The JIRA issue ${issueKey} does not exist. Please update the JIRA URL and try again`
+        const result = await updateExistingJiraIssue(
+          jiraIssue,
+          parentKey,
+          vuln,
+          assessmentIssue.fields.project.id,
+          jiraInit
         );
+        resolve(result);
+      } catch (err) {
+        reject(err);
+        return;
       }
-      if (vuln.screenshots) {
-        for await (const existScreenshot of existingIssue.fields.attachment) {
-          deleteIssue(existScreenshot.id, jiraInit);
-        }
-        attachImages(vuln, existingIssue.id);
-      }
-      const returnObj: JiraResult = {
-        id: existingIssue.id,
-        key: existingIssue.key,
-        self: existingIssue.self,
-        message: `The vulnerability for "${vuln.name}" has been updated in JIRA.  Key: ${existingIssue.key}`
-      };
-      resolve(returnObj);
     }
   });
 };
-
+/**
+ * @description Add new Jira issue
+ * @param {any} jiraIssue
+ * @param {string} parentUrl
+ * @param {Vulnerability} vuln
+ * @returns Jira result
+ */
+const addNewJiraIssue = (jiraIssue: any, parentKey: string, vuln: Vulnerability): Promise<JiraResult> => {
+  return new Promise(async (resolve, reject) => {
+    let saved: any;
+    try {
+      saved = await jira.addNewIssue(jiraIssue);
+      if (parentKey) {
+        await issueLink(parentKey, saved.key, (err, res) => {
+          if (err) {
+            console.error(err);
+          }
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      reject('The JIRA export has failed.  If the issue continues, please contact an administrator');
+      return;
+    }
+    const returnObj: JiraResult = {
+      id: saved.id,
+      key: saved.key,
+      self: saved.self,
+      message: `The vulnerability for "${vuln.name}" has been exported to JIRA.  Key: ${saved.key}`
+    };
+    if (vuln.screenshots) {
+      attachImages(vuln, returnObj.id);
+    }
+    resolve(returnObj);
+  });
+};
+/**
+ * @description Update existing Jira issue
+ * @param {any} jiraIssue
+ * @param {string} parentUrl
+ * @param {Vulnerability} vuln
+ * @returns Jira result
+ */
+const updateExistingJiraIssue = (
+  jiraIssue: any,
+  parentKey: string,
+  vuln: Vulnerability,
+  projectId: string,
+  jiraInit: JiraInit
+): Promise<JiraResult> => {
+  return new Promise(async (resolve, reject) => {
+    let issueKey: string;
+    let existingIssue: any;
+    try {
+      issueKey = getIssueKey(vuln.jiraId);
+      existingIssue = await jira.getIssue(issueKey);
+      const updatedJiraIssue = await mapVulnToJiraIssue(vuln, projectId);
+      await jira.updateIssue(existingIssue.id, updatedJiraIssue);
+      if (parentKey) {
+        await issueLink(parentKey, existingIssue.key, (err, res) => {
+          if (err) {
+            console.error(err);
+          }
+        });
+      }
+    } catch (err) {
+      reject(
+        `An error has occured. The JIRA issue ${issueKey} does not exist. Please update the JIRA URL and try again`
+      );
+      return;
+    }
+    if (vuln.screenshots) {
+      for await (const existScreenshot of existingIssue.fields.attachment) {
+        deleteIssueAttachment(existScreenshot.id, jiraInit);
+      }
+      attachImages(vuln, existingIssue.id);
+    }
+    const returnObj: JiraResult = {
+      id: existingIssue.id,
+      key: existingIssue.key,
+      self: existingIssue.self,
+      message: `The vulnerability for "${vuln.name}" has been updated in JIRA.  Key: ${existingIssue.key}`
+    };
+    resolve(returnObj);
+  });
+};
+/**
+ * @description Links Jira ticket to parent ticket
+ * @param callback
+ * @param {string} issueKey
+ * @param {string} parentUrl
+ * @returns success: links jira issue to parent ticket
+ */
 const issueLink = async (parentUrl: string, issueKey: string, callback) => {
   const parentKey = getIssueKey(parentUrl);
   const link: IssueLink = {
@@ -109,7 +172,13 @@ const issueLink = async (parentUrl: string, issueKey: string, callback) => {
     callback(`The JIRA Project "${parentKey}" does not exist.`);
   }
 };
-const deleteIssue = (id: string, jiraInit: JiraInit) => {
+/**
+ * @description Deletes Jira ticket attachment
+ * @param {string} id
+ * @param {JiraInit} jiraInit
+ * @returns success: return object errror: error message
+ */
+const deleteIssueAttachment = (id: string, jiraInit: JiraInit) => {
   const auth = `${jiraInit.username}:${decrypt(jiraInit.apiKey)}`;
   fetch(`https://${jiraInit.host}/rest/api/3/attachment/${id}`, {
     method: 'DELETE',
@@ -125,10 +194,20 @@ const deleteIssue = (id: string, jiraInit: JiraInit) => {
       console.error(err);
     });
 };
+/**
+ * @description Returns Jira issue key
+ * @param {string} url
+ * @returns string of key
+ */
 const getIssueKey = (url: string): string => {
   const ary: string[] = url.split('/');
   return ary[ary.length - 1];
 };
+/**
+ * @description Initializes Jira
+ * @param {JiraInit} jiraInit
+ * @returns nothing
+ */
 const initializeJira = (jiraInit: JiraInit) => {
   jira = new JiraApi({
     protocol: 'https',
@@ -139,7 +218,13 @@ const initializeJira = (jiraInit: JiraInit) => {
     strictSSL: true
   });
 };
-const attachImages = async (vuln: Vulnerability, issueId) => {
+/**
+ * @description Attaches one-to-many images to Jira ticket
+ * @param {string} issueId
+ * @param {Vulnerability} vulnerability
+ * @returns nothing
+ */
+const attachImages = async (vuln: Vulnerability, issueId: string) => {
   for await (const screenshot of vuln.screenshots) {
     // TODO: Figure out a way to create a stream from the buffer and pass that in
     // Instead of creating a temporary file on the file system
@@ -155,6 +240,12 @@ const attachImages = async (vuln: Vulnerability, issueId) => {
     }
   }
 };
+/**
+ * @description Maps Vulnerability information to Jira ticket
+ * @param {string} projectId
+ * @param {Vulnerability} vulnerability
+ * @returns JiraIssue object
+ */
 const mapVulnToJiraIssue = async (vuln: Vulnerability, projectId: string) => {
   const probLocRows = await dynamicProbLocTableRows(vuln);
   const resourceRows = await dynamicResourceTableRows(vuln);
@@ -325,7 +416,11 @@ const mapVulnToJiraIssue = async (vuln: Vulnerability, projectId: string) => {
   };
   return jiraIssue;
 };
-
+/**
+ * @description Dynamically creates Jira table for problem locations
+ * @param {Vulnerability} vulnerability
+ * @returns table rows
+ */
 const dynamicProbLocTableRows = async (vuln: Vulnerability) => {
   const rows = [];
   rows.push({
@@ -405,7 +500,11 @@ const dynamicProbLocTableRows = async (vuln: Vulnerability) => {
   }
   return rows;
 };
-
+/**
+ * @description Dynamically creates Jira table for resources
+ * @param {Vulnerability} vulnerability
+ * @returns table rows
+ */
 const dynamicResourceTableRows = async (vuln: Vulnerability) => {
   const rows = [];
   rows.push({
@@ -493,7 +592,11 @@ const dynamicResourceTableRows = async (vuln: Vulnerability) => {
   }
   return rows;
 };
-
+/**
+ * @description Maps overall risk severity to Jira priority
+ * @param {Vulnerability} vulnerability
+ * @returns jira priority string
+ */
 const mapRiskToSeverity = (risk: string) => {
   switch (risk) {
     case 'Informational':

@@ -1,10 +1,8 @@
-export class Asset {
-  constructor(
-    public id: number,
-    public name: string,
-    public organization: number,
-    public jiraUsername: string,
-    public jiraHost: string,
-    public jiraApiKey: string
-  ) {}
+import { Jira } from './Jira';
+
+export interface Asset {
+  id: number;
+  name: string;
+  organization: number;
+  jira?: Jira;
 }

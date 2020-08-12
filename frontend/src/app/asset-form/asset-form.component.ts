@@ -15,6 +15,7 @@ export class AssetFormComponent implements OnInit, OnChanges {
   public orgId: number;
   public assetId: number;
   public keyPlaceholder = '************************';
+  public canAddApiKey: boolean;
   constructor(
     private fb: FormBuilder,
     public appService: AppService,
@@ -30,6 +31,11 @@ export class AssetFormComponent implements OnInit, OnChanges {
       if (asset) {
         this.assetModel = asset;
         this.rebuildForm();
+        if (asset.jira) {
+          this.canAddApiKey = false;
+        } else {
+          this.canAddApiKey = true;
+        }
       }
     });
     this.activatedRoute.params.subscribe((params) => {
@@ -51,9 +57,11 @@ export class AssetFormComponent implements OnInit, OnChanges {
   createForm() {
     this.assetForm = this.fb.group({
       name: ['', [Validators.required]],
-      jiraUsername: ['', []],
-      jiraHost: ['', []],
-      jiraApiKey: ['', []],
+      jira: this.fb.group({
+        username: ['', []],
+        host: ['', []],
+        apiKey: ['', []],
+      }),
     });
   }
 
@@ -63,9 +71,11 @@ export class AssetFormComponent implements OnInit, OnChanges {
   rebuildForm() {
     this.assetForm.reset({
       name: this.assetModel.name,
-      jiraApiKey: this.assetModel?.jira?.apiKey,
-      jiraHost: this.assetModel?.jira?.host,
-      jiraUsername: this.assetModel?.jira?.username,
+      jira: {
+        username: this.assetModel?.jira?.username,
+        host: this.assetModel?.jira?.host,
+        apiKey: this.assetModel?.jira?.apiKey,
+      },
     });
   }
 
@@ -77,6 +87,9 @@ export class AssetFormComponent implements OnInit, OnChanges {
     this.assetModel = asset.value;
     this.assetModel.organization = this.orgId;
     this.assetModel.id = this.assetId;
+    if (!this.canAddApiKey) {
+      this.assetModel.jira = null;
+    }
     this.createOrUpdateAsset(this.assetModel);
   }
 
@@ -88,16 +101,15 @@ export class AssetFormComponent implements OnInit, OnChanges {
   }
 
   purgeJiraInfo() {
-    const r = confirm(
-      `Purge API Key for username: "${this.assetModel.jira.username}"?`
-    );
+    const r = confirm(`Purge API Key for username: ""?`);
     if (r) {
-      this.appService.purgeJira(this.assetForm['']).subscribe((res: string) => {
+      this.appService.purgeJira(this.assetId).subscribe((res: string) => {
         this.alertService.success(res);
         this.appService
           .getAsset(this.assetId, this.orgId)
           .subscribe((asset: Asset) => {
             this.assetModel = asset;
+            this.canAddApiKey = true;
             this.rebuildForm();
           });
       });
