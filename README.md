@@ -2,7 +2,9 @@
   <img width="350" src="frontend/src/assets/logo.png">
 </p>
 
-Bulwark is an organizational asset and vulnerability management tool designed for building and generating application security reports.
+Bulwark is an organizational asset and vulnerability management tool designed for building and generating application security reports and [Jira](https://www.atlassian.com/software/jira) tickets.
+
+[![Actions Status](https://github.com/softrams/bulwark/workflows/build/badge.svg)](https://github.com/softrams/bulwark/actions)
 
 ![Running Bulwark](https://github.com/Whamo12/media/blob/master/bulwark_walkthrough.gif)
 
@@ -114,6 +116,36 @@ Set this variable to sender email password or a [Gmail app passwords](https://su
 
 Set this variable to the application security company name to be published on the report
 
+#### `JIRA_API_KEY`
+
+`JIRA_API_KEY="someApiKey"`
+
+Set this variable to the Jira user's generated [API token](https://confluence.atlassian.com/cloud/api-tokens-938839638.html).
+
+#### `JIRA_USERNAME`
+
+`JIRA_USERNAME="foo@bar.com"`
+
+Set this variable to the user's Jira email address.
+
+#### `JIRA_HOST`
+
+`JIRA_HOST="foo-bar.atlassian.net"`
+
+Set this variable to the user's Jira host address.
+
+#### `CRYPTO_SECRET`
+
+`CRYPTO_SECRET="randomValue"`
+
+Set this variable to the [Scrypt](https://nodejs.org/api/crypto.html#crypto_crypto_scryptsync_password_salt_keylen_options) password.
+
+#### `CRYPTO_SALT`
+
+`CRYPTO_SECRET="randomValue"`
+
+Set this variable to the [Scrypt](https://nodejs.org/api/crypto.html#crypto_crypto_scryptsync_password_salt_keylen_options) salt.
+
 ### Empty .env example
 
 ```
@@ -131,6 +163,11 @@ JWT_REFRESH_KEY=""
 FROM_EMAIL=""
 FROM_EMAIL_PASSWORD=""
 COMPANY_NAME=""
+JIRA_API_KEY=""
+JIRA_USERNAME=""
+JIRA_HOST=""
+CRYPTO_SECRET=""
+CRYPTO_SALT=""
 ```
 
 ## Seed Initial User

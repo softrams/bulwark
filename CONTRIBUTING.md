@@ -44,4 +44,4 @@ npm run lint
 
 ### Testing
 
-All testing should following the guildline stated within the [Testing Documention](TESTING.md)
+All testing should adhere to the [testing guidelines](TESTING.md).

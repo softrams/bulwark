@@ -26,6 +26,15 @@ const helmet = require('helmet');
 const cors = require('cors');
 const app = express();
 app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self' blob:", 'stackpath.bootstrapcdn.com'],
+      scriptSrc: ["'self'", 'code.jquery.com', 'stackpath.bootstrapcdn.com'],
+      styleSrc: ["'self'", 'stackpath.bootstrapcdn.com', "'unsafe-inline'"]
+    }
+  })
+);
 app.use(cors());
 app.use(
   express.static(path.join(__dirname, '../frontend/dist/frontend'), {
