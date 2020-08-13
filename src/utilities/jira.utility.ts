@@ -16,6 +16,7 @@ let jira = null;
  * @param {Vulnerability} vulnerability
  * @returns success: return object errror: error message
  */
+/* istanbul ignore next */
 export const exportToJiraIssue = (vuln: Vulnerability, jiraInit: JiraInit): Promise<JiraResult> => {
   return new Promise(async (resolve, reject) => {
     initializeJira(jiraInit);
@@ -65,6 +66,7 @@ export const exportToJiraIssue = (vuln: Vulnerability, jiraInit: JiraInit): Prom
  * @param {Vulnerability} vuln
  * @returns Jira result
  */
+/* istanbul ignore next */
 const addNewJiraIssue = (jiraIssue: any, parentKey: string, vuln: Vulnerability): Promise<JiraResult> => {
   return new Promise(async (resolve, reject) => {
     let saved: any;
@@ -101,6 +103,7 @@ const addNewJiraIssue = (jiraIssue: any, parentKey: string, vuln: Vulnerability)
  * @param {Vulnerability} vuln
  * @returns Jira result
  */
+/* istanbul ignore next */
 const updateExistingJiraIssue = (
   jiraIssue: any,
   parentKey: string,
@@ -151,6 +154,7 @@ const updateExistingJiraIssue = (
  * @param {string} parentUrl
  * @returns success: links jira issue to parent ticket
  */
+/* istanbul ignore next */
 const issueLink = async (parentUrl: string, issueKey: string, callback) => {
   const parentKey = getIssueKey(parentUrl);
   const link: IssueLink = {
@@ -178,6 +182,7 @@ const issueLink = async (parentUrl: string, issueKey: string, callback) => {
  * @param {JiraInit} jiraInit
  * @returns success: return object errror: error message
  */
+/* istanbul ignore next */
 const deleteIssueAttachment = (id: string, jiraInit: JiraInit) => {
   const auth = `${jiraInit.username}:${decrypt(jiraInit.apiKey)}`;
   fetch(`https://${jiraInit.host}/rest/api/3/attachment/${id}`, {
@@ -199,7 +204,7 @@ const deleteIssueAttachment = (id: string, jiraInit: JiraInit) => {
  * @param {string} url
  * @returns string of key
  */
-const getIssueKey = (url: string): string => {
+export const getIssueKey = (url: string): string => {
   const ary: string[] = url.split('/');
   return ary[ary.length - 1];
 };
@@ -208,6 +213,7 @@ const getIssueKey = (url: string): string => {
  * @param {JiraInit} jiraInit
  * @returns nothing
  */
+/* istanbul ignore next */
 const initializeJira = (jiraInit: JiraInit) => {
   jira = new JiraApi({
     protocol: 'https',
@@ -224,6 +230,7 @@ const initializeJira = (jiraInit: JiraInit) => {
  * @param {Vulnerability} vulnerability
  * @returns nothing
  */
+/* istanbul ignore next */
 const attachImages = async (vuln: Vulnerability, issueId: string) => {
   for await (const screenshot of vuln.screenshots) {
     // TODO: Figure out a way to create a stream from the buffer and pass that in
@@ -246,7 +253,7 @@ const attachImages = async (vuln: Vulnerability, issueId: string) => {
  * @param {Vulnerability} vulnerability
  * @returns JiraIssue object
  */
-const mapVulnToJiraIssue = async (vuln: Vulnerability, projectId: string) => {
+export const mapVulnToJiraIssue = async (vuln: Vulnerability, projectId: string) => {
   const probLocRows = await dynamicProbLocTableRows(vuln);
   const resourceRows = await dynamicResourceTableRows(vuln);
   const jiraIssue: JiraIssue = {
@@ -310,7 +317,7 @@ const mapVulnToJiraIssue = async (vuln: Vulnerability, projectId: string) => {
             content: [
               {
                 type: 'text',
-                text: `Systemic: ${vuln.systemic ? 'Yes' : 'No'}`,
+                text: `Systemic: ${vuln.systemic}`,
                 marks: [
                   {
                     type: 'strong'
@@ -597,7 +604,7 @@ const dynamicResourceTableRows = async (vuln: Vulnerability) => {
  * @param {Vulnerability} vulnerability
  * @returns jira priority string
  */
-const mapRiskToSeverity = (risk: string) => {
+export const mapRiskToSeverity = (risk: string) => {
   switch (risk) {
     case 'Informational':
       return 'Lowest';
