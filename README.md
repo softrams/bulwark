@@ -4,7 +4,7 @@
 
 Bulwark is an organizational asset and vulnerability management tool designed for building and generating application security reports and [Jira](https://www.atlassian.com/software/jira) tickets.
 
-[![Actions Status](https://github.com/softrams/bulwark/workflows/build/badge.svg)](https://github.com/softrams/bulwark/actions)
+[![Actions Status](https://github.com/softrams/bulwark/workflows/Node.js%20CI/badge.svg)](https://github.com/softrams/bulwark/actions)
 
 ![Running Bulwark](https://github.com/Whamo12/media/blob/master/bulwark_walkthrough.gif)
 
