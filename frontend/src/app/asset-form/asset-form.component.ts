@@ -15,7 +15,7 @@ export class AssetFormComponent implements OnInit, OnChanges {
   public orgId: number;
   public assetId: number;
   public keyPlaceholder = '************************';
-  public canAddApiKey: boolean;
+  public canAddApiKey = true;
   constructor(
     private fb: FormBuilder,
     public appService: AppService,

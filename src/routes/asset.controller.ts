@@ -84,21 +84,29 @@ export const createAsset = async (req: UserRequest, res: Response) => {
   if (!req.body.name) {
     return res.status(400).send('Asset is not valid');
   }
-  const asset = new Asset();
-  try {
-    await addJiraIntegration(req.body.jiraUsername, req.body.jiraHost, req.body.jiraApiKey, asset);
-  } catch (err) {
-    res.status(400).json('JIRA integration validation failed');
-  }
+  let asset = new Asset();
   asset.name = req.body.name;
   asset.organization = org;
   asset.status = status.active;
   const errors = await validate(asset);
   if (errors.length > 0) {
-    res.status(400).send('Asset form validation failed');
+    return res.status(400).send('Asset form validation failed');
   } else {
-    await getConnection().getRepository(Asset).save(asset);
-    res.status(200).json('Asset saved successfully');
+    asset = await getConnection().getRepository(Asset).save(asset);
+    if (req.body.jira && req.body.jira.username && req.body.jira.host && req.body.jira.apiKey) {
+      try {
+        await addJiraIntegration(req.body.jira.username, req.body.jira.host, req.body.jira.apiKey, asset);
+      } catch (err) {
+        return res.status(400).json(err);
+      }
+    } else {
+      return res
+        .status(200)
+        .json(
+          'Asset saved successfully.  Unable to integrate Jira.  JIRA integration requires username, host, and API key.'
+        );
+    }
+    return res.status(200).json('Asset saved successfully');
   }
 };
 /**
@@ -109,16 +117,16 @@ export const createAsset = async (req: UserRequest, res: Response) => {
  */
 export const purgeJiraInfo = async (req: Request, res: Response) => {
   if (!req.params.assetId) {
-    res.status(400).json('Asset ID is not valid');
+    return res.status(400).json('Asset ID is not valid');
   }
   if (isNaN(+req.params.assetId)) {
-    res.status(400).json('Asset ID is not valid');
+    return res.status(400).json('Asset ID is not valid');
   }
   const asset = await getConnection()
     .getRepository(Asset)
     .findOne(req.params.assetId, { relations: ['jira'] });
   await getConnection().getRepository(Jira).delete(asset.jira);
-  res.status(200).json('The API Key has been purged successfully');
+  return res.status(200).json('The API Key has been purged successfully');
 };
 /**
  * @description Associates Asset to JIRA integration
@@ -151,6 +159,7 @@ const addJiraIntegration = (username: string, host: string, apiKey: string, asse
     const errors = await validate(jiraInit);
     if (errors.length > 0) {
       reject('JIRA integration requires username, host, and API key.');
+      return;
     } else {
       const jiraResult = await getConnection().getRepository(Jira).save(jiraInit);
       resolve(jiraResult);
@@ -166,9 +175,6 @@ const addJiraIntegration = (username: string, host: string, apiKey: string, asse
 export const getAssetById = async (req: UserRequest, res: Response) => {
   if (isNaN(+req.params.assetId)) {
     return res.status(400).json('Invalid Asset ID');
-  }
-  if (!req.params.assetId) {
-    return res.status(400).send('Invalid Asset Request');
   }
   const asset = await getConnection()
     .getRepository(Asset)
