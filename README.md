@@ -2,7 +2,8 @@
   <img width="350" src="frontend/src/assets/logo.png">
 </p>
 
-<p style="text-align: center;">An organizational asset and vulnerability management tool designed for building and generating application security reports and <a href="https://www.atlassian.com/software/jira">Jira</a> tickets.</p>
+<p style="text-align: center;">An organizational asset and vulnerability management tool, with Jira integration, designed for generating application security reports.</p>
+
 <p align="center">
 <img src='https://github.com/softrams/bulwark/workflows/Node.js%20CI/badge.svg'>
 <img src='https://img.shields.io/badge/License-MIT-yellow.svg'>
@@ -11,7 +12,7 @@
 
 ## Note
 
-Please keep in mind, this project is very early in the development phase.
+Please keep in mind, this project is in early development.
 
 ## Installing
 
@@ -201,7 +202,7 @@ The Softrams Bulwark core development team are:
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Read the [contribution guidelines](CONTRIBUTING.md) first.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Read the [contribution guidelines](CONTRIBUTING.md) for more information.
 
 ## License
 
