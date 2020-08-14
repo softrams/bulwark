@@ -5,7 +5,7 @@
 <p style="text-align: center;">An organizational asset and vulnerability management tool, with Jira integration, designed for generating application security reports.</p>
 
 <p align="center">
-<img src='https://github.com/softrams/bulwark/workflows/Node.js%20CI/badge.svg'>
+<img src='https://github.com/softrams/bulwark/workflows/build/badge.svg'>
 <img src='https://img.shields.io/badge/License-MIT-yellow.svg'>
 </p>
 ![Running Bulwark](https://github.com/Whamo12/media/blob/master/bulwark_walkthrough.gif)
@@ -118,24 +118,6 @@ Set this variable to sender email password or a [Gmail app passwords](https://su
 
 Set this variable to the application security company name to be published on the report
 
-#### `JIRA_API_KEY`
-
-`JIRA_API_KEY="someApiKey"`
-
-Set this variable to the Jira user's generated [API token](https://confluence.atlassian.com/cloud/api-tokens-938839638.html).
-
-#### `JIRA_USERNAME`
-
-`JIRA_USERNAME="foo@bar.com"`
-
-Set this variable to the user's Jira email address.
-
-#### `JIRA_HOST`
-
-`JIRA_HOST="foo-bar.atlassian.net"`
-
-Set this variable to the user's Jira host address.
-
 #### `CRYPTO_SECRET`
 
 `CRYPTO_SECRET="randomValue"`
@@ -165,9 +147,6 @@ JWT_REFRESH_KEY=""
 FROM_EMAIL=""
 FROM_EMAIL_PASSWORD=""
 COMPANY_NAME=""
-JIRA_API_KEY=""
-JIRA_USERNAME=""
-JIRA_HOST=""
 CRYPTO_SECRET=""
 CRYPTO_SALT=""
 ```
