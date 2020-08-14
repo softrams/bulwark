@@ -139,7 +139,7 @@ const addJiraIntegration = (username: string, host: string, apiKey: string, asse
     const existingAsset = await getConnection().getRepository(Asset).findOne(asset.id);
     if (existingAsset.jira) {
       reject(
-        `The Asset: ${existingAsset.name} contains an existing JIRA integration.  Please purge the existing JIRA integration before providing a new one.`
+        `The Asset: ${existingAsset.name} contains an existing Jira integration.  Purge the existing Jira integration and try again.`
       );
       return;
     }
@@ -158,7 +158,7 @@ const addJiraIntegration = (username: string, host: string, apiKey: string, asse
     }
     const errors = await validate(jiraInit);
     if (errors.length > 0) {
-      reject('JIRA integration requires username, host, and API key.');
+      reject('Jira integration requires username, host, and API key.');
       return;
     } else {
       const jiraResult = await getConnection().getRepository(Jira).save(jiraInit);

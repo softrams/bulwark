@@ -81,14 +81,14 @@ const addNewJiraIssue = (jiraIssue: any, parentKey: string, vuln: Vulnerability)
       }
     } catch (err) {
       console.error(err);
-      reject('The JIRA export has failed.  If the issue continues, please contact an administrator');
+      reject('The Jira export has failed.');
       return;
     }
     const returnObj: JiraResult = {
       id: saved.id,
       key: saved.key,
       self: saved.self,
-      message: `The vulnerability for "${vuln.name}" has been exported to JIRA.  Key: ${saved.key}`
+      message: `The vulnerability for "${vuln.name}" has been exported to Jira.  Key: ${saved.key}`
     };
     if (vuln.screenshots) {
       attachImages(vuln, returnObj.id);
@@ -128,7 +128,7 @@ const updateExistingJiraIssue = (
       }
     } catch (err) {
       reject(
-        `An error has occured. The JIRA issue ${issueKey} does not exist. Please update the JIRA URL and try again`
+        `An error has occured. The JIRA issue ${issueKey} does not exist. Please update the Jira field with a valid URL and try again.`
       );
       return;
     }

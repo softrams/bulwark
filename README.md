@@ -2,10 +2,11 @@
   <img width="350" src="frontend/src/assets/logo.png">
 </p>
 
-Bulwark is an organizational asset and vulnerability management tool designed for building and generating application security reports and [Jira](https://www.atlassian.com/software/jira) tickets.
-
-[![Actions Status](https://github.com/softrams/bulwark/workflows/Node.js%20CI/badge.svg)](https://github.com/softrams/bulwark/actions)
-
+<p style="text-align: center;">An organizational asset and vulnerability management tool designed for building and generating application security reports and <a href="https://www.atlassian.com/software/jira">Jira</a> tickets.</p>
+<p align="center">
+<img src='https://github.com/softrams/bulwark/workflows/Node.js%20CI/badge.svg'>
+<img src='https://img.shields.io/badge/License-MIT-yellow.svg'>
+</p>
 ![Running Bulwark](https://github.com/Whamo12/media/blob/master/bulwark_walkthrough.gif)
 
 ## Note
@@ -177,11 +178,13 @@ On initial startup, Bulwark will not have any users. Therefore, it is necessary 
 <!-- Afterwords, subsequent users should be invited. -->
 
 1. `$ npm install`
-2. `$ npm run start:dev`
-3. Navigate to [seed-user.ts](https://github.com/softrams/bulwark/blob/develop/src/temp/seed-user.ts)
-4. Update the `userConfig` object with user credentials, save, and wait for the JS to compile
-5. `$ node ./dist/temp/seed-user.js`
-6. Log into Bulwark with credentials used in step 4
+2. Create the initial database migration `$ npm run migration:init`
+3. Run the initial database migration `$ npm run migration:run`
+4. `$ npm run start:dev`
+5. Navigate to [seed-user.ts](https://github.com/softrams/bulwark/blob/develop/src/temp/seed-user.ts)
+6. Update the `userConfig` object with user credentials, save, and wait for the JS to compile
+7. `$ node ./dist/temp/seed-user.js`
+8. Log into Bulwark with credentials used in step 4
 
 ## Built With
 
