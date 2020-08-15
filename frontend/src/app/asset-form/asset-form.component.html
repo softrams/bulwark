@@ -2,33 +2,35 @@
   <form [formGroup]="assetForm" (ngSubmit)="onSubmit(assetForm)">
     <div class="form-group">
       <label for="assetName">Asset Name</label>
-      <input
-        formControlName="name"
-        type="text"
-        class="form-control"
-        id="assetName"
-        placeholder="Enter in an asset name"
-      />
+      <input formControlName="name" type="text" class="form-control" id="assetName" />
+      <div class="card">
+        <div class="card-body">
+          <div class="col-md-12 text-center">
+            <h5>Jira Integration</h5>
+            <hr />
+          </div>
+          <div formGroupName="jira">
+            <label for="username">Username</label>
+            <input [readonly]="!canAddApiKey" formControlName="username" type="text" class="form-control"
+              id="username" />
+            <label for="host">Host</label>
+            <input [readonly]="!canAddApiKey" formControlName="host" type="text" class="form-control" id="host" />
+            <label for="apiKey">API Key</label>
+            <input [readonly]="!canAddApiKey" formControlName="apiKey" type="password" class="form-control" id="apiKey"
+              [placeholder]="canAddApiKey ? '':keyPlaceholder" />
+          </div>
+          <br>
+          <button [disabled]="canAddApiKey" type="button" class="float-right btn btn-warning"
+            (click)="purgeJiraInfo()">Purge</button>
+        </div>
+      </div>
     </div>
-    <button
-      [disabled]="!assetForm.valid"
-      class="btn btn-primary float-right"
-      type="submit"
-      data-toggle="tooltip"
-      data-placement="bottom"
-      title="Submit"
-    >
+    <button [disabled]="!assetForm.valid" class="btn btn-primary float-right" type="submit" data-toggle="tooltip"
+      data-placement="bottom" title="Submit">
       Submit
     </button>
-    <button
-      (click)="navigateToAssets()"
-      class="btn btn-secondary float-right"
-      type="button"
-      style="margin-right: 5px"
-      data-toggle="tooltip"
-      data-placement="bottom"
-      title="Back to Assets"
-    >
+    <button (click)="navigateToAssets()" class="btn btn-secondary float-right" type="button" style="margin-right: 5px"
+      data-toggle="tooltip" data-placement="bottom" title="Back to Assets">
       Back to Assets
     </button>
   </form>

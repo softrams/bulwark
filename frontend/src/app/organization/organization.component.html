@@ -1,14 +1,11 @@
 <div class="container-fluid">
-  <div class="row">
-    <h3 class="mx-auto">{{ org?.name }} {{isArchive ? 'Archived':'Active'}} Assets</h3>
-  </div>
-  <br />
   <h4 *ngIf="!assetAry.length">The organization {{ org?.name }} does not have any assets.</h4>
   <table class="table" *ngIf="assetAry && assetAry.length">
     <thead class="thead-dark">
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Name</th>
+        <th scope="col">Asset Name</th>
+        <th scope="col">Jira Enabled</th>
         <th scope="col">Status</th>
         <th scope="col"></th>
       </tr>
@@ -16,6 +13,7 @@
     <tbody *ngFor="let asset of assetAry">
       <td scope="row">{{ asset?.id }}</td>
       <td>{{ asset?.name }}</td>
+      <td>{{asset?.jira?.id ? 'Yes' : 'No'}}</td>
       <td>{{ asset?.status === 'A' ? 'Active':'Archived' }}</td>
       <td>
         <button *ngIf="!isArchive" class="btn btn-secondary" type="button" style="margin-right: 10px;"

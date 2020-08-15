@@ -2,13 +2,17 @@
   <img width="350" src="frontend/src/assets/logo.png">
 </p>
 
-Bulwark is an organizational asset and vulnerability management tool designed for building and generating application security reports.
+<p style="text-align: center;">An organizational asset and vulnerability management tool, with Jira integration, designed for generating application security reports.</p>
 
+<p align="center">
+<img src='https://github.com/softrams/bulwark/workflows/build/badge.svg'>
+<img src='https://img.shields.io/badge/License-MIT-yellow.svg'>
+</p>
 ![Running Bulwark](https://github.com/Whamo12/media/blob/master/bulwark_walkthrough.gif)
 
 ## Note
 
-Please keep in mind, this project is very early in the development phase.
+Please keep in mind, this project is in early development.
 
 ## Installing
 
@@ -114,6 +118,18 @@ Set this variable to sender email password or a [Gmail app passwords](https://su
 
 Set this variable to the application security company name to be published on the report
 
+#### `CRYPTO_SECRET`
+
+`CRYPTO_SECRET="randomValue"`
+
+Set this variable to the [Scrypt](https://nodejs.org/api/crypto.html#crypto_crypto_scryptsync_password_salt_keylen_options) password.
+
+#### `CRYPTO_SALT`
+
+`CRYPTO_SECRET="randomValue"`
+
+Set this variable to the [Scrypt](https://nodejs.org/api/crypto.html#crypto_crypto_scryptsync_password_salt_keylen_options) salt.
+
 ### Empty .env example
 
 ```
@@ -131,6 +147,8 @@ JWT_REFRESH_KEY=""
 FROM_EMAIL=""
 FROM_EMAIL_PASSWORD=""
 COMPANY_NAME=""
+CRYPTO_SECRET=""
+CRYPTO_SALT=""
 ```
 
 ## Seed Initial User
@@ -140,11 +158,13 @@ On initial startup, Bulwark will not have any users. Therefore, it is necessary 
 <!-- Afterwords, subsequent users should be invited. -->
 
 1. `$ npm install`
-2. `$ npm run start:dev`
-3. Navigate to [seed-user.ts](https://github.com/softrams/bulwark/blob/develop/src/temp/seed-user.ts)
-4. Update the `userConfig` object with user credentials, save, and wait for the JS to compile
-5. `$ node ./dist/temp/seed-user.js`
-6. Log into Bulwark with credentials used in step 4
+2. Create the initial database migration `$ npm run migration:init`
+3. Run the initial database migration `$ npm run migration:run`
+4. `$ npm run start:dev`
+5. Navigate to [seed-user.ts](https://github.com/softrams/bulwark/blob/develop/src/temp/seed-user.ts)
+6. Update the `userConfig` object with user credentials, save, and wait for the JS to compile
+7. `$ node ./dist/temp/seed-user.js`
+8. Log into Bulwark with credentials used in step 4
 
 ## Built With
 
@@ -161,7 +181,7 @@ The Softrams Bulwark core development team are:
 
 ## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Read the [contribution guidelines](CONTRIBUTING.md) first.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Read the [contribution guidelines](CONTRIBUTING.md) for more information.
 
 ## License
 

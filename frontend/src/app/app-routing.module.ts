@@ -179,7 +179,7 @@ const routes: Routes = [
     path:
       'organization/:orgId/asset/:assetId/assessment/:assessmentId/vuln-form/:vulnId',
     component: VulnFormComponent,
-    resolve: { vulnerability: VulnerabilityResolver },
+    resolve: { vulnInfo: VulnerabilityResolver },
     canActivate: [AuthGuard],
   },
   {

@@ -1,11 +1,12 @@
 import { UserRequest } from '../interfaces/user-request.interface';
-import { Response, Request } from 'express';
-import { getConnection } from 'typeorm';
+import { Response, Request, response } from 'express';
+import { getConnection, AdvancedConsoleLogger } from 'typeorm';
 import { Asset } from '../entity/Asset';
 import { validate } from 'class-validator';
 import { Organization } from '../entity/Organization';
 import { status } from '../enums/status-enum';
-
+import { encrypt } from '../utilities/crypto.utility';
+import { Jira } from '../entity/Jira';
 /**
  * @description Get organization assets
  * @param {UserRequest} req
@@ -21,9 +22,16 @@ export const getOrgAssets = async (req: UserRequest, res: Response) => {
   }
   const asset = await getConnection()
     .getRepository(Asset)
-    .find({
-      where: { organization: req.params.id, status: status.active }
-    });
+    .createQueryBuilder('asset')
+    .leftJoinAndSelect('asset.jira', 'jira')
+    .where('asset.organization = :orgId', {
+      orgId: req.params.id
+    })
+    .andWhere('asset.status = :status', {
+      status: status.active
+    })
+    .select(['asset.id', 'asset.name', 'asset.status', 'jira.id'])
+    .getMany();
   if (!asset) {
     return res.status(404).json('Assets not found');
   }
@@ -44,9 +52,16 @@ export const getArchivedOrgAssets = async (req: Request, res: Response) => {
   }
   const asset = await getConnection()
     .getRepository(Asset)
-    .find({
-      where: { organization: req.params.id, status: status.archived }
-    });
+    .createQueryBuilder('asset')
+    .leftJoinAndSelect('asset.jira', 'jira')
+    .where('asset.organization = :orgId', {
+      orgId: req.params.id
+    })
+    .andWhere('asset.status = :status', {
+      status: status.archived
+    })
+    .select(['asset.id', 'asset.name', 'asset.status', 'jira.id'])
+    .getMany();
   if (!asset) {
     return res.status(404).json('Assets not found');
   }
@@ -69,17 +84,87 @@ export const createAsset = async (req: UserRequest, res: Response) => {
   if (!req.body.name) {
     return res.status(400).send('Asset is not valid');
   }
-  const asset = new Asset();
+  let asset = new Asset();
   asset.name = req.body.name;
   asset.organization = org;
   asset.status = status.active;
   const errors = await validate(asset);
   if (errors.length > 0) {
-    res.status(400).send('Asset form validation failed');
+    return res.status(400).send('Asset form validation failed');
   } else {
-    await getConnection().getRepository(Asset).save(asset);
-    res.status(200).json('Asset saved successfully');
+    asset = await getConnection().getRepository(Asset).save(asset);
+    if (req.body.jira && req.body.jira.username && req.body.jira.host && req.body.jira.apiKey) {
+      try {
+        await addJiraIntegration(req.body.jira.username, req.body.jira.host, req.body.jira.apiKey, asset);
+      } catch (err) {
+        return res.status(400).json(err);
+      }
+    } else {
+      return res
+        .status(200)
+        .json(
+          'Asset saved successfully.  Unable to integrate Jira.  JIRA integration requires username, host, and API key.'
+        );
+    }
+    return res.status(200).json('Asset saved successfully');
   }
+};
+/**
+ * @description Purge JIRA by asset ID
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns success/error message
+ */
+export const purgeJiraInfo = async (req: Request, res: Response) => {
+  if (!req.params.assetId) {
+    return res.status(400).json('Asset ID is not valid');
+  }
+  if (isNaN(+req.params.assetId)) {
+    return res.status(400).json('Asset ID is not valid');
+  }
+  const asset = await getConnection()
+    .getRepository(Asset)
+    .findOne(req.params.assetId, { relations: ['jira'] });
+  await getConnection().getRepository(Jira).delete(asset.jira);
+  return res.status(200).json('The API Key has been purged successfully');
+};
+/**
+ * @description Associates Asset to JIRA integration
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns success/error message
+ */
+const addJiraIntegration = (username: string, host: string, apiKey: string, asset: Asset): Promise<Jira> => {
+  return new Promise(async (resolve, reject) => {
+    const existingAsset = await getConnection().getRepository(Asset).findOne(asset.id);
+    if (existingAsset.jira) {
+      reject(
+        `The Asset: ${existingAsset.name} contains an existing Jira integration.  Purge the existing Jira integration and try again.`
+      );
+      return;
+    }
+    const jiraInit: Jira = {
+      id: null,
+      username,
+      host,
+      asset,
+      apiKey
+    };
+    try {
+      jiraInit.apiKey = encrypt(apiKey);
+    } catch (err) {
+      reject(err);
+      return;
+    }
+    const errors = await validate(jiraInit);
+    if (errors.length > 0) {
+      reject('Jira integration requires username, host, and API key.');
+      return;
+    } else {
+      const jiraResult = await getConnection().getRepository(Jira).save(jiraInit);
+      resolve(jiraResult);
+    }
+  });
 };
 /**
  * @description Get asset by ID
@@ -91,12 +176,14 @@ export const getAssetById = async (req: UserRequest, res: Response) => {
   if (isNaN(+req.params.assetId)) {
     return res.status(400).json('Invalid Asset ID');
   }
-  if (!req.params.assetId) {
-    return res.status(400).send('Invalid Asset Request');
-  }
-  const asset = await getConnection().getRepository(Asset).findOne(req.params.assetId);
+  const asset = await getConnection()
+    .getRepository(Asset)
+    .findOne(req.params.assetId, { relations: ['jira'] });
   if (!asset) {
     return res.status(404).send('Asset does not exist');
+  }
+  if (asset.jira) {
+    delete asset.jira.apiKey;
   }
   res.status(200).json(asset);
 };
@@ -118,13 +205,20 @@ export const updateAssetById = async (req: UserRequest, res: Response) => {
   if (!req.body.name) {
     return res.status(400).json('Asset name is not valid');
   }
+  try {
+    if (req.body.jira) {
+      await addJiraIntegration(req.body.jira.username, req.body.jira.host, req.body.jira.apiKey, asset);
+    }
+  } catch (err) {
+    return res.status(400).json('JIRA integration validation failed');
+  }
   asset.name = req.body.name;
-  const errors = await validate(asset);
+  const errors = await validate(asset, { skipMissingProperties: true });
   if (errors.length > 0) {
-    res.status(400).send('Asset form validation failed');
+    return res.status(400).send('Asset form validation failed');
   } else {
     await getConnection().getRepository(Asset).save(asset);
-    res.status(200).json('Asset patched successfully');
+    return res.status(200).json('Asset patched successfully');
   }
 };
 /**
@@ -142,13 +236,8 @@ export const archiveAssetById = async (req: UserRequest, res: Response) => {
     return res.status(404).json('Asset does not exist');
   }
   asset.status = status.archived;
-  const errors = await validate(asset);
-  if (errors.length > 0) {
-    res.status(400).send('Asset form validation failed');
-  } else {
-    await getConnection().getRepository(Asset).save(asset);
-    res.status(200).json('Asset archived successfully');
-  }
+  await getConnection().getRepository(Asset).save(asset);
+  res.status(200).json('Asset archived successfully');
 };
 /**
  * @description Activate an asset by ID
@@ -165,11 +254,6 @@ export const activateAssetById = async (req: UserRequest, res: Response) => {
     return res.status(404).json('Asset does not exist');
   }
   asset.status = status.active;
-  const errors = await validate(asset);
-  if (errors.length > 0) {
-    res.status(400).send('Asset form validation failed');
-  } else {
-    await getConnection().getRepository(Asset).save(asset);
-    res.status(200).json('Asset activated successfully');
-  }
+  await getConnection().getRepository(Asset).save(asset);
+  res.status(200).json('Asset activated successfully');
 };

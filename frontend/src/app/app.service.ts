@@ -200,6 +200,14 @@ export class AppService {
     return this.http.get(`${this.api}/vulnerability/${id}`);
   }
 
+  exportVulnToJira(vulnId: number) {
+    return this.http.get(`${this.api}/vulnerability/jira/${vulnId}`);
+  }
+
+  exportAssessmentToJira(assessmentId: number) {
+    return this.http.get(`${this.api}/assessment/jira/${assessmentId}`);
+  }
+
   /**
    * Function is responsible for updating a vulnerability by ID
    * @param id is associated with the requested vulnerability
@@ -257,6 +265,10 @@ export class AppService {
       `${this.api}/organization/${asset.organization}/asset`,
       asset
     );
+  }
+
+  purgeJira(assetId: number) {
+    return this.http.delete(`${this.api}/asset/jira/${assetId}`);
   }
 
   /**

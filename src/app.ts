@@ -19,13 +19,22 @@ const userController = require('./routes/user.controller');
 const fileUploadController = require('./routes/file-upload.controller');
 import * as assetController from './routes/asset.controller';
 import * as assessmentController from './routes/assessment.controller';
-const vulnController = require('./routes/vulnerability.controller');
+import * as vulnController from './routes/vulnerability.controller';
 import * as jwtMiddleware from './middleware/jwt.middleware';
 const puppeteerUtility = require('./utilities/puppeteer.utility');
 const helmet = require('helmet');
 const cors = require('cors');
 const app = express();
 app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self' blob:", 'stackpath.bootstrapcdn.com'],
+      scriptSrc: ["'self'", 'code.jquery.com', 'stackpath.bootstrapcdn.com'],
+      styleSrc: ["'self'", 'stackpath.bootstrapcdn.com', "'unsafe-inline'"]
+    }
+  })
+);
 app.use(cors());
 app.use(
   express.static(path.join(__dirname, '../frontend/dist/frontend'), {
@@ -70,6 +79,7 @@ createConnection().then((_) => {
   app.patch('/api/organization/:id/asset/:assetId', jwtMiddleware.checkToken, assetController.updateAssetById);
   app.patch('/api/asset/archive/:assetId', jwtMiddleware.checkToken, assetController.archiveAssetById);
   app.patch('/api/asset/activate/:assetId', jwtMiddleware.checkToken, assetController.activateAssetById);
+  app.delete('/api/asset/jira/:assetId', jwtMiddleware.checkToken, assetController.purgeJiraInfo);
   app.get('/api/assessment/:id', jwtMiddleware.checkToken, assessmentController.getAssessmentsByAssetId);
   app.get('/api/assessment/:id/vulnerability', jwtMiddleware.checkToken, assessmentController.getAssessmentVulns);
   app.post('/api/assessment', jwtMiddleware.checkToken, assessmentController.createAssessment);
@@ -94,4 +104,5 @@ createConnection().then((_) => {
   app.delete('/api/vulnerability/:vulnId', jwtMiddleware.checkToken, vulnController.deleteVulnById);
   app.patch('/api/vulnerability/:vulnId', jwtMiddleware.checkToken, vulnController.patchVulnById);
   app.post('/api/vulnerability', jwtMiddleware.checkToken, vulnController.createVuln);
+  app.get('/api/vulnerability/jira/:vulnId', jwtMiddleware.checkToken, vulnController.exportToJira);
 });

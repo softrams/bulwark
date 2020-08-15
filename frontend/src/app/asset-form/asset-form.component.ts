@@ -7,13 +7,15 @@ import { AlertService } from '../alert/alert.service';
 @Component({
   selector: 'app-asset-form',
   templateUrl: './asset-form.component.html',
-  styleUrls: ['./asset-form.component.sass']
+  styleUrls: ['./asset-form.component.sass'],
 })
 export class AssetFormComponent implements OnInit, OnChanges {
   public assetModel: Asset;
   public assetForm: FormGroup;
   public orgId: number;
   public assetId: number;
+  public keyPlaceholder = '************************';
+  public canAddApiKey = true;
   constructor(
     private fb: FormBuilder,
     public appService: AppService,
@@ -29,6 +31,11 @@ export class AssetFormComponent implements OnInit, OnChanges {
       if (asset) {
         this.assetModel = asset;
         this.rebuildForm();
+        if (asset.jira) {
+          this.canAddApiKey = false;
+        } else {
+          this.canAddApiKey = true;
+        }
       }
     });
     this.activatedRoute.params.subscribe((params) => {
@@ -49,7 +56,12 @@ export class AssetFormComponent implements OnInit, OnChanges {
    */
   createForm() {
     this.assetForm = this.fb.group({
-      name: ['', [Validators.required]]
+      name: ['', [Validators.required]],
+      jira: this.fb.group({
+        username: ['', []],
+        host: ['', []],
+        apiKey: ['', []],
+      }),
     });
   }
 
@@ -58,7 +70,12 @@ export class AssetFormComponent implements OnInit, OnChanges {
    */
   rebuildForm() {
     this.assetForm.reset({
-      name: this.assetModel.name
+      name: this.assetModel.name,
+      jira: {
+        username: this.assetModel?.jira?.username,
+        host: this.assetModel?.jira?.host,
+        apiKey: this.assetModel?.jira?.apiKey,
+      },
     });
   }
 
@@ -70,6 +87,9 @@ export class AssetFormComponent implements OnInit, OnChanges {
     this.assetModel = asset.value;
     this.assetModel.organization = this.orgId;
     this.assetModel.id = this.assetId;
+    if (!this.canAddApiKey) {
+      this.assetModel.jira = null;
+    }
     this.createOrUpdateAsset(this.assetModel);
   }
 
@@ -78,6 +98,22 @@ export class AssetFormComponent implements OnInit, OnChanges {
    */
   navigateToAssets() {
     this.route.navigate([`organization/${this.orgId}`]);
+  }
+
+  purgeJiraInfo() {
+    const r = confirm(`Purge API Key for Asset: "${this.assetModel.name}"?`);
+    if (r) {
+      this.appService.purgeJira(this.assetId).subscribe((res: string) => {
+        this.alertService.success(res);
+        this.appService
+          .getAsset(this.assetId, this.orgId)
+          .subscribe((asset: Asset) => {
+            this.assetModel = asset;
+            this.canAddApiKey = true;
+            this.rebuildForm();
+          });
+      });
+    }
   }
 
   /**

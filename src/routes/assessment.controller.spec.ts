@@ -11,6 +11,7 @@ import { Resource } from '../entity/Resource';
 import MockExpressResponse = require('mock-express-response');
 import MockExpressRequest = require('mock-express-request');
 import * as assessmentController from './assessment.controller';
+import { Jira } from '../entity/Jira';
 
 describe('Assessment Controller', () => {
   beforeEach(async () => {
@@ -18,7 +19,7 @@ describe('Assessment Controller', () => {
       type: 'sqlite',
       database: ':memory:',
       dropSchema: true,
-      entities: [Asset, Organization, File, Vulnerability, Assessment, User, ProblemLocation, Resource],
+      entities: [Asset, Organization, File, Vulnerability, Assessment, User, ProblemLocation, Resource, Jira],
       synchronize: true,
       logging: false,
       name: 'default'

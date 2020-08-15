@@ -232,6 +232,10 @@
     <button [disabled]="!vulnForm.valid" type="submit" class="btn btn-primary float-right">
       Submit
     </button>
+    <button type="button" style="margin-right: 5px;" (click)="exportToJira()" [disabled]="!this.vulnId"
+      class="btn btn-info float-right">
+      Export to Jira
+    </button>
     <button (click)="navigateToVulnerabilities()" type="button" class="btn btn-secondary float-right"
       style="margin-right: 5px;">
       Back to Vulnerabilities

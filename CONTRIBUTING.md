@@ -15,7 +15,7 @@ The project uses git as its version control system and GitHub as the central ser
 
 ### Branching model
 
-Bulwark is maintained in a simplified [Gitflow](https://jeffkreeftmeijer.com/git-flow/) fashion, where all active development happens on the develop branch while master is used to maintain stable versions. Tasks with higher complexity, prototypes, and experiments will occur in feature branches
+Bulwark is maintained in a simplified [Gitflow](https://jeffkreeftmeijer.com/git-flow/) fashion, where all active development happens on the develop branch while master is used to maintain stable versions. Tasks with higher complexity, prototypes, and experiments will occur in feature branches.
 
 ### Versioning
 
@@ -44,4 +44,4 @@ npm run lint
 
 ### Testing
 
-All testing should following the guildline stated within the [Testing Documention](TESTING.md)
+All testing should adhere to the [testing guidelines](TESTING.md).
