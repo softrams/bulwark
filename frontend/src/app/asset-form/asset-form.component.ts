@@ -101,7 +101,7 @@ export class AssetFormComponent implements OnInit, OnChanges {
   }
 
   purgeJiraInfo() {
-    const r = confirm(`Purge API Key for username: ""?`);
+    const r = confirm(`Purge API Key for Asset: "${this.assetModel.name}"?`);
     if (r) {
       this.appService.purgeJira(this.assetId).subscribe((res: string) => {
         this.alertService.success(res);
