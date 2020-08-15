@@ -30,6 +30,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
   assessmentId: string;
   vulnId: number;
   vulnFormData: FormData;
+  jiraHost: string;
   tempScreenshots: Screenshot[] = [];
   screenshotsToDelete: number[] = [];
   faTrash = faTrash;
@@ -102,10 +103,13 @@ export class VulnFormComponent implements OnChanges, OnInit {
         this.updateRisk();
       }
     });
-    this.activatedRoute.data.subscribe(({ vulnerability }) => {
-      if (vulnerability) {
-        this.vulnModel = vulnerability;
-        for (const probLoc of vulnerability.problemLocations) {
+    this.activatedRoute.data.subscribe(({ vulnInfo }) => {
+      if (vulnInfo.jiraHost) {
+        this.jiraHost = vulnInfo.jiraHost;
+      }
+      if (vulnInfo.vulnerability) {
+        this.vulnModel = vulnInfo.vulnerability;
+        for (const probLoc of vulnInfo.vulnerability.problemLocations) {
           this.probLocArr.push(
             this.fb.group({
               id: probLoc.id,
@@ -114,7 +118,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
             })
           );
         }
-        for (const resource of vulnerability.resources) {
+        for (const resource of vulnInfo.vulnerability.resources) {
           this.resourceArr.push(
             this.fb.group({
               id: resource.id,
@@ -123,14 +127,14 @@ export class VulnFormComponent implements OnChanges, OnInit {
             })
           );
         }
-        for (const file of vulnerability.screenshots) {
+        for (const file of vulnInfo.vulnerability.screenshots) {
           const existFile: AppFile = file;
           this.appService.getImageById(existFile).then((url) => {
             existFile.imgUrl = url;
             this.previewScreenshot(null, existFile);
           });
         }
-        this.vulnForm.patchValue(vulnerability);
+        this.vulnForm.patchValue(vulnInfo.vulnerability);
       }
     });
     this.activatedRoute.params.subscribe((params) => {
@@ -461,7 +465,9 @@ export class VulnFormComponent implements OnChanges, OnInit {
   }
 
   exportToJira() {
-    const r = confirm(`Export vulnerability ${this.vulnModel.name} to Jira?`);
+    const r = confirm(
+      `Export vulnerability "${this.vulnModel.name}" to Jira host: ${this.jiraHost}?`
+    );
     if (r) {
       if (this.vulnForm.dirty) {
         this.alertService.warn(
