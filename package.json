@@ -15,6 +15,7 @@
     "postinstall": "cd frontend && npm install && cd .. && npm run build",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
+    "migration:init": "typeorm migration:generate -n CreateDatabase",
     "migration:generate": "typeorm migration:generate -n refactor",
     "migration:create": "typeorm migration:create -n newInit",
     "migration:revert": "typeorm migration:revert",
