@@ -15,7 +15,7 @@ Please keep in mind, this project is very early in the development phase.
 ```
 $ git clone (url)
 $ cd bulwark
-$ npm i
+$ npm install
 ```
 
 Run in development mode:
@@ -133,18 +133,29 @@ FROM_EMAIL_PASSWORD=""
 COMPANY_NAME=""
 ```
 
-## Seed Initial User
+## Create Initial Database Migration
 
-On initial startup, Bulwark will not have any users. Therefore, it is necessary to seed the **first** user.
+1. Create the initial database migration
 
-<!-- Afterwords, subsequent users should be invited. -->
+```
+$ npm run migration:init
+```
 
-1. `$ npm install`
-2. `$ npm run start:dev`
-3. Navigate to [seed-user.ts](https://github.com/softrams/bulwark/blob/develop/src/temp/seed-user.ts)
-4. Update the `userConfig` object with user credentials, save, and wait for the JS to compile
-5. `$ node ./dist/temp/seed-user.js`
-6. Log into Bulwark with credentials used in step 4
+2. Run the initial database migration
+
+```
+$ npm run migration:run
+```
+
+## Insert First User
+
+1. Insert the first user by running the following command with the required arguments. Example:
+
+```
+$ node dist/init/seed-user.js --firstName=John --lastName=OneOneSeven --email=spartan117@unsc.com --title='Master Chief Petty Officer' --password=blueTeam
+```
+
+2. Login to Bulwark with the newly created user
 
 ## Built With
 
