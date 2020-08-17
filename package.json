@@ -84,7 +84,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "helmet": "^4.0.0",
+    "helmet": "^4.1.0",
     "jira-client": "^6.18.0",
     "jira2md": "^2.0.4",
     "jsonwebtoken": "^8.5.1",
