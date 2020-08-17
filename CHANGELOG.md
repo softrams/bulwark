@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.3](https://github.com/softrams/bulwark/compare/v3.2.2...v3.2.3) (2020-08-17)
+
+
+### Bug Fixes
+
+* **ormconfig:** updated ormconfig migrations array ([afba021](https://github.com/softrams/bulwark/commit/afba021856cabfde61d7f833998b9be138dcabb2)), closes [#208](https://github.com/softrams/bulwark/issues/208)
+* **seed initial user fix:** update seed user script so that it uses CLI arguments ([14d0e38](https://github.com/softrams/bulwark/commit/14d0e384228075cb064d794251bcb0d8fff796b1)), closes [#208](https://github.com/softrams/bulwark/issues/208)
+* **updated readme.  added initial migration script:** updated the README with updated initial steps ([c954694](https://github.com/softrams/bulwark/commit/c954694a59e1483c61e7302684d53a57f44e55fa)), closes [#208](https://github.com/softrams/bulwark/issues/208)
+
 ### [3.2.2](https://github.com/softrams/bulwark/compare/v3.2.1...v3.2.2) (2020-07-24)
 
 

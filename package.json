@@ -1,6 +1,6 @@
 {
   "name": "bulwark",
-  "version": "3.2.2",
+  "version": "3.2.3",
   "description": "An organizational asset and vulnerability management tool",
   "main": "index.js",
   "scripts": {
@@ -15,8 +15,8 @@
     "postinstall": "cd frontend && npm install && cd .. && npm run build",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run",
-    "migration:generate": "typeorm migration:generate -n refactor",
     "migration:init": "typeorm migration:generate -n CreateDatabase",
+    "migration:generate": "typeorm migration:generate -n refactor",
     "migration:create": "typeorm migration:create -n newInit",
     "migration:revert": "typeorm migration:revert",
     "tsc": "rimraf dist && tsc && npm start",
@@ -99,7 +99,8 @@
     "ts-node": "^8.10.2",
     "tsconfig-paths": "^3.9.0",
     "typeorm": "^0.2.25",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.0",
+    "yargs": "^15.4.1"
   },
   "husky": {
     "hooks": {
