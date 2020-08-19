@@ -26,7 +26,7 @@ export const getAssessmentsByAssetId = async (req: UserRequest, res: Response) =
     .getRepository(Assessment)
     .createQueryBuilder('assessment')
     .leftJoinAndSelect('assessment.testers', 'tester')
-    .where('assessment.id = :assessmentId', {
+    .where('assessment.asset = :assessmentId', {
       assessmentId: req.params.id
     })
     .select([
@@ -39,9 +39,6 @@ export const getAssessmentsByAssetId = async (req: UserRequest, res: Response) =
       'tester.lastName'
     ])
     .getMany();
-  if (!assessment) {
-    return res.status(404).json('Assessments do not exist');
-  }
   res.status(200).json(assessment);
 };
 /**
