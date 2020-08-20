@@ -4,6 +4,7 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">Assessment Name</th>
+        <th scope="col">Testers</th>
         <th scope="col">Jira ID</th>
         <th scope="col">Start Date</th>
         <th scope="col">End Date</th>
@@ -12,8 +13,13 @@
     </thead>
     <tbody *ngFor="let assessment of assessmentAry">
       <tr>
-        <th scope="row">{{ assessment.id }}</th>
+        <td scope="row">{{ assessment.id }}</td>
         <td>{{ assessment?.name }}</td>
+        <td>
+          <div *ngFor="let tester of assessment.testers;let last = last">
+            {{tester?.firstName}} {{tester?.lastName}}<span *ngIf="!last">,</span>
+          </div>
+        </td>
         <a target="_blank" [href]="assessment?.jiraId">{{
           assessment?.jiraId
         }}</a>
