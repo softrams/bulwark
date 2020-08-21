@@ -1,5 +1,5 @@
 import { Url } from 'url';
-import { User } from '../classes/User';
+import { User } from '../interfaces/User';
 
 export class Assessment {
   constructor(

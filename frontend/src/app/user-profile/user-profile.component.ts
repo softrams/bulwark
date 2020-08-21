@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService } from '../alert/alert.service';
-import { User } from '../classes/User';
+import { User } from '../interfaces/User';
 import { UserService } from '../user.service';
 
 @Component({
@@ -24,17 +24,14 @@ export class UserProfileComponent implements OnInit {
     public alertService: AlertService,
     public activatedRoute: ActivatedRoute,
     public userService: UserService
-  ) {
-    this.createForms();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ user }) => {
-      if (user) {
-        this.user = user;
-        this.rebuildForm();
-        this.rebuildSecurityForm();
-      }
+      this.createForms();
+      this.user = user;
+      this.rebuildForm();
+      this.rebuildSecurityForm();
     });
   }
 
@@ -69,7 +66,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   rebuildSecurityForm() {
-    this.userForm.reset({
+    this.securityForm.reset({
       oldPassword: '',
       newPassword: '',
       confirmNewPassword: '',
@@ -82,7 +79,6 @@ export class UserProfileComponent implements OnInit {
       this.userForm.enable();
     } else {
       const userInfo: User = {
-        id: null,
         firstName: form.value.firstName,
         lastName: form.value.lastName,
         title: form.value.title,
