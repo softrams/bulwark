@@ -20,9 +20,11 @@
             {{tester?.firstName}} {{tester?.lastName}}<span *ngIf="!last">,</span>
           </div>
         </td>
-        <a target="_blank" [href]="assessment?.jiraId">{{
-          assessment?.jiraId
-        }}</a>
+        <td>
+          <a target="_blank" [href]="assessment?.jiraId">{{
+            assessment?.jiraId
+          }}</a>
+        </td>
         <td>{{ assessment?.startDate | date: "shortDate":'UTC' }}</td>
         <td>{{ assessment?.endDate | date: "shortDate":'UTC' }}</td>
         <td>

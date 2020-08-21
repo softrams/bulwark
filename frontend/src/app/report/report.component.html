@@ -124,7 +124,6 @@
             <th scope="col">Likelihood</th>
             <th scope="col">Risk</th>
             <th scope="col">Systemic</th>
-            <th scope="col">Jira URL</th>
             <th scope="col">CVSS Score</th>
             <th scope="col">Status</th>
           </tr>
@@ -135,7 +134,6 @@
             <td>{{ vuln?.likelihood }}</td>
             <td>{{ vuln?.risk }}</td>
             <td>{{ vuln?.systemic }}</td>
-            <a target="_blank" [href]="vuln?.jiraId">{{ vuln?.jiraId }}</a>
             <td>
               <a [href]="vuln.cvssUrl" target="_blank">{{ vuln.cvssScore }}</a>
             </td>
