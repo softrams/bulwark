@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.1](https://github.com/softrams/bulwark/compare/v4.0.0...v4.0.1) (2020-08-24)
+
+
+### Bug Fixes
+
+* **asset and vuln:** fixed update Asset and fixed get Vulnerability by id ([ea4d4f1](https://github.com/softrams/bulwark/commit/ea4d4f1cdb17e52e617acaa1642eeae581b15e17))
+
 ## [4.0.0](https://github.com/softrams/bulwark/compare/v3.2.3...v4.0.0) (2020-08-24)
 
 
