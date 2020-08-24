@@ -206,7 +206,7 @@ export const updateAssetById = async (req: UserRequest, res: Response) => {
     return res.status(400).json('Asset name is not valid');
   }
   try {
-    if (req.body.jira) {
+    if (req.body.jira && req.body.jira.username && req.body.jira.host && req.body.jira.apiKey) {
       await addJiraIntegration(req.body.jira.username, req.body.jira.host, req.body.jira.apiKey, asset);
     }
   } catch (err) {
