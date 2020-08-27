@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.2](https://github.com/softrams/bulwark/compare/v4.0.1...v4.0.2) (2020-08-27)
+
+
+### Others
+
+* **deps:** bump @angular-devkit/build-angular in /frontend ([bae4ca9](https://github.com/softrams/bulwark/commit/bae4ca9dc29a26aee767519b0d2eda17a356a89b))
+* **deps:** bump @angular/cli from 10.0.7 to 10.0.8 in /frontend ([52dd36b](https://github.com/softrams/bulwark/commit/52dd36ba2c83056cdd6b4b936792ca2ce147ba4b))
+* **deps:** bump jira-client from 6.19.0 to 6.20.0 ([014bd86](https://github.com/softrams/bulwark/commit/014bd868c0a25bd2be62a21f8fd9ba98a344eea3))
+* **deps-dev:** bump @angular/language-service in /frontend ([09938ab](https://github.com/softrams/bulwark/commit/09938abfa8087936cc7b08abae8802020bde8453))
+* **deps-dev:** bump @angular/language-service in /frontend ([94fc0c9](https://github.com/softrams/bulwark/commit/94fc0c95183067e7ca7dd90e5ec8073050b1b186))
+* **deps-dev:** bump @types/jasmine from 3.5.13 to 3.5.14 in /frontend ([5b9aa1d](https://github.com/softrams/bulwark/commit/5b9aa1d9f7a455b3d5d4fe6e7a97dfccf5a08565))
+* **deps-dev:** bump cz-conventional-changelog from 3.2.0 to 3.2.1 ([492dc6b](https://github.com/softrams/bulwark/commit/492dc6b73c432ea2c6204e37a2611f20a1c6de3f))
+* **deps-dev:** bump cz-conventional-changelog from 3.2.1 to 3.3.0 ([7f22e05](https://github.com/softrams/bulwark/commit/7f22e05fc2e001f2250bd938db6c2f244ff8067f))
+* **deps-dev:** bump ts-jest from 26.2.0 to 26.3.0 ([5d9e103](https://github.com/softrams/bulwark/commit/5d9e1037896ac023a016be8ff2b7e5b073100a52))
+* **deps-dev:** bump ts-node from 8.10.2 to 9.0.0 in /frontend ([9a31591](https://github.com/softrams/bulwark/commit/9a31591afa9e47390c3a1e5b6c63535f6596ddf7))
+
 ### [4.0.1](https://github.com/softrams/bulwark/compare/v4.0.0...v4.0.1) (2020-08-24)
 
 
