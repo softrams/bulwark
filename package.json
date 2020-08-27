@@ -61,7 +61,7 @@
     "@commitlint/config-conventional": "^9.1.2",
     "@types/jest": "^26.0.10",
     "babel-jest": "^26.3.0",
-    "cz-conventional-changelog": "^3.2.1",
+    "cz-conventional-changelog": "^3.3.0",
     "husky": "^4.2.5",
     "jest": "^26.4.2",
     "mock-express-request": "^0.2.2",
