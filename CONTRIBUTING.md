@@ -34,7 +34,7 @@ Any release from master will have a unique version automated by [standard-versio
 3. All Git commits within a PR must be conventional commits using [commitizen](https://github.com/commitizen/cz-cli) and enforced by [husky](https://github.com/typicode/husky)
    1. Run `$ npm run commit` when committing changes
 4. The code must comply to the configured TSLint and Sass Lint rules
-5. Open pull request on the `develop` branch of your fork
+5. Open pull request to target the `develop` branch
 
 ### Linting
 
