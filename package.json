@@ -72,7 +72,7 @@
     "standard-version": "^9.0.0",
     "ts-jest": "^26.3.0",
     "tslint": "^6.1.3",
-    "typescript": "^3.9.7"
+    "typescript": "^4.0.2"
   },
   "dependencies": {
     "@types/body-parser": "^1.19.0",

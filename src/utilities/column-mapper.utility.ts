@@ -6,7 +6,7 @@ const mysqlSqliteTypeMapping: { [key: string]: ColumnType } = {
 
 const resolveDbType = (mySqlType: ColumnType): ColumnType => {
   const isTestEnv = process.env.NODE_ENV === 'test';
-  if (isTestEnv && mySqlType in mysqlSqliteTypeMapping) {
+  if (isTestEnv && mySqlType.toString() in mysqlSqliteTypeMapping) {
     return mysqlSqliteTypeMapping[mySqlType.toString()];
   }
   return mySqlType;
