@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.3](https://github.com/softrams/bulwark/compare/v4.0.2...v4.0.3) (2020-08-31)
+
+
+### Bug Fixes
+
+* **column-mapper.utility.ts:** fixed typescript build break.  made column mapper a string for In ([d2ef14c](https://github.com/softrams/bulwark/commit/d2ef14cb333e89807c8fa92dc1f89303f65b19ad))
+
+
+### Others
+
+* **deps:** bump @fortawesome/free-solid-svg-icons in /frontend ([10ee5fd](https://github.com/softrams/bulwark/commit/10ee5fdb0480463ac101d75c4045d784b1b90387))
+* **deps-dev:** bump @types/node from 14.6.0 to 14.6.1 in /frontend ([e31dfa0](https://github.com/softrams/bulwark/commit/e31dfa0458d349bc97e6822def324e568094cbb6))
+* **deps-dev:** bump @types/node from 14.6.1 to 14.6.2 in /frontend ([b428221](https://github.com/softrams/bulwark/commit/b42822197284d97455825a3d0af2b9489529987d))
+* **deps-dev:** bump typescript from 3.9.7 to 4.0.2 ([10a17a6](https://github.com/softrams/bulwark/commit/10a17a665f60c314bcd21732b18b6c2278c319b8))
+
 ### [4.0.2](https://github.com/softrams/bulwark/compare/v4.0.1...v4.0.2) (2020-08-27)
 
 
