@@ -4,6 +4,7 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">Assessment Name</th>
+        <th scope="col">Testers</th>
         <th scope="col">Jira ID</th>
         <th scope="col">Start Date</th>
         <th scope="col">End Date</th>
@@ -12,11 +13,18 @@
     </thead>
     <tbody *ngFor="let assessment of assessmentAry">
       <tr>
-        <th scope="row">{{ assessment.id }}</th>
+        <td scope="row">{{ assessment.id }}</td>
         <td>{{ assessment?.name }}</td>
-        <a target="_blank" [href]="assessment?.jiraId">{{
-          assessment?.jiraId
-        }}</a>
+        <td>
+          <div *ngFor="let tester of assessment.testers;let last = last">
+            {{tester?.firstName}} {{tester?.lastName}}<span *ngIf="!last">,</span>
+          </div>
+        </td>
+        <td>
+          <a target="_blank" [href]="assessment?.jiraId">{{
+            assessment?.jiraId
+          }}</a>
+        </td>
         <td>{{ assessment?.startDate | date: "shortDate":'UTC' }}</td>
         <td>{{ assessment?.endDate | date: "shortDate":'UTC' }}</td>
         <td>
@@ -27,7 +35,7 @@
           <button style="margin-right: 10px;" class="btn btn-primary" type="button"
             (click)="navigateToVulnerability(assessment.id)" data-toggle="tooltip" data-placement="bottom"
             title="View Vulnerabilities">
-            <fa-icon [icon]="faHaykal"></fa-icon>
+            <fa-icon [icon]="faBahai"></fa-icon>
           </button>
           <button (click)="deleteAssessment(assessment)" class="btn btn-dark" type="button">
             <fa-icon [icon]="faTrash"></fa-icon>

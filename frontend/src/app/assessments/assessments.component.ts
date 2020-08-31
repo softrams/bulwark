@@ -3,7 +3,7 @@ import { AppService } from '../app.service';
 import { AlertService } from '../alert/alert.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
-import { faHaykal } from '@fortawesome/free-solid-svg-icons';
+import { faBahai } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Assessment } from '../assessment-form/Assessment';
 
@@ -17,7 +17,7 @@ export class AssessmentsComponent implements OnInit {
   assetId: number;
   orgId: number;
   faPencilAlt = faPencilAlt;
-  faHaykal = faHaykal;
+  faBahai = faBahai;
   faTrash = faTrash;
   constructor(
     public activatedRoute: ActivatedRoute,

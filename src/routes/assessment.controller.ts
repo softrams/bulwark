@@ -24,12 +24,21 @@ export const getAssessmentsByAssetId = async (req: UserRequest, res: Response) =
   }
   const assessment = await getConnection()
     .getRepository(Assessment)
-    .find({
-      where: { asset: req.params.id }
-    });
-  if (!assessment) {
-    return res.status(404).json('Assessments do not exist');
-  }
+    .createQueryBuilder('assessment')
+    .leftJoinAndSelect('assessment.testers', 'tester')
+    .where('assessment.asset = :assessmentId', {
+      assessmentId: req.params.id
+    })
+    .select([
+      'assessment.id',
+      'assessment.name',
+      'assessment.jiraId',
+      'assessment.startDate',
+      'assessment.endDate',
+      'tester.firstName',
+      'tester.lastName'
+    ])
+    .getMany();
   res.status(200).json(assessment);
 };
 /**

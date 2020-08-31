@@ -236,7 +236,7 @@ const attachImages = async (vuln: Vulnerability, issueId: string) => {
     // TODO: Figure out a way to create a stream from the buffer and pass that in
     // Instead of creating a temporary file on the file system
     const extension = mime.extension(screenshot.mimetype);
-    const path = `./src/temp/${screenshot.originalname}.${extension}`;
+    const path = `./src/temp/${screenshot.originalname}`;
     await fs.writeFileSync(path, screenshot.buffer);
     const stream = await fs.createReadStream(path);
     await fs.unlinkSync(path);

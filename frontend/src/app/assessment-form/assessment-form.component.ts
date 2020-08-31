@@ -4,7 +4,7 @@ import { AppService } from '../app.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Assessment } from './Assessment';
 import { AlertService } from '../alert/alert.service';
-import { User } from '../classes/User';
+import { User } from '../interfaces/User';
 
 @Component({
   selector: 'app-assessment-form',

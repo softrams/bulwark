@@ -8,7 +8,12 @@
 <img src='https://github.com/softrams/bulwark/workflows/build/badge.svg'>
 <img src='https://img.shields.io/badge/License-MIT-yellow.svg'>
 </p>
-![Running Bulwark](https://github.com/Whamo12/media/blob/master/bulwark_walkthrough.gif)
+
+![Bulwark Walkthrough Demo](https://github.com/Whamo12/media/blob/master/bulwark_report_demo.gif)
+
+## Jira Integration
+
+![Bulwark Jira Demo](https://github.com/Whamo12/media/blob/master/bulwark_jira_demo.gif)
 
 ## Note
 
