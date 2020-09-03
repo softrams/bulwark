@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.5](https://github.com/softrams/bulwark/compare/v4.0.4...v4.0.5) (2020-09-03)
+
+
+### Bug Fixes
+
+* **ormconfig.js:** updated ormconfig so that it allows to safely run migrations ([cd52a9c](https://github.com/softrams/bulwark/commit/cd52a9cf8a8b06549f0e2e05f6e5931be10127a3)), closes [#262](https://github.com/softrams/bulwark/issues/262)
+* **report generation:** updated puppeteer report generation so that it outputs to the `temp` folder ([38f7bcf](https://github.com/softrams/bulwark/commit/38f7bcf4e2bb4d390a5df65de119af92d577de7a)), closes [#259](https://github.com/softrams/bulwark/issues/259)
+
+
+### Others
+
+* **deps:** bump @angular/cli from 10.0.8 to 10.1.0 in /frontend ([cc699f3](https://github.com/softrams/bulwark/commit/cc699f3b68e69bfc8249cb86609bd50c758529c0))
+* **deps:** bump @types/express from 4.17.7 to 4.17.8 ([8a5726b](https://github.com/softrams/bulwark/commit/8a5726ba6a2142e44a5a732dc7e9ff04424da595))
+* **deps-dev:** bump @angular/language-service in /frontend ([d3d9580](https://github.com/softrams/bulwark/commit/d3d9580267e46f9b897d1a52c4548ef37ce8b7fd))
+* **deps-dev:** bump @babel/core from 7.11.4 to 7.11.5 ([719c25c](https://github.com/softrams/bulwark/commit/719c25ced2d4361ece72bad730c27077e6531b23))
+* **deps-dev:** bump @babel/preset-env from 7.11.0 to 7.11.5 ([ce52573](https://github.com/softrams/bulwark/commit/ce525733276515de64e73994d3ff2bdf2d73d503))
+* **deps-dev:** bump @types/jest from 26.0.10 to 26.0.12 ([0fc4012](https://github.com/softrams/bulwark/commit/0fc401251a422d729af393a5df97a36cf24d8932))
+* **deps-dev:** bump @types/jest from 26.0.12 to 26.0.13 ([5d7e519](https://github.com/softrams/bulwark/commit/5d7e5193e2188ca7741a6d72c09d491c0f6b1171))
+* **deps-dev:** bump @types/node from 14.6.2 to 14.6.3 in /frontend ([c62143a](https://github.com/softrams/bulwark/commit/c62143a020afb9c9811aa8ec5dde05c49c48f0a2))
+* **deps-dev:** bump karma from 5.1.1 to 5.2.0 in /frontend ([f372b0f](https://github.com/softrams/bulwark/commit/f372b0f7eb5735268fa2f944fe7be55efb227554))
+* **deps-dev:** bump karma from 5.2.0 to 5.2.1 in /frontend ([6524c98](https://github.com/softrams/bulwark/commit/6524c98445c142f20fe04fc31d348d30d7ef85cf))
+
 ### [4.0.4](https://github.com/softrams/bulwark/compare/v4.0.3...v4.0.4) (2020-08-31)
 
 
