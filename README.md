@@ -170,6 +170,8 @@ $ npm run migration:init
 $ npm run migration:run
 ```
 
+_This command should be run with every new database migration_
+
 ## Insert First User
 
 1. Insert the first user by running the following command with the required arguments. Example:
@@ -178,7 +180,7 @@ $ npm run migration:run
 $ node dist/init/seed-user.js --firstName=John --lastName=OneOneSeven --email=spartan117@unsc.com --title='Master Chief Petty Officer' --password=blueTeam
 ```
 
-2. Login to Bulwark with the newly created user
+2. Start the server and login to Bulwark with the newly created user
 
 ## Built With
 
