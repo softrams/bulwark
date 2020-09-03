@@ -21,7 +21,7 @@ import * as assetController from './routes/asset.controller';
 import * as assessmentController from './routes/assessment.controller';
 import * as vulnController from './routes/vulnerability.controller';
 import * as jwtMiddleware from './middleware/jwt.middleware';
-const puppeteerUtility = require('./utilities/puppeteer.utility');
+import { generateReport } from './utilities/puppeteer.utility';
 const helmet = require('helmet');
 const cors = require('cors');
 const app = express();
@@ -99,7 +99,7 @@ createConnection().then((_) => {
     jwtMiddleware.checkToken,
     assessmentController.queryReportDataByAssessment
   );
-  app.post('/api/report/generate', jwtMiddleware.checkToken, puppeteerUtility.generateReport);
+  app.post('/api/report/generate', jwtMiddleware.checkToken, generateReport);
   app.get('/api/vulnerability/:vulnId', jwtMiddleware.checkToken, vulnController.getVulnById);
   app.delete('/api/vulnerability/:vulnId', jwtMiddleware.checkToken, vulnController.deleteVulnById);
   app.patch('/api/vulnerability/:vulnId', jwtMiddleware.checkToken, vulnController.patchVulnById);
