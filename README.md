@@ -105,24 +105,6 @@ Set this variable to the JWT secret
 
 Set this variable to the refresh JWT secret
 
-#### `FROM_EMAIL`
-
-`FROM_EMAIL="foo@bar.com"`
-
-Set this variable to sender email
-
-#### `FROM_EMAIL_PASSWORD`
-
-`FROM_EMAIL_PASSWORD="somePassword"`
-
-Set this variable to sender email password or a [Gmail app passwords](https://support.google.com/mail/answer/185833?hl=en)
-
-#### `COMPANY_NAME`
-
-`COMPANY_NAME="United Nations Space Command"`
-
-Set this variable to the application security company name to be published on the report
-
 #### `CRYPTO_SECRET`
 
 `CRYPTO_SECRET="randomValue"`
@@ -149,9 +131,6 @@ DEV_URL="http://localhost:4200"
 PROD_URL="http://localhost:5000"
 JWT_KEY=""
 JWT_REFRESH_KEY=""
-FROM_EMAIL=""
-FROM_EMAIL_PASSWORD=""
-COMPANY_NAME=""
 CRYPTO_SECRET=""
 CRYPTO_SALT=""
 ```

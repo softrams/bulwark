@@ -25,6 +25,7 @@ import { PasswordResetComponent } from './password-reset/password-reset.componen
 import { InviteUserComponent } from './invite-user/invite-user.component';
 import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { SettingsComponent } from './settings/settings.component';
 import { UserService } from './user.service';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
@@ -118,6 +119,14 @@ export class UserResolver implements Resolve<any> {
     return this.userService.getUser();
   }
 }
+@Injectable()
+export class SettingsResolver implements Resolve<any> {
+  constructor(private apiService: AppService) {}
+
+  resolve(route: ActivatedRouteSnapshot) {
+    return this.apiService.getConfig();
+  }
+}
 const routes: Routes = [
   {
     path: '',
@@ -144,6 +153,12 @@ const routes: Routes = [
     path: 'user/profile',
     component: UserProfileComponent,
     resolve: { user: UserResolver },
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent,
+    resolve: { settings: SettingsResolver },
     canActivate: [AuthGuard],
   },
   {
@@ -251,6 +266,7 @@ const routes: Routes = [
     VulnerabilityResolver,
     ReportResolver,
     UserResolver,
+    SettingsResolver,
   ],
 })
 export class AppRoutingModule {}

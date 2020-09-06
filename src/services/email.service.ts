@@ -1,25 +1,36 @@
 import nodemailer = require('nodemailer');
+import { getConnection } from 'typeorm';
+import { Config } from '../entity/Config';
+import { decrypt } from '../utilities/crypto.utility';
 
-export const transporter = nodemailer.createTransport({
-  auth: {
-    pass: process.env.FROM_EMAIL_PASSWORD,
-    user: process.env.FROM_EMAIL
-  },
-  service: 'Gmail'
-});
 /**
  * @description Send email
  * @param {object} mailOptions
  * @returns string
  */
-export const sendEmail = (mailOptions, callback) => {
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      return callback('Error sending email');
-    } else {
-      return callback('email sent successfully');
-    }
-  });
+export const sendEmail = async (mailOptions, callback) => {
+  const config = await getConnection().getRepository(Config).findOne(1);
+  if (config.fromEmail && config.fromEmailPassword) {
+    const decryptedEmailPassword = decrypt(config.fromEmailPassword);
+    const transporter = nodemailer.createTransport({
+      auth: {
+        pass: decryptedEmailPassword,
+        user: config.fromEmail
+      },
+      service: 'Gmail'
+    });
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+        return callback('Error sending email', null);
+      } else {
+        return callback(null, 'Email sent successfully');
+      }
+    });
+  } else {
+    console.error('Missing email configuration');
+    return callback('Missing email configuration', null);
+  }
 };
 
 /**

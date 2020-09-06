@@ -7,6 +7,7 @@ import { validate } from 'class-validator';
 import { Vulnerability } from '../entity/Vulnerability';
 import { Organization } from '../entity/Organization';
 import { Report } from '../classes/Report';
+import { Config } from '../entity/Config';
 const userController = require('../routes/user.controller');
 
 /**
@@ -210,12 +211,19 @@ export const queryReportDataByAssessment = async (req: UserRequest, res: Respons
     })
     .select(['vuln', 'screenshot.id', 'screenshot.originalname', 'screenshot.mimetype', 'problemLocation', 'resource'])
     .getMany();
+  const config = await getConnection()
+    .getRepository(Config)
+    .findOne(1, { select: ['companyName'] });
   const report = new Report();
   report.org = organization;
   report.asset = asset;
   report.assessment = assessment;
   report.vulns = vulnerabilities;
-  report.companyName = process.env.COMPANY_NAME;
+  if (config.companyName) {
+    report.companyName = config.companyName;
+  } else {
+    report.companyName = null;
+  }
   res.status(200).json(report);
 };
 

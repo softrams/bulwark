@@ -15,6 +15,7 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.ts'],
   moduleFileExtensions: ['ts', 'js', 'json', 'node'],
+  modulePathIgnorePatterns: ['<rootDir>/src/services', '<rootDir>/src/database', '<rootDir>/src/init'],
   coveragePathIgnorePatterns: [
     '<rootDir>/src/interfaces',
     '<rootDir>/src/classes',

@@ -7,6 +7,7 @@ import { validate } from 'class-validator';
 import { passwordRequirement } from '../enums/message-enum';
 import { generateHash, passwordSchema, updatePassword } from '../utilities/password.utility';
 import * as emailService from '../services/email.service';
+import { Config } from '../entity/Config';
 /**
  * @description Register user
  * @param {UserRequest} req
@@ -58,21 +59,28 @@ const register = async (req: UserRequest, res: Response) => {
  * @returns success message
  */
 const invite = async (req: UserRequest, res: Response) => {
-  const { email } = req.body;
-  if (!email) {
-    return res.status(400).json('Email is invalid');
+  const config = await getConnection().getRepository(Config).findOne(1);
+  if (!config.fromEmail || !config.fromEmailPassword) {
+    return res
+      .status(400)
+      .json('Failed to invite user. Please set the email configuration in the Settings menu option.');
+  } else {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json('Email is invalid');
+    }
+    const existUser = await getConnection().getRepository(User).find({ where: { email } });
+    if (existUser.length) {
+      return res.status(400).json('A user associated to that email has already been invited');
+    }
+    const user = new User();
+    user.active = false;
+    user.uuid = uuidv4();
+    user.email = email;
+    await getConnection().getRepository(User).save(user);
+    emailService.sendInvitationEmail(user.uuid, user.email);
+    return res.status(200).json('User invited successfully');
   }
-  const existUser = await getConnection().getRepository(User).find({ where: { email } });
-  if (existUser.length) {
-    return res.status(400).json('A user associated to that email has already been invited');
-  }
-  const user = new User();
-  user.active = false;
-  user.uuid = uuidv4();
-  user.email = email;
-  await getConnection().getRepository(User).save(user);
-  emailService.sendInvitationEmail(user.uuid, user.email);
-  return res.status(200).json('User invited successfully');
 };
 /**
  * @description Verifies user by comparing UUID
