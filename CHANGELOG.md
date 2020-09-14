@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.6](https://github.com/softrams/bulwark/compare/v4.0.5...v4.0.6) (2020-09-14)
+
+
+### Others
+
+* **deps:** bump @angular-devkit/build-angular in /frontend ([0fa83d3](https://github.com/softrams/bulwark/commit/0fa83d3ca411e2537fcca9de3445a8b35db942dd))
+* **deps:** bump @angular/cli from 10.1.0 to 10.1.1 in /frontend ([edde37f](https://github.com/softrams/bulwark/commit/edde37f79999ea0c35b51629321edd214e109241))
+* **deps:** bump helmet from 4.1.0 to 4.1.1 ([8d641e0](https://github.com/softrams/bulwark/commit/8d641e05c080051186cd23ac28d0a1b08039b675))
+* **deps:** bump jira-client from 6.20.0 to 6.21.0 ([1b22837](https://github.com/softrams/bulwark/commit/1b22837983852429040029ceb9f98c14e5794e02))
+* **deps:** bump node-fetch from 2.6.0 to 2.6.1 ([0875c69](https://github.com/softrams/bulwark/commit/0875c69e2ab4173766642086dd44e5df0cfc2634))
+* **deps:** bump puppeteer from 5.2.1 to 5.3.0 ([52431ad](https://github.com/softrams/bulwark/commit/52431ad6b33bcd434e424d67f1473c47600a7765))
+* **deps:** bump rxjs from 6.6.2 to 6.6.3 in /frontend ([faf866d](https://github.com/softrams/bulwark/commit/faf866dd8d481c8e47bdf4355ceccba8475afcc8))
+* **deps:** bump typeorm from 0.2.25 to 0.2.26 ([0a445e1](https://github.com/softrams/bulwark/commit/0a445e1655015c723df253c5f77841a962beb366))
+* **deps:** bump yargs from 15.4.1 to 16.0.0 ([6b53359](https://github.com/softrams/bulwark/commit/6b53359ba3072d8f804296bfa5f1ea651048ee99))
+* **deps:** bump yargs from 16.0.0 to 16.0.3 ([9a3ed79](https://github.com/softrams/bulwark/commit/9a3ed79ed8df3a6c971c6f5e2e890cebc7f95c31))
+* **deps-dev:** bump @angular/language-service in /frontend ([b2a2943](https://github.com/softrams/bulwark/commit/b2a2943533ce033392a244f1d63c15b316c059a4))
+* **deps-dev:** bump @babel/core from 7.11.5 to 7.11.6 ([c79fd88](https://github.com/softrams/bulwark/commit/c79fd8866710f5a5643d80ba2caf170e327d100a))
+* **deps-dev:** bump @commitlint/cli from 9.1.2 to 11.0.0 ([1abe52f](https://github.com/softrams/bulwark/commit/1abe52f9a59484885e50a273f84398a5df9e830e))
+* **deps-dev:** bump @commitlint/config-conventional ([6806a6d](https://github.com/softrams/bulwark/commit/6806a6d2248dd81c42752763895eefd94d921190))
+* **deps-dev:** bump @types/node from 14.10.0 to 14.10.1 in /frontend ([60e52fe](https://github.com/softrams/bulwark/commit/60e52feabab1fb8a0fc93f0c931a3e18f7f6f2c9))
+* **deps-dev:** bump @types/node from 14.6.3 to 14.6.4 in /frontend ([2f86132](https://github.com/softrams/bulwark/commit/2f861320b4a92a80b7869a4db75e8d0cfc9795ba))
+* **deps-dev:** bump @types/node from 14.6.4 to 14.10.0 in /frontend ([250777c](https://github.com/softrams/bulwark/commit/250777c9f126061edf24e3f315754d2e26051a3f))
+* **deps-dev:** bump husky from 4.2.5 to 4.3.0 ([ddaf553](https://github.com/softrams/bulwark/commit/ddaf553bd0883c4bc06cc0d8eb76e250affd8110))
+* **deps-dev:** bump karma from 5.2.1 to 5.2.2 in /frontend ([ab6e48b](https://github.com/softrams/bulwark/commit/ab6e48b4756964b971b8d609cdb6e25f16a3db33))
+
 ### [4.0.5](https://github.com/softrams/bulwark/compare/v4.0.4...v4.0.5) (2020-09-03)
 
 
