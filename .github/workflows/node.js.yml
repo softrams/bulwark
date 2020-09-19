@@ -23,12 +23,25 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      # Checks if the subfolder files have changed for the backend /src
+      - uses: dorny/paths-filter@v2.2.0
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'src/**'
+      # Installs packages, if a backend file has changed
       - name: Install Packages
+        if: steps.filter.outputs.backend == 'true'
         run: npm install
+      # Creates a ENV file, if a backend file has changed
       - name: Create Env File
+        if: steps.filter.outputs.backend == 'true'
         run: |
           touch .env
           echo JWT_KEY="test" >> .env
           echo JWT_REFRESH_KEY="test" >> .env
+      # Runs backend tests, if a backend file has changed
       - name: Backend Tests
+        if: steps.filter.outputs.backend == 'true'
         run: npm run test:node
