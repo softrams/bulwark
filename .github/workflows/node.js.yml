@@ -27,6 +27,6 @@ jobs:
         run: npm install
       - name: Backend Tests
         env:
-          JWT_SECERT="testJWT"
-          JWT_REFRESH_KEY="testJWT"
+          JWT_SECERT=testJWT
+          JWT_REFRESH_KEY=testJWT
         run: npm run test:node
