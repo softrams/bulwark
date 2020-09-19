@@ -23,4 +23,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
+      - name: Install Packages
+        run: npm install
+      - name: Backend Tests
+        env:
+          JWT_SECERT="testJWT"
+          JWT_REFRESH_KEY="testJWT"
+        run: npm run test:node
