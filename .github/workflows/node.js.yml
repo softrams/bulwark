@@ -25,8 +25,10 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install Packages
         run: npm install
+      - name: Create Env File
+        run: |
+          touch .env
+          echo JWT_KEY="test" >> .env
+          echo JWT_REFRESH_KEY="test" >> .env
       - name: Backend Tests
-        env:
-          JWT_SECERT=testJWT
-          JWT_REFRESH_KEY=testJWT
         run: npm run test:node
