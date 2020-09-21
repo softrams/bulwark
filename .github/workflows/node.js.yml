@@ -23,21 +23,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - uses: dorny/paths-filter@v2.2.0
-        id: filter
-        with:
-          filters: |
-            backend:
-              - "src/**"
       - name: Install Packages
-        if: steps.filter.outputs.backend == "true"
         run: npm install
       - name: Create Env File
-        if: steps.filter.outputs.backend == "true"
         run: |
           touch .env
           echo JWT_KEY="test" >> .env
           echo JWT_REFRESH_KEY="test" >> .env
       - name: Backend Tests
-        if: steps.filter.outputs.backend == 'true'
         run: npm run test:node
