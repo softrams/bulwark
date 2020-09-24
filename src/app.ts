@@ -22,6 +22,7 @@ import * as assessmentController from './routes/assessment.controller';
 import * as vulnController from './routes/vulnerability.controller';
 import * as jwtMiddleware from './middleware/jwt.middleware';
 import { generateReport } from './utilities/puppeteer.utility';
+import * as configController from './routes/config.controller';
 const helmet = require('helmet');
 const cors = require('cors');
 const app = express();
@@ -51,6 +52,9 @@ app.set('serverIpAddress', serverIpAddress);
 app.listen(serverPort, () => console.info(`Server running on ${serverIpAddress}:${serverPort}`));
 // create typeorm connection
 createConnection().then((_) => {
+  // Check for initial configuration
+  // If none exist, insert it
+  configController.initialInsert();
   // register routes
   app.post('/api/user/register', userController.register);
   app.post('/api/user/invite', jwtMiddleware.checkToken, userController.invite);
@@ -105,4 +109,6 @@ createConnection().then((_) => {
   app.patch('/api/vulnerability/:vulnId', jwtMiddleware.checkToken, vulnController.patchVulnById);
   app.post('/api/vulnerability', jwtMiddleware.checkToken, vulnController.createVuln);
   app.get('/api/vulnerability/jira/:vulnId', jwtMiddleware.checkToken, vulnController.exportToJira);
+  app.post('/api/config', jwtMiddleware.checkToken, configController.saveConfig);
+  app.get('/api/config', jwtMiddleware.checkToken, configController.getConfig);
 });

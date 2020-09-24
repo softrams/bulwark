@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="col-md-9 mx-auto">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <h4>Settings</h4>
+            <hr />
+          </div>
+        </div>
+        <div id="formContent">
+          <form [formGroup]="settingsForm" (ngSubmit)="onSubmit(settingsForm)" id="userForm">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="form-group row">
+                    <span>
+                      <fa-icon [icon]="faInfoCircle"></fa-icon><i style="font-size: smaller;"> An app password is a
+                        16-digit passcode that gives a
+                        non-Google app or device permission to access your Google Account. Please follow this <a
+                          href="https://support.google.com/mail/answer/185833?hl=en-GB">link</a> for more
+                        information.</i>
+                    </span>
+                  </div>
+                  <div class="form-group row">
+                    <label for="fromEmail" class="col-4 col-form-label">Gmail Account:</label>
+                    <div class="col-8">
+                      <input formControlName="fromEmail" type="text" id="fromEmail" class="form-control"
+                        name="fromEmail" placeholder="Email" style="margin-bottom: 5px;" />
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="fromEmailPassword" class="col-4 col-form-label">Gmail App Password:</label>
+                    <div class="col-8">
+                      <input formControlName="fromEmailPassword" type="password" id="fromEmailPassword"
+                        class="form-control" name="fromEmailPassword" [placeholder]="isEdit ? '':keyPlaceholder"
+                        style="margin-bottom: 5px;" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="form-group row">
+                <label for="companyName" class="col-4 col-form-label">Company Name:</label>
+                <div class="col-8">
+                  <input formControlName="companyName" type="text" id="companyName" class="form-control"
+                    name="companyName" placeholder="Company Name" style="margin-bottom: 5px;" />
+                </div>
+              </div>
+              <input [disabled]="isEdit ? !settingsForm.valid : false" type="submit" class="btn btn-primary float-right"
+                [value]="isEdit ? 'Update' : 'Edit'" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

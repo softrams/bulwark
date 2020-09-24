@@ -3,6 +3,7 @@ const userController = require('./user.controller');
 import { User } from '../entity/user';
 import { v4 as uuidv4 } from 'uuid';
 import { generateHash } from '../utilities/password.utility';
+import { Config } from '../entity/Config';
 describe('User Controller', () => {
   // Mocks the Request Object that is returned
   const mockRequest = () => {
@@ -28,7 +29,7 @@ describe('User Controller', () => {
       type: 'sqlite',
       database: ':memory:',
       dropSchema: true,
-      entities: [User],
+      entities: [User, Config],
       synchronize: true,
       logging: false
     });
@@ -38,16 +39,28 @@ describe('User Controller', () => {
     const conn = getConnection();
     return conn.close();
   });
-  test('invite user success', async () => {
+  test('invite user fail', async () => {
+    const config = new Config();
+    config.fromEmail = 'testingDude@jest.com';
+    config.companyName = 'Test';
+    config.fromEmailPassword = null;
+    config.id = 1;
+    await getConnection().getRepository(Config).insert(config);
     const req = mockRequest();
     req.body = {
       email: 'testing@jest.com'
     };
     const res = mockResponse();
     await userController.invite(req, res);
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.status).toHaveBeenCalledWith(400);
   });
   test('invite user failure missing email', async () => {
+    const config = new Config();
+    config.fromEmail = 'testingDude@jest.com';
+    config.companyName = 'Test';
+    config.fromEmailPassword = null;
+    config.id = 1;
+    await getConnection().getRepository(Config).insert(config);
     const req = mockRequest();
     req.body = {};
     const res = mockResponse();
@@ -55,6 +68,12 @@ describe('User Controller', () => {
     expect(res.status).toHaveBeenCalledWith(400);
   });
   test('invite user failure user already exists', async () => {
+    const config = new Config();
+    config.fromEmail = 'testingDude@jest.com';
+    config.companyName = 'Test';
+    config.fromEmailPassword = null;
+    config.id = 1;
+    await getConnection().getRepository(Config).insert(config);
     const req = mockRequest();
     req.body = {
       email: 'testing@jest.com'
@@ -134,6 +153,17 @@ describe('User Controller', () => {
     expect(res.status).toHaveBeenCalledWith(400);
   });
   test('register user success', async () => {
+    const config = new Config();
+    config.fromEmail = 'testingDude@jest.com';
+    config.companyName = 'Test';
+    config.fromEmailPassword = null;
+    config.id = 1;
+    const user = new User();
+    user.active = false;
+    user.uuid = uuidv4();
+    user.email = 'testing@jest.com';
+    await getConnection().getRepository(User).save(user);
+    await getConnection().getRepository(Config).insert(config);
     const req = mockRequest();
     const invReq = mockRequest();
     invReq.body = {

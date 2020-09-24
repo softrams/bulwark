@@ -208,6 +208,14 @@ export class AppService {
     return this.http.get(`${this.api}/assessment/jira/${assessmentId}`);
   }
 
+  getConfig() {
+    return this.http.get(`${this.api}/config`);
+  }
+
+  updateConfig(config: FormData) {
+    return this.http.post(`${this.api}/config`, config);
+  }
+
   /**
    * Function is responsible for updating a vulnerability by ID
    * @param id is associated with the requested vulnerability

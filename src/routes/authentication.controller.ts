@@ -7,6 +7,7 @@ import jwt = require('jsonwebtoken');
 import { generateHash, passwordSchema, compare } from '../utilities/password.utility';
 import { passwordRequirement } from '../enums/message-enum';
 import * as emailService from '../services/email.service';
+import { Config } from '../entity/Config';
 
 /**
  * @description Login to the application
@@ -29,7 +30,15 @@ const login = async (req: UserRequest, res: Response) => {
       user.uuid = uuidv4();
       // No need to validate as validation happend with user creation
       await getConnection().getRepository(User).save(user);
-      emailService.sendVerificationEmail(user.uuid, user.email);
+      const config = await getConnection().getRepository(Config).findOne(1);
+      if (!config.fromEmail || !config.fromEmailPassword) {
+        emailService.sendVerificationEmail(user.uuid, user.email);
+        return res
+          .status(400)
+          .json(
+            'This account has not been activated.  The email configuration has not been set.  Please contact an administrator'
+          );
+      }
       return res
         .status(400)
         .json('This account has not been activated.  Please check for email verification or contact an administrator.');
@@ -69,11 +78,19 @@ const forgotPassword = async (req: UserRequest, res: Response) => {
     })
     .getOne();
   if (!user) {
-    return res.status(200).json('A password reset request has been initiated.  Please check your email.');
+    return res.status(400).json('A password reset request has been initiated.  Please check your email.');
   }
   user.uuid = uuidv4();
   await getConnection().getRepository(User).save(user);
-  emailService.sendForgotPasswordEmail(user.uuid, user.email);
+  const config = await getConnection().getRepository(Config).findOne(1);
+  if (!config.fromEmail || !config.fromEmailPassword) {
+    emailService.sendForgotPasswordEmail(user.uuid, user.email);
+    return res
+      .status(400)
+      .json(
+        'Unable to initiate the password reset process.  The email configuration has not been set.  Please contact an administrator.'
+      );
+  }
   return res.status(200).json('A password reset request has been initiated.  Please check your email.');
 };
 /**

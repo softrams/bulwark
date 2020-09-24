@@ -32,6 +32,7 @@ import { PasswordResetComponent } from './password-reset/password-reset.componen
 import { InviteUserComponent } from './invite-user/invite-user.component';
 import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     InviteUserComponent,
     RegisterComponent,
     UserProfileComponent,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,
