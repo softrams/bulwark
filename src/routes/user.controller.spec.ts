@@ -1,6 +1,6 @@
 import { createConnection, getConnection, Entity, getRepository } from 'typeorm';
 const userController = require('./user.controller');
-import { User } from '../entity/user';
+import { User } from '../entity/User';
 import { v4 as uuidv4 } from 'uuid';
 import { generateHash } from '../utilities/password.utility';
 import { Config } from '../entity/Config';
