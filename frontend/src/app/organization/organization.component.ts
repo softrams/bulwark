@@ -25,6 +25,7 @@ export class OrganizationComponent implements OnInit {
   faBox = faBox;
   faBoxOpen = faBoxOpen;
   @ViewChild('dt') table: Table;
+
   constructor(
     public activatedRoute: ActivatedRoute,
     public router: Router,
@@ -43,6 +44,11 @@ export class OrganizationComponent implements OnInit {
         .then((org) => (this.org = org));
     });
   }
+
+  onRepresentativeChange(event) {
+    this.table.filter(event.value, 'name', 'in');
+  }
+
   /**
    * Function responsible retrieving active assets
    */

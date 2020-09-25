@@ -1,5 +1,71 @@
 <div class="container-fluid">
-  <table class="table" *ngIf="activatedRoute.snapshot.params.assetId">
+  <p-table #dt [value]="assessmentAry" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id">#<p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">Assessment Name<p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="jira">Testers<p-sortIcon field="jira"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">Jira ID<p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="jira">Start Date<p-sortIcon field="jira"></p-sortIcon>
+        </th>
+        <th pSortableColumn="jira">End Date<p-sortIcon field="jira"></p-sortIcon>
+        </th>
+        <th scope="col"></th>
+      </tr>
+      <tr>
+        <th></th>
+        <th>
+          <input pInputText type="text" (input)="dt.filter($event.target.value, 'name', 'startsWith')"
+            placeholder="Search by Assessment Name" class="p-column-filter">
+        </th>
+        <th> <input pInputText type="text" (input)="dt.filter($event.target.value, 'tester', 'startsWith')"
+            placeholder="Search by Tester" class="p-column-filter"></th>
+        <th>
+          <input pInputText type="text" (input)="dt.filter($event.target.value, 'jiraId', 'startsWith')"
+            placeholder="Search by Jira ID" class="p-column-filter">
+        </th>
+        <th></th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-assessment>
+      <tr>
+        <td scope="row">{{ assessment.id }}</td>
+        <td>{{ assessment?.name }}</td>
+        <td>
+          <div *ngFor="let tester of assessment.testers;let last = last">
+            {{tester?.firstName}} {{tester?.lastName}}<span *ngIf="!last">,</span>
+          </div>
+        </td>
+        <td>
+          <a target="_blank" [href]="assessment?.jiraId">{{
+            assessment?.jiraId
+          }}</a>
+        </td>
+        <td>{{ assessment?.startDate | date: "shortDate":'UTC' }}</td>
+        <td>{{ assessment?.endDate | date: "shortDate":'UTC' }}</td>
+        <td>
+          <button class="btn btn-secondary" type="button" (click)="navigateToAssessmentById(assessment.id)"
+            style="margin-right: 10px;" data-toggle="tooltip" data-placement="bottom" title="Edit Assessment">
+            <fa-icon [icon]="faPencilAlt"></fa-icon>
+          </button>
+          <button style="margin-right: 10px;" class="btn btn-primary" type="button"
+            (click)="navigateToVulnerability(assessment.id)" data-toggle="tooltip" data-placement="bottom"
+            title="View Vulnerabilities">
+            <fa-icon [icon]="faBahai"></fa-icon>
+          </button>
+          <button (click)="deleteAssessment(assessment)" class="btn btn-dark" type="button">
+            <fa-icon [icon]="faTrash"></fa-icon>
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <!-- <table class="table" *ngIf="activatedRoute.snapshot.params.assetId">
     <thead class="thead-dark">
       <tr>
         <th scope="col">#</th>
@@ -43,7 +109,7 @@
         </td>
       </tr>
     </tbody>
-  </table>
+  </table> -->
   <button (click)="navigateToAssessment()" type="button" class="btn btn-primary float-right" data-toggle="tooltip"
     data-placement="bottom" title="Create Assessment">
     Create Assessment

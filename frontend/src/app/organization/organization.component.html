@@ -1,16 +1,6 @@
 <div class="container-fluid">
   <h4 *ngIf="!assetAry.length">The organization {{ org?.name }} does not have any assets.</h4>
-  <p-table [value]="assetAry" [paginator]="true" [rows]="10" [filterDelay]="0" [globalFilterFields]="['name']">
-    <ng-template pTemplate="caption">
-      <div class="table-header">
-        List of Cars
-        <span class="p-input-icon-left">
-          <i class="pi pi-search"></i>
-          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
-            placeholder="Global Search" />
-        </span>
-      </div>
-    </ng-template>
+  <p-table #dt [value]="assetAry" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="id">#<p-sortIcon field="id"></p-sortIcon>
@@ -22,6 +12,16 @@
         <th scope="col">Status</th>
         <th scope="col"></th>
       </tr>
+      <tr>
+        <th></th>
+        <th>
+          <input pInputText type="text" (input)="dt.filter($event.target.value, 'name', 'startsWith')"
+            placeholder="Search by Asset Name" class="p-column-filter">
+        </th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
     </ng-template>
     <ng-template pTemplate="body" let-asset>
       <tr>
@@ -32,61 +32,25 @@
         <td>
           <button *ngIf="!isArchive" class="btn btn-secondary" type="button" style="margin-right: 10px;"
             data-toggle="tooltip" (click)="navigateToAsset(asset.id)" c data-placement="bottom" title="Edit Asset">
-            <fa-icon [icon]="faPencilAlt"></fa-icon>
+            <i class="pi pi-pencil"></i>
           </button>
           <button *ngIf="!isArchive" (click)="navigateToAssessment(asset.id)" class="btn btn-primary"
             style="margin-right: 10px;" type="button" data-toggle="tooltip" data-placement="bottom"
             title="View Assessments">
-            <fa-icon [icon]="faList"></fa-icon>
+            <i class="pi pi-list"></i>
           </button>
           <button (click)="archiveAsset(asset);" *ngIf="!isArchive" class="btn btn-dark" type="button"
             data-toggle="tooltip" data-placement="bottom" title="Archive">
-            <fa-icon [icon]="faBox"></fa-icon>
+            <i class="pi pi-folder"></i>
           </button>
           <button (click)="activateAsset(asset);" *ngIf="isArchive" class="btn btn-dark" type="button"
             data-toggle="tooltip" data-placement="bottom" title="Activate">
-            <fa-icon [icon]="faBoxOpen"></fa-icon>
+            <i class="pi pi-folder-open"></i>
           </button>
         </td>
       </tr>
     </ng-template>
   </p-table>
-  <!-- <table class="table" *ngIf="assetAry && assetAry.length">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Asset Name</th>
-        <th scope="col">Jira Enabled</th>
-        <th scope="col">Status</th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody *ngFor="let asset of assetAry">
-      <td scope="row">{{ asset?.id }}</td>
-      <td>{{ asset?.name }}</td>
-      <td>{{asset?.jira?.id ? 'Yes' : 'No'}}</td>
-      <td>{{ asset?.status === 'A' ? 'Active':'Archived' }}</td>
-      <td>
-        <button *ngIf="!isArchive" class="btn btn-secondary" type="button" style="margin-right: 10px;"
-          data-toggle="tooltip" (click)="navigateToAsset(asset.id)" c data-placement="bottom" title="Edit Asset">
-          <fa-icon [icon]="faPencilAlt"></fa-icon>
-        </button>
-        <button *ngIf="!isArchive" (click)="navigateToAssessment(asset.id)" class="btn btn-primary"
-          style="margin-right: 10px;" type="button" data-toggle="tooltip" data-placement="bottom"
-          title="View Assessments">
-          <fa-icon [icon]="faList"></fa-icon>
-        </button>
-        <button (click)="archiveAsset(asset);" *ngIf="!isArchive" class="btn btn-dark" type="button"
-          data-toggle="tooltip" data-placement="bottom" title="Archive">
-          <fa-icon [icon]="faBox"></fa-icon>
-        </button>
-        <button (click)="activateAsset(asset);" *ngIf="isArchive" class="btn btn-dark" type="button"
-          data-toggle="tooltip" data-placement="bottom" title="Activate">
-          <fa-icon [icon]="faBoxOpen"></fa-icon>
-        </button>
-      </td>
-    </tbody>
-  </table> -->
   <br />
   <div class="float-right">
     <button style="margin-right: 5px;" (click)="navigateToDashboard()" type="button" class="btn btn-secondary ">

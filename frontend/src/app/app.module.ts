@@ -34,6 +34,7 @@ import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { SettingsComponent } from './settings/settings.component';
 import { TableModule } from 'primeng/table';
+import { InputTextModule } from 'primeng/inputtext';
 @NgModule({
   declarations: [
     AppComponent,
@@ -67,6 +68,7 @@ import { TableModule } from 'primeng/table';
     AlertModule,
     NgSelectModule,
     TableModule,
+    InputTextModule,
   ],
   providers: [
     AppService,
