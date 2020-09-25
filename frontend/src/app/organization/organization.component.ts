@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from '../app.service';
 import {
@@ -9,6 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Asset } from '../asset-form/Asset';
 import { AlertService } from '../alert/alert.service';
+import { Table } from 'primeng/table';
 @Component({
   selector: 'app-organization',
   templateUrl: './organization.component.html',
@@ -23,6 +24,7 @@ export class OrganizationComponent implements OnInit {
   faList = faList;
   faBox = faBox;
   faBoxOpen = faBoxOpen;
+  @ViewChild('dt') table: Table;
   constructor(
     public activatedRoute: ActivatedRoute,
     public router: Router,

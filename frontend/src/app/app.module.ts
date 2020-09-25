@@ -33,7 +33,7 @@ import { InviteUserComponent } from './invite-user/invite-user.component';
 import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { SettingsComponent } from './settings/settings.component';
-
+import { TableModule } from 'primeng/table';
 @NgModule({
   declarations: [
     AppComponent,
@@ -66,6 +66,7 @@ import { SettingsComponent } from './settings/settings.component';
     MarkdownModule.forRoot(),
     AlertModule,
     NgSelectModule,
+    TableModule,
   ],
   providers: [
     AppService,

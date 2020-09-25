@@ -1,6 +1,57 @@
 <div class="container-fluid">
   <h4 *ngIf="!assetAry.length">The organization {{ org?.name }} does not have any assets.</h4>
-  <table class="table" *ngIf="assetAry && assetAry.length">
+  <p-table [value]="assetAry" [paginator]="true" [rows]="10" [filterDelay]="0" [globalFilterFields]="['name']">
+    <ng-template pTemplate="caption">
+      <div class="table-header">
+        List of Cars
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+            placeholder="Global Search" />
+        </span>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id">#<p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">Asset Name<p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="jira">Jira Enabled<p-sortIcon field="jira"></p-sortIcon>
+        </th>
+        <th scope="col">Status</th>
+        <th scope="col"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-asset>
+      <tr>
+        <td scope="row">{{ asset?.id }}</td>
+        <td>{{ asset?.name }}</td>
+        <td>{{asset?.jira?.id ? 'Yes' : 'No'}}</td>
+        <td>{{ asset?.status === 'A' ? 'Active':'Archived' }}</td>
+        <td>
+          <button *ngIf="!isArchive" class="btn btn-secondary" type="button" style="margin-right: 10px;"
+            data-toggle="tooltip" (click)="navigateToAsset(asset.id)" c data-placement="bottom" title="Edit Asset">
+            <fa-icon [icon]="faPencilAlt"></fa-icon>
+          </button>
+          <button *ngIf="!isArchive" (click)="navigateToAssessment(asset.id)" class="btn btn-primary"
+            style="margin-right: 10px;" type="button" data-toggle="tooltip" data-placement="bottom"
+            title="View Assessments">
+            <fa-icon [icon]="faList"></fa-icon>
+          </button>
+          <button (click)="archiveAsset(asset);" *ngIf="!isArchive" class="btn btn-dark" type="button"
+            data-toggle="tooltip" data-placement="bottom" title="Archive">
+            <fa-icon [icon]="faBox"></fa-icon>
+          </button>
+          <button (click)="activateAsset(asset);" *ngIf="isArchive" class="btn btn-dark" type="button"
+            data-toggle="tooltip" data-placement="bottom" title="Activate">
+            <fa-icon [icon]="faBoxOpen"></fa-icon>
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <!-- <table class="table" *ngIf="assetAry && assetAry.length">
     <thead class="thead-dark">
       <tr>
         <th scope="col">#</th>
@@ -35,7 +86,7 @@
         </button>
       </td>
     </tbody>
-  </table>
+  </table> -->
   <br />
   <div class="float-right">
     <button style="margin-right: 5px;" (click)="navigateToDashboard()" type="button" class="btn btn-secondary ">
