@@ -22,7 +22,7 @@ export class UserService {
   }
 
   getUsers() {
-    return this.http.get<User>(`${this.api}/users`);
+    return this.http.get<User[]>(`${this.api}/users`);
   }
   patchUser(user: User) {
     return this.http.patch(`${this.api}/user`, user);

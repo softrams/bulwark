@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppService } from '../app.service';
 import { AlertService } from '../alert/alert.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,6 +6,9 @@ import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import { faBahai } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Assessment } from '../assessment-form/Assessment';
+import { Table } from 'primeng/table';
+import { UserService } from '../user.service';
+import { User } from '../interfaces/User';
 
 @Component({
   selector: 'app-assessments',
@@ -19,11 +22,15 @@ export class AssessmentsComponent implements OnInit {
   faPencilAlt = faPencilAlt;
   faBahai = faBahai;
   faTrash = faTrash;
+  testers: User[] = [];
+  @ViewChild('dt') table: Table;
+
   constructor(
     public activatedRoute: ActivatedRoute,
     public router: Router,
     public appService: AppService,
-    public alertService: AlertService
+    public alertService: AlertService,
+    public userService: UserService
   ) {}
 
   ngOnInit() {
@@ -33,6 +40,9 @@ export class AssessmentsComponent implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       this.assetId = params.assetId;
       this.orgId = params.orgId;
+    });
+    this.userService.getUsers().subscribe((testers) => {
+      this.testers = testers;
     });
   }
 
@@ -91,5 +101,13 @@ export class AssessmentsComponent implements OnInit {
             .then((res) => (this.assessmentAry = res));
         });
     }
+  }
+
+  onTesterChange(event) {
+    this.table.filter(event.value, 'tester', 'in');
+  }
+
+  onDateSelect(value) {
+    this.table.filter(value, 'date', 'equals');
   }
 }
