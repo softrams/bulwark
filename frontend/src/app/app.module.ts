@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -35,6 +35,8 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { SettingsComponent } from './settings/settings.component';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { CalendarModule } from 'primeng/calendar';
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,15 +62,17 @@ import { InputTextModule } from 'primeng/inputtext';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FontAwesomeModule,
     MarkdownModule.forRoot(),
     AlertModule,
     NgSelectModule,
     TableModule,
     InputTextModule,
+    MultiSelectModule,
+    CalendarModule,
   ],
   providers: [
     AppService,

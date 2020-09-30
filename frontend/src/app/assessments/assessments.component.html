@@ -1,44 +1,51 @@
 <div class="container-fluid">
-  <p-table #dt [value]="assessmentAry" [paginator]="true" [rows]="10">
+  <p-table #assessmentTable [value]="assessmentAry" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="id">#<p-sortIcon field="id"></p-sortIcon>
+        <th pSortableColumn="id">Assessment ID<p-sortIcon field="id"></p-sortIcon>
         </th>
         <th pSortableColumn="name">Assessment Name<p-sortIcon field="name"></p-sortIcon>
         </th>
-        <th pSortableColumn="jira">Testers<p-sortIcon field="jira"></p-sortIcon>
+        <th>Testers</th>
+        <th>Jira ID</th>
+        <th pSortableColumn="startDate">Start Date<p-sortIcon field="startDate"></p-sortIcon>
         </th>
-        <th pSortableColumn="name">Jira ID<p-sortIcon field="name"></p-sortIcon>
-        </th>
-        <th pSortableColumn="jira">Start Date<p-sortIcon field="jira"></p-sortIcon>
-        </th>
-        <th pSortableColumn="jira">End Date<p-sortIcon field="jira"></p-sortIcon>
+        <th pSortableColumn="endDate">End Date<p-sortIcon field="endDate"></p-sortIcon>
         </th>
         <th scope="col"></th>
       </tr>
       <tr>
-        <th></th>
         <th>
-          <input pInputText type="text" (input)="dt.filter($event.target.value, 'name', 'startsWith')"
-            placeholder="Search by Assessment Name" class="p-column-filter">
+          <input pInputText type="text" (input)="assessmentTable.filter($event.target.value, 'id', 'equals')"
+            placeholder="Search by ID" class="p-column-filter">
         </th>
         <th>
-          <p-multiSelect *ngIf="testers" [options]="testers" placeholder="All"
-            (onChange)="dt.filter($event.target.value, 'firstName', 'startsWith')" styleClass="p-column-filter"
-            optionLabel="firstName">
+          <input pInputText type="text" (input)="assessmentTable.filter($event.target.value, 'name', 'startsWith')"
+            placeholder="Search by Name" class="p-column-filter">
+        </th>
+        <th>
+          <p-multiSelect [options]="testers" placeholder="All" (onChange)="onTesterChange($event)"
+            optionLabel="firstName" styleClass="p-column-filter">
             <ng-template let-option pTemplate="item">
               <div class="p-multiselect-representative-option">
-                <span class="p-ml-1">{{option.label}}</span>
+                <span class="p-ml-1">{{option.value.firstName}} {{option.value.lastName}}</span>
               </div>
             </ng-template>
           </p-multiSelect>
         <th>
-          <input pInputText type="text" (input)="dt.filter($event.target.value, 'jiraId', 'contains')"
+          <input pInputText type="text" (input)="assessmentTable.filter($event.target.value, 'jiraId', 'contains')"
             placeholder="Search by Jira ID" class="p-column-filter">
         </th>
         <th>
-          <p-calendar (onSelect)="onDateSelect($event)" (onClearClick)="dt.filter('', 'startDtae', 'equals')"
-            [showButtonBar]="true" styleClass="p-column-filter" placeholder="Start Date" [readonlyInput]="true">
+          <p-calendar (onSelect)="onDateSelect($event, 'startDate')"
+            (onClearClick)="assessmentTable.filter('', 'startDate', 'equals')" [showButtonBar]="true"
+            styleClass="p-column-filter" placeholder="Start Date" [readonlyInput]="true" dateFormat="m-d-yy">
+          </p-calendar>
+        </th>
+        <th>
+          <p-calendar (onSelect)="onDateSelect($event, 'endDate')"
+            (onClearClick)="assessmentTable.filter('', 'endDate', 'equals')" [showButtonBar]="true"
+            styleClass="p-column-filter" placeholder="End Date" [readonlyInput]="true" dateFormat="m-d-yy">
           </p-calendar>
         </th>
         <th></th>
@@ -63,15 +70,15 @@
         <td>
           <button class="btn btn-secondary" type="button" (click)="navigateToAssessmentById(assessment.id)"
             style="margin-right: 10px;" data-toggle="tooltip" data-placement="bottom" title="Edit Assessment">
-            <fa-icon [icon]="faPencilAlt"></fa-icon>
+            <i class="pi pi-pencil"></i>
           </button>
           <button style="margin-right: 10px;" class="btn btn-primary" type="button"
             (click)="navigateToVulnerability(assessment.id)" data-toggle="tooltip" data-placement="bottom"
             title="View Vulnerabilities">
-            <fa-icon [icon]="faBahai"></fa-icon>
+            <i class="pi pi-ticket"></i>
           </button>
           <button (click)="deleteAssessment(assessment)" class="btn btn-dark" type="button">
-            <fa-icon [icon]="faTrash"></fa-icon>
+            <i class="pi pi-trash"></i>
           </button>
         </td>
       </tr>

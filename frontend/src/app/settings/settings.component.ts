@@ -6,7 +6,6 @@ import { AlertService } from '../alert/alert.service';
 import { Settings } from '../interfaces/Settings';
 import { UserService } from '../user.service';
 import { AppService } from '../app.service';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-settings',
@@ -17,7 +16,6 @@ export class SettingsComponent implements OnInit {
   settingsForm: FormGroup;
   isEdit = false;
   settings: Settings;
-  faInfoCircle = faInfoCircle;
   public keyPlaceholder = '************************';
   constructor(
     private fb: FormBuilder,

@@ -106,7 +106,7 @@
             <th scope="col">Target</th>
             <th>
               <button class="btn btn-primary" type="button" (click)="addProbLoc()">
-                <fa-icon [icon]="faPlus"></fa-icon>
+                <i class="pi pi-plus"></i>
               </button>
             </th>
           </tr>
@@ -117,7 +117,7 @@
             <td><input formControlName="target" class="form-control" /></td>
             <td>
               <button class="btn btn-secondary" type="button" (click)="deleteProbLoc(i)">
-                <fa-icon [icon]="faTrash"></fa-icon>
+                <i class="pi pi-trash"></i>
               </button>
             </td>
           </tr>
@@ -129,8 +129,8 @@
       <div class="col-12">
         <label for="description">Description</label>
         <div class="float-right">
-          <fa-icon (click)="toggleDescPreview()" *ngIf="!previewDescription" [icon]="faEye"></fa-icon>
-          <fa-icon (click)="toggleDescPreview()" *ngIf="previewDescription" [icon]="faEyeSlash"></fa-icon>
+          <i class="pi pi-eye" (click)="toggleDescPreview()" *ngIf="!previewDescription"></i>
+          <i class="pi pi-eye-slash" (click)="toggleDescPreview()" *ngIf="previewDescription"></i>
         </div>
       </div>
     </div>
@@ -197,7 +197,7 @@
             <th scope="col">Resource URL</th>
             <th>
               <button class="btn btn-primary" type="button" (click)="addResource()">
-                <fa-icon [icon]="faPlus"></fa-icon>
+                <i class="pi pi-plus"></i>
               </button>
             </th>
           </tr>
@@ -208,7 +208,7 @@
             <td><input formControlName="url" class="form-control" placeholder="URL" /></td>
             <td>
               <button class="btn btn-secondary" type="button" (click)="deleteResource(i)">
-                <fa-icon [icon]="faTrash"></fa-icon>
+                <i class="pi pi-trash"></i>
               </button>
             </td>
           </tr>

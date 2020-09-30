@@ -2,9 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppService } from '../app.service';
 import { AlertService } from '../alert/alert.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
-import { faBahai } from '@fortawesome/free-solid-svg-icons';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Assessment } from '../assessment-form/Assessment';
 import { Table } from 'primeng/table';
 import { UserService } from '../user.service';
@@ -19,11 +16,8 @@ export class AssessmentsComponent implements OnInit {
   assessmentAry: any = [];
   assetId: number;
   orgId: number;
-  faPencilAlt = faPencilAlt;
-  faBahai = faBahai;
-  faTrash = faTrash;
-  testers: User[] = [];
-  @ViewChild('dt') table: Table;
+  testers: User[];
+  @ViewChild('assessmentTable') table: Table;
 
   constructor(
     public activatedRoute: ActivatedRoute,
@@ -104,10 +98,17 @@ export class AssessmentsComponent implements OnInit {
   }
 
   onTesterChange(event) {
-    this.table.filter(event.value, 'tester', 'in');
+    const selectedTesterAry = event.value.map((x) => x.id);
+    this.table.filter(selectedTesterAry, 'testers', 'in');
   }
 
-  onDateSelect(value) {
-    this.table.filter(value, 'date', 'equals');
+  onDateSelect(value, type) {
+    const date = new Date(value);
+    date.setUTCHours(0, 0, 0, 0);
+    if (type === 'startDate') {
+      this.table.filter(date.toISOString(), 'startDate', 'equals');
+    } else if (type === 'endDate') {
+      this.table.filter(date.toISOString(), 'endDate', 'equals');
+    }
   }
 }

@@ -3,7 +3,7 @@
   <p-table #dt [value]="assetAry" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="id">#<p-sortIcon field="id"></p-sortIcon>
+        <th pSortableColumn="id">Organization ID<p-sortIcon field="id"></p-sortIcon>
         </th>
         <th pSortableColumn="name">Asset Name<p-sortIcon field="name"></p-sortIcon>
         </th>
@@ -13,10 +13,13 @@
         <th scope="col"></th>
       </tr>
       <tr>
-        <th></th>
+        <th>
+          <input pInputText type="text" (input)="dt.filter($event.target.value, 'id', 'equals')"
+            placeholder="Search by ID" class="p-column-filter">
+        </th>
         <th>
           <input pInputText type="text" (input)="dt.filter($event.target.value, 'name', 'startsWith')"
-            placeholder="Search by Asset Name" class="p-column-filter">
+            placeholder="Search by Name" class="p-column-filter">
         </th>
         <th></th>
         <th></th>

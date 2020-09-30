@@ -1,16 +1,9 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { AppService } from '../app.service';
 import { AlertService } from '../alert/alert.service';
 import { Vulnerability } from './Vulnerability';
-import {
-  faTrash,
-  faPlus,
-  faEye,
-  faEyeSlash,
-} from '@fortawesome/free-solid-svg-icons';
 import { AppFile } from '../interfaces/App_File';
 import { Screenshot } from '../interfaces/Screenshot';
 
@@ -33,10 +26,6 @@ export class VulnFormComponent implements OnChanges, OnInit {
   jiraHost: string;
   tempScreenshots: Screenshot[] = [];
   screenshotsToDelete: number[] = [];
-  faTrash = faTrash;
-  faPlus = faPlus;
-  faEye = faEye;
-  faEyeSlash = faEyeSlash;
   previewDescription = false;
   previewDetailedDesc = false;
   previewRemediation = false;
