@@ -1,17 +1,59 @@
 <div class="container-fluid">
-  <table class="table" *ngIf="activatedRoute.snapshot.params.assetId">
-    <thead class="thead-dark">
+  <p-table #assessmentTable [value]="assessmentAry" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
+    <ng-template pTemplate="header">
       <tr>
-        <th scope="col">#</th>
-        <th scope="col">Assessment Name</th>
-        <th scope="col">Testers</th>
-        <th scope="col">Jira ID</th>
-        <th scope="col">Start Date</th>
-        <th scope="col">End Date</th>
+        <th pSortableColumn="id">Assessment ID<p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="name">Assessment Name<p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="testers">Testers<p-sortIcon field="testers"></p-sortIcon>
+        </th>
+        <th>Jira ID</th>
+        <th pSortableColumn="startDate">Start Date<p-sortIcon field="startDate"></p-sortIcon>
+        </th>
+        <th pSortableColumn="endDate">End Date<p-sortIcon field="endDate"></p-sortIcon>
+        </th>
         <th scope="col"></th>
       </tr>
-    </thead>
-    <tbody *ngFor="let assessment of assessmentAry">
+      <tr>
+        <th>
+          <input pInputText type="text" (input)="assessmentTable.filter($event.target.value, 'id', 'equals')"
+            placeholder="Search by ID" class="p-column-filter">
+        </th>
+        <th>
+          <input pInputText type="text" (input)="assessmentTable.filter($event.target.value, 'name', 'startsWith')"
+            placeholder="Search by Name" class="p-column-filter">
+        </th>
+        <th>
+          <!-- TODO: Fix multiselect for testers
+            <p-multiSelect [options]="testers" placeholder="All" (onChange)="onTesterChange($event)"
+            optionLabel="firstName" styleClass="p-column-filter">
+            <ng-template let-option pTemplate="item">
+              <div class="p-multiselect-representative-option">
+                <span class="p-ml-1">{{option.value.firstName}} {{option.value.lastName}}</span>
+              </div>
+            </ng-template>
+          </p-multiSelect> -->
+        <th>
+          <input pInputText type="text" (input)="assessmentTable.filter($event.target.value, 'jiraId', 'contains')"
+            placeholder="Search by Jira ID" class="p-column-filter">
+        </th>
+        <th>
+          <p-calendar (onSelect)="onDateSelect($event, 'startDate')"
+            (onClearClick)="assessmentTable.filter('', 'startDate', 'equals')" [showButtonBar]="true"
+            styleClass="p-column-filter" placeholder="Start Date" [readonlyInput]="true" dateFormat="m-d-yy">
+          </p-calendar>
+        </th>
+        <th>
+          <p-calendar (onSelect)="onDateSelect($event, 'endDate')"
+            (onClearClick)="assessmentTable.filter('', 'endDate', 'equals')" [showButtonBar]="true"
+            styleClass="p-column-filter" placeholder="End Date" [readonlyInput]="true" dateFormat="m-d-yy">
+          </p-calendar>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-assessment>
       <tr>
         <td scope="row">{{ assessment.id }}</td>
         <td>{{ assessment?.name }}</td>
@@ -30,20 +72,20 @@
         <td>
           <button class="btn btn-secondary" type="button" (click)="navigateToAssessmentById(assessment.id)"
             style="margin-right: 10px;" data-toggle="tooltip" data-placement="bottom" title="Edit Assessment">
-            <fa-icon [icon]="faPencilAlt"></fa-icon>
+            <i class="pi pi-pencil"></i>
           </button>
           <button style="margin-right: 10px;" class="btn btn-primary" type="button"
             (click)="navigateToVulnerability(assessment.id)" data-toggle="tooltip" data-placement="bottom"
             title="View Vulnerabilities">
-            <fa-icon [icon]="faBahai"></fa-icon>
+            <i class="pi pi-ticket"></i>
           </button>
           <button (click)="deleteAssessment(assessment)" class="btn btn-dark" type="button">
-            <fa-icon [icon]="faTrash"></fa-icon>
+            <i class="pi pi-trash"></i>
           </button>
         </td>
       </tr>
-    </tbody>
-  </table>
+    </ng-template>
+  </p-table>
   <button (click)="navigateToAssessment()" type="button" class="btn btn-primary float-right" data-toggle="tooltip"
     data-placement="bottom" title="Create Assessment">
     Create Assessment

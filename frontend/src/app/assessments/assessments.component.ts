@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppService } from '../app.service';
 import { AlertService } from '../alert/alert.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
-import { faBahai } from '@fortawesome/free-solid-svg-icons';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Assessment } from '../assessment-form/Assessment';
+import { Table } from 'primeng/table';
+import { UserService } from '../user.service';
+import { User } from '../interfaces/User';
 
 @Component({
   selector: 'app-assessments',
@@ -16,14 +16,15 @@ export class AssessmentsComponent implements OnInit {
   assessmentAry: any = [];
   assetId: number;
   orgId: number;
-  faPencilAlt = faPencilAlt;
-  faBahai = faBahai;
-  faTrash = faTrash;
+  testers: User[];
+  @ViewChild('assessmentTable') table: Table;
+
   constructor(
     public activatedRoute: ActivatedRoute,
     public router: Router,
     public appService: AppService,
-    public alertService: AlertService
+    public alertService: AlertService,
+    public userService: UserService
   ) {}
 
   ngOnInit() {
@@ -33,6 +34,9 @@ export class AssessmentsComponent implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       this.assetId = params.assetId;
       this.orgId = params.orgId;
+    });
+    this.userService.getUsers().subscribe((testers) => {
+      this.testers = testers;
     });
   }
 
@@ -90,6 +94,21 @@ export class AssessmentsComponent implements OnInit {
             .getAssessments(this.orgId)
             .then((res) => (this.assessmentAry = res));
         });
+    }
+  }
+
+  onTesterChange(event) {
+    const selectedTesterAry = event.value.map((x) => x.id);
+    this.table.filter(selectedTesterAry, 'testers', 'in');
+  }
+
+  onDateSelect(value, type) {
+    const date = new Date(value);
+    date.setUTCHours(0, 0, 0, 0);
+    if (type === 'startDate') {
+      this.table.filter(date.toISOString(), 'startDate', 'equals');
+    } else if (type === 'endDate') {
+      this.table.filter(date.toISOString(), 'endDate', 'equals');
     }
   }
 }

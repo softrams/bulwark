@@ -2,8 +2,8 @@
   <a class="navbar-brand" href="#">
     <img src="../../assets/logo.png" width="250" height="115" alt="Bulwark Logo" /></a>
   <div class="mx-auto">
-    <div *ngIf="loaderService.isLoading | async" class="spinner-border" role="status">
-      <span class="sr-only">Loading...</span>
+    <div *ngIf="loaderService.isLoading | async" role="status">
+      <p-progressSpinner [style]="{width: '75px', height: '75px'}"></p-progressSpinner>
     </div>
   </div>
   <div class="nav-item dropdown" *ngIf="loggedIn$ | async as loggedIn">

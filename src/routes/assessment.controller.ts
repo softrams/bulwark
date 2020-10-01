@@ -219,7 +219,7 @@ export const queryReportDataByAssessment = async (req: UserRequest, res: Respons
   report.asset = asset;
   report.assessment = assessment;
   report.vulns = vulnerabilities;
-  if (config.companyName) {
+  if (config && config.companyName) {
     report.companyName = config.companyName;
   } else {
     report.companyName = null;
