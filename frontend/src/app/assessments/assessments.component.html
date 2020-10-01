@@ -6,7 +6,8 @@
         </th>
         <th pSortableColumn="name">Assessment Name<p-sortIcon field="name"></p-sortIcon>
         </th>
-        <th>Testers</th>
+        <th pSortableColumn="testers">Testers<p-sortIcon field="testers"></p-sortIcon>
+        </th>
         <th>Jira ID</th>
         <th pSortableColumn="startDate">Start Date<p-sortIcon field="startDate"></p-sortIcon>
         </th>
@@ -24,14 +25,15 @@
             placeholder="Search by Name" class="p-column-filter">
         </th>
         <th>
-          <p-multiSelect [options]="testers" placeholder="All" (onChange)="onTesterChange($event)"
+          <!-- TODO: Fix multiselect for testers
+            <p-multiSelect [options]="testers" placeholder="All" (onChange)="onTesterChange($event)"
             optionLabel="firstName" styleClass="p-column-filter">
             <ng-template let-option pTemplate="item">
               <div class="p-multiselect-representative-option">
                 <span class="p-ml-1">{{option.value.firstName}} {{option.value.lastName}}</span>
               </div>
             </ng-template>
-          </p-multiSelect>
+          </p-multiSelect> -->
         <th>
           <input pInputText type="text" (input)="assessmentTable.filter($event.target.value, 'jiraId', 'contains')"
             placeholder="Search by Jira ID" class="p-column-filter">
