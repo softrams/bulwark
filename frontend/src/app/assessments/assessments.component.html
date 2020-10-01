@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <p-table #assessmentTable [value]="assessmentAry" [paginator]="true" [rows]="10">
+  <p-table #assessmentTable [value]="assessmentAry" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="id">Assessment ID<p-sortIcon field="id"></p-sortIcon>
@@ -84,51 +84,6 @@
       </tr>
     </ng-template>
   </p-table>
-  <!-- <table class="table" *ngIf="activatedRoute.snapshot.params.assetId">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Assessment Name</th>
-        <th scope="col">Testers</th>
-        <th scope="col">Jira ID</th>
-        <th scope="col">Start Date</th>
-        <th scope="col">End Date</th>
-        <th scope="col"></th>
-      </tr>
-    </thead>
-    <tbody *ngFor="let assessment of assessmentAry">
-      <tr>
-        <td scope="row">{{ assessment.id }}</td>
-        <td>{{ assessment?.name }}</td>
-        <td>
-          <div *ngFor="let tester of assessment.testers;let last = last">
-            {{tester?.firstName}} {{tester?.lastName}}<span *ngIf="!last">,</span>
-          </div>
-        </td>
-        <td>
-          <a target="_blank" [href]="assessment?.jiraId">{{
-            assessment?.jiraId
-          }}</a>
-        </td>
-        <td>{{ assessment?.startDate | date: "shortDate":'UTC' }}</td>
-        <td>{{ assessment?.endDate | date: "shortDate":'UTC' }}</td>
-        <td>
-          <button class="btn btn-secondary" type="button" (click)="navigateToAssessmentById(assessment.id)"
-            style="margin-right: 10px;" data-toggle="tooltip" data-placement="bottom" title="Edit Assessment">
-            <fa-icon [icon]="faPencilAlt"></fa-icon>
-          </button>
-          <button style="margin-right: 10px;" class="btn btn-primary" type="button"
-            (click)="navigateToVulnerability(assessment.id)" data-toggle="tooltip" data-placement="bottom"
-            title="View Vulnerabilities">
-            <fa-icon [icon]="faBahai"></fa-icon>
-          </button>
-          <button (click)="deleteAssessment(assessment)" class="btn btn-dark" type="button">
-            <fa-icon [icon]="faTrash"></fa-icon>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table> -->
   <button (click)="navigateToAssessment()" type="button" class="btn btn-primary float-right" data-toggle="tooltip"
     data-placement="bottom" title="Create Assessment">
     Create Assessment

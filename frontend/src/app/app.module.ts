@@ -37,6 +37,7 @@ import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 @NgModule({
   declarations: [
     AppComponent,
@@ -73,6 +74,7 @@ import { CalendarModule } from 'primeng/calendar';
     InputTextModule,
     MultiSelectModule,
     CalendarModule,
+    ProgressSpinnerModule,
   ],
   providers: [
     AppService,
