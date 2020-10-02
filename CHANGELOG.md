@@ -2,6 +2,71 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0](https://github.com/softrams/bulwark/compare/v4.0.7...v5.0.0) (2020-10-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* **settings component:** Added new table for app configurations.  updated API's referencing the email
+service to check for email configuration from database.  Removed env vars for email configuration
+and company name.
+
+### Features
+
+* **assessment/asset summary table:** added filtering to tables ([66b2420](https://github.com/softrams/bulwark/commit/66b242008725c826d094a78a67ea9dae270935e7)), closes [#302](https://github.com/softrams/bulwark/issues/302)
+* **initial commit for primeng:** initial commit for PrimeNG ([988dc2a](https://github.com/softrams/bulwark/commit/988dc2a856a1851b138aadb59d5aaaf6e8d8e6e8)), closes [#302](https://github.com/softrams/bulwark/issues/302)
+* **initial commit of asset and assessment primeng refactor:** initial commit of asset and assessent ([493a3d2](https://github.com/softrams/bulwark/commit/493a3d2c660363bbda6a28650b4e6766d57e6fd1)), closes [#302](https://github.com/softrams/bulwark/issues/302)
+* **primeng refactor:** refactored existing tables to use primeng ([0adc220](https://github.com/softrams/bulwark/commit/0adc220196e06c93b052f327a2163085caa5c8f3)), closes [#302](https://github.com/softrams/bulwark/issues/302)
+* **removed tester multiselect:** temporarily replaced Tester multiselect with sort ([aa332da](https://github.com/softrams/bulwark/commit/aa332dad1d258370b48e03c8a280b7eafc555afd)), closes [#302](https://github.com/softrams/bulwark/issues/302)
+* **settings component:** moved email configuration from env var to application ([778670e](https://github.com/softrams/bulwark/commit/778670e45a75a7c11bdacfd8674a3fa8feb60183)), closes [#260](https://github.com/softrams/bulwark/issues/260)
+* **update primeng table and loading spinner:** updated primeng tables. Refactored loading spinner ([c169e99](https://github.com/softrams/bulwark/commit/c169e999708f49687fa0e9fca6d457f8b790fc00)), closes [#302](https://github.com/softrams/bulwark/issues/302)
+
+
+### Others
+
+* **ci:** added support for issues ([dadee4e](https://github.com/softrams/bulwark/commit/dadee4e66d5957ac3c8d7e6fe92841ac6ae49eae))
+* **deps:** bump @angular-devkit/build-angular in /frontend ([3189224](https://github.com/softrams/bulwark/commit/3189224a5b21f2c26e1d97ab075379179d0465dd))
+* **deps:** bump @angular-devkit/build-angular in /frontend ([ec14201](https://github.com/softrams/bulwark/commit/ec1420139a6d4d60dec10a2282697dd2ac710e68))
+* **deps:** bump @angular-devkit/build-angular in /frontend ([77ac88c](https://github.com/softrams/bulwark/commit/77ac88c599ccdb630ea4f85c9f9402510754f867))
+* **deps:** bump @angular/animations in /frontend ([b74a9c9](https://github.com/softrams/bulwark/commit/b74a9c9a20cf9b9c82efbea8d509534b09a30a13))
+* **deps:** bump @angular/cdk from 10.2.2 to 10.2.3 in /frontend ([3d0e38d](https://github.com/softrams/bulwark/commit/3d0e38d1f2b572834427e411e2eaecd1fdcc0eac))
+* **deps:** bump @angular/cli from 10.1.1 to 10.1.2 in /frontend ([45cfe34](https://github.com/softrams/bulwark/commit/45cfe34935379f7011829f85bf2eb622b978a6ea))
+* **deps:** bump @angular/cli from 10.1.2 to 10.1.3 in /frontend ([1369d3c](https://github.com/softrams/bulwark/commit/1369d3c8e10ce474f3fa302e434d72663456c438))
+* **deps:** bump @angular/cli from 10.1.3 to 10.1.4 in /frontend ([5a0536e](https://github.com/softrams/bulwark/commit/5a0536e1fa2f7df2da94ee66ae3b5faa2a38465c))
+* **deps:** bump @fortawesome/fontawesome-svg-core in /frontend ([1a54c95](https://github.com/softrams/bulwark/commit/1a54c95e1c0ccc157441e831bf00f9bbc541a253))
+* **deps:** bump @fortawesome/free-brands-svg-icons in /frontend ([830a15c](https://github.com/softrams/bulwark/commit/830a15c0b1a38dfd43198d61475aa558f6e35608))
+* **deps:** bump @fortawesome/free-solid-svg-icons in /frontend ([39bd027](https://github.com/softrams/bulwark/commit/39bd027aff2457bbd3ef695151a14ffe9ca63d04))
+* **deps:** bump @ng-select/ng-select from 5.0.1 to 5.0.3 in /frontend ([797caab](https://github.com/softrams/bulwark/commit/797caab204417f23519b3b4826f4405fe74b9358))
+* **deps:** bump nodemailer from 6.4.11 to 6.4.12 ([a690271](https://github.com/softrams/bulwark/commit/a690271d38061c1d5b2826e10a2c3b5c59b7d96f))
+* **deps:** bump primeng from 10.0.0 to 10.0.2 in /frontend ([a9e5b30](https://github.com/softrams/bulwark/commit/a9e5b30b391602a7ab3a2d044881c20c6e59f8e0))
+* **deps:** bump puppeteer from 5.3.0 to 5.3.1 ([6e77d99](https://github.com/softrams/bulwark/commit/6e77d9948489da1fa7a8a16b24025f6945655d34))
+* **deps:** bump typeorm from 0.2.26 to 0.2.28 ([e723343](https://github.com/softrams/bulwark/commit/e7233435811adbc5fc82ea351c10e22c8fa69e75))
+* **deps-dev:** bump @angular/language-service in /frontend ([7502ade](https://github.com/softrams/bulwark/commit/7502ade9c6e5d1da72a40842236a8c48fd5a4b65))
+* **deps-dev:** bump @angular/language-service in /frontend ([f20a01b](https://github.com/softrams/bulwark/commit/f20a01b67d0b6bc1323c2af3a7a20455afb1e4f8))
+* **deps-dev:** bump @angular/language-service in /frontend ([856bd1c](https://github.com/softrams/bulwark/commit/856bd1c0dca011ca58c69d0e9682da83532a483e))
+* **deps-dev:** bump @types/jest from 26.0.13 to 26.0.14 ([bcd296a](https://github.com/softrams/bulwark/commit/bcd296afb3ae320cbbfb7fdf5ebb9950844d03f5))
+* **deps-dev:** bump @types/node from 14.10.1 to 14.10.2 in /frontend ([0384b4e](https://github.com/softrams/bulwark/commit/0384b4efd1a735b6595997742ff90c4bb026eefb))
+* **deps-dev:** bump @types/node from 14.10.2 to 14.10.3 in /frontend ([d2bbdea](https://github.com/softrams/bulwark/commit/d2bbdea6d567a1d4da2f6f4572f791f829f1d356))
+* **deps-dev:** bump @types/node from 14.10.3 to 14.11.1 in /frontend ([1f00fbf](https://github.com/softrams/bulwark/commit/1f00fbfd82e4205f76458f89e3c73e2876d824ad))
+* **deps-dev:** bump @types/node from 14.11.1 to 14.11.2 in /frontend ([eadd88c](https://github.com/softrams/bulwark/commit/eadd88c66bd3a1842aa25b9f1a393faa295d47a6))
+* **deps-dev:** bump codelyzer from 6.0.0 to 6.0.1 in /frontend ([ee12133](https://github.com/softrams/bulwark/commit/ee121334659fd3ef46db880df9581ad22affafb3))
+* **deps-dev:** bump jasmine-spec-reporter in /frontend ([002fb85](https://github.com/softrams/bulwark/commit/002fb85f7670b166df47418d4ed2db25152dd64e))
+* **deps-dev:** bump karma from 5.2.2 to 5.2.3 in /frontend ([9380ed0](https://github.com/softrams/bulwark/commit/9380ed0e4b6b6bf78b7c6cd16866ab5c743c3793))
+* **deps-dev:** bump ts-jest from 26.3.0 to 26.4.0 ([1da83db](https://github.com/softrams/bulwark/commit/1da83db85b49bf251351019383c39f1e8fda3449))
+* **deps-dev:** bump ts-jest from 26.4.0 to 26.4.1 ([6304980](https://github.com/softrams/bulwark/commit/6304980cf4390b09ee4d88c4d2c0551ac4b8f7fe))
+* **deps-dev:** bump typescript from 4.0.2 to 4.0.3 ([e76deae](https://github.com/softrams/bulwark/commit/e76deaeead62bfd4d3441fbc2c66f8c33cb80c7e))
+* **fixing merge conflicts:** fixed merge conflicts ([ff7e2af](https://github.com/softrams/bulwark/commit/ff7e2af483ab1a6872e002d0aa3b8f98f4f3066f)), closes [#302](https://github.com/softrams/bulwark/issues/302)
+
+
+### CI
+
+* **node:** added ability to create env file before running tests ([0dc9757](https://github.com/softrams/bulwark/commit/0dc9757c66ff1a9dc2fec8101da1bd5ae4fe8b2b))
+* **node:** added support for backend tests to run on ci ([e31c488](https://github.com/softrams/bulwark/commit/e31c488ee23b21399792d0f0b81a7bb4187433ed))
+* **node:** added support to ci to only run if the backend files have changed ([8071cb3](https://github.com/softrams/bulwark/commit/8071cb3016c80f31ba0f14aece10093c891d8622))
+* **node:** removed double qutoes ([20d1586](https://github.com/softrams/bulwark/commit/20d15866de030cef7c93c6ebffb51ebbb4c09c3e))
+* **node:** removed path filter and set tests to run each time ([76d01f3](https://github.com/softrams/bulwark/commit/76d01f332fc02266ae3954f954fca40588e5f2e0))
+* **user.controller:** updated user import for failed tested ([b56a7fa](https://github.com/softrams/bulwark/commit/b56a7fae4b080da1ff7528c2235d7a829ea9e9f6))
+
 ### [4.0.7](https://github.com/softrams/bulwark/compare/v4.0.6...v4.0.7) (2020-10-01)
 
 ### [4.0.6](https://github.com/softrams/bulwark/compare/v4.0.5...v4.0.6) (2020-09-14)
