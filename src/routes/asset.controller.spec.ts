@@ -48,7 +48,6 @@ describe('Asset Controller', () => {
     const org: Organization = {
       id: null,
       name: 'testOrg',
-      avatar: null,
       asset: null,
       status: 'A'
     };
@@ -93,7 +92,6 @@ describe('Asset Controller', () => {
     const org: Organization = {
       id: null,
       name: 'testOrg',
-      avatar: null,
       asset: null,
       status: 'A'
     };
@@ -138,7 +136,6 @@ describe('Asset Controller', () => {
     const org: Organization = {
       id: null,
       name: 'testOrg',
-      avatar: null,
       asset: null,
       status: 'A'
     };
@@ -183,7 +180,6 @@ describe('Asset Controller', () => {
     const org: Organization = {
       id: null,
       name: 'testOrg',
-      avatar: null,
       asset: null,
       status: 'A'
     };
@@ -212,7 +208,6 @@ describe('Asset Controller', () => {
     const org: Organization = {
       id: null,
       name: 'testOrg',
-      avatar: null,
       asset: null,
       status: 'A'
     };
@@ -281,7 +276,6 @@ describe('Asset Controller', () => {
     const org: Organization = {
       id: null,
       name: 'testOrg',
-      avatar: null,
       asset: null,
       status: 'A'
     };
@@ -308,7 +302,6 @@ describe('Asset Controller', () => {
     const org: Organization = {
       id: null,
       name: 'testOrg',
-      avatar: null,
       asset: null,
       status: 'A'
     };
@@ -370,7 +363,6 @@ describe('Asset Controller', () => {
     const org: Organization = {
       id: null,
       name: 'testOrg',
-      avatar: null,
       asset: null,
       status: 'A'
     };
@@ -382,7 +374,6 @@ describe('Asset Controller', () => {
     const org: Organization = {
       id: null,
       name: 'testOrg',
-      avatar: null,
       asset: null,
       status: 'A'
     };
@@ -421,7 +412,6 @@ describe('Asset Controller', () => {
     const org: Organization = {
       id: null,
       name: 'testOrg',
-      avatar: null,
       asset: null,
       status: 'A'
     };
@@ -450,7 +440,6 @@ describe('Asset Controller', () => {
     const org: Organization = {
       id: null,
       name: 'testOrg',
-      avatar: null,
       asset: null,
       status: 'A'
     };
@@ -488,7 +477,6 @@ describe('Asset Controller', () => {
     const org: Organization = {
       id: null,
       name: 'testOrg',
-      avatar: null,
       asset: null,
       status: 'A'
     };
@@ -565,7 +553,6 @@ describe('Asset Controller', () => {
     const org: Organization = {
       id: null,
       name: 'testOrg',
-      avatar: null,
       asset: null,
       status: 'A'
     };
@@ -603,7 +590,6 @@ describe('Asset Controller', () => {
     const org: Organization = {
       id: null,
       name: 'testOrg',
-      avatar: null,
       asset: null,
       status: 'A'
     };

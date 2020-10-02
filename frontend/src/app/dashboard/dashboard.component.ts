@@ -1,19 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AppService } from '../app.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Organization } from '../org-form/Organization';
 import { AlertService } from '../alert/alert.service';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.sass']
+  styleUrls: ['./dashboard.component.sass'],
 })
 export class DashboardComponent implements OnInit {
   orgAry: any = [];
   assetAry: any = [];
   orgId: number;
   isArchive = false;
+  @ViewChild('orgTable') table: Table;
   constructor(
     private appService: AppService,
     public activatedRoute: ActivatedRoute,

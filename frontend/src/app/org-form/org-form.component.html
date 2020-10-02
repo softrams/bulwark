@@ -1,46 +1,16 @@
 <div class="container col-6">
-  <img *ngIf="avatar" [src]="avatar" alt="avatar" class="img-thumbnail" style="height: auto; width: 200px;" />
-
   <form [formGroup]="orgForm" (ngSubmit)="onSubmit(orgForm)">
     <div class="form-group">
       <label for="orgName">Organization Name</label>
-      <input
-        formControlName="name"
-        type="text"
-        class="form-control"
-        id="orgName"
-        placeholder="Enter in an organization name"
-      />
+      <input formControlName="name" type="text" class="form-control" id="orgName"
+        placeholder="Enter in an organization name" />
     </div>
-    <div class="form-group">
-      <label for="file">Choose Avatar</label>
-      <input
-        formControlName="avatar"
-        type="file"
-        id="file"
-        class="form-control-file"
-        (change)="handleFileInput($event.target.files)"
-      />
-    </div>
-    <button
-      [disabled]="!orgForm.valid"
-      class="btn btn-primary float-right"
-      type="submit"
-      data-toggle="tooltip"
-      data-placement="bottom"
-      title="Submit Data"
-    >
+    <button [disabled]="!orgForm.valid" class="btn btn-primary float-right" type="submit" data-toggle="tooltip"
+      data-placement="bottom" title="Submit Data">
       Submit
     </button>
-    <button
-      (click)="navigateToDashboard()"
-      class="btn btn-secondary float-right"
-      type="button"
-      style="margin-right: 5px"
-      data-toggle="tooltip"
-      data-placement="bottom"
-      title="Back to Dashboard"
-    >
+    <button (click)="navigateToDashboard()" class="btn btn-secondary float-right" type="button"
+      style="margin-right: 5px" data-toggle="tooltip" data-placement="bottom" title="Back to Dashboard">
       Back to Dashboard
     </button>
   </form>

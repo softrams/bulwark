@@ -12,9 +12,6 @@ export class Organization {
   @Column()
   @IsIn(['A', 'AH'])
   status: string;
-  @OneToOne((type) => File)
-  @JoinColumn()
-  avatar: number;
   @OneToMany((type) => Asset, (asset) => asset.organization)
   asset: Asset[];
 }
