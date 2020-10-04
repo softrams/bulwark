@@ -14,9 +14,9 @@ if (envConfig) {
 import * as bodyParser from 'body-parser';
 import { createConnection } from 'typeorm';
 const authController = require('./routes/authentication.controller');
-const orgController = require('./routes/organization.controller');
 const userController = require('./routes/user.controller');
 const fileUploadController = require('./routes/file-upload.controller');
+import * as orgController from './routes/organization.controller';
 import * as assetController from './routes/asset.controller';
 import * as assessmentController from './routes/assessment.controller';
 import * as vulnController from './routes/vulnerability.controller';
@@ -42,7 +42,7 @@ app.use(
     etag: false
   })
 );
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '2mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 const serverPort = process.env.PORT || 5000;
 const serverIpAddress = process.env.IP || '127.0.0.1';

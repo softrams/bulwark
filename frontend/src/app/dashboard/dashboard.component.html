@@ -1,32 +1,52 @@
-<div class="container">
-  <div class="row card-group">
-    <div class="col-4" *ngFor="let org of orgAry">
-      <div class="card text-center">
-        <img *ngIf="org.imgUrl" class="card-img-top" [src]="org.imgUrl" alt="Card image cap" />
-        <div class="card-body">
-          <h5 class="card-title">{{ org.name }}</h5>
+<div class="container-fluid">
+  <p-table #orgTable [value]="orgAry">
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id">Organization ID<p-sortIcon field="id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="id">Organization Name<p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th></th>
+      </tr>
+      <tr>
+        <th>
+          <input pInputText type="text" (input)="orgTable.filter($event.target.value, 'id', 'equals')"
+            placeholder="Search by ID" class="p-column-filter">
+        </th>
+        <th>
+          <input pInputText type="text" (input)="orgTable.filter($event.target.value, 'name', 'startsWith')"
+            placeholder="Search by Name" class="p-column-filter">
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-org>
+      <tr>
+        <td>{{org.id}}</td>
+        <td>{{org.name}}</td>
+        <td>
           <button *ngIf="!isArchive" (click)="navigateToOrganization(org.id)" class="btn btn-secondary"
             style="margin-right: 5px;" data-toggle="tooltip" data-placement="bottom" title="Edit {{ org.name }}">
-            Edit
-          </button>
-          <button *ngIf="!isArchive" (click)="archiveOrganization(org)" class="btn btn-warning"
-            style="margin-right: 5px;" data-toggle="tooltip" data-placement="bottom" title="Archive {{ org.name }}">
-            Archive
-          </button>
-          <button *ngIf="isArchive" (click)="activateOrganization(org)" class="btn btn-warning"
-            style="margin-right: 5px;" data-toggle="tooltip" data-placement="bottom" title="Activate {{ org.name }}">
-            Activate
+            <i class="pi pi-pencil"></i>
           </button>
           <button *ngIf="!isArchive" (click)="navigateToAsset(org.id)" class="btn btn-primary"
             style="margin-right: 5px;" data-toggle="tooltip" data-placement="bottom"
             title="View Assets of {{ org.name }}">
-            Assets
+            <i class="pi pi-list"></i>
           </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <br />
+          <button *ngIf="!isArchive" (click)="archiveOrganization(org)" class="btn btn-warning"
+            style="margin-right: 5px;" data-toggle="tooltip" data-placement="bottom" title="Archive {{ org.name }}">
+            <i class="pi pi-folder"></i>
+          </button>
+          <button *ngIf="isArchive" (click)="activateOrganization(org)" class="btn btn-warning"
+            style="margin-right: 5px;" data-toggle="tooltip" data-placement="bottom" title="Activate {{ org.name }}">
+            <i class="pi pi-folder-open"></i>
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <br>
   <button (click)="navigateToCreate()" *ngIf="!isArchive" type="button" class="btn btn-primary float-right"
     data-toggle="tooltip" data-placement="bottom" title="Add An Organization">
     Add Organization

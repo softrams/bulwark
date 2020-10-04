@@ -7,13 +7,12 @@ import { AlertService } from '../alert/alert.service';
 @Component({
   selector: 'app-org-form',
   templateUrl: './org-form.component.html',
-  styleUrls: ['./org-form.component.sass']
+  styleUrls: ['./org-form.component.sass'],
 })
 export class OrgFormComponent implements OnInit, OnChanges {
   public orgModel: Organization;
   orgForm: FormGroup;
   fileToUpload: File = null;
-  avatar: any;
   orgId: number;
   constructor(
     private fb: FormBuilder,
@@ -29,11 +28,6 @@ export class OrgFormComponent implements OnInit, OnChanges {
     this.activatedRoute.data.subscribe(({ organization }) => {
       if (organization) {
         this.orgModel = organization;
-        if (this.orgModel.avatar) {
-          this.appService.getImageById(this.orgModel.avatar).then((res) => {
-            this.avatar = res;
-          });
-        }
         this.rebuildForm();
       }
     });
@@ -52,7 +46,6 @@ export class OrgFormComponent implements OnInit, OnChanges {
   createForm() {
     this.orgForm = this.fb.group({
       name: ['', [Validators.required]],
-      avatar: ['']
     });
   }
 
@@ -62,7 +55,6 @@ export class OrgFormComponent implements OnInit, OnChanges {
   rebuildForm() {
     this.orgForm.reset({
       name: this.orgModel.name,
-      avatar: this.orgModel.avatar
     });
   }
 
@@ -82,7 +74,6 @@ export class OrgFormComponent implements OnInit, OnChanges {
     this.orgModel = contact.value;
     if (this.fileToUpload) {
       this.appService.upload(this.fileToUpload).subscribe((fileId) => {
-        this.orgModel.avatar = +fileId;
         this.createOrUpdateOrg(this.orgModel);
       });
     } else {

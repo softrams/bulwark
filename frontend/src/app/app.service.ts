@@ -30,24 +30,7 @@ export class AppService {
       .get(`${this.api}/organization`)
       .toPromise()
       .then(async (res) => {
-        const orgs: any = res;
-        let count = 0;
-        for (const org of orgs) {
-          if (org.avatar && org.avatar.buffer) {
-            await this.http
-              .get(`${this.api}/file/${org.avatar.id}`, httpOptions)
-              .toPromise()
-              .then(async (blob: Blob) => {
-                org.imgUrl = this.createObjectUrl(blob, org.avatar.mimetype);
-                count++;
-              });
-          } else {
-            count++;
-          }
-        }
-        if (count === orgs.length) {
-          return orgs;
-        }
+        return res;
       });
   }
 
@@ -63,24 +46,7 @@ export class AppService {
       .get(`${this.api}/organization/archive`)
       .toPromise()
       .then(async (res) => {
-        const orgs: any = res;
-        let count = 0;
-        for (const org of orgs) {
-          if (org.avatar && org.avatar.buffer) {
-            await this.http
-              .get(`${this.api}/file/${org.avatar.id}`, httpOptions)
-              .toPromise()
-              .then(async (blob: Blob) => {
-                org.imgUrl = this.createObjectUrl(blob, org.avatar.mimetype);
-                count++;
-              });
-          } else {
-            count++;
-          }
-        }
-        if (count === orgs.length) {
-          return orgs;
-        }
+        return res;
       });
   }
 
