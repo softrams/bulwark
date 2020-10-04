@@ -4,7 +4,7 @@
       <tr>
         <th pSortableColumn="id">Organization ID<p-sortIcon field="id"></p-sortIcon>
         </th>
-        <th pSortableColumn="id">Name<p-sortIcon field="name"></p-sortIcon>
+        <th pSortableColumn="id">Organization Name<p-sortIcon field="name"></p-sortIcon>
         </th>
         <th></th>
       </tr>
@@ -17,6 +17,7 @@
           <input pInputText type="text" (input)="orgTable.filter($event.target.value, 'name', 'startsWith')"
             placeholder="Search by Name" class="p-column-filter">
         </th>
+        <th></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-org>

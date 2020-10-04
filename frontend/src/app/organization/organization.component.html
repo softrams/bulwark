@@ -1,9 +1,8 @@
 <div class="container-fluid">
-  <h4 *ngIf="!assetAry.length">The organization {{ org?.name }} does not have any assets.</h4>
   <p-table #dt [value]="assetAry" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="id">Organization ID<p-sortIcon field="id"></p-sortIcon>
+        <th pSortableColumn="id">Asset ID<p-sortIcon field="id"></p-sortIcon>
         </th>
         <th pSortableColumn="name">Asset Name<p-sortIcon field="name"></p-sortIcon>
         </th>
