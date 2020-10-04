@@ -1,7 +1,5 @@
 <div class="container-fluid">
-  <p-table #assessmentTable [value]="assessmentAry" [columns]="cols" [paginator]="true" [rows]="10"
-    styleClass="p-datatable-striped"
-    [globalFilterFields]="['testers']">
+  <p-table #assessmentTable [value]="assessmentAry" [columns]="cols" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
 
     <ng-template pTemplate="header" let-columns>
       <tr>
