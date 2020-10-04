@@ -1,11 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FilterUtils } from 'primeng/utils';
 import { AppService } from '../app.service';
 import { AlertService } from '../alert/alert.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Assessment } from '../assessment-form/Assessment';
 import { Table } from 'primeng/table';
-import { UserService } from '../user.service';
 import { User } from '../interfaces/User';
+import { UserService } from '../user.service';
+
+// User decorated with compound name field
+interface FormattedUser extends User {
+  name: string;
+}
 
 @Component({
   selector: 'app-assessments',
@@ -16,28 +22,69 @@ export class AssessmentsComponent implements OnInit {
   assessmentAry: any = [];
   assetId: number;
   orgId: number;
-  testers: User[];
+  testers: FormattedUser[];
   @ViewChild('assessmentTable') table: Table;
+
+  cols = [
+    {
+      field: 'id',
+      filterMatchMode: 'contains',
+      header: 'Assessment ID',
+    },
+    {
+      field: 'name',
+      filterMatchMode: 'contains',
+      header: 'Assessment Name',
+    },
+    {
+      field: 'testers',
+      filterMatchMode: 'arrayCompare',
+      header: 'Testers',
+    },
+    {
+      field: 'jiraId',
+      filterMatchMode: 'contains',
+      header: 'Jira ID',
+    },
+    {
+      field: 'startDate',
+      filterMatchMode: 'equals',
+      header: 'Start Date',
+    },
+    {
+      field: 'startDate',
+      filterMatchMode: 'equals',
+      header: 'End Date',
+    },
+  ];
 
   constructor(
     public activatedRoute: ActivatedRoute,
     public router: Router,
     public appService: AppService,
     public alertService: AlertService,
-    public userService: UserService
+    public userService: UserService,
   ) {}
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(
-      ({ assessments }) => (this.assessmentAry = assessments)
+      ({assessments}) => {
+        this.assessmentAry = assessments;
+      },
     );
     this.activatedRoute.params.subscribe((params) => {
       this.assetId = params.assetId;
       this.orgId = params.orgId;
     });
     this.userService.getUsers().subscribe((testers) => {
-      this.testers = testers;
+      // add a composite 'name' field to the Testers to display in MultiSelect
+      this.testers = testers.map((tester) => ({
+        ...tester,
+        name: this.formatName(tester),
+      }));
     });
+
+    this.addArrayCompareTableFilter();
   }
 
   /**
@@ -97,11 +144,6 @@ export class AssessmentsComponent implements OnInit {
     }
   }
 
-  onTesterChange(event) {
-    const selectedTesterAry = event.value.map((x) => x.id);
-    this.table.filter(selectedTesterAry, 'testers', 'in');
-  }
-
   onDateSelect(value, type) {
     const date = new Date(value);
     date.setUTCHours(0, 0, 0, 0);
@@ -110,5 +152,24 @@ export class AssessmentsComponent implements OnInit {
     } else if (type === 'endDate') {
       this.table.filter(date.toISOString(), 'endDate', 'equals');
     }
+  }
+
+  /**
+   * Create custom table filter "matchMode" to compare multiselect filter array values to array of values in a table row field
+   */
+  private addArrayCompareTableFilter() {
+    // @ts-ignore-next-line
+    FilterUtils.arrayCompare = (values: User[], selections: FormattedUser[]) => {
+      return values.some((value) => {
+        return !!selections.some((selection) => selection.name === this.formatName(value));
+      });
+    };
+  }
+
+  /**
+   * Format composite name from first and last name fields
+   */
+  private formatName(user) {
+    return `${user.firstName} ${user.lastName}`;
   }
 }
