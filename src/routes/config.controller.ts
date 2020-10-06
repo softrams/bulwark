@@ -1,18 +1,30 @@
 import { getConnection } from 'typeorm';
 import { Response, Request } from 'express';
 import { Config } from '../entity/Config';
+import { User } from '../entity/User';
 import { encrypt } from '../utilities/crypto.utility';
 import { validate } from 'class-validator';
+import { generateHash } from '../utilities/password.utility';
 
 export const initialInsert = async () => {
   const configAry = await getConnection().getRepository(Config).find({});
+  const usrAry = await getConnection().getRepository(User).find({});
   if (!configAry.length) {
     const initialConfig = new Config();
     initialConfig.companyName = null;
     initialConfig.fromEmail = null;
     initialConfig.fromEmailPassword = null;
     await getConnection().getRepository(Config).save(initialConfig);
-    return;
+  }
+  if (!usrAry.length) {
+    const initialUser = new User();
+    initialUser.active = true;
+    initialUser.email = 'admin@bulwark.com';
+    initialUser.firstName = 'Master';
+    initialUser.lastName = 'Chief';
+    initialUser.title = 'Spartan 117';
+    initialUser.password = await generateHash('changeMe');
+    await getConnection().getRepository(User).save(initialUser);
   }
 };
 
