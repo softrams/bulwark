@@ -151,15 +151,14 @@ $ npm run migration:run
 
 _This command should be run with every new database migration_
 
-## Insert First User
+## Default credentials
 
-1. Insert the first user by running the following command with the required arguments. Example:
+An account is created on initial startup with the following credentials:
 
-```
-$ node dist/init/seed-user.js --firstName=John --lastName=OneOneSeven --email=spartan117@unsc.com --title='Master Chief Petty Officer' --password=blueTeam
-```
+- email: `admin@bulwark.com`
+- password: `changeMe`
 
-2. Start the server and login to Bulwark with the newly created user
+Upon first login, update the default user password under the profile section.
 
 ## Built With
 

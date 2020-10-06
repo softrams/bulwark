@@ -3,6 +3,8 @@ import * as configController from './config.controller';
 import { Config } from '../entity/Config';
 import MockExpressResponse = require('mock-express-response');
 import MockExpressRequest = require('mock-express-request');
+import { User } from '../entity/User';
+import { compare } from '../utilities/password.utility';
 
 describe('config controller', () => {
   beforeEach(() => {
@@ -10,7 +12,7 @@ describe('config controller', () => {
       type: 'sqlite',
       database: ':memory:',
       dropSchema: true,
-      entities: [Config],
+      entities: [Config, User],
       synchronize: true,
       logging: false
     });
@@ -21,6 +23,17 @@ describe('config controller', () => {
   });
   test('initalize config', async () => {
     await configController.initialInsert();
+    const userAry = await getConnection().getRepository(User).find({});
+    const configAry = await getConnection().getRepository(Config).find({});
+    expect(userAry.length).toBe(1);
+    expect(configAry.length).toBe(1);
+    expect(userAry[0].firstName).toBe('Master');
+    expect(userAry[0].lastName).toBe('Chief');
+    expect(userAry[0].email).toBe('admin@bulwark.com');
+    expect(userAry[0].title).toBe('Spartan 117');
+    expect(userAry[0].active).toBeTruthy();
+    const initUsrPw = userAry[0].password;
+    expect(compare('changeMe', initUsrPw)).toBeTruthy();
   });
   test('save configuration success', async () => {
     const config = new Config();
