@@ -19,6 +19,8 @@
     "migration:generate": "typeorm migration:generate -n Refactor && rimraf dist && tsc",
     "migration:create": "typeorm migration:create -n newInit && rimraf dist && tsc",
     "migration:revert": "typeorm migration:revert",
+    "tsc": "rimraf dist && tsc && npm start",
+    "docker": "rimraf dist && tsc && cd frontend && npm run-script build --aot --prod",
     "lint": "tslint --project . && cd frontend && npm run-script lint",
     "lint:fix": "tslint --fix --project . && cd frontend && npm run-script lint --fix=true",
     "release": "standard-version",

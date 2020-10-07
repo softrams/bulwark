@@ -1,0 +1,57 @@
+version: '3.8'
+services:
+  bulwark:
+    image: skewled/bulwark:6.0.0
+    container_name: bulwark
+    depends_on:
+      - bulwark-db
+    networks:
+      static-network:
+        ipv4_address: 172.16.16.2
+    ports:
+      - '5000:5000'
+    expose:
+      - '5000'
+    stop_grace_period: 1m
+    volumes:
+      - bulwark-temp:/bulwark/src/temp:rw
+    command: >
+      sh -c "
+      until mysql --host=172.16.16.3 --user=root --password=bulwark --database=mysql -e 'SELECT user FROM user;'; do
+        >&2 echo MySQL is unavailable - sleeping
+        sleep 1
+      done
+      && echo MySQL should be up - starting up Bulwark.
+      && echo Initial DB Creation
+      && npm run migration:init
+      && npm run migration:run
+      && npm run start"
+
+  bulwark-db:
+    image: mysql:5.7.31
+    container_name: bulwark_db
+    environment:
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+    networks:
+      static-network:
+        ipv4_address: 172.16.16.3
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - bulwark-db:/var/lib/mysql:rw
+    restart: always
+
+volumes:
+  bulwark-db:
+  bulwark-temp:
+
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 172.16.16.0/16

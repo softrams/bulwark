@@ -21,7 +21,7 @@ export const generateReport = async (req: UserRequest, res: Response) => {
       : `${process.env.DEV_URL}/#/organization/${req.body.orgId}
           /asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report/puppeteer`;
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
   const page = await browser.newPage();
   const filePath = path.join(__dirname, '../temp/temp_report.pdf');
