@@ -14,6 +14,9 @@
 chrome-profiler-events.json
 speed-measure-plugin.json
 
+# database migrations
+/src/database/migration/*
+
 # IDEs and editors
 /.idea
 .project
