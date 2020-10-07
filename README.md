@@ -135,6 +135,43 @@ CRYPTO_SECRET=""
 CRYPTO_SALT=""
 ```
 
+## Example Docker .env
+
+Leave the DB\_ variables alone as they're required, and update the JWT_KEY, JWT_REFRESH_KEY, CRYPT_SECRET, and CRYPT_SALT. You may update all of them if you
+know what you're doing.
+
+```
+DB_PASSWORD="bulwark"
+DB_URL="172.16.16.3"
+DB_USERNAME="bulwark"
+DB_PORT=3306
+DB_NAME="bulwark"
+DB_TYPE="mysql"
+NODE_ENV="production"
+DEV_URL="http://localhost:4200"
+PROD_URL="http://localhost:5000"
+JWT_KEY="UY5614f$NAFB2pI"
+JWT_REFRESH_KEY="U42U2K432IU52"
+CRYPTO_SECRET="as9df86as9d6f9asf86498g698sd6f9s8g5s95hr"
+CRYPTO_SALT="as29fzx98cv6a9sb5w9b59cxbc5957wb9w5wr957w5b"
+```
+
+### Docker Launch
+
+You will need to save the contents above in a `.env` file before you use docker-compose.
+
+To Start Bulwark:
+
+```
+docker-compose up -d
+```
+
+To Stop Bulwark:
+
+```
+docker-compose down
+```
+
 ## Create Initial Database Migration
 
 1. Create the initial database migration
@@ -155,7 +192,7 @@ _This command should be run with every new database migration_
 
 An account is created on initial startup with the following credentials:
 
-- email: `admin@bulwark.com`
+- email: `admin@example.com`
 - password: `changeMe`
 
 Upon first login, update the default user password under the profile section.
