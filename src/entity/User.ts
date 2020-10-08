@@ -11,6 +11,11 @@ export class User {
   })
   @IsEmail()
   email: string;
+  @Column({
+    nullable: true
+  })
+  @IsEmail()
+  newEmail: string;
   @dynamicNullable()
   password: string;
   @Column()

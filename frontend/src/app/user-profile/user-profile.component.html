@@ -44,6 +44,32 @@
       <div class="card-body">
         <div class="row">
           <div class="col-md-12">
+            <h4>Contact Information</h4>
+            <hr />
+          </div>
+        </div>
+        <div id="formContent">
+          <form [formGroup]="emailForm" (ngSubmit)="onSubmit(emailForm)" id="emailForm">
+            <div class="col-md-12">
+              <div class="form-group row">
+                <label for="email" class="col-4 col-form-label">Email:</label>
+                <div class="col-8">
+                  <input formControlName="email" type="email" id="email" class="form-control" name="email"
+                    placeholder="Email" style="margin-bottom: 5px;" />
+                </div>
+              </div>
+              <input [disabled]="isEmailEdit ? !emailForm.valid : false" type="submit"
+                class="btn btn-primary float-right" [value]="isEmailEdit ? 'Update' : 'Edit'" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
             <h4>Security</h4>
             <hr />
           </div>

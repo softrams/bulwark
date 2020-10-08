@@ -1,7 +1,7 @@
 import { UserRequest } from '../interfaces/user-request.interface';
 import { getConnection } from 'typeorm';
 import { User } from '../entity/User';
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { validate } from 'class-validator';
 import { passwordRequirement } from '../enums/message-enum';
@@ -14,7 +14,7 @@ import { Config } from '../entity/Config';
  * @param {Response} res
  * @returns success message
  */
-const register = async (req: UserRequest, res: Response) => {
+export const register = async (req: Request, res: Response) => {
   const { firstName, lastName, title, password, confirmPassword, uuid } = req.body;
   if (!firstName || !lastName || !title) {
     return res.status(400).json('Invalid registration form');
@@ -39,7 +39,7 @@ const register = async (req: UserRequest, res: Response) => {
     user.firstName = firstName;
     user.lastName = lastName;
     user.title = title;
-    const errors = await validate(user);
+    const errors = await validate(user, { skipMissingProperties: true });
     if (errors.length > 0) {
       return res.status(400).json('Invalid registration form');
     } else {
@@ -58,7 +58,7 @@ const register = async (req: UserRequest, res: Response) => {
  * @param {Response} res
  * @returns success message
  */
-const invite = async (req: UserRequest, res: Response) => {
+export const invite = async (req: Request, res: Response) => {
   const config = await getConnection().getRepository(Config).findOne(1);
   if (!config.fromEmail || !config.fromEmailPassword) {
     return res
@@ -88,7 +88,7 @@ const invite = async (req: UserRequest, res: Response) => {
  * @param {Response} res
  * @returns Success message
  */
-const verify = async (req: UserRequest, res: Response) => {
+export const verify = async (req: Request, res: Response) => {
   if (req.params.uuid) {
     const user = await getConnection()
       .getRepository(User)
@@ -111,7 +111,7 @@ const verify = async (req: UserRequest, res: Response) => {
  * @param {Response} res
  * @returns Success message
  */
-const updateUserPassword = async (req: UserRequest, res: Response) => {
+export const updateUserPassword = async (req: UserRequest, res: Response) => {
   const { oldPassword, newPassword, confirmNewPassword } = req.body;
   if (newPassword !== confirmNewPassword) {
     return res.status(400).json('Passwords do not match');
@@ -143,7 +143,7 @@ const updateUserPassword = async (req: UserRequest, res: Response) => {
  * @param {Response} res
  * @returns Success message
  */
-const patch = async (req: UserRequest, res: Response) => {
+export const patch = async (req: UserRequest, res: Response) => {
   const { firstName, lastName, title } = req.body;
   const user = await getConnection().getRepository(User).findOne(req.user);
   if (firstName) {
@@ -156,7 +156,7 @@ const patch = async (req: UserRequest, res: Response) => {
     user.title = title;
   }
   user.uuid = null;
-  const errors = await validate(user);
+  const errors = await validate(user, { skipMissingProperties: true });
   if (errors.length > 0) {
     return res.status(400).json(errors);
   } else {
@@ -170,7 +170,7 @@ const patch = async (req: UserRequest, res: Response) => {
  * @param {Response} res
  * @returns User
  */
-const getUser = async (req: UserRequest, res: Response) => {
+export const getUser = async (req: UserRequest, res: Response) => {
   const user = await getConnection().getRepository(User).findOne(req.user);
   if (!user) return res.status(404).json('User not found');
   delete user.active;
@@ -185,7 +185,7 @@ const getUser = async (req: UserRequest, res: Response) => {
  * @param {Response} res
  * @returns user array
  */
-const getUsers = async (req: UserRequest, res: Response) => {
+export const getUsers = async (req: Request, res: Response) => {
   const users = await getConnection()
     .getRepository(User)
     .createQueryBuilder('user')
@@ -200,7 +200,7 @@ const getUsers = async (req: UserRequest, res: Response) => {
  * @param {Response} res
  * @returns User array
  */
-const getUsersById = async (userIds: number[]) => {
+export const getUsersById = async (userIds: number[]) => {
   const userArray: User[] = [];
   for (const iterator of userIds) {
     const user = await getConnection().getRepository(User).findOne(iterator);
@@ -209,14 +209,4 @@ const getUsersById = async (userIds: number[]) => {
     }
   }
   return userArray;
-};
-module.exports = {
-  verify,
-  updateUserPassword,
-  invite,
-  register,
-  patch,
-  getUser,
-  getUsers,
-  getUsersById
 };

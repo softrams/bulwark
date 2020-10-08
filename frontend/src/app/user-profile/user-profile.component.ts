@@ -14,8 +14,10 @@ import { UserService } from '../user.service';
 export class UserProfileComponent implements OnInit {
   userForm: FormGroup;
   securityForm: FormGroup;
+  emailForm: FormGroup;
   isEdit = false;
   isSecurityEdit = false;
+  isEmailEdit = false;
   user: User;
   constructor(
     private fb: FormBuilder,
@@ -55,6 +57,9 @@ export class UserProfileComponent implements OnInit {
         Validators.required,
       ],
     });
+    this.emailForm = this.fb.group({
+      email: [{ value: '', disabled: !this.isEmailEdit }, Validators.required],
+    });
   }
 
   rebuildForm() {
@@ -73,6 +78,9 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  rebuildEmailForm() {
+    this.emailForm.reset({});
+  }
   onSubmit(form: FormGroup) {
     if (!this.isEdit) {
       this.isEdit = true;
@@ -108,6 +116,15 @@ export class UserProfileComponent implements OnInit {
           this.securityForm.disable();
           this.securityForm.reset();
         });
+    }
+  }
+
+  onEmailFormSubmit(form: FormGroup) {
+    if (!this.isEmailEdit) {
+      this.isEmailEdit = true;
+      this.emailForm.enable();
+    } else {
+      // this.authService.updateUserEmail
     }
   }
 }

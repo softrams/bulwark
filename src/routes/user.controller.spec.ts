@@ -1,9 +1,11 @@
 import { createConnection, getConnection, Entity, getRepository } from 'typeorm';
-const userController = require('./user.controller');
+import * as userController from './user.controller';
 import { User } from '../entity/User';
 import { v4 as uuidv4 } from 'uuid';
 import { generateHash } from '../utilities/password.utility';
 import { Config } from '../entity/Config';
+import MockExpressResponse = require('mock-express-response');
+import MockExpressRequest = require('mock-express-request');
 describe('User Controller', () => {
   // Mocks the Request Object that is returned
   const mockRequest = () => {
@@ -46,13 +48,13 @@ describe('User Controller', () => {
     config.fromEmailPassword = null;
     config.id = 1;
     await getConnection().getRepository(Config).insert(config);
-    const req = mockRequest();
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
     req.body = {
       email: 'testing@jest.com'
     };
-    const res = mockResponse();
     await userController.invite(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.statusCode).toBe(400);
   });
   test('invite user failure missing email', async () => {
     const config = new Config();
@@ -61,11 +63,11 @@ describe('User Controller', () => {
     config.fromEmailPassword = null;
     config.id = 1;
     await getConnection().getRepository(Config).insert(config);
-    const req = mockRequest();
+    const req = new MockExpressRequest();
     req.body = {};
-    const res = mockResponse();
+    const res = new MockExpressResponse();
     await userController.invite(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.statusCode).toBe(400);
   });
   test('invite user failure user already exists', async () => {
     const config = new Config();
@@ -74,11 +76,11 @@ describe('User Controller', () => {
     config.fromEmailPassword = null;
     config.id = 1;
     await getConnection().getRepository(Config).insert(config);
-    const req = mockRequest();
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
     req.body = {
       email: 'testing@jest.com'
     };
-    const res = mockResponse();
     const existUser = new User();
     existUser.firstName = 'master';
     existUser.lastName = 'chief';
@@ -86,46 +88,46 @@ describe('User Controller', () => {
     existUser.active = true;
     await getConnection().getRepository(User).insert(existUser);
     await userController.invite(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.statusCode).toBe(400);
   });
   test('register user failure missing first name', async () => {
-    const req = mockRequest();
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
     req.body = {
       email: 'testing@jest.com',
       title: 'Spartan 117',
       lastName: 'Chief',
       password: 'notSecure123'
     };
-    const res = mockResponse();
     await userController.register(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.statusCode).toBe(400);
   });
   test('register user failure missing last name', async () => {
-    const req = mockRequest();
+    const req = new MockExpressRequest();
     req.body = {
       email: 'testing@jest.com',
       title: 'Spartan 117',
       firstName: 'Master',
       password: 'notSecure123'
     };
-    const res = mockResponse();
+    const res = new MockExpressResponse();
     await userController.register(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.statusCode).toBe(400);
   });
   test('register user failure missing title', async () => {
-    const req = mockRequest();
+    const req = new MockExpressRequest();
     req.body = {
       email: 'testing@jest.com',
       lastName: 'Chief',
       firstName: 'Master',
       password: 'notSecure123'
     };
-    const res = mockResponse();
+    const res = new MockExpressResponse();
     await userController.register(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.statusCode).toBe(400);
   });
   test('register user failure passwords do not match', async () => {
-    const req = mockRequest();
+    const req = new MockExpressRequest();
     req.body = {
       email: 'testing@jest.com',
       lastName: 'Chief',
@@ -134,12 +136,12 @@ describe('User Controller', () => {
       confirmPassword: 'notSecureAbc',
       title: 'Spartan 117'
     };
-    const res = mockResponse();
+    const res = new MockExpressResponse();
     await userController.register(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.statusCode).toBe(400);
   });
   test('register user failure password validation', async () => {
-    const req = mockRequest();
+    const req = new MockExpressRequest();
     req.body = {
       email: 'testing@jest.com',
       lastName: 'Chief',
@@ -148,9 +150,9 @@ describe('User Controller', () => {
       confirmPassword: '123',
       title: 'Spartan 117'
     };
-    const res = mockResponse();
+    const res = new MockExpressResponse();
     await userController.register(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.statusCode).toBe(400);
   });
   test('register user success', async () => {
     const config = new Config();
@@ -162,14 +164,15 @@ describe('User Controller', () => {
     user.active = false;
     user.uuid = uuidv4();
     user.email = 'testing@jest.com';
+    user.newEmail = null;
     await getConnection().getRepository(User).save(user);
     await getConnection().getRepository(Config).insert(config);
-    const req = mockRequest();
-    const invReq = mockRequest();
+    const req = new MockExpressRequest();
+    const invReq = new MockExpressRequest();
     invReq.body = {
       email: 'testing@jest.com'
     };
-    const res = mockResponse();
+    const res = new MockExpressResponse();
     await userController.invite(invReq, res);
     const invUser = await getConnection()
       .getRepository(User)
@@ -183,8 +186,9 @@ describe('User Controller', () => {
       title: 'Spartan 117',
       uuid: invUser[0].uuid
     };
-    await userController.register(req, res);
-    expect(res.status).toHaveBeenCalledWith(200);
+    const res2 = new MockExpressResponse();
+    await userController.register(req, res2);
+    expect(res2.statusCode).toBe(200);
   });
   test('verify user failure no uuid', async () => {
     const mRequest = () => {
@@ -195,14 +199,14 @@ describe('User Controller', () => {
       req.user = jest.fn().mockReturnValue(req);
       return req;
     };
-    const vReq = mRequest();
-    const res = mockResponse();
+    const vReq = new MockExpressRequest();
+    const res = new MockExpressResponse();
     vReq.params = {};
     await userController.verify(vReq, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.statusCode).toBe(400);
   });
   test('verify user success', async () => {
-    const res = mockResponse();
+    const res = new MockExpressResponse();
     const mRequest = () => {
       const r = {
         params: {},
@@ -219,15 +223,15 @@ describe('User Controller', () => {
     const uuid = uuidv4();
     existUser.uuid = uuid;
     await getConnection().getRepository(User).insert(existUser);
-    const verifyReq = mRequest();
+    const verifyReq = new MockExpressRequest();
     verifyReq.params = {
       uuid
     };
     await userController.verify(verifyReq, res);
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.statusCode).toBe(200);
   });
   test('verify user failure user does not exist', async () => {
-    const res = mockResponse();
+    const res = new MockExpressResponse();
     const mRequest = () => {
       const r = {
         params: {},
@@ -244,50 +248,50 @@ describe('User Controller', () => {
     const uuid = uuidv4();
     existUser.uuid = uuid;
     await getConnection().getRepository(User).insert(existUser);
-    const verifyReq = mRequest();
+    const verifyReq = new MockExpressRequest();
     const uuid2 = uuidv4();
     verifyReq.params = {
       uuid: uuid2
     };
     await userController.verify(verifyReq, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.statusCode).toBe(400);
   });
   test('Update user password failure passwords do not match', async () => {
-    const req = mockRequest();
-    const res = mockResponse();
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
     req.body = {
       oldPassword: 'fakePassword',
       newPassword: 'fakePassword2',
       confirmNewPassword: 'fakePasswordDifferent'
     };
     await userController.updateUserPassword(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.statusCode).toBe(400);
   });
   test('Update user password failure same password', async () => {
-    const req = mockRequest();
-    const res = mockResponse();
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
     req.body = {
       oldPassword: 'fakePassword',
       newPassword: 'fakePassword',
       confirmNewPassword: 'fakePassword'
     };
     await userController.updateUserPassword(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.statusCode).toBe(400);
   });
   test('Update user password failure password validation', async () => {
-    const req = mockRequest();
-    const res = mockResponse();
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
     req.body = {
       oldPassword: '123',
       newPassword: '234',
       confirmNewPassword: '234'
     };
     await userController.updateUserPassword(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.statusCode).toBe(400);
   });
   test('Update user password success', async () => {
-    const req = mockRequest();
-    const res = mockResponse();
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
     req.body = {
       oldPassword: 'TangoDown123!!!',
       newPassword: '9z4O4^HSvHkt3iU',
@@ -304,11 +308,11 @@ describe('User Controller', () => {
     const userr = await getConnection().getRepository(User).insert(existUser);
     req.user = userr.identifiers[0].id;
     await userController.updateUserPassword(req, res);
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.statusCode).toBe(200);
   });
   test('Update user failure user does not exist', async () => {
-    const req = mockRequest();
-    const res = mockResponse();
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
     req.body = {
       oldPassword: 'TangoDown123!!!',
       newPassword: '9z4O4^HSvHkt3iU',
@@ -327,11 +331,11 @@ describe('User Controller', () => {
     const x: any = 2;
     req.user = x;
     await userController.updateUserPassword(req, res);
-    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.statusCode).toBe(400);
   });
   test('patch user success', async () => {
-    const req = mockRequest();
-    const res = mockResponse();
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
     req.body = {
       firstName: 'Master',
       lastName: 'Chief',
@@ -346,14 +350,15 @@ describe('User Controller', () => {
     const uuid = uuidv4();
     existUser.uuid = uuid;
     existUser.password = await generateHash('TangoDown123!!!');
+    existUser.newEmail = null;
     const userr = await getConnection().getRepository(User).insert(existUser);
     req.user = userr.identifiers[0].id;
     await userController.patch(req, res);
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.statusCode).toBe(200);
   });
   test('get user failure user does not exist', async () => {
-    const req = mockRequest();
-    const res = mockResponse();
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
     const existUser = new User();
     existUser.firstName = 'Cortana';
     existUser.lastName = 'AI';
@@ -367,11 +372,11 @@ describe('User Controller', () => {
     const x: any = 2;
     req.user = x;
     await userController.getUser(req, res);
-    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.statusCode).toBe(404);
   });
   test('get user success', async () => {
-    const req = mockRequest();
-    const res = mockResponse();
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
     const existUser = new User();
     existUser.firstName = 'Cortana';
     existUser.lastName = 'AI';
@@ -384,17 +389,17 @@ describe('User Controller', () => {
     const userr = await getConnection().getRepository(User).insert(existUser);
     req.user = userr.identifiers[0].id;
     await userController.getUser(req, res);
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.statusCode).toBe(200);
   });
   test('get users success', async () => {
-    const req = mockRequest();
-    const res = mockResponse();
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
     await userController.getUsers(req, res);
-    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.statusCode).toBe(200);
   });
   test('get users by id success', async () => {
-    const req = mockRequest();
-    const res = mockResponse();
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
     const user1 = new User();
     user1.firstName = 'Cortana';
     user1.lastName = 'AI';
