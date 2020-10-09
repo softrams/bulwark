@@ -2,6 +2,7 @@ import nodemailer = require('nodemailer');
 import { getConnection } from 'typeorm';
 import { Config } from '../entity/Config';
 import { decrypt } from '../utilities/crypto.utility';
+import { User } from '../entity/User';
 
 /**
  * @description Send email
@@ -101,6 +102,27 @@ export const sendInvitationEmail = (uuid, userEmail) => {
       console.error(err);
     } else {
       return info;
+    }
+  });
+};
+
+/**
+ * @description Prepare invitation email
+ * @param {string} uuid
+ * @returns string
+ */
+export const sendUpdateUserEmail = (user: User, callback) => {
+  const mailOptions = {
+    from: process.env.FROM_EMAIL,
+    subject: 'Bulwark - Email update request',
+    text: `An email update has been requested for Bulwark.  Please click the link to confirm this update. ${process.env.PROD_URL}/#/register/${user.uuid}`,
+    to: user.newEmail
+  };
+  sendEmail(mailOptions, (err, info) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, info);
     }
   });
 };

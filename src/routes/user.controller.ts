@@ -210,3 +210,40 @@ export const getUsersById = async (userIds: number[]) => {
   }
   return userArray;
 };
+/**
+ * @description Send email update request
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns string
+ */
+export const updateUserEmail = async (req: UserRequest, res: Response) => {
+  const email = req.body.email;
+  if (!email) {
+    return res.status(400).json('Email is invalid');
+  }
+  const user = await getConnection().getRepository(User).findOne(req.user);
+  const emails = await getConnection()
+    .getRepository(User)
+    .find({ select: ['email'] });
+  const existingEmails = emails.map((x) => x.email);
+  if (existingEmails.includes(email)) {
+    return res.status(400).json('Email is already taken');
+  }
+  user.uuid = uuidv4();
+  user.newEmail = email;
+  const errors = await validate(user);
+  if (errors.length > 0) {
+    return res.status(400).json('Email is invalid');
+  } else {
+    await getConnection().getRepository(User).save(user);
+    emailService.sendUpdateUserEmail(user, (err, info) => {
+      if (err) {
+        return res
+          .status(400)
+          .json('There was a problem updating your email address.  Please contact an administrator for assistance.');
+      } else {
+        return res.status(200).json(`A confirmation email has been sent to ${user.newEmail}`);
+      }
+    });
+  }
+};

@@ -7,7 +7,7 @@ import { Tokens } from './interfaces/Tokens';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   api = environment.apiUrl;
   isLoggedIn = false;
@@ -54,8 +54,10 @@ export class AuthService {
     });
   }
 
-  updateUserEmail(newEmail: string) {
-
+  updateUserEmail(email: string) {
+    return this.http.post(`${this.api}/user/email`, {
+      email,
+    });
   }
 
   refreshSession() {

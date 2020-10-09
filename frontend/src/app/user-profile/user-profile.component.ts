@@ -34,6 +34,7 @@ export class UserProfileComponent implements OnInit {
       this.user = user;
       this.rebuildForm();
       this.rebuildSecurityForm();
+      this.rebuildEmailForm();
     });
   }
 
@@ -79,7 +80,9 @@ export class UserProfileComponent implements OnInit {
   }
 
   rebuildEmailForm() {
-    this.emailForm.reset({});
+    this.emailForm.reset({
+      email: this.user.email,
+    });
   }
   onSubmit(form: FormGroup) {
     if (!this.isEdit) {
@@ -124,7 +127,14 @@ export class UserProfileComponent implements OnInit {
       this.isEmailEdit = true;
       this.emailForm.enable();
     } else {
-      // this.authService.updateUserEmail
+      this.authService
+        .updateUserEmail(form.value.email)
+        .subscribe((res: string) => {
+          this.alertService.success(res);
+          this.isEmailEdit = false;
+          this.emailForm.disable();
+          this.emailForm.reset();
+        });
     }
   }
 }
