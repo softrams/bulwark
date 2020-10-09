@@ -426,4 +426,195 @@ describe('User Controller', () => {
     const retUserAry = await userController.getUsersById(usrIdAry);
     expect(retUserAry).toHaveLength(2);
   });
+  test('Update user email failure emails do not match', async () => {
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
+    req.body = {
+      email: '123',
+      newEmail: '234'
+    };
+    await userController.updateUserEmail(req, res);
+    expect(res.statusCode).toBe(400);
+  });
+  test('Update user email failure in progress email update request', async () => {
+    const user1 = new User();
+    user1.firstName = 'Cortana';
+    user1.lastName = 'AI';
+    user1.email = 'testing1@jest.com';
+    user1.newEmail = 'alreadySent@lol.com';
+    user1.title = 'A.I.';
+    user1.active = true;
+    const uuid = uuidv4();
+    user1.uuid = uuid;
+    user1.password = await generateHash('TangoDown123!!!');
+    const insUser1 = await getConnection().getRepository(User).insert(user1);
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
+    req.body = {
+      email: 'test@jest.com',
+      newEmail: 'test@jest.com'
+    };
+    req.user = 1;
+    await userController.updateUserEmail(req, res);
+    expect(res.statusCode).toBe(400);
+  });
+  test('Update user email failure email already exists', async () => {
+    const user1 = new User();
+    user1.firstName = 'Cortana';
+    user1.lastName = 'AI';
+    user1.email = 'testing1@jest.com';
+    user1.newEmail = '';
+    user1.title = 'A.I.';
+    user1.active = true;
+    const uuid = uuidv4();
+    user1.uuid = uuid;
+    user1.password = await generateHash('TangoDown123!!!');
+    const user2 = new User();
+    user2.firstName = 'Cortana';
+    user2.lastName = 'AI';
+    user2.email = 'testing2@jest.com';
+    user2.title = 'A.I.';
+    user2.active = true;
+    const uuid2 = uuidv4();
+    user2.uuid = uuid2;
+    user2.password = await generateHash('TangoDown123!!!');
+    const insUser1 = await getConnection().getRepository(User).insert(user1);
+    const insUser2 = await getConnection().getRepository(User).insert(user2);
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
+    req.body = {
+      email: 'testing2@jest.com',
+      newEmail: 'testing2@jest.com'
+    };
+    req.user = 1;
+    await userController.updateUserEmail(req, res);
+    expect(res.statusCode).toBe(400);
+  });
+  test('Update user email failure user entity email validation', async () => {
+    const user1 = new User();
+    user1.firstName = 'Cortana';
+    user1.lastName = 'AI';
+    user1.email = 'testing1@jest.com';
+    user1.newEmail = '';
+    user1.title = 'A.I.';
+    user1.active = true;
+    const uuid = uuidv4();
+    user1.uuid = uuid;
+    user1.password = await generateHash('TangoDown123!!!');
+    const insUser1 = await getConnection().getRepository(User).insert(user1);
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
+    req.body = {
+      email: 'test@',
+      newEmail: 'test@'
+    };
+    req.user = 1;
+    await userController.updateUserEmail(req, res);
+    expect(res.statusCode).toBe(400);
+  });
+  test('revoke email request success', async () => {
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
+    req.user = 1;
+    const user1 = new User();
+    user1.firstName = 'Cortana';
+    user1.lastName = 'AI';
+    user1.email = 'testing1@jest.com';
+    user1.newEmail = 'newEmailToBeRevoked@jest.com';
+    user1.title = 'A.I.';
+    user1.active = true;
+    const uuid = uuidv4();
+    user1.uuid = uuid;
+    user1.password = await generateHash('TangoDown123!!!');
+    const insUser1 = await getConnection().getRepository(User).insert(user1);
+    await userController.revokeEmailRequest(req, res);
+    const checkUser = await getConnection().getRepository(User).findOne(req.user);
+    expect(checkUser.uuid).toBeNull();
+    expect(checkUser.newEmail).toBeNull();
+    expect(res.statusCode).toBe(200);
+  });
+  test('revoke email request failure user does not exist', async () => {
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
+    req.user = 1;
+    await userController.revokeEmailRequest(req, res);
+    expect(res.statusCode).toBe(404);
+  });
+  test('validate email request failure missing uuid or password', async () => {
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
+    req.body = {
+      password: 'test',
+      uuid: ''
+    };
+    await userController.validateEmailRequest(req, res);
+    expect(res.statusCode).toBe(400);
+    const req2 = new MockExpressRequest();
+    const res2 = new MockExpressResponse();
+    req2.body = {
+      password: '',
+      uuid: 'test'
+    };
+    await userController.validateEmailRequest(req2, res2);
+    expect(res2.statusCode).toBe(400);
+  });
+  test('validate email request failure user does not exist', async () => {
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
+    const uuid = uuidv4();
+    req.body = {
+      password: 'test',
+      uuid
+    };
+    await userController.validateEmailRequest(req, res);
+    expect(res.statusCode).toBe(404);
+  });
+  test('validate email request failure invalid password', async () => {
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
+    const uuid = uuidv4();
+    req.body = {
+      password: 'test',
+      uuid
+    };
+    req.user = 1;
+    const user1 = new User();
+    user1.firstName = 'Cortana';
+    user1.lastName = 'AI';
+    user1.email = 'testing1@jest.com';
+    user1.newEmail = 'newEmailToBeRevoked@jest.com';
+    user1.title = 'A.I.';
+    user1.active = true;
+    user1.uuid = uuid;
+    user1.password = await generateHash('TangoDown123!!!');
+    const insUser1 = await getConnection().getRepository(User).insert(user1);
+    await userController.validateEmailRequest(req, res);
+    expect(res.statusCode).toBe(401);
+  });
+  test('validate email request success', async () => {
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
+    const uuid = uuidv4();
+    req.body = {
+      password: 'TangoDown123!!!',
+      uuid
+    };
+    req.user = 1;
+    const user1 = new User();
+    user1.firstName = 'Cortana';
+    user1.lastName = 'AI';
+    user1.email = 'testing1@jest.com';
+    user1.newEmail = 'newEmail@jest.com';
+    user1.title = 'A.I.';
+    user1.active = true;
+    user1.uuid = uuid;
+    user1.password = await generateHash('TangoDown123!!!');
+    const insUser1 = await getConnection().getRepository(User).insert(user1);
+    await userController.validateEmailRequest(req, res);
+    const checkUser = await getConnection().getRepository(User).findOne(req.user);
+    expect(checkUser.email).toBe('newEmail@jest.com');
+    expect(checkUser.newEmail).toBeNull();
+    expect(checkUser.uuid).toBeNull();
+    expect(res.statusCode).toBe(200);
+  });
 });

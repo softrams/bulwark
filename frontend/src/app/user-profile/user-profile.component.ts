@@ -59,7 +59,14 @@ export class UserProfileComponent implements OnInit {
       ],
     });
     this.emailForm = this.fb.group({
-      email: [{ value: '', disabled: !this.isEmailEdit }, Validators.required],
+      email: [
+        { value: '', disabled: !this.isEmailEdit },
+        [Validators.required, Validators.email],
+      ],
+      newEmail: [
+        { value: '', disabled: !this.isEmailEdit },
+        [Validators.required, Validators.email],
+      ],
     });
   }
 
@@ -82,6 +89,7 @@ export class UserProfileComponent implements OnInit {
   rebuildEmailForm() {
     this.emailForm.reset({
       email: this.user.email,
+      newEmail: '',
     });
   }
   onSubmit(form: FormGroup) {
@@ -125,16 +133,27 @@ export class UserProfileComponent implements OnInit {
   onEmailFormSubmit(form: FormGroup) {
     if (!this.isEmailEdit) {
       this.isEmailEdit = true;
+      this.emailForm.reset();
       this.emailForm.enable();
     } else {
       this.authService
-        .updateUserEmail(form.value.email)
+        .updateUserEmail(form.value.email, form.value.newEmail)
         .subscribe((res: string) => {
           this.alertService.success(res);
           this.isEmailEdit = false;
           this.emailForm.disable();
-          this.emailForm.reset();
+          this.rebuildEmailForm();
         });
     }
+  }
+
+  revokeUpdateEmailRequest() {
+    this.user.newEmail = '';
+    this.authService.revokeUserEmail().subscribe((res: string) => {
+      this.alertService.success(res);
+      this.isEmailEdit = false;
+      this.emailForm.disable();
+      this.rebuildEmailForm();
+    });
   }
 }

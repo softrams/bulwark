@@ -115,7 +115,7 @@ export const sendUpdateUserEmail = (user: User, callback) => {
   const mailOptions = {
     from: process.env.FROM_EMAIL,
     subject: 'Bulwark - Email update request',
-    text: `An email update has been requested for Bulwark.  Please click the link to confirm this update. ${process.env.PROD_URL}/#/register/${user.uuid}`,
+    text: `An email update has been requested for Bulwark.  Please click the link to confirm this update. ${process.env.PROD_URL}/#/email/validate/${user.uuid}`,
     to: user.newEmail
   };
   sendEmail(mailOptions, (err, info) => {

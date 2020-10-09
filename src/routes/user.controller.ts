@@ -5,7 +5,7 @@ import { Response, Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { validate } from 'class-validator';
 import { passwordRequirement } from '../enums/message-enum';
-import { generateHash, passwordSchema, updatePassword } from '../utilities/password.utility';
+import { compare, generateHash, passwordSchema, updatePassword } from '../utilities/password.utility';
 import * as emailService from '../services/email.service';
 import { Config } from '../entity/Config';
 /**
@@ -218,10 +218,16 @@ export const getUsersById = async (userIds: number[]) => {
  */
 export const updateUserEmail = async (req: UserRequest, res: Response) => {
   const email = req.body.email;
-  if (!email) {
-    return res.status(400).json('Email is invalid');
+  const newEmail = req.body.newEmail;
+  if (email !== newEmail) {
+    return res.status(400).json('The new email address and confirmation email address must match');
   }
   const user = await getConnection().getRepository(User).findOne(req.user);
+  if (user.newEmail) {
+    return res
+      .status(400)
+      .json('An email update request is already in progress. Please revoke this current request and try again.');
+  }
   const emails = await getConnection()
     .getRepository(User)
     .find({ select: ['email'] });
@@ -245,5 +251,48 @@ export const updateUserEmail = async (req: UserRequest, res: Response) => {
         return res.status(200).json(`A confirmation email has been sent to ${user.newEmail}`);
       }
     });
+  }
+};
+/**
+ * @description Revoke current email update request
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns string
+ */
+export const revokeEmailRequest = async (req: UserRequest, res: Response) => {
+  const user = await getConnection().getRepository(User).findOne(req.user);
+  if (!user || !user.newEmail) {
+    return res.status(404).json('An email update request for this user does not exist');
+  }
+  user.newEmail = null;
+  user.uuid = null;
+  await getConnection().getRepository(User).save(user);
+  return res.status(200).json('The email update request has been successfully revoked');
+};
+/**
+ * @description Validate current email update request
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns string
+ */
+export const validateEmailRequest = async (req: UserRequest, res: Response) => {
+  if (!req.body.password || !req.body.uuid) {
+    return res.status(400).json('The password or UUID is missing');
+  }
+  const user = await getConnection()
+    .getRepository(User)
+    .findOne({ where: { uuid: req.body.uuid } });
+  if (!user) {
+    return res.status(404).json('A user associated with this UUID does not exist');
+  }
+  const valid = await compare(req.body.password, user.password);
+  if (!valid) {
+    return res.status(401).json('The password is incorrect');
+  } else {
+    user.email = user.newEmail;
+    user.uuid = null;
+    user.newEmail = null;
+    await getConnection().getRepository(User).save(user);
+    return res.status(200).json('Your email has been successfully updated');
   }
 };

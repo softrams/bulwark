@@ -54,10 +54,15 @@ export class AuthService {
     });
   }
 
-  updateUserEmail(email: string) {
+  updateUserEmail(email: string, newEmail) {
     return this.http.post(`${this.api}/user/email`, {
       email,
+      newEmail,
     });
+  }
+
+  revokeUserEmail() {
+    return this.http.post(`${this.api}/user/email/revoke`, null);
   }
 
   refreshSession() {
