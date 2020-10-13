@@ -1,6 +1,6 @@
 {
   "name": "bulwark",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "description": "An organizational asset and vulnerability management tool",
   "main": "index.js",
   "scripts": {
