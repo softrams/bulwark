@@ -2,14 +2,24 @@ import * as express from 'express';
 import * as path from 'path';
 const fs = require('fs');
 const dotenv = require('dotenv');
-// https://github.com/motdotla/dotenv#what-happens-to-environment-variables-that-were-already-set
-const envConfig = dotenv.parse(fs.readFileSync(path.join(__dirname, '../.env')));
-if (envConfig) {
-  for (const key in envConfig) {
-    if (envConfig.hasOwnProperty(key)) {
-      process.env[key] = envConfig[key];
+if (fs.existsSync(path.join(__dirname, '../.env'))) {
+  const envPath = fs.readFileSync(path.join(__dirname, '../.env'));
+  // tslint:disable-next-line: no-console
+  console.log('A .env file has been found found and will now be parsed.');
+  // https://github.com/motdotla/dotenv#what-happens-to-environment-variables-that-were-already-set
+  const envConfig = dotenv.parse(envPath);
+  if (envConfig) {
+    for (const key in envConfig) {
+      if (envConfig.hasOwnProperty(key)) {
+        process.env[key] = envConfig[key];
+      }
     }
+    // tslint:disable-next-line: no-console
+    console.log('The provided .env file has been parsed successfully.');
   }
+} else {
+  // tslint:disable-next-line: no-console
+  console.info('A .env file was not found. Attempting to fetch values from existing environment variables.');
 }
 import * as bodyParser from 'body-parser';
 import { createConnection } from 'typeorm';

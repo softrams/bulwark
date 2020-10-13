@@ -141,8 +141,14 @@ Update the JWT_KEY, JWT_REFRESH_KEY, CRYPTO_SECRET, and CRYPTO_SALT. You may upd
 know what you're doing.
 
 ```
+MYSQL_DATABASE="bulwark"
+MYSQL_PASSWORD="bulwark"
+MYSQL_ROOT_PASSWORD="bulwark"
+MYSQL_USER="root"
+MYSQL_DB_CHECK="mysql"
 DB_PASSWORD="bulwark"
 DB_URL="172.16.16.3"
+DB_ROOT="root"
 DB_USERNAME="bulwark"
 DB_PORT=3306
 DB_NAME="bulwark"
@@ -150,10 +156,10 @@ DB_TYPE="mysql"
 NODE_ENV="production"
 DEV_URL="http://localhost:4200"
 PROD_URL="http://localhost:5000"
-JWT_KEY=""
-JWT_REFRESH_KEY=""
-CRYPTO_SECRET=""
-CRYPTO_SALT=""
+JWT_KEY="changeme"
+JWT_REFRESH_KEY="changeme"
+CRYPTO_SECRET="changeme"
+CRYPTO_SALT="changeme"
 ```
 
 ## Create Initial Database Migration
