@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   bulwark:
-    image: skewled/bulwark:6.0.0
+    image: softramsdocker/bulwark:6.0.0
     container_name: bulwark
     environment:
       MYSQL_USER: "${MYSQL_USER}"

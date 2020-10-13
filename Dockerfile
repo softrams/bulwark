@@ -1,4 +1,4 @@
-FROM softramsdocker/bulwark:6.0.0
+FROM skewled/bulwark-base:6.0.0
 
 # Environment Arguments for Bulwark
 ARG MYSQL_USER
