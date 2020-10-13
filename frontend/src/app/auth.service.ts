@@ -54,10 +54,17 @@ export class AuthService {
     });
   }
 
-  updateUserEmail(email: string, newEmail) {
+  updateUserEmail(email: string, newEmail: string) {
     return this.http.post(`${this.api}/user/email`, {
       email,
       newEmail,
+    });
+  }
+
+  validateUserEmailRequest(password: string, uuid: string) {
+    return this.http.post(`${this.api}/user/email/validate`, {
+      password,
+      uuid,
     });
   }
 

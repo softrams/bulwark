@@ -60,7 +60,7 @@ createConnection().then((_) => {
   app.post('/api/user/invite', jwtMiddleware.checkToken, userController.invite);
   app.post('/api/user/email', jwtMiddleware.checkToken, userController.updateUserEmail);
   app.post('/api/user/email/revoke', jwtMiddleware.checkToken, userController.revokeEmailRequest);
-  app.get('/api/user/email/validate/:uuid', userController.validateEmailRequest);
+  app.post('/api/user/email/validate', userController.validateEmailRequest);
   app.patch('/api/user', jwtMiddleware.checkToken, userController.patch);
   app.get('/api/user', jwtMiddleware.checkToken, userController.getUser);
   app.get('/api/users', jwtMiddleware.checkToken, userController.getUsers);

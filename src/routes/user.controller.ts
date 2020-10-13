@@ -287,7 +287,7 @@ export const validateEmailRequest = async (req: UserRequest, res: Response) => {
   }
   const valid = await compare(req.body.password, user.password);
   if (!valid) {
-    return res.status(401).json('The password is incorrect');
+    return res.status(400).json('The password is incorrect');
   } else {
     user.email = user.newEmail;
     user.uuid = null;

@@ -589,7 +589,7 @@ describe('User Controller', () => {
     user1.password = await generateHash('TangoDown123!!!');
     const insUser1 = await getConnection().getRepository(User).insert(user1);
     await userController.validateEmailRequest(req, res);
-    expect(res.statusCode).toBe(401);
+    expect(res.statusCode).toBe(400);
   });
   test('validate email request success', async () => {
     const req = new MockExpressRequest();
