@@ -2,20 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [6.0.5](https://github.com/softrams/bulwark/compare/v6.0.2...v6.0.5) (2020-10-13)
+### [6.0.3](https://github.com/softrams/bulwark/compare/v6.0.5...v6.0.3) (2020-10-13)
 
 
-### Others
+### Docs
 
-* **release:** 6.0.1 ([0fbf5c2](https://github.com/softrams/bulwark/commit/0fbf5c2b77e3cb045350d9eca757e26fbbc48377))
-* **release:** 6.0.3 ([b296c2b](https://github.com/softrams/bulwark/commit/b296c2b7529b8047cda3a5bbe14a74ceca996986))
+* **updated readme:** updated readme ([d9b19b5](https://github.com/softrams/bulwark/commit/d9b19b508fa705e94a5cd6cd26625ae7673c8cee))
 
 ### [6.0.1](https://github.com/softrams/bulwark/compare/v6.0.2...v6.0.1) (2020-10-13)
 
-
 ### Others
 
-* **release:** 6.0.3 ([b296c2b](https://github.com/softrams/bulwark/commit/b296c2b7529b8047cda3a5bbe14a74ceca996986))
+- **release:** 6.0.3 ([b296c2b](https://github.com/softrams/bulwark/commit/b296c2b7529b8047cda3a5bbe14a74ceca996986))
 
 ## [6.0.0](https://github.com/softrams/bulwark/compare/v5.0.0...v6.0.0) (2020-10-13)
 
