@@ -26,6 +26,7 @@ import { InviteUserComponent } from './invite-user/invite-user.component';
 import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { SettingsComponent } from './settings/settings.component';
+import { EmailValidateComponent } from './email-validate/email-validate.component';
 import { UserService } from './user.service';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
@@ -148,6 +149,10 @@ const routes: Routes = [
   {
     path: 'register/:uuid',
     component: RegisterComponent,
+  },
+  {
+    path: 'email/validate/:uuid',
+    component: EmailValidateComponent,
   },
   {
     path: 'user/profile',

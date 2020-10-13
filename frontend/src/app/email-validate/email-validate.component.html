@@ -1,0 +1,27 @@
+<div class="container col-4">
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-12">
+          <h4>Email Update Validation</h4>
+          <hr />
+          <i class="pi pi-info-circle"></i><i style="font-size: smaller;"> Please enter your password to validate the
+            email update request</i>
+          <br>
+        </div>
+      </div>
+      <div id="formContent">
+        <form [formGroup]="emailUpdateForm" (ngSubmit)="onSubmit(emailUpdateForm)">
+          <input formControlName="password" type="password" id="password" class="form-control" name="password"
+            placeholder="Password" style="margin-bottom: 5px;" />
+          <input [disabled]="!emailUpdateForm.valid" type="submit" class="btn btn-success float-right" value="Submit" />
+        </form>
+        <div id="formFooter">
+          <div>
+            <a class="underlineHover" href="#/login">Return to login</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

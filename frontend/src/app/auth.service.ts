@@ -54,6 +54,24 @@ export class AuthService {
     });
   }
 
+  updateUserEmail(email: string, newEmail: string) {
+    return this.http.post(`${this.api}/user/email`, {
+      email,
+      newEmail,
+    });
+  }
+
+  validateUserEmailRequest(password: string, uuid: string) {
+    return this.http.post(`${this.api}/user/email/validate`, {
+      password,
+      uuid,
+    });
+  }
+
+  revokeUserEmail() {
+    return this.http.post(`${this.api}/user/email/revoke`, null);
+  }
+
   refreshSession() {
     const refreshToken = this.getRefreshToken();
     return this.http.post(`${this.api}/refresh`, { refreshToken });
