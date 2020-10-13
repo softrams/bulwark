@@ -24,7 +24,7 @@ if (fs.existsSync(path.join(__dirname, '../.env'))) {
 import * as bodyParser from 'body-parser';
 import { createConnection } from 'typeorm';
 const authController = require('./routes/authentication.controller');
-const userController = require('./routes/user.controller');
+import * as userController from './routes/user.controller';
 const fileUploadController = require('./routes/file-upload.controller');
 import * as orgController from './routes/organization.controller';
 import * as assetController from './routes/asset.controller';
@@ -62,12 +62,15 @@ app.set('serverIpAddress', serverIpAddress);
 app.listen(serverPort, () => console.info(`Server running on ${serverIpAddress}:${serverPort}`));
 // create typeorm connection
 createConnection().then((_) => {
-  // Check for initial configuration
-  // If none exist, insert it
+  // Check for initial configuration and user
+  // If none exist, insert
   configController.initialInsert();
   // register routes
   app.post('/api/user/register', userController.register);
   app.post('/api/user/invite', jwtMiddleware.checkToken, userController.invite);
+  app.post('/api/user/email', jwtMiddleware.checkToken, userController.updateUserEmail);
+  app.post('/api/user/email/revoke', jwtMiddleware.checkToken, userController.revokeEmailRequest);
+  app.post('/api/user/email/validate', userController.validateEmailRequest);
   app.patch('/api/user', jwtMiddleware.checkToken, userController.patch);
   app.get('/api/user', jwtMiddleware.checkToken, userController.getUser);
   app.get('/api/users', jwtMiddleware.checkToken, userController.getUsers);

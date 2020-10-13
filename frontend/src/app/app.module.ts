@@ -38,6 +38,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { EmailValidateComponent } from './email-validate/email-validate.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,6 +61,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     RegisterComponent,
     UserProfileComponent,
     SettingsComponent,
+    EmailValidateComponent,
   ],
   imports: [
     BrowserModule,

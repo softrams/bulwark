@@ -14,8 +14,10 @@ import { UserService } from '../user.service';
 export class UserProfileComponent implements OnInit {
   userForm: FormGroup;
   securityForm: FormGroup;
+  emailForm: FormGroup;
   isEdit = false;
   isSecurityEdit = false;
+  isEmailEdit = false;
   user: User;
   constructor(
     private fb: FormBuilder,
@@ -32,6 +34,7 @@ export class UserProfileComponent implements OnInit {
       this.user = user;
       this.rebuildForm();
       this.rebuildSecurityForm();
+      this.rebuildEmailForm();
     });
   }
 
@@ -55,6 +58,16 @@ export class UserProfileComponent implements OnInit {
         Validators.required,
       ],
     });
+    this.emailForm = this.fb.group({
+      email: [
+        { value: '', disabled: !this.isEmailEdit },
+        [Validators.required, Validators.email],
+      ],
+      newEmail: [
+        { value: '', disabled: !this.isEmailEdit },
+        [Validators.required, Validators.email],
+      ],
+    });
   }
 
   rebuildForm() {
@@ -73,6 +86,12 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  rebuildEmailForm() {
+    this.emailForm.reset({
+      email: this.user.email,
+      newEmail: '',
+    });
+  }
   onSubmit(form: FormGroup) {
     if (!this.isEdit) {
       this.isEdit = true;
@@ -109,5 +128,32 @@ export class UserProfileComponent implements OnInit {
           this.securityForm.reset();
         });
     }
+  }
+
+  onEmailFormSubmit(form: FormGroup) {
+    if (!this.isEmailEdit) {
+      this.isEmailEdit = true;
+      this.emailForm.reset();
+      this.emailForm.enable();
+    } else {
+      this.authService
+        .updateUserEmail(form.value.email, form.value.newEmail)
+        .subscribe((res: string) => {
+          this.alertService.success(res);
+          this.isEmailEdit = false;
+          this.emailForm.disable();
+          this.rebuildEmailForm();
+        });
+    }
+  }
+
+  revokeUpdateEmailRequest() {
+    this.user.newEmail = '';
+    this.authService.revokeUserEmail().subscribe((res: string) => {
+      this.alertService.success(res);
+      this.isEmailEdit = false;
+      this.emailForm.disable();
+      this.rebuildEmailForm();
+    });
   }
 }

@@ -9,8 +9,9 @@
     "outDir": "dist",
     "removeComments": true,
     "baseUrl": "./",
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["@types/jest"]
   },
-  "exclude": ["./frontend", "./migration", "src/**/*.spec.ts"],
+  "exclude": ["./frontend", "./migration"],
   "include": ["src/**/*"]
 }

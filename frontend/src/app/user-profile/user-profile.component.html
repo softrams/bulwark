@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="row">
           <div class="col-md-12">
-            <h4>Your Profile</h4>
+            <h4>Profile</h4>
             <hr />
           </div>
         </div>
@@ -34,6 +34,45 @@
               </div>
               <input [disabled]="isEdit ? !userForm.valid : false" type="submit" class="btn btn-primary float-right"
                 [value]="isEdit ? 'Update' : 'Edit'" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <br />
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <h4>User Email Configuration</h4>
+            <hr />
+          </div>
+        </div>
+        <div id="formContent">
+          <form [formGroup]="emailForm" (ngSubmit)="onEmailFormSubmit(emailForm)" id="emailForm">
+            <div class="col-md-12">
+              <div class="form-group row">
+                <label for="email" class="col-4 col-form-label">Email:</label>
+                <div class="col-8">
+                  <input formControlName="email" type="email" id="email" class="form-control" name="email"
+                    style="margin-bottom: 5px;" />
+                </div>
+              </div>
+              <div *ngIf="isEmailEdit" class="form-group row">
+                <label for="newEmail" class="col-4 col-form-label">Confirm New Email:</label>
+                <div class="col-8">
+                  <input formControlName="newEmail" type="email" id="newEmail" class="form-control" name="newEmail"
+                    placeholder="" style="margin-bottom: 5px;" />
+                  <span *ngIf="user.newEmail">
+                    <i class="pi pi-info-circle"></i><i style="font-size: smaller;"> Please check your email at
+                      <strong>{{user?.newEmail}}</strong> to verify the address.
+                      To revoke this request, please click this <a [routerLink]=""
+                        (click)="revokeUpdateEmailRequest()">link</a></i>
+                  </span>
+                </div>
+              </div>
+              <input [disabled]="isEmailEdit ? !emailForm.valid || user.newEmail : false" type="submit"
+                class="btn btn-primary float-right" [value]="isEmailEdit ? 'Update' : 'Edit'" />
             </div>
           </form>
         </div>
