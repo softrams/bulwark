@@ -2,6 +2,71 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0](https://github.com/softrams/bulwark/compare/v5.0.0...v6.0.0) (2020-10-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* **add user entity column for newemail:** added new newEmail column to the user entity
+* **organization and file table:** Updates to the schema.  Removed relationship between Organization and File.
+
+### Features
+
+* **add user entity column for newemail:** update user entity with newEmail column ([4aef2fe](https://github.com/softrams/bulwark/commit/4aef2febad142a514529071772c35b7f8fd8c1e2)), closes [#49](https://github.com/softrams/bulwark/issues/49)
+* **assessments:** add custom table filter matchMode to filter Testers array ([0e555b4](https://github.com/softrams/bulwark/commit/0e555b4041657c1abf1d919298cb3beef8259ca2))
+* **create initial seed user:** update initial startup to create default user ([61ddc2a](https://github.com/softrams/bulwark/commit/61ddc2a07b002e5dc53bcf812c126dbe874e707d)), closes [#322](https://github.com/softrams/bulwark/issues/322)
+* **dashboard, organization, vulnerability summary tables:** updated column name and headers ([bd4feac](https://github.com/softrams/bulwark/commit/bd4feacd596bdd78c61eeef0d2968a140e5c7d5f)), closes [#321](https://github.com/softrams/bulwark/issues/321)
+* **docker:** updating Bulwark to run from docker ([b983c52](https://github.com/softrams/bulwark/commit/b983c52db76031eacbcd452b58467d1947fd5935)), closes [#245](https://github.com/softrams/bulwark/issues/245)
+* **dockerfile:** dockerize Bulwark ([fe07262](https://github.com/softrams/bulwark/commit/fe07262fc9f1a33d3f05ec0b801c8b83e0abf4f8))
+* **dockerfile:** dockerize Bulwark ([8ac6fdd](https://github.com/softrams/bulwark/commit/8ac6fdd3baa86cbb35425c193eb40c5861079ea7))
+* **email-validate component:** created the email-validate.component.ts file ([5c1dd87](https://github.com/softrams/bulwark/commit/5c1dd87b602de9f3fd3a97ecd1db8cbf75cd6378)), closes [#49](https://github.com/softrams/bulwark/issues/49)
+* **new api for revoke and validate email request:** new api's with unit tests ([152cbf1](https://github.com/softrams/bulwark/commit/152cbf15961733ee131a36f20e361588561a723c)), closes [#49](https://github.com/softrams/bulwark/issues/49)
+* **organization and file table:** removed relation between Org and File ([05d42a0](https://github.com/softrams/bulwark/commit/05d42a0efb2cdf899e94d11b576450a282af35f1)), closes [#321](https://github.com/softrams/bulwark/issues/321)
+* **user controller:** created API for email update ([bcbab8f](https://github.com/softrams/bulwark/commit/bcbab8f36ddde18cfc0024ad571a5dad2dffcb40)), closes [#49](https://github.com/softrams/bulwark/issues/49)
+* docker ([62ee1ad](https://github.com/softrams/bulwark/commit/62ee1ad858dbb0f202976b6a4b37fc00f5ec141d))
+* docker ([afd7274](https://github.com/softrams/bulwark/commit/afd72741f4e4e3024d2ed750027e30ce68b8c0e3))
+* docker ([a590ecf](https://github.com/softrams/bulwark/commit/a590ecfefddeacbeb894f7c4b7524ab52191a094))
+* dockerize Bulwark ([607db0b](https://github.com/softrams/bulwark/commit/607db0b722bf7597a139cb187f1f96bf32ef6b54))
+
+
+### Bug Fixes
+
+* **removed migration directory files:** removed migrations ([783ce03](https://github.com/softrams/bulwark/commit/783ce03aa30163fa8828e7b17a36151621c2b3e7))
+
+
+### Others
+
+* **deps:** bump @angular-devkit/build-angular in /frontend ([5b2edba](https://github.com/softrams/bulwark/commit/5b2edba0de6ac9d6082e759b0e5057790ac9c17f))
+* **deps:** bump @angular-devkit/build-angular in /frontend ([af92bac](https://github.com/softrams/bulwark/commit/af92bac398fcd8e68f109b1c360cd0442cc3ce3f))
+* **deps:** bump @angular/animations from 10.1.4 to 10.1.5 in /frontend ([6f57b2e](https://github.com/softrams/bulwark/commit/6f57b2e9a2871b76f50278c34cfa633b12442740))
+* **deps:** bump @angular/cdk from 10.2.3 to 10.2.4 in /frontend ([40e75d9](https://github.com/softrams/bulwark/commit/40e75d9d2efd88e9acc0f6ff43eba290cd671d2c))
+* **deps:** bump @angular/cli from 10.1.4 to 10.1.5 in /frontend ([58ff160](https://github.com/softrams/bulwark/commit/58ff160bb3fe70e3a7a68567fd5d6655872b9ef6))
+* **deps:** bump @angular/cli from 10.1.5 to 10.1.6 in /frontend ([e573f3d](https://github.com/softrams/bulwark/commit/e573f3de8b22b4fcb9eecfd69e3466d03a009035))
+* **deps:** bump @ng-select/ng-select from 5.0.3 to 5.0.4 in /frontend ([dbcc884](https://github.com/softrams/bulwark/commit/dbcc884a8886591955f992153cd1edee8e8b92b3))
+* **deps:** bump @ng-select/ng-select from 5.0.4 to 5.0.5 in /frontend ([05c1a8f](https://github.com/softrams/bulwark/commit/05c1a8f66a02878944410b8bc44f630d2f664a15))
+* **deps:** bump @ng-select/ng-select from 5.0.5 to 5.0.6 in /frontend ([c73d17f](https://github.com/softrams/bulwark/commit/c73d17f609f5c202e56b5de81ce689115374a40f))
+* **deps:** bump @ng-select/ng-select from 5.0.6 to 5.0.7 in /frontend ([9731080](https://github.com/softrams/bulwark/commit/9731080df713b0867c2da9689442a0b57156b486))
+* **deps:** bump @ng-select/ng-select from 5.0.7 to 5.0.8 in /frontend ([47cb485](https://github.com/softrams/bulwark/commit/47cb485743cc77845a91cd934f61b25c0a53dd30))
+* **deps:** bump jira-client from 6.21.0 to 6.21.1 ([25a5e8b](https://github.com/softrams/bulwark/commit/25a5e8b038dca63957e06ad8c50bbb0a360ac73e))
+* **deps:** bump nodemailer from 6.4.12 to 6.4.13 ([6b389bd](https://github.com/softrams/bulwark/commit/6b389bd4d260c6f10e555957b73b262ac4447fc6))
+* **deps:** bump primeng from 10.0.2 to 10.0.3 in /frontend ([015f652](https://github.com/softrams/bulwark/commit/015f652c6a4fa8d41bcf37517c1448e6f6f9d853))
+* **deps:** bump tslib from 2.0.1 to 2.0.2 in /frontend ([17a8e32](https://github.com/softrams/bulwark/commit/17a8e32676bfc9167742bf058b02912af0d6d43b))
+* **deps:** bump tslib from 2.0.2 to 2.0.3 in /frontend ([9ef5373](https://github.com/softrams/bulwark/commit/9ef53738e894395f5d13ff63b7589242c3f1cde7))
+* **deps:** bump uuid from 8.3.0 to 8.3.1 ([9bbdd11](https://github.com/softrams/bulwark/commit/9bbdd11005095e4b43e2eda174461348089b54d2))
+* **deps-dev:** bump @angular/language-service in /frontend ([9c3a1be](https://github.com/softrams/bulwark/commit/9c3a1be35226761e7472daa7e20f06bd5595da32))
+* **deps-dev:** bump @types/node from 14.11.2 to 14.11.5 in /frontend ([ba63886](https://github.com/softrams/bulwark/commit/ba638868ce66ee1e7fb9e603dd54e6a497bf78f2))
+* **deps-dev:** bump @types/node from 14.11.5 to 14.11.7 in /frontend ([0034d3f](https://github.com/softrams/bulwark/commit/0034d3ffd5ce95bf5d28eef68972220fe4ccd6f6))
+* **deps-dev:** bump @types/node from 14.11.7 to 14.11.8 in /frontend ([534b6c8](https://github.com/softrams/bulwark/commit/534b6c8e54792b56d7f0c3182fd84b4460ac204f))
+* **deps-dev:** bump babel-jest from 26.3.0 to 26.5.2 ([2c0e335](https://github.com/softrams/bulwark/commit/2c0e335612b21dba273d71c0d8251ab33a9298f7))
+* **deps-dev:** bump jest from 26.4.2 to 26.5.0 ([fab2537](https://github.com/softrams/bulwark/commit/fab2537628b3ff3a2d0e4743b7db010aef14f99c))
+* **deps-dev:** bump jest from 26.5.0 to 26.5.2 ([d44551b](https://github.com/softrams/bulwark/commit/d44551bc329d9f500525fa5b101b0ebe98d37ff3))
+* **deps-dev:** bump jest from 26.5.2 to 26.5.3 ([4e31812](https://github.com/softrams/bulwark/commit/4e31812201e88ea8c4a11528d628f3756bc5b1eb))
+
+
+### Code Refactoring
+
+* **user.ts:** updated user column uuid to always be nullable ([79cd34e](https://github.com/softrams/bulwark/commit/79cd34efa7c15045f6e6f70a212919da1f19d082))
+
 ## [5.0.0](https://github.com/softrams/bulwark/compare/v4.0.7...v5.0.0) (2020-10-02)
 
 
