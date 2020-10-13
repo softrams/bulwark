@@ -1,4 +1,9 @@
-import { createConnection, getConnection, Entity, getRepository } from 'typeorm';
+import {
+  createConnection,
+  getConnection,
+  Entity,
+  getRepository,
+} from 'typeorm';
 import * as configController from './config.controller';
 import { Config } from '../entity/Config';
 import MockExpressResponse = require('mock-express-response');
@@ -14,7 +19,7 @@ describe('config controller', () => {
       dropSchema: true,
       entities: [Config, User],
       synchronize: true,
-      logging: false
+      logging: false,
     });
   });
   afterEach(() => {
@@ -29,7 +34,7 @@ describe('config controller', () => {
     expect(configAry.length).toBe(1);
     expect(userAry[0].firstName).toBe('Master');
     expect(userAry[0].lastName).toBe('Chief');
-    expect(userAry[0].email).toBe('admin@bulwark.com');
+    expect(userAry[0].email).toBe('admin@example.com');
     expect(userAry[0].title).toBe('Spartan 117');
     expect(userAry[0].active).toBeTruthy();
     const initUsrPw = userAry[0].password;
@@ -47,8 +52,8 @@ describe('config controller', () => {
       body: {
         fromEmail: 'test@jest.com',
         fromEmailPassword: 'abc123',
-        companyName: 'UNFC'
-      }
+        companyName: 'UNFC',
+      },
     });
     await configController.saveConfig(request, response);
     expect(response.statusCode).toBe(200);
@@ -65,8 +70,8 @@ describe('config controller', () => {
       body: {
         fromEmail: 'test',
         fromEmailPassword: 'abc123',
-        companyName: 'UNFC'
-      }
+        companyName: 'UNFC',
+      },
     });
     await configController.saveConfig(request, response);
     expect(response.statusCode).toBe(400);
@@ -83,8 +88,8 @@ describe('config controller', () => {
       body: {
         fromEmail: 'test@jest.com',
         fromEmailPassword: 'abc123',
-        companyName: 'UNFC'
-      }
+        companyName: 'UNFC',
+      },
     });
     await configController.saveConfig(request, response);
     expect(response.statusCode).toBe(200);
@@ -101,8 +106,8 @@ describe('config controller', () => {
       body: {
         fromEmail: 'test',
         fromEmailPassword: 'abc123',
-        companyName: 'UNFC'
-      }
+        companyName: 'UNFC',
+      },
     });
     await configController.saveConfig(request, response);
     expect(response.statusCode).toBe(400);

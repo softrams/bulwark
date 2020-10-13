@@ -1,0 +1,74 @@
+version: '3.8'
+services:
+  bulwark:
+    image: softramsdocker/bulwark:6.0.0
+    container_name: bulwark
+    environment:
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DB_CHECK: "${MYSQL_DB_CHECK}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      DB_URL: "${DB_URL}"
+      DB_USERNAME: "${DB_USERNAME}"
+      DB_PORT: "${DB_PORT}"
+      DB_NAME: "${DB_NAME}"
+      DB_TYPE: "${DB_TYPE}"
+      NODE_ENV: "${NODE_ENV}"
+      DEV_URL: "${DEV_URL}"
+      PROD_URL: "${PROD_URL}"
+      JWT_KEY: "${JWT_KEY}"
+      JWT_REFRESH_KEY: "${JWT_REFRESH_KEY}"
+      CRYPTO_SECRET: "${CRYPTO_SECRET}"
+      CRYPTO_SALT: "${CRYPTO_SALT}"
+    depends_on:
+      - bulwark-db
+    networks:
+      static-network:
+        ipv4_address: 172.16.16.2
+    ports:
+      - '5000:5000'
+    expose:
+      - '5000'
+    stop_grace_period: 1m
+    volumes:
+      - bulwark-temp:/bulwark/src/temp:rw
+    command: >
+      sh -c "
+      until mysql --host=172.16.16.3 --user=$${MYSQL_USER} --password=$${MYSQL_ROOT_PASSWORD} --database=$${MYSQL_DB_CHECK} -e 'SELECT user FROM user;'; do
+        >&2 echo MySQL is unavailable - sleeping
+        sleep 1
+      done
+      && echo MySQL should be up - starting up Bulwark.
+      && echo Initial DB Creation
+      && npm run migration:init
+      && npm run migration:run
+      && npm run start"
+
+  bulwark-db:
+    image: mysql:5.7.31
+    container_name: bulwark_db
+    environment:
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+    networks:
+      static-network:
+        ipv4_address: 172.16.16.3
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - bulwark-db:/var/lib/mysql:rw
+    restart: always
+
+volumes:
+  bulwark-db:
+  bulwark-temp:
+
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 172.16.16.0/29

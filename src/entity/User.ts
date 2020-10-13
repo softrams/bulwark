@@ -20,7 +20,9 @@ export class User {
   password: string;
   @Column()
   active: boolean;
-  @dynamicNullable()
+  @Column({
+    nullable: true
+  })
   @IsOptional()
   @IsUUID()
   uuid: string;

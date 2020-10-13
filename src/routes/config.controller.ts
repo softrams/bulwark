@@ -19,7 +19,7 @@ export const initialInsert = async () => {
   if (!usrAry.length) {
     const initialUser = new User();
     initialUser.active = true;
-    initialUser.email = 'admin@bulwark.com';
+    initialUser.email = 'admin@example.com';
     initialUser.firstName = 'Master';
     initialUser.lastName = 'Chief';
     initialUser.title = 'Spartan 117';
@@ -45,7 +45,9 @@ export const saveConfig = async (req: Request, res: Response) => {
     const encryptedPassword = encrypt(fromEmailPassword);
     existingConfig.fromEmailPassword = encryptedPassword;
   }
-  const errors = await validate(existingConfig, { skipMissingProperties: true });
+  const errors = await validate(existingConfig, {
+    skipMissingProperties: true,
+  });
   if (errors.length > 0) {
     return res.status(400).json('Settings validation failed');
   } else {
