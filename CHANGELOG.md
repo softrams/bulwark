@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.4](https://github.com/softrams/bulwark/compare/v6.0.3...v6.0.4) (2020-10-14)
+
+
+### Docs
+
+* **readme.md:** updated README.md ([0966f9f](https://github.com/softrams/bulwark/commit/0966f9f6b0a35fb6397b083dda8ed222802136ed))
+
 ### [6.0.3](https://github.com/softrams/bulwark/compare/v6.0.2...v6.0.3) (2020-10-13)
 
 
