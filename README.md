@@ -46,23 +46,26 @@ CRYPTO_SECRET="changeme"
 CRYPTO_SALT="changeme"
 ```
 
-To Start Bulwark:
+Build and start Bulwark containers:
 
 ```
 docker-compose up -d
 ```
 
-To Stop Bulwark:
+Start/Stop Bulwark containers:
 
 ```
+docker-compose start
 docker-compose stop
 ```
 
-To Remove Bulwark:
+Remove Bulwark containers:
 
 ```
 docker-compose down
 ```
+
+Bulwark will be available at [localhost:5000](http://localhost:5000)
 
 ## Local Installation
 
