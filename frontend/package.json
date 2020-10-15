@@ -15,7 +15,7 @@
     "@angular/animations": "~10.1.5",
     "@angular/cli": "~10.1.6",
     "@angular/common": "~10.0.3",
-    "@angular/cdk": "^10.2.4",
+    "@angular/cdk": "^10.2.5",
     "@angular/compiler": "~10.0.3",
     "@angular/compiler-cli": "^10.0.3",
     "@angular/core": "~10.0.3",
