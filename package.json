@@ -97,7 +97,7 @@
     "tsconfig-paths": "^3.9.0",
     "typeorm": "^0.2.28",
     "uuid": "^8.3.1",
-    "yargs": "^16.0.3"
+    "yargs": "^16.1.0"
   },
   "husky": {
     "hooks": {
