@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.5](https://github.com/softrams/bulwark/compare/v6.0.4...v6.0.5) (2020-10-16)
+
+
+### Others
+
+* **deps:** bump @angular-devkit/build-angular in /frontend ([3ce0d49](https://github.com/softrams/bulwark/commit/3ce0d49bc84ceaee825b22e917e7328e3c8bb8f0))
+* **deps:** bump @angular/animations from 10.1.5 to 10.1.6 in /frontend ([1eea3d3](https://github.com/softrams/bulwark/commit/1eea3d375b816d6bcc69f3a8285124758af2fd47))
+* **deps:** bump @angular/cdk from 10.2.4 to 10.2.5 in /frontend ([ffeacb9](https://github.com/softrams/bulwark/commit/ffeacb910c2fd7fb281cd9798221c923177eca93))
+* **deps:** bump @angular/cli from 10.1.6 to 10.1.7 in /frontend ([8af8735](https://github.com/softrams/bulwark/commit/8af87353f97799dfbe91aeec013375212e5953f7))
+* **deps:** bump nodemailer from 6.4.13 to 6.4.14 ([0f0201f](https://github.com/softrams/bulwark/commit/0f0201f491ca69fddad912b492e3a727911ec41a))
+* **deps:** bump yargs from 16.0.3 to 16.1.0 ([541bbf3](https://github.com/softrams/bulwark/commit/541bbf32b3a02df6655901857d1502070fe40585))
+* **deps-dev:** bump @angular/language-service in /frontend ([94914f5](https://github.com/softrams/bulwark/commit/94914f52c55d69dc48144c0ce5105687e08788b6))
+* **deps-dev:** bump @babel/core from 7.11.6 to 7.12.0 ([0538836](https://github.com/softrams/bulwark/commit/0538836658c07c5854f9d87fe77de61eaac273c8))
+* **deps-dev:** bump @babel/core from 7.12.0 to 7.12.1 ([55c6f86](https://github.com/softrams/bulwark/commit/55c6f86613aec80204ce1f2b1d01b1bef4943503))
+* **deps-dev:** bump @babel/preset-env from 7.11.5 to 7.12.0 ([4a3c1c6](https://github.com/softrams/bulwark/commit/4a3c1c61ff6cca5118d289994196b0519a09d07f))
+* **deps-dev:** bump @babel/preset-env from 7.12.0 to 7.12.1 ([def2233](https://github.com/softrams/bulwark/commit/def2233f2c8c76e7174f68cebc9a1a0c1e621b91))
+* **deps-dev:** bump @babel/preset-typescript from 7.10.4 to 7.12.0 ([2a2861b](https://github.com/softrams/bulwark/commit/2a2861b6407b5df398481eead368578ee5edf3b0))
+* **deps-dev:** bump @babel/preset-typescript from 7.12.0 to 7.12.1 ([a3ed773](https://github.com/softrams/bulwark/commit/a3ed7738028ff4ea26b52a1762291c649ec24a57))
+
 ### [6.0.4](https://github.com/softrams/bulwark/compare/v6.0.3...v6.0.4) (2020-10-14)
 
 
