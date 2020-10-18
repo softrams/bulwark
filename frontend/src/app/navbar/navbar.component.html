@@ -1,22 +1,10 @@
-<nav class="navbar navbar-light bg-light" style="margin-bottom: 50px;">
-  <a class="navbar-brand" href="#">
-    <img src="../../assets/logo.png" width="250" height="115" alt="Bulwark Logo" /></a>
-  <div class="mx-auto">
-    <div *ngIf="loaderService.isLoading | async" role="status">
-      <p-progressSpinner [style]="{width: '75px', height: '75px'}"></p-progressSpinner>
-    </div>
-  </div>
-  <div class="nav-item dropdown" *ngIf="loggedIn$ | async as loggedIn">
-    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-      aria-expanded="false">
-      Menu
+<div *ngIf="loaderService.isLoading | async" role="status">
+  <p-progressSpinner [style]="{width: '75px', height: '75px'}"></p-progressSpinner>
+</div>
+<p-menubar [model]="menuItems" *ngIf="loggedIn$ | async as loggedIn">
+  <ng-template pTemplate="start">
+    <a class="navbar-brand" routerLink="/">
+      <img src="../../assets/logo.png" width="250" height="115" alt="Bulwark Logo" />
     </a>
-    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-      <a class="dropdown-item" href="#/user/profile">Profile</a>
-      <a class="dropdown-item" href="#/invite">Invite User</a>
-      <a class="dropdown-item" href="#/settings">Settings</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" (click)="logout()" href="">Logout</a>
-    </div>
-  </div>
-</nav>
+  </ng-template>
+</p-menubar>
