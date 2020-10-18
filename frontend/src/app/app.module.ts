@@ -39,6 +39,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { EmailValidateComponent } from './email-validate/email-validate.component';
+import { MenubarModule } from 'primeng/menubar';
 @NgModule({
   declarations: [
     AppComponent,
@@ -77,6 +78,7 @@ import { EmailValidateComponent } from './email-validate/email-validate.componen
     MultiSelectModule,
     CalendarModule,
     ProgressSpinnerModule,
+    MenubarModule,
   ],
   providers: [
     AppService,
@@ -87,4 +89,4 @@ import { EmailValidateComponent } from './email-validate/email-validate.componen
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
