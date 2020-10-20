@@ -1,17 +1,15 @@
-<div class="container col-6">
+<div class="container col-md-6 col-12">
   <form [formGroup]="orgForm" (ngSubmit)="onSubmit(orgForm)">
     <div class="form-group">
       <label for="orgName">Organization Name</label>
       <input formControlName="name" type="text" class="form-control" id="orgName"
-        placeholder="Enter in an organization name" />
+        placeholder="Enter in an organization name" pInputText  />
     </div>
     <button [disabled]="!orgForm.valid" class="btn btn-primary float-right" type="submit" data-toggle="tooltip"
-      data-placement="bottom" title="Submit Data">
-      Submit
+      data-placement="bottom" label="Submit Data" pButton>
     </button>
     <button (click)="navigateToDashboard()" class="btn btn-secondary float-right" type="button"
-      style="margin-right: 5px" data-toggle="tooltip" data-placement="bottom" title="Back to Dashboard">
-      Back to Dashboard
+      style="margin-right: 5px" data-toggle="tooltip" data-placement="bottom" label="Back to Dashboard" pButton>
     </button>
   </form>
 </div>
