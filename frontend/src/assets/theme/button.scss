@@ -1,0 +1,11 @@
+// cf: login.component.html
+.btn-success.p-inputtext {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: white;
+}
+
+.btn-success.p-inputtext:enabled:focus {
+  box-shadow: 0 0 0 0.2rem rgba(72, 180, 97, 0.5);
+  border-color: #28a745;
+}
