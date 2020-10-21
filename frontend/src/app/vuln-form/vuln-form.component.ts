@@ -93,10 +93,10 @@ export class VulnFormComponent implements OnChanges, OnInit {
       }
     });
     this.activatedRoute.data.subscribe(({ vulnInfo }) => {
-      if (vulnInfo.jiraHost) {
+      if (vulnInfo && vulnInfo.jiraHost) {
         this.jiraHost = vulnInfo.jiraHost;
       }
-      if (vulnInfo.vulnerability) {
+      if (vulnInfo && vulnInfo.vulnerability) {
         this.vulnModel = vulnInfo.vulnerability;
         for (const probLoc of vulnInfo.vulnerability.problemLocations) {
           this.probLocArr.push(

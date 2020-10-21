@@ -223,7 +223,7 @@
         <span>
           <a [href]="screenshot.url" target="_blank">{{ screenshot?.fileName}}</a>
           <a>
-            <fa-icon (click)="deleteScreenshot(screenshot)" [icon]="faTrash"></fa-icon>
+            <i (click)="deleteScreenshot(screenshot)" class="pi pi-trash" style="margin-left: 5px"></i>
           </a>
         </span>
       </div>
