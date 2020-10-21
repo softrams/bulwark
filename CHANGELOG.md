@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.6](https://github.com/softrams/bulwark/compare/v6.0.5...v6.0.6) (2020-10-21)
+
+
+### Bug Fixes
+
+* **vuln-form component:** fixed missing delete screenshot icon ([60be8a9](https://github.com/softrams/bulwark/commit/60be8a9f58fa79885384f17d459121dd41c058fa))
+
 ### [6.0.5](https://github.com/softrams/bulwark/compare/v6.0.4...v6.0.5) (2020-10-16)
 
 
