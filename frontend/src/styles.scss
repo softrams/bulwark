@@ -1,6 +1,7 @@
 @import "~@ng-select/ng-select/themes/default.theme.css";
 
-.btn-primary.p-button {
+.btn-primary.p-button,
+.btn-primary {
   background-color: #ae0a0a;
   border-color: #ae0a0a;
   color: #fff !important;
@@ -12,16 +13,19 @@
   border-color: #6c757d !important;
 }
 
-.btn-primary.p-button:hover {
+.btn-primary.p-button:hover,
+.btn-primary:hover {
   color: #910a0a;
   background-color: #910a0a !important;
   border-color: #ae0a0a !important;
 }
 
-.btn-primary.p-button:active {
+.btn-primary.p-button:active,
+.btn-primary {
   background-color: #910a0a !important;
 }
-.btn-primary.p-button:focus {
+.btn-primary.p-button:focus,
+.btn-primary:focus {
   box-shadow: 0 0 0 0.2rem #910a0a40 !important;
 }
 
