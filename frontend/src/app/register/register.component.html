@@ -1,33 +1,25 @@
-<div class="container col-4">
-  <div class="card">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-12">
-          <h4>Bulwark Registration</h4>
-          <hr />
+<div class="container col-12 col-md-4">
+  <p-card>
+      <h4>Bulwark Registration</h4>
+      <hr/>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm)">
+        <input formControlName="firstName" type="text" id="firstName" class="form-control" name="firstName"
+          placeholder="First Name" style="margin-bottom: 5px;" pInputText />
+        <input formControlName="lastName" type="text" id="lastName" class="form-control" name="lastName"
+          placeholder="Last Name" style="margin-bottom: 5px;" pInputText />
+        <input formControlName="title" type="text" id="title" class="form-control" name="title" placeholder="Title"
+          style="margin-bottom: 5px;" pInputText />
+        <input formControlName="password" type="password" id="password" class="form-control" name="password"
+          placeholder="Password" style="margin-bottom: 5px;" pInputText />
+        <input formControlName="confirmPassword" type="password" id="confirmPassword" class="form-control"
+          name="confirmPassword" placeholder="Confirm Password" style="margin-bottom: 5px;" pInputText />
+        <input [disabled]="!registerForm.valid" type="submit" class="btn btn-success float-right" value="Register" pInputText/>
+      </form>
+      <p-footer>
+      <div id="formFooter">
+        <div>
+          <a class="underlineHover" href="#/login">Return to login</a>
         </div>
-      </div>
-      <div id="formContent">
-        <form [formGroup]="registerForm" (ngSubmit)="onSubmit(registerForm)">
-          <input formControlName="firstName" type="text" id="firstName" class="form-control" name="firstName"
-            placeholder="First Name" style="margin-bottom: 5px;" />
-          <input formControlName="lastName" type="text" id="lastName" class="form-control" name="lastName"
-            placeholder="Last Name" style="margin-bottom: 5px;" />
-          <input formControlName="title" type="text" id="title" class="form-control" name="title" placeholder="Title"
-            style="margin-bottom: 5px;" />
-          <input formControlName="password" type="password" id="password" class="form-control" name="password"
-            placeholder="Password" style="margin-bottom: 5px;" />
-          <input formControlName="confirmPassword" type="password" id="confirmPassword" class="form-control"
-            name="confirmPassword" placeholder="Confirm Password" style="margin-bottom: 5px;" />
-          <input [disabled]="!registerForm.valid" type="submit" class="btn btn-success float-right" value="Register" />
-        </form>
-
-        <div id="formFooter">
-          <div>
-            <a class="underlineHover" href="#/login">Return to login</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+      </div></p-footer>
+  </p-card>
 </div>
