@@ -1,12 +1,12 @@
-<div class="container col-md-4 col-12" style="border: 1px solid #cecece; padding: 25px;">
-  <div id="formContent">
+<div class="container col-md-4 col-12">
+  <p-card id="formContent" class="card">
     <!-- Login Form -->
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm)">
       <input formControlName="email" type="text" id="email" class="form-control text-center" name="email"
-        placeholder="Email" style="margin-bottom: 5px;" />
+        placeholder="Email" style="margin-bottom: 5px;" pInputText/>
       <input formControlName="password" type="password" id="password" class="form-control text-center" name="password"
-        placeholder="Password" style="margin-bottom: 5px;" />
-      <input [disabled]="!loginForm.valid" type="submit" class="btn btn-success float-right" value="Log In" />
+        placeholder="Password" style="margin-bottom: 5px;" pInputText/>
+      <input [disabled]="!loginForm.valid" type="submit" class="btn btn-success float-right" value="Log In" pInputText/>
     </form>
 
     <!-- TODO: Set up email registration -->
@@ -15,5 +15,5 @@
         <a class="underlineHover" href="#/forgot-password">Forgot Password?</a>
       </div>
     </div>
-  </div>
+  </p-card>
 </div>
