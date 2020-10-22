@@ -39,7 +39,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import {ButtonModule} from 'primeng/button';
-import {CardModule} from 'primeng/card'; 
+import {CardModule} from 'primeng/card';
 import { EmailValidateComponent } from './email-validate/email-validate.component';
 
 @NgModule({
