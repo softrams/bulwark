@@ -1,58 +1,53 @@
-<div class="container">
-  <div class="col-md-9 mx-auto">
-    <div class="card">
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-12">
-            <h4>Settings</h4>
-            <hr />
-          </div>
-        </div>
+<div class="container col-12 col-md-7 mx-auto">
+    <p-card>
+      <h4>Settings</h4>
+      <hr />
         <div id="formContent">
           <form [formGroup]="settingsForm" (ngSubmit)="onSubmit(settingsForm)" id="userForm">
-            <div class="col-md-12">
-              <div class="card">
-                <div class="card-body">
-                  <div class="form-group row">
+            <div class="col-12">
+              <p-card>
+                  <div class="p-d-flex p-flex-column">
+                    <div class="p-d-flex p-flex-column">
                     <span>
                       <i class="pi pi-info-circle"></i><i style="font-size: smaller;"> An app password is a
                         16-digit passcode that gives a
                         non-Google app or device permission to access your Google Account. Please follow this <a
                           href="https://support.google.com/mail/answer/185833?hl=en-GB">link</a> for more
                         information.</i>
-                    </span>
-                  </div>
-                  <div class="form-group row">
-                    <label for="fromEmail" class="col-4 col-form-label">Gmail Account:</label>
-                    <div class="col-8">
-                      <input formControlName="fromEmail" type="text" id="fromEmail" class="form-control"
-                        name="fromEmail" placeholder="Email" style="margin-bottom: 5px;" />
+                    </span></div>
+                    <div class="p-d-flex p-flex-column p-flex-md-row">
+                    <label for="fromEmail" class="col-12 col-md-4 col-form-label">Gmail Account:</label>
+                      <div class="col-12 col-md-8">
+                        <input formControlName="fromEmail" type="text" id="fromEmail" class="form-control"
+                          name="fromEmail" placeholder="Email" style="margin-bottom: 5px;" pInputText/>
+                      </div>
                     </div>
-                  </div>
-                  <div class="form-group row">
-                    <label for="fromEmailPassword" class="col-4 col-form-label">Gmail App Password:</label>
-                    <div class="col-8">
-                      <input formControlName="fromEmailPassword" type="password" id="fromEmailPassword"
-                        class="form-control" name="fromEmailPassword" [placeholder]="isEdit ? '':keyPlaceholder"
-                        style="margin-bottom: 5px;" />
+
+                    <div class="p-d-flex p-flex-column p-flex-md-row">
+                    <label for="fromEmailPassword" class="col-12 col-md-4 col-form-label">Gmail App Password:</label>
+                      <div class="col-12 col-md-8">
+                        <input formControlName="fromEmailPassword" type="password" id="fromEmailPassword"
+                          class="form-control" name="fromEmailPassword" [placeholder]="isEdit ? '':keyPlaceholder"
+                          style="margin-bottom: 5px;" pInputText/>
+                      </div>
                     </div>
-                  </div>
+                
                 </div>
-              </div>
+              </p-card>
               <br>
-              <div class="form-group row">
-                <label for="companyName" class="col-4 col-form-label">Company Name:</label>
-                <div class="col-8">
+              <div class="p-d-flex p-flex-column p-flex-md-row pb-2">
+                <label for="companyName" class="col-12 col-md-4 col-form-label">Company Name:</label>
+                <div class="col-12 col-md-8">
                   <input formControlName="companyName" type="text" id="companyName" class="form-control"
-                    name="companyName" placeholder="Company Name" style="margin-bottom: 5px;" />
+                    name="companyName" placeholder="Company Name" style="margin-bottom: 5px;" pInputText/>
                 </div>
               </div>
-              <input [disabled]="isEdit ? !settingsForm.valid : false" type="submit" class="btn btn-primary float-right"
-                [value]="isEdit ? 'Update' : 'Edit'" />
+              <div class="col-12 p-d-flex p-jc-end">
+              <input [disabled]="isEdit ? !settingsForm.valid : false" type="submit" class="btn btn-primary px-3"
+                [value]="isEdit ? 'Update' : 'Edit'" pInputText/>
+                </div>
             </div>
           </form>
         </div>
-      </div>
-    </div>
-  </div>
+    </p-card>
 </div>
