@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.1.0](https://github.com/softrams/bulwark/compare/v6.0.6...v6.1.0) (2020-10-23)
+
+
+### Features
+
+* email validate with prime ng ([b40f588](https://github.com/softrams/bulwark/commit/b40f588f36435f4a0828c55c76cd042623dd867e))
+* forgot password  with prime ng ([36e1d10](https://github.com/softrams/bulwark/commit/36e1d10ce841748e66cbc61e79e0daf2f173e61c))
+* login with prime ng ([eca4924](https://github.com/softrams/bulwark/commit/eca49249a8d933671f6afd6d67276cc53cd34b30))
+* register with prime ng ([2688138](https://github.com/softrams/bulwark/commit/2688138634dd64d5282c22e24ea1c0819a082546))
+* reset password with prime ng ([b1f082c](https://github.com/softrams/bulwark/commit/b1f082cc41012d8a52736689e4401c28e78cbfbe))
+* settings with prime ng ([a830258](https://github.com/softrams/bulwark/commit/a830258a79621b7ec70ab30c908ec9c8646c3e00))
+
+
+### Bug Fixes
+
+* button scss side effect ([4e0cf29](https://github.com/softrams/bulwark/commit/4e0cf298f3bc6ff43bbb72d884d21f1e0206f25e))
+
+
+### Others
+
+* **deps:** bump @angular-devkit/build-angular in /frontend ([535777d](https://github.com/softrams/bulwark/commit/535777de4f6c40c17a1e321a7f580130803f69f1))
+* **deps:** bump @angular/animations from 10.1.6 to 10.2.0 in /frontend ([002a996](https://github.com/softrams/bulwark/commit/002a996996f7ca00f0cf50f63fce6c6e768006b7))
+* **deps:** bump @angular/cli from 10.1.7 to 10.2.0 in /frontend ([dc5a468](https://github.com/softrams/bulwark/commit/dc5a4688a3951d7d68fc350c0f51de54fa794634))
+* **deps-dev:** bump @angular/language-service in /frontend ([22879fb](https://github.com/softrams/bulwark/commit/22879fb82a811b539ca6be26bee879de673fba5f))
+* **deps-dev:** bump @babel/core from 7.12.1 to 7.12.3 ([9adb353](https://github.com/softrams/bulwark/commit/9adb3536fbd74dcf36b79683f0f13b1376ce6607))
+* **deps-dev:** bump @types/jest from 26.0.14 to 26.0.15 ([0e3e7f0](https://github.com/softrams/bulwark/commit/0e3e7f006c4ef845ee2b252458a4cf106210653f))
+* **deps-dev:** bump @types/node from 14.11.10 to 14.14.0 in /frontend ([86f9969](https://github.com/softrams/bulwark/commit/86f99697d9e72506162a9567976d2a1d91a8c1c6))
+* **deps-dev:** bump @types/node from 14.11.8 to 14.11.10 in /frontend ([cb2f61c](https://github.com/softrams/bulwark/commit/cb2f61cd2e1e7ba2914c661596583182e923db3c))
+* **deps-dev:** bump @types/node from 14.14.0 to 14.14.2 in /frontend ([84ae92c](https://github.com/softrams/bulwark/commit/84ae92c28921d417b2fddb735a830b6bb5d0c33f))
+* **deps-dev:** bump babel-jest from 26.5.2 to 26.6.0 ([022c89d](https://github.com/softrams/bulwark/commit/022c89de15c2d526e33cf60b4fc1ee14789aa094))
+* **deps-dev:** bump jest from 26.5.3 to 26.6.0 ([81aea5a](https://github.com/softrams/bulwark/commit/81aea5a5334f77e46a533ab3a7777a51450bdc2c))
+
 ### [6.0.6](https://github.com/softrams/bulwark/compare/v6.0.5...v6.0.6) (2020-10-21)
 
 
