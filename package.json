@@ -92,7 +92,7 @@
     "node-fetch": "^2.6.1",
     "nodemailer": "^6.4.14",
     "password-validator": "^5.1.0",
-    "puppeteer": "^5.3.1",
+    "puppeteer": "^5.4.0",
     "reflect-metadata": "^0.1.13",
     "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",
