@@ -38,8 +38,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import {ButtonModule} from 'primeng/button';
-import {CardModule} from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { PasswordModule } from 'primeng/password';
 import { EmailValidateComponent } from './email-validate/email-validate.component';
 
 @NgModule({
@@ -81,7 +82,8 @@ import { EmailValidateComponent } from './email-validate/email-validate.componen
     CalendarModule,
     ProgressSpinnerModule,
     ButtonModule,
-    CardModule
+    CardModule,
+    PasswordModule
   ],
   providers: [
     AppService,
