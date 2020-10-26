@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppService } from '../app.service';
+import { Vulnerability } from '../vuln-form/Vulnerability';
 
 @Component({
   selector: 'app-report',
   templateUrl: './report.component.html',
-  styleUrls: ['./report.component.sass']
+  styleUrls: ['./report.component.sass'],
 })
 export class ReportComponent implements OnInit {
   report: any;
@@ -16,6 +17,7 @@ export class ReportComponent implements OnInit {
   isLoading = true;
   urls = [];
   showButtons = true;
+  pieData: any;
   constructor(
     public activatedRoute: ActivatedRoute,
     public appService: AppService,
@@ -23,7 +25,7 @@ export class ReportComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const pathAry = this.activatedRoute.snapshot.url.map(obj => obj.path);
+    const pathAry = this.activatedRoute.snapshot.url.map((obj) => obj.path);
     if (pathAry.includes('puppeteer')) {
       this.showButtons = false;
     }
@@ -34,13 +36,14 @@ export class ReportComponent implements OnInit {
           Date.parse(this.report.assessment.startDate)) /
           86400000
       );
+      this.buildPieChart(report.vulns);
       for (const vuln of report.vulns) {
         vuln.screenshotObjs = [];
         for (const screenshot of vuln.screenshots) {
-          this.appService.getImageById(screenshot).then(url => {
+          this.appService.getImageById(screenshot).then((url) => {
             const screenshotObj = {
               url,
-              name: screenshot.originalname
+              name: screenshot.originalname,
             };
             this.urls.push(url);
             vuln.screenshotObjs.push(screenshotObj);
@@ -48,19 +51,39 @@ export class ReportComponent implements OnInit {
         }
       }
     });
-    this.activatedRoute.params.subscribe(params => {
+    this.activatedRoute.params.subscribe((params) => {
       this.orgId = params.orgId;
       this.assetId = params.assetId;
       this.assessmentId = params.assessmentId;
     });
   }
 
+  buildPieChart(vulns: Vulnerability[]) {
+    for (let vuln of vulns) {
+      console.log(vuln.risk);
+    }
+    const infoVulns = vulns.filter((x) => x.risk === 'Informational').length;
+    const lowVulns = vulns.filter((x) => x.risk === 'Low').length;
+    const mediumVulns = vulns.filter((x) => x.risk === 'Medium').length;
+    const highVulns = vulns.filter((x) => x.risk === 'High').length;
+    const criticalVulns = vulns.filter((x) => x.risk === 'Critical').length;
+    this.pieData = {
+      labels: ['Informational', 'Low', 'Medium', 'High', 'Critical'],
+      datasets: [
+        {
+          data: [infoVulns, lowVulns, mediumVulns],
+          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+          hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+        },
+      ],
+    };
+  }
   /**
    * Function responsible for navigating the user to the Vulnerability Listing
    */
   navigateToVulns() {
     this.router.navigate([
-      `organization/${this.orgId}/asset/${this.assetId}/assessment/${this.assessmentId}/vulnerability`
+      `organization/${this.orgId}/asset/${this.assetId}/assessment/${this.assessmentId}/vulnerability`,
     ]);
   }
 
@@ -73,7 +96,7 @@ export class ReportComponent implements OnInit {
       .generateReport(this.orgId, this.assetId, this.assessmentId)
       .subscribe((res: Blob) => {
         const blob = new Blob([res], {
-          type: res.type
+          type: res.type,
         });
         const url = window.URL.createObjectURL(blob);
         window.open(url);

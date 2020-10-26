@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid">
   <div class="row" id="buttons" *ngIf="showButtons">
     <div class="col-12">
       <div class="float-right">
@@ -42,9 +42,8 @@
     </div>
     <br />
     <div class="row">
-      <div class="col-5">
-        <h4>Application Security Team</h4>
-        <!--TODO:  Dynamically fill these out-->
+      <div class="col-6">
+        <h4 class="text-center">Application Security Team</h4>
         <table class="table">
           <thead>
             <tr>
@@ -60,33 +59,9 @@
           </tbody>
         </table>
       </div>
-      <div class="col-3">
-        <h4>Tools and Methodology</h4>
-        <ul>
-          <li>
-            <a href="https://portswigger.net/burp" target="_blank">Burp Suite Professional</a>
-          </li>
-          <li>
-            <a href="https://developers.google.com/web/tools/chrome-devtools/" target="_blank">Chrome Developer
-              Tools</a>
-          </li>
-          <li>
-            <a href="https://developer.mozilla.org/en-US/docs/Tools" target="_blank">Firefox Developer Tools</a>
-          </li>
-          <li>
-            <a href="https://www.ssllabs.com/ssltest/" target="_blank">SSL Labs</a>
-          </li>
-          <li>
-            <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check" target="_blank">Owasp Dependency Check</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-4">
-        <h4>OWASP Risk Rating</h4>
-        <!--Source: https://owasp.org/www-community/OWASP_Risk_Rating_Methodology-->
-        <a target="_blank" href="https://owasp.org/www-community/OWASP_Risk_Rating_Methodology">
-          <img src="../../assets/overallRiskSeverity.png" />
-        </a>
+      <div class="col-6" class="text-center">
+        <h4>Risk Severity Chart</h4>
+        <p-chart [height]="500" [width]="500" type="pie" [data]="pieData"></p-chart>
       </div>
     </div>
     <br />
@@ -116,7 +91,7 @@
   <div *ngFor="let vuln of report?.vulns; last as isLast">
     <div [ngClass]="{ page: !isLast }">
       <br />
-      <h3>{{ vuln?.name }}</h3>
+      <h3 class="text-center">{{ vuln?.name }}</h3>
       <table class="table">
         <thead class="thead-dark">
           <tr>
