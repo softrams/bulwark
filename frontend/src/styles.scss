@@ -9,10 +9,18 @@
   color: #fff !important;
 }
 
+.btn-secondary.p-button,
 .btn-secondary {
   color: #fff;
   background-color: #6c757d !important;
   border-color: #6c757d !important;
+}
+
+.btn-warning.p-button,
+.btn-warning {
+  color: #fff;
+  background-color: #ffc107 !important;
+  border-color: #ffc107 !important;
 }
 
 .btn-primary.p-button:hover,
