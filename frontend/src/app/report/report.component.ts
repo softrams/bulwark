@@ -18,6 +18,7 @@ export class ReportComponent implements OnInit {
   urls = [];
   showButtons = true;
   pieData: any;
+  radarData: any;
   constructor(
     public activatedRoute: ActivatedRoute,
     public appService: AppService,
@@ -37,6 +38,7 @@ export class ReportComponent implements OnInit {
           86400000
       );
       this.buildPieChart(report.vulns);
+      this.buildRadarChart(report.vulns);
       for (const vuln of report.vulns) {
         vuln.screenshotObjs = [];
         for (const screenshot of vuln.screenshots) {
@@ -59,9 +61,6 @@ export class ReportComponent implements OnInit {
   }
 
   buildPieChart(vulns: Vulnerability[]) {
-    for (let vuln of vulns) {
-      console.log(vuln.risk);
-    }
     const infoVulns = vulns.filter((x) => x.risk === 'Informational').length;
     const lowVulns = vulns.filter((x) => x.risk === 'Low').length;
     const mediumVulns = vulns.filter((x) => x.risk === 'Medium').length;
@@ -71,9 +70,41 @@ export class ReportComponent implements OnInit {
       labels: ['Informational', 'Low', 'Medium', 'High', 'Critical'],
       datasets: [
         {
-          data: [infoVulns, lowVulns, mediumVulns],
-          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-          hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+          data: [infoVulns, lowVulns, mediumVulns, highVulns, criticalVulns],
+          backgroundColor: [
+            '#157a6e',
+            '#499f68',
+            '#77B28C',
+            '#fec601',
+            '#ae0a0a',
+          ],
+          hoverBackgroundColor: [
+            '#157a6e',
+            '#499f68',
+            '#77B28C',
+            '#fec601',
+            '#ae0a0a',
+          ],
+        },
+      ],
+    };
+  }
+  buildRadarChart(vulns: Vulnerability[]) {
+    const open = vulns.filter((x) => x.status === 'Open').length;
+    const resolved = vulns.filter((x) => x.status === 'Resolved').length;
+    const onHold = vulns.filter((x) => x.status === 'On Hold').length;
+    this.radarData = {
+      labels: ['Open', 'Resolved', 'On Hold'],
+      datasets: [
+        {
+          label: 'Finding Status',
+          backgroundColor: 'rgba(179,181,198,0.2)',
+          borderColor: 'rgba(179,181,198,1)',
+          pointBackgroundColor: 'rgba(179,181,198,1)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgba(179,181,198,1)',
+          data: [open, resolved, onHold],
         },
       ],
     };

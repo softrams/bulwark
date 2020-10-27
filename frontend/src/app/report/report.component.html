@@ -19,7 +19,7 @@
       {{ report?.assessment?.name }} Application Security Report
     </h1>
     <hr />
-    <h4>
+    <h4 class="text-center">
       {{ report?.assessment?.startDate | date: 'shortDate':'UTC' }} -
       {{ report?.assessment?.endDate | date: 'shortDate':'UTC' }}
     </h4>
@@ -35,14 +35,14 @@
     </p>
     <br />
     <div *ngIf="report.assessment.executiveSummary">
-      <h4>Executive Summary</h4>
+      <h4 class="text-center">Executive Summary</h4>
       <markdown>
         {{ report?.assessment?.executiveSummary }}
       </markdown>
     </div>
     <br />
     <div class="row">
-      <div class="col-6">
+      <div class="col-4">
         <h4 class="text-center">Application Security Team</h4>
         <table class="table">
           <thead>
@@ -59,14 +59,18 @@
           </tbody>
         </table>
       </div>
-      <div class="col-6" class="text-center">
-        <h4>Risk Severity Chart</h4>
-        <p-chart [height]="500" [width]="500" type="pie" [data]="pieData"></p-chart>
+      <div class="col-4">
+        <h4 class="text-center">Overall Risk Severity</h4>
+        <p-chart [responsive]="false" [height]="415" [width]="415" type="pie" [data]="pieData"></p-chart>
+      </div>
+      <div class="col-4">
+        <h4 class="text-center">Status</h4>
+        <p-chart [responsive]="false" [height]="475" [width]="475" type="radar" [data]="radarData"></p-chart>
       </div>
     </div>
     <br />
     <div *ngIf="report && report.vulns && report.vulns.length; else noVulnMessage">
-      <h4>Summary of Findings</h4>
+      <h3 class="text-center">Summary of Findings</h3>
       <table class="table">
         <thead class="thead-dark">
           <tr>
