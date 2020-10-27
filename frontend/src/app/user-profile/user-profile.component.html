@@ -1,6 +1,6 @@
 <div class="container">
   <div class="col-md-9 mx-auto">
-    <div class="card">
+    <p-card>
       <div class="card-body">
         <div class="row">
           <div class="col-md-12">
@@ -14,33 +14,33 @@
               <div class="form-group row">
                 <label for="firstName" class="col-4 col-form-label">First Name:</label>
                 <div class="col-8">
-                  <input formControlName="firstName" type="text" id="password" class="form-control" name="firstName"
+                  <input pInputText formControlName="firstName" type="text" id="password" class="form-control" name="firstName"
                     placeholder="First Name" style="margin-bottom: 5px;" />
                 </div>
               </div>
               <div class="form-group row">
                 <label for="lastName" class="col-4 col-form-label">Last Name:</label>
                 <div class="col-8">
-                  <input formControlName="lastName" type="text" id="lastName" class="form-control" name="lastName"
+                  <input pInputText formControlName="lastName" type="text" id="lastName" class="form-control" name="lastName"
                     placeholder="Last Name" style="margin-bottom: 5px;" />
                 </div>
               </div>
               <div class="form-group row">
                 <label for="title" class="col-4 col-form-label">Title:</label>
                 <div class="col-8">
-                  <input formControlName="title" type="text" id="title" class="form-control" name="title"
+                  <input pInputText formControlName="title" type="text" id="title" class="form-control" name="title"
                     placeholder="Title" style="margin-bottom: 5px;" />
                 </div>
               </div>
-              <input [disabled]="isEdit ? !userForm.valid : false" type="submit" class="btn btn-primary float-right"
+              <input pInputText [disabled]="isEdit ? !userForm.valid : false" type="submit" class="btn btn-primary float-right"
                 [value]="isEdit ? 'Update' : 'Edit'" />
             </div>
           </form>
         </div>
       </div>
-    </div>
+    </p-card>
     <br />
-    <div class="card">
+    <p-card>
       <div class="card-body">
         <div class="row">
           <div class="col-md-12">
@@ -54,14 +54,14 @@
               <div class="form-group row">
                 <label for="email" class="col-4 col-form-label">Email:</label>
                 <div class="col-8">
-                  <input formControlName="email" type="email" id="email" class="form-control" name="email"
+                  <input pInputText formControlName="email" type="email" id="email" class="form-control" name="email"
                     style="margin-bottom: 5px;" />
                 </div>
               </div>
               <div *ngIf="isEmailEdit" class="form-group row">
                 <label for="newEmail" class="col-4 col-form-label">Confirm New Email:</label>
                 <div class="col-8">
-                  <input formControlName="newEmail" type="email" id="newEmail" class="form-control" name="newEmail"
+                  <input pInputText formControlName="newEmail" type="email" id="newEmail" class="form-control" name="newEmail"
                     placeholder="" style="margin-bottom: 5px;" />
                   <span *ngIf="user.newEmail">
                     <i class="pi pi-info-circle"></i><i style="font-size: smaller;"> Please check your email at
@@ -71,15 +71,15 @@
                   </span>
                 </div>
               </div>
-              <input [disabled]="isEmailEdit ? !emailForm.valid || user.newEmail : false" type="submit"
+              <input pInputText [disabled]="isEmailEdit ? !emailForm.valid || user.newEmail : false" type="submit"
                 class="btn btn-primary float-right" [value]="isEmailEdit ? 'Update' : 'Edit'" />
             </div>
           </form>
         </div>
       </div>
-    </div>
+    </p-card>
     <br />
-    <div class="card">
+    <p-card>
       <div class="card-body">
         <div class="row">
           <div class="col-md-12">
@@ -93,30 +93,30 @@
               <div class="form-group row">
                 <label for="oldPassword" class="col-4 col-form-label">Old Password:</label>
                 <div class="col-8">
-                  <input formControlName="oldPassword" type="password" id="oldPassword" class="form-control"
+                  <input pInputText formControlName="oldPassword" type="password" id="oldPassword" class="form-control"
                     name="oldPassword" style="margin-bottom: 5px;" />
                 </div>
               </div>
               <div class="form-group row">
                 <label for="newPassword" class="col-4 col-form-label">New Password:</label>
                 <div class="col-8">
-                  <input formControlName="newPassword" type="password" id="newPassword" class="form-control"
+                  <input pInputText formControlName="newPassword" type="password" id="newPassword" class="form-control"
                     name="newPassword" style="margin-bottom: 5px;" />
                 </div>
               </div>
               <div class="form-group row">
                 <label for="confirmNewPassword" class="col-4 col-form-label">Confirm New Password:</label>
                 <div class="col-8">
-                  <input formControlName="confirmNewPassword" type="password" id="confirmNewPassword"
+                  <input pInputText formControlName="confirmNewPassword" type="password" id="confirmNewPassword"
                     class="form-control" name="confirmNewPassword" style="margin-bottom: 5px;" />
                 </div>
               </div>
-              <input [disabled]="isSecurityEdit ? !securityForm.valid : false" type="submit"
+              <input pInputText [disabled]="isSecurityEdit ? !securityForm.valid : false" type="submit"
                 class="btn btn-primary float-right" [value]="isSecurityEdit ? 'Update' : 'Edit'" />
             </div>
           </form>
         </div>
       </div>
-    </div>
+    </p-card>
   </div>
 </div>
