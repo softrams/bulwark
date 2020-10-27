@@ -40,6 +40,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { PasswordModule } from 'primeng/password';
 import { EmailValidateComponent } from './email-validate/email-validate.component';
 import { ChartModule } from 'primeng/chart';
 @NgModule({
@@ -83,6 +84,7 @@ import { ChartModule } from 'primeng/chart';
     ButtonModule,
     CardModule,
     ChartModule,
+    PasswordModule,
   ],
   providers: [
     AppService,

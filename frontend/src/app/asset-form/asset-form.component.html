@@ -2,7 +2,7 @@
   <form [formGroup]="assetForm" (ngSubmit)="onSubmit(assetForm)">
     <div class="form-group">
       <label for="assetName">Asset Name</label>
-      <input formControlName="name" type="text" class="form-control" id="assetName" />
+      <input pInputText formControlName="name" type="text" class="form-control" id="assetName"/>
       <div class="card">
         <div class="card-body">
           <div class="col-md-12 text-center">
@@ -12,26 +12,25 @@
           <div formGroupName="jira">
             <label for="username">Username</label>
             <input [readonly]="!canAddApiKey" formControlName="username" type="text" class="form-control"
-              id="username" />
-            <label for="host">Host</label>
-            <input [readonly]="!canAddApiKey" formControlName="host" type="text" class="form-control" id="host" />
-            <label for="apiKey">API Key</label>
-            <input [readonly]="!canAddApiKey" formControlName="apiKey" type="password" class="form-control" id="apiKey"
-              [placeholder]="canAddApiKey ? '':keyPlaceholder" />
+              id="username" pInputText/>
+            <label for="host" style="margin-top: 10px">Host</label>
+            <input pInputText [readonly]="!canAddApiKey" formControlName="host" type="text" class="form-control" id="host"/>
+            <label for="apiKey" style="margin-top: 10px">API Key</label>
+            <input pPassword promptLabel="Enter the API key" [readonly]="!canAddApiKey" formControlName="apiKey" type="password" class="form-control" id="apiKey"
+              [placeholder]="canAddApiKey ? '':keyPlaceholder"/>
           </div>
           <br>
-          <button [disabled]="canAddApiKey" type="button" class="float-right btn btn-warning"
-            (click)="purgeJiraInfo()">Purge</button>
+          <button pButton [disabled]="canAddApiKey" type="button" class="float-right btn btn-warning"
+            (click)="purgeJiraInfo()" label="Purge">
+          </button>
         </div>
       </div>
     </div>
-    <button [disabled]="!assetForm.valid" class="btn btn-primary float-right" type="submit" data-toggle="tooltip"
-      data-placement="bottom" title="Submit">
-      Submit
+    <button pButton [disabled]="!assetForm.valid" class="btn btn-primary float-right" type="submit" data-toggle="tooltip"
+      data-placement="bottom" label="Submit">
     </button>
-    <button (click)="navigateToAssets()" class="btn btn-secondary float-right" type="button" style="margin-right: 5px"
-      data-toggle="tooltip" data-placement="bottom" title="Back to Assets">
-      Back to Assets
+    <button pButton (click)="navigateToAssets()" class="btn btn-secondary float-right" type="button" style="margin-right: 5px"
+      data-toggle="tooltip" data-placement="bottom" label="Back to Assets">
     </button>
   </form>
 </div>
