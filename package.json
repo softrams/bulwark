@@ -36,7 +36,7 @@
     "vulnerable",
     "vulnerability"
   ],
-  "author": "Alejandro Saenz",
+  "author": "Alejandro Saenz (https://www.alejandrosaenz.com/)",
   "contributors": [
     "Bill Jones",
     "Ryan Mathus",
@@ -44,7 +44,8 @@
     "Darrell Richards",
     "Alexandre Zanni",
     "Brett Mayen",
-    "Boucham Amine"
+    "Boucham Amine",
+    "Mark Muth"
   ],
   "repository": {
     "type": "git",
