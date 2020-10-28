@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   bulwark:
-    image: softramsdocker/bulwark:6.0.0
+    image: softramsdocker/bulwark:6.2.0
     container_name: bulwark
     environment:
       MYSQL_USER: "${MYSQL_USER}"
@@ -34,7 +34,7 @@ services:
       - bulwark-temp:/bulwark/src/temp:rw
     command: >
       sh -c "
-      until mysql --host=172.16.16.3 --user=$${MYSQL_USER} --password=$${MYSQL_ROOT_PASSWORD} --database=$${MYSQL_DB_CHECK} -e 'SELECT user FROM user;'; do
+      until mysql --host=$${DB_URL} --user=$${MYSQL_USER} --password=$${MYSQL_ROOT_PASSWORD} --database=$${MYSQL_DB_CHECK} -e 'SELECT user FROM user;'; do
         >&2 echo MySQL is unavailable - sleeping
         sleep 1
       done
