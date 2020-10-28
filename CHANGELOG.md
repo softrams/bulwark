@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.2.0](https://github.com/softrams/bulwark/compare/v6.1.0...v6.2.0) (2020-10-28)
+
+
+### Features
+
+* **asset-form:** use Prime NG for inputs, buttons and password form components ([e8f8e46](https://github.com/softrams/bulwark/commit/e8f8e46439b505e2f6a0a6656f98331dff20470a)), closes [#369](https://github.com/softrams/bulwark/issues/369)
+* **report component:** added pie chart and radar chart to report ([d955720](https://github.com/softrams/bulwark/commit/d955720db93482dd3f12f34a37a77f4f04005776)), closes [#410](https://github.com/softrams/bulwark/issues/410)
+* **report component:** update report structure ([ec5d06c](https://github.com/softrams/bulwark/commit/ec5d06cc67b8471d829bc64022243bbf2fd13413))
+* **user-profile:** use Prime NG for inputs and cards ([5623cb5](https://github.com/softrams/bulwark/commit/5623cb5f5b65c50037d5b8aeb0e963ff51bd4bca)), closes [#377](https://github.com/softrams/bulwark/issues/377)
+
+
+### Others
+
+* **deps:** bump @angular/cdk from 10.2.5 to 10.2.6 in /frontend ([3a00265](https://github.com/softrams/bulwark/commit/3a00265dcbf215591949d9ee404e6635141ff4fd))
+* **deps:** bump puppeteer from 5.3.1 to 5.4.0 ([a92cdc5](https://github.com/softrams/bulwark/commit/a92cdc52f35e87a6a788374b59a99af871eb3078))
+* **deps:** bump puppeteer from 5.4.0 to 5.4.1 ([4f83bc8](https://github.com/softrams/bulwark/commit/4f83bc81fbaec0563768c8f0008b3cb50ff5f694))
+* **deps-dev:** bump @types/jasmine from 3.5.14 to 3.6.0 in /frontend ([f596d72](https://github.com/softrams/bulwark/commit/f596d72f615f80e1c146798372d40da9664a9bd3))
+* **deps-dev:** bump @types/node from 14.14.2 to 14.14.3 in /frontend ([1c95507](https://github.com/softrams/bulwark/commit/1c95507b506bfe423cbec697dde0231c1971f9ec))
+* **deps-dev:** bump @types/node from 14.14.3 to 14.14.5 in /frontend ([3c9d0d7](https://github.com/softrams/bulwark/commit/3c9d0d732a2f4f02814efff709888d6c5a1bc95f))
+* **deps-dev:** bump babel-jest from 26.6.0 to 26.6.1 ([f5325f8](https://github.com/softrams/bulwark/commit/f5325f81f03070e5ffb0f5531fabfb66c106b8af))
+* **deps-dev:** bump jest from 26.6.0 to 26.6.1 ([53f64ab](https://github.com/softrams/bulwark/commit/53f64ab91e7db177afb8126471b33ca684b0033d))
+* **deps-dev:** bump ts-jest from 26.4.1 to 26.4.2 ([a2be373](https://github.com/softrams/bulwark/commit/a2be37332696f9c112a7b97821f4e2f93836cc8d))
+* **deps-dev:** bump ts-jest from 26.4.2 to 26.4.3 ([29d1404](https://github.com/softrams/bulwark/commit/29d14044d7ac0bf888f97f06edd1b00d567afd6b))
+* **deps-dev:** bump typescript from 4.0.3 to 4.0.5 ([b16b187](https://github.com/softrams/bulwark/commit/b16b187e53d346b8917de8addae9c02ad01243af))
+* **merge dev into branch:** merge develop into this branch ([9f7b32d](https://github.com/softrams/bulwark/commit/9f7b32dd635f47ed6f3834ebd8bea43bbdcbbe25))
+* **package.json:** updated package.json with additional contributor name ([20d8b47](https://github.com/softrams/bulwark/commit/20d8b478bc780786c8dfb6252422337f6123d737))
+
 ## [6.1.0](https://github.com/softrams/bulwark/compare/v6.0.6...v6.1.0) (2020-10-23)
 
 
