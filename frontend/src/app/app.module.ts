@@ -42,7 +42,7 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { PasswordModule } from 'primeng/password';
 import { EmailValidateComponent } from './email-validate/email-validate.component';
-
+import { ChartModule } from 'primeng/chart';
 @NgModule({
   declarations: [
     AppComponent,
@@ -83,7 +83,8 @@ import { EmailValidateComponent } from './email-validate/email-validate.componen
     ProgressSpinnerModule,
     ButtonModule,
     CardModule,
-    PasswordModule
+    ChartModule,
+    PasswordModule,
   ],
   providers: [
     AppService,

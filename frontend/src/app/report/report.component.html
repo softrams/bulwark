@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid">
   <div class="row" id="buttons" *ngIf="showButtons">
     <div class="col-12">
       <div class="float-right">
@@ -19,7 +19,7 @@
       {{ report?.assessment?.name }} Application Security Report
     </h1>
     <hr />
-    <h4>
+    <h4 class="text-center">
       {{ report?.assessment?.startDate | date: 'shortDate':'UTC' }} -
       {{ report?.assessment?.endDate | date: 'shortDate':'UTC' }}
     </h4>
@@ -35,16 +35,15 @@
     </p>
     <br />
     <div *ngIf="report.assessment.executiveSummary">
-      <h4>Executive Summary</h4>
+      <h4 class="text-center">Executive Summary</h4>
       <markdown>
         {{ report?.assessment?.executiveSummary }}
       </markdown>
     </div>
     <br />
     <div class="row">
-      <div class="col-5">
-        <h4>Application Security Team</h4>
-        <!--TODO:  Dynamically fill these out-->
+      <div class="col-4">
+        <h4 class="text-center">Application Security Team</h4>
         <table class="table">
           <thead>
             <tr>
@@ -60,38 +59,18 @@
           </tbody>
         </table>
       </div>
-      <div class="col-3">
-        <h4>Tools and Methodology</h4>
-        <ul>
-          <li>
-            <a href="https://portswigger.net/burp" target="_blank">Burp Suite Professional</a>
-          </li>
-          <li>
-            <a href="https://developers.google.com/web/tools/chrome-devtools/" target="_blank">Chrome Developer
-              Tools</a>
-          </li>
-          <li>
-            <a href="https://developer.mozilla.org/en-US/docs/Tools" target="_blank">Firefox Developer Tools</a>
-          </li>
-          <li>
-            <a href="https://www.ssllabs.com/ssltest/" target="_blank">SSL Labs</a>
-          </li>
-          <li>
-            <a href="https://www.owasp.org/index.php/OWASP_Dependency_Check" target="_blank">Owasp Dependency Check</a>
-          </li>
-        </ul>
+      <div class="col-4">
+        <h4 class="text-center">Overall Risk Severity</h4>
+        <p-chart [responsive]="false" [height]="415" [width]="415" type="pie" [data]="pieData"></p-chart>
       </div>
       <div class="col-4">
-        <h4>OWASP Risk Rating</h4>
-        <!--Source: https://owasp.org/www-community/OWASP_Risk_Rating_Methodology-->
-        <a target="_blank" href="https://owasp.org/www-community/OWASP_Risk_Rating_Methodology">
-          <img src="../../assets/overallRiskSeverity.png" />
-        </a>
+        <h4 class="text-center">Status</h4>
+        <p-chart [responsive]="false" [height]="475" [width]="475" type="radar" [data]="radarData"></p-chart>
       </div>
     </div>
     <br />
     <div *ngIf="report && report.vulns && report.vulns.length; else noVulnMessage">
-      <h4>Summary of Findings</h4>
+      <h3 class="text-center">Summary of Findings</h3>
       <table class="table">
         <thead class="thead-dark">
           <tr>
@@ -116,7 +95,7 @@
   <div *ngFor="let vuln of report?.vulns; last as isLast">
     <div [ngClass]="{ page: !isLast }">
       <br />
-      <h3>{{ vuln?.name }}</h3>
+      <h3 class="text-center">{{ vuln?.name }}</h3>
       <table class="table">
         <thead class="thead-dark">
           <tr>
