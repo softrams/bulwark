@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
-      interval: 'daily'
+      interval: 'weekly'
     target-branch: 'develop'
     reviewers:
       - 'Whamo12'
@@ -12,7 +12,7 @@ updates:
   - package-ecosystem: 'npm'
     directory: '/frontend'
     schedule:
-      interval: 'daily'
+      interval: 'weekly'
     target-branch: 'develop'
     reviewers:
       - 'Whamo12'
