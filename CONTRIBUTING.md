@@ -27,21 +27,11 @@ Any release from master will have a unique version automated by [standard-versio
 2. `MINOR` version with new functionality that is backwards-compatible
 3. `PATCH` version with backwards-compatible bug fixes
 
-## Pull Request Process
+## Pull-Request Process
 
 1. All work must be done in a fork off the dev branch
 2. Ensure any install or build dependencies are removed
 3. All Git commits within a PR must be conventional commits using [commitizen](https://github.com/commitizen/cz-cli) and enforced by [husky](https://github.com/typicode/husky)
    1. Run `$ npm run commit` when committing changes
-4. The code must comply to the configured TSLint and Sass Lint rules
-5. Open pull request to target the `develop` branch
-
-### Linting
-
-```
-npm run lint
-```
-
-### Testing
-
-All testing should adhere to the [testing guidelines](TESTING.md).
+4. The code must comply to the [testing requirements](TESTING.md)
+5. Open a Pull-Request against the `develop` branch
