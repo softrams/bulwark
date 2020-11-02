@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.2.2](https://github.com/softrams/bulwark/compare/v6.2.1...v6.2.2) (2020-11-02)
+
+
+### Docs
+
+* **security.md:** update security policy supported version statement. Update docker-compose.yml ver ([14f6b92](https://github.com/softrams/bulwark/commit/14f6b920af6d72841df273aca6c35e5a94ced819))
+
 ### [6.2.1](https://github.com/softrams/bulwark/compare/v6.2.0...v6.2.1) (2020-10-28)
 
 
