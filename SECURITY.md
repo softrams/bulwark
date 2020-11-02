@@ -2,12 +2,7 @@
 
 ## Supported Versions
 
-Security patches will be included in the latest released minor version.
-
-| Version | Supported          |
-| ------- | ------------------ |
-| 3.0.x   | :white_check_mark: |
-| <3.0    | :x:                |
+Security patches will be included in the latest released version.
 
 ## Reporting a Vulnerability
 

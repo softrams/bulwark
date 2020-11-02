@@ -1,25 +1,25 @@
 version: '3.8'
 services:
   bulwark:
-    image: softramsdocker/bulwark:6.2.0
+    image: softramsdocker/bulwark:6.2.2
     container_name: bulwark
     environment:
-      MYSQL_USER: "${MYSQL_USER}"
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
-      MYSQL_DB_CHECK: "${MYSQL_DB_CHECK}"
-      DB_PASSWORD: "${DB_PASSWORD}"
-      DB_URL: "${DB_URL}"
-      DB_USERNAME: "${DB_USERNAME}"
-      DB_PORT: "${DB_PORT}"
-      DB_NAME: "${DB_NAME}"
-      DB_TYPE: "${DB_TYPE}"
-      NODE_ENV: "${NODE_ENV}"
-      DEV_URL: "${DEV_URL}"
-      PROD_URL: "${PROD_URL}"
-      JWT_KEY: "${JWT_KEY}"
-      JWT_REFRESH_KEY: "${JWT_REFRESH_KEY}"
-      CRYPTO_SECRET: "${CRYPTO_SECRET}"
-      CRYPTO_SALT: "${CRYPTO_SALT}"
+      MYSQL_USER: '${MYSQL_USER}'
+      MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASSWORD}'
+      MYSQL_DB_CHECK: '${MYSQL_DB_CHECK}'
+      DB_PASSWORD: '${DB_PASSWORD}'
+      DB_URL: '${DB_URL}'
+      DB_USERNAME: '${DB_USERNAME}'
+      DB_PORT: '${DB_PORT}'
+      DB_NAME: '${DB_NAME}'
+      DB_TYPE: '${DB_TYPE}'
+      NODE_ENV: '${NODE_ENV}'
+      DEV_URL: '${DEV_URL}'
+      PROD_URL: '${PROD_URL}'
+      JWT_KEY: '${JWT_KEY}'
+      JWT_REFRESH_KEY: '${JWT_REFRESH_KEY}'
+      CRYPTO_SECRET: '${CRYPTO_SECRET}'
+      CRYPTO_SALT: '${CRYPTO_SALT}'
     depends_on:
       - bulwark-db
     networks:
@@ -48,10 +48,10 @@ services:
     image: mysql:5.7.31
     container_name: bulwark_db
     environment:
-      MYSQL_DATABASE: "${DB_NAME}"
-      MYSQL_USER: "${DB_USERNAME}"
-      MYSQL_PASSWORD: "${DB_PASSWORD}"
-      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_DATABASE: '${DB_NAME}'
+      MYSQL_USER: '${DB_USERNAME}'
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
     networks:
       static-network:
         ipv4_address: 172.16.16.3
