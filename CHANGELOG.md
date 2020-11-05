@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.2.3](https://github.com/softrams/bulwark/compare/v6.2.2...v6.2.3) (2020-11-05)
+
+
+### Docs
+
+* **docker-compose.yml:** update image version to 6.2.3 ([a90bddf](https://github.com/softrams/bulwark/commit/a90bddf2992e68f3317283cda77c5416b7c88120))
+* **testing.md contributing.md:** update testing and contribution documentation ([9b84c2b](https://github.com/softrams/bulwark/commit/9b84c2b6996c31ef7130f26afd8dc4814194b077))
+
+
+### Others
+
+* **deps:** bump @angular/animations from 10.2.0 to 10.2.1 in /frontend ([52e5888](https://github.com/softrams/bulwark/commit/52e588822b139ef3e536a01a167779bb4f7b53dc))
+* **deps:** bump @angular/animations from 10.2.1 to 10.2.2 in /frontend ([b0e69b8](https://github.com/softrams/bulwark/commit/b0e69b8921fbc4ec34593c9c3d7b48298f065fc0))
+* **deps:** bump @angular/cdk from 10.2.6 to 10.2.7 in /frontend ([59dd1f2](https://github.com/softrams/bulwark/commit/59dd1f28584577d744ef7c36086d772c97dfee5e))
+* **deps:** bump helmet from 4.1.1 to 4.2.0 ([ce2be8b](https://github.com/softrams/bulwark/commit/ce2be8bfd77ababcb800e0f91b49076f18cf1abe))
+* **deps:** bump typeorm from 0.2.28 to 0.2.29 ([191c98e](https://github.com/softrams/bulwark/commit/191c98e01d0cc34ff5deccb1ca8e29dc4f46fa05))
+* **deps-dev:** bump @angular/language-service in /frontend ([7c2854b](https://github.com/softrams/bulwark/commit/7c2854b34aaeb8ab40e22380e68a2f343bf80802))
+* **deps-dev:** bump @angular/language-service in /frontend ([771a992](https://github.com/softrams/bulwark/commit/771a992a413c50174c4ee094eddf1191007029a0))
+* **deps-dev:** bump @types/jasmine from 3.6.0 to 3.6.1 in /frontend ([d050ff0](https://github.com/softrams/bulwark/commit/d050ff0f1040061f229c8ea813bafaec261c6a95))
+* **deps-dev:** bump @types/node from 14.14.5 to 14.14.6 in /frontend ([cb4e421](https://github.com/softrams/bulwark/commit/cb4e42145217270a9d8b76809998ba6f0948a90f))
+* **deps-dev:** bump babel-jest from 26.6.1 to 26.6.2 ([684a36e](https://github.com/softrams/bulwark/commit/684a36edb9167027e5db8f0042a9dc43992154b9))
+* **deps-dev:** bump babel-jest from 26.6.2 to 26.6.3 ([05ff020](https://github.com/softrams/bulwark/commit/05ff020a0b0dcb4b8c2f28ab466a84f66c630272))
+* **deps-dev:** bump jest from 26.6.1 to 26.6.2 ([beed374](https://github.com/softrams/bulwark/commit/beed374f1510bd000b8c2366ac2606357a2ba82c))
+* **deps-dev:** bump jest from 26.6.2 to 26.6.3 ([d6be217](https://github.com/softrams/bulwark/commit/d6be2173339386df7db1d6009e291da66e976558))
+
+
+### CI
+
+* **codeql-analysis.yml:** update codeql-analysis.yml ([c46b22a](https://github.com/softrams/bulwark/commit/c46b22a14973226b872adeec4a3059b427ee19ee))
+* **dependabot.yml:** update dependabot.yml configuration ([3f2c01b](https://github.com/softrams/bulwark/commit/3f2c01b476141c80d4eb75d010447c007dcb6f10))
+
 ### [6.2.2](https://github.com/softrams/bulwark/compare/v6.2.1...v6.2.2) (2020-11-02)
 
 
