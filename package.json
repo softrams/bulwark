@@ -91,7 +91,7 @@
     "multer": "^1.4.2",
     "mysql": "^2.18.1",
     "node-fetch": "^2.6.1",
-    "nodemailer": "^6.4.14",
+    "nodemailer": "^6.4.15",
     "password-validator": "^5.1.1",
     "puppeteer": "^5.4.1",
     "reflect-metadata": "^0.1.13",
