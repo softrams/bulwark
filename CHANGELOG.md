@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.2.4](https://github.com/softrams/bulwark/compare/v6.2.3...v6.2.4) (2020-11-11)
+
+
+### Bug Fixes
+
+* **docker-run-exec.ts:** update docker-compose.yml with new npm script ([cd81ba7](https://github.com/softrams/bulwark/commit/cd81ba74f5687f168dd25cce9a4147b9ed5b3214)), closes [#434](https://github.com/softrams/bulwark/issues/434)
+* **update docker tag to latest:** no longer using a pinned version in docker-compse.yml ([6505c1c](https://github.com/softrams/bulwark/commit/6505c1cff2e548fa47e4b51ab06f69d5240f9439)), closes [#434](https://github.com/softrams/bulwark/issues/434)
+
+
+### Others
+
+* **deps:** bump core-js from 3.6.5 to 3.7.0 in /frontend ([2ed9be8](https://github.com/softrams/bulwark/commit/2ed9be8ace1cd606525cceb18c204fd67fafd390))
+* **deps:** bump nodemailer from 6.4.14 to 6.4.15 ([c476958](https://github.com/softrams/bulwark/commit/c476958b1d749c8a26b1b595ae856e2bba084cd9))
+* **deps:** bump password-validator from 5.1.0 to 5.1.1 ([c97982c](https://github.com/softrams/bulwark/commit/c97982c1637961ff15c3b22775614ab858d6954d))
+* **deps-dev:** bump ts-jest from 26.4.3 to 26.4.4 ([efe384b](https://github.com/softrams/bulwark/commit/efe384bf12c611a07cc41fa7d10bf45324a0761e))
+
 ### [6.2.3](https://github.com/softrams/bulwark/compare/v6.2.2...v6.2.3) (2020-11-05)
 
 
