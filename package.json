@@ -14,6 +14,7 @@
     "build": "rimraf dist && tsc && cd frontend && npm run-script build --aot --prod",
     "postinstall": "cd frontend && npm install && cd .. && npm run build",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+    "docker:check": "node dist/init/docker-run-exec.js",
     "migration:run": "typeorm migration:run",
     "migration:init": "typeorm migration:generate -n CreateDatabase && rimraf dist && tsc",
     "migration:generate": "typeorm migration:generate -n Refactor && rimraf dist && tsc",

@@ -40,8 +40,7 @@ services:
       done
       && echo MySQL should be up - starting up Bulwark.
       && echo Initial DB Creation
-      && npm run migration:init
-      && npm run migration:run
+      && npm run docker:check
       && npm run start"
 
   bulwark-db:
