@@ -7,6 +7,7 @@
 <p align="center">
 <img src='https://github.com/softrams/bulwark/workflows/build/badge.svg'>
 <img src='https://img.shields.io/badge/License-MIT-yellow.svg'>
+<img src='https://img.shields.io/docker/pulls/softramsdocker/bulwark'>
 </p>
 
 ![Bulwark Walkthrough Demo](https://github.com/Whamo12/media/blob/master/bulwark_report_demo.gif)
