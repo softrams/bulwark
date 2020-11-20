@@ -11,6 +11,7 @@ import { Vulnerability } from '../vuln-form/Vulnerability';
 export class ReportComponent implements OnInit {
   report: any;
   numOfDays: number;
+  stringDays: string;
   orgId: number;
   assetId: number;
   assessmentId: number;
@@ -37,6 +38,12 @@ export class ReportComponent implements OnInit {
           Date.parse(this.report.assessment.startDate)) /
           86400000
       );
+      if (this.numOfDays > 1 || this.numOfDays  === 0) {
+        this.stringDays = 'days';
+      }
+      else {
+        this.stringDays = 'day';
+      }
       this.buildPieChart(report.vulns);
       this.buildRadarChart(report.vulns);
       for (const vuln of report.vulns) {

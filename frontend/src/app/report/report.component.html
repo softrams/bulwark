@@ -28,7 +28,7 @@
       security assessment on {{ report?.asset?.name }} &
       {{ report?.assessment?.name }} (the application) on
       {{ report?.assessment?.startDate | date: 'shortDate':'UTC' }}. The security
-      assessment lasted {{ numOfDays }} days and ended on
+      assessment lasted {{ numOfDays }} {{ stringDays }} and ended on
       {{ report?.assessment?.endDate | date: 'shortDate':'UTC' }}. This report
       contains detailed information about security vulnerabilities found during
       the assessment.
