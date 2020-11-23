@@ -23,7 +23,7 @@
     "@angular/platform-browser": "~11.0.0",
     "@angular/platform-browser-dynamic": "~11.0.0",
     "@angular/router": "~11.0.0",
-    "@ng-select/ng-select": "^5.0.8",
+    "@ng-select/ng-select": "^5.0.9",
     "chart.js": "^2.9.4",
     "core-js": "^3.7.0",
     "ngx-markdown": "^10.1.1",
