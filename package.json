@@ -24,7 +24,7 @@
     "lint": "tslint --project . && cd frontend && npm run-script lint",
     "lint:fix": "tslint --fix --project . && cd frontend && npm run-script lint --fix=true",
     "release": "standard-version",
-    "commit": "git cz"
+    "commit": "npx git-cz"
   },
   "keywords": [
     "web security",
