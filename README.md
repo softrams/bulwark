@@ -50,7 +50,7 @@ CRYPTO_SALT="changeme"
 Build and start Bulwark containers:
 
 ```
-docker-compose up -d
+docker-compose up
 ```
 
 Start/Stop Bulwark containers:
