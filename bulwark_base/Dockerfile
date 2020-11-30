@@ -7,7 +7,7 @@ FROM alpine:3.12.0
 # Environmental Items
 ENV NODE_VERSION=14.9.0 \
     NPM_VERSION=6.14.8 \
-    ANGULAR_VERSION=9.0.7 \
+    ANGULAR_VERSION=11.0.0 \
     NPM_CONFIG_LOGLEVEL=info \
     TYPESCRIPT_VERSION=4.0.2 \
     PUPPETEER_VERSION=5.2.1 \
@@ -64,19 +64,19 @@ RUN rm -f "node-v$NODE_VERSION" \
   && npm --version
 
 # Install NPM
-RUN npm install -g npm@$NPM_VERSION
+# RUN npm install -g npm@$NPM_VERSION
 
 # Install Angular
-RUN npm install -g @angular/cli@$ANGULAR_VERSION --unsafe-perm
+# RUN npm install -g @angular/cli@$ANGULAR_VERSION --unsafe-perm
 
 # Install Typescript
-RUN npm install -g typescript@$TYPESCRIPT_VERSION
+# RUN npm install -g typescript@$TYPESCRIPT_VERSION
 
 # Install Angular Build DevKit
-RUN npm install -g @angular-devkit/build-angular
+# RUN npm install -g @angular-devkit/build-angular
 
 # Install Puppeteer
-RUN npm install -g puppeteer@$PUPPETEER_VERSION
+# RUN npm install -g puppeteer@$PUPPETEER_VERSION
 
 # Setup for launch control of Bulwark
 WORKDIR /
