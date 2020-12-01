@@ -1,4 +1,4 @@
-FROM softramsdocker/bulwark-base:6.0.0
+FROM softramsdocker/bulwark-base:latest
 
 # Environment Arguments for Bulwark
 ARG MYSQL_USER
@@ -33,11 +33,7 @@ RUN apk add --no-cache mysql-client
 USER bulwark
 
 # Bulwark Specific Startup
-RUN npm install \
-    && cd frontend \
-    && npm install \
-    && cd .. \
-    && npm run build
+RUN npm install
 
 # Cleanup NPM to save some space
 RUN rm -rf /bulwark/.npm
@@ -46,4 +42,4 @@ RUN rm -rf /bulwark/.npm
 EXPOSE 5000
 
 # Launch Bulwark
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
