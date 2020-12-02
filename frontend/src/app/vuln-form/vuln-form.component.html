@@ -150,8 +150,8 @@
       <div class="col-12">
         <label for="detailedInfo">Detailed Information</label>
         <div class="float-right">
-          <fa-icon (click)="toggleDetailedDescPreview()" *ngIf="!previewDetailedDesc" [icon]="faEye"></fa-icon>
-          <fa-icon (click)="toggleDetailedDescPreview()" *ngIf="previewDetailedDesc" [icon]="faEyeSlash"></fa-icon>
+          <i class="pi pi-eye" (click)="toggleDetailedDescPreview()" *ngIf="!previewDetailedDesc"></i>
+          <i class="pi pi-eye-slash" (click)="toggleDetailedDescPreview()" *ngIf="previewDetailedDesc"></i>
         </div>
       </div>
     </div>
@@ -171,8 +171,8 @@
       <div class="col-12">
         <label for="remediation">Remediation</label>
         <div class="float-right">
-          <fa-icon (click)="toggleRemediationPreview()" *ngIf="!previewRemediation" [icon]="faEye"></fa-icon>
-          <fa-icon (click)="toggleRemediationPreview()" *ngIf="previewRemediation" [icon]="faEyeSlash"></fa-icon>
+          <i class="pi pi-eye" (click)="toggleRemediationPreview()" *ngIf="!previewRemediation"></i>
+          <i class="pi pi-eye-slash" (click)="toggleRemediationPreview()" *ngIf="previewRemediation" [icon]="faEyeSlash"></i>
         </div>
       </div>
     </div>
