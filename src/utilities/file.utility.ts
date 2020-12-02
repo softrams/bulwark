@@ -1,6 +1,6 @@
 import multer = require('multer');
 
-const maxFileSize = 2097152
+const maxFileSize = 5000000; // 5 MB
 export const upload = multer({
   fileFilter: (req, file, cb) => {
     // Ext validation
