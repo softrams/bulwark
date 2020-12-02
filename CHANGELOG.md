@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.2.6](https://github.com/softrams/bulwark/compare/v6.2.5...v6.2.6) (2020-12-02)
+
+
+### Bug Fixes
+
+* **vuln form component:** fixing the markdown icon ([a7eee64](https://github.com/softrams/bulwark/commit/a7eee640297fbd76ad98aae37b66afd9c8bf5a86)), closes [#468](https://github.com/softrams/bulwark/issues/468)
+
+
+### Code Refactoring
+
+* **file.utility.ts:** update max file size to 5m ([d3d1a44](https://github.com/softrams/bulwark/commit/d3d1a4408ef127317ac9daf95db1a91415a34f5d))
+
 ### [6.2.5](https://github.com/softrams/bulwark/compare/v6.2.4...v6.2.5) (2020-12-01)
 
 
