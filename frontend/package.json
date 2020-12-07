@@ -11,7 +11,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular-devkit/build-angular": "~0.1100.2",
+    "@angular-devkit/build-angular": "~0.1100.3",
     "@angular/animations": "~11.0.0",
     "@angular/cdk": "^11.0.1",
     "@angular/cli": "~11.0.3",
@@ -26,7 +26,7 @@
     "@ng-select/ng-select": "^5.0.9",
     "chart.js": "^2.9.4",
     "core-js": "^3.8.1",
-    "ngx-markdown": "^11.0.0",
+    "ngx-markdown": "^11.0.1",
     "primeflex": "^2.0.0",
     "primeicons": "^4.1.0",
     "primeng": "^10.0.3",
@@ -36,7 +36,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.1100.2",
+    "@angular-devkit/build-angular": "~0.1100.3",
     "@angular/language-service": "~11.0.3",
     "@types/jasmine": "~3.6.2",
     "@types/jasminewd2": "~2.0.3",
