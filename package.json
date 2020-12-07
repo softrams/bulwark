@@ -62,6 +62,7 @@
     "@types/jest": "^26.0.16",
     "babel-jest": "^26.6.3",
     "cz-conventional-changelog": "^3.3.0",
+    "highlight.js": ">=10.4.1",
     "husky": "^4.3.0",
     "jest": "^26.6.3",
     "mock-express-request": "^0.2.2",
