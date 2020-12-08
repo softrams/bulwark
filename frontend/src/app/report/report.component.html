@@ -74,6 +74,7 @@
       <table class="table">
         <thead class="thead-dark">
           <tr>
+            <th scope="col">ID</th>
             <th scope="col">Finding</th>
             <th scope="col">Overall Risk Severity</th>
             <th scope="col">Status</th>
@@ -81,6 +82,7 @@
         </thead>
         <tbody *ngFor="let vuln of report.vulns">
           <tr>
+            <th>{{ vuln?.id }}</th>
             <th>{{ vuln?.name }}</th>
             <td>{{ vuln?.risk }}</td>
             <td>{{ vuln?.status }}</td>
@@ -99,6 +101,7 @@
       <table class="table">
         <thead class="thead-dark">
           <tr>
+            <th scope="col">ID</th>
             <th scope="col">Impact</th>
             <th scope="col">Likelihood</th>
             <th scope="col">Risk</th>
@@ -109,6 +112,7 @@
         </thead>
         <tbody>
           <tr>
+            <td>{{ vuln?.id }} </td>
             <td>{{ vuln?.impact }}</td>
             <td>{{ vuln?.likelihood }}</td>
             <td>{{ vuln?.risk }}</td>
