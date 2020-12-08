@@ -97,10 +97,11 @@
   <div *ngFor="let vuln of report?.vulns; last as isLast">
     <div [ngClass]="{ page: !isLast }">
       <br />
-      <h3 class="text-center">{{ vuln?.id }} - {{ vuln?.name }}</h3>
+      <h3 class="text-center">{{ vuln?.name }}</h3>
       <table class="table">
         <thead class="thead-dark">
           <tr>
+            <th scope="col">ID</th>
             <th scope="col">Impact</th>
             <th scope="col">Likelihood</th>
             <th scope="col">Risk</th>
@@ -111,6 +112,7 @@
         </thead>
         <tbody>
           <tr>
+            <td>{{ vuln?.id }} </td>
             <td>{{ vuln?.impact }}</td>
             <td>{{ vuln?.likelihood }}</td>
             <td>{{ vuln?.risk }}</td>
