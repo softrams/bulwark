@@ -69,7 +69,7 @@ export class ReportComponent implements OnInit {
     const highVulns = vulns.filter((x) => x.risk === 'High').length;
     const criticalVulns = vulns.filter((x) => x.risk === 'Critical').length;
     this.pieData = {
-      labels: ['Informational', 'Low', 'Medium', 'High', 'Critical'],
+      labels: [`Informational (${infoVulns})`, `Low (${lowVulns})`, `Medium (${mediumVulns})`, `High (${highVulns})`, `Critical (${criticalVulns})`],
       datasets: [
         {
           data: [infoVulns, lowVulns, mediumVulns, highVulns, criticalVulns],
