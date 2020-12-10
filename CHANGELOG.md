@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.3.0](https://github.com/softrams/bulwark/compare/v6.2.6...v6.3.0) (2020-12-10)
+
+
+### Features
+
+* **report component:** add numbering for list ([e6d3877](https://github.com/softrams/bulwark/commit/e6d3877547c1e2287f1fa4169034994566643a9b)), closes [#478](https://github.com/softrams/bulwark/issues/478) [#478](https://github.com/softrams/bulwark/issues/478)
+* **report component:** add numbers to pie chart ([4b12bfb](https://github.com/softrams/bulwark/commit/4b12bfbc56d48c05ef13ddb12861a180a06a8c12)), closes [#485](https://github.com/softrams/bulwark/issues/485)
+* **report component:** numbered list for reports ([75f6793](https://github.com/softrams/bulwark/commit/75f67934d66c67c1cd6cf38ab048373f11b432ad)), closes [#478](https://github.com/softrams/bulwark/issues/478) [#478](https://github.com/softrams/bulwark/issues/478)
+
+
+### Others
+
+* **deps:** bump @angular-devkit/build-angular in /frontend ([0df647a](https://github.com/softrams/bulwark/commit/0df647ab9bdb33ad004c96eb613c6a6e9765a495))
+* **deps:** bump @angular/cli from 11.0.2 to 11.0.3 in /frontend ([9f38774](https://github.com/softrams/bulwark/commit/9f38774412d2e383cd0539aca7ce13802fe8d1c6))
+* **deps:** bump core-js from 3.7.0 to 3.8.1 in /frontend ([64bafae](https://github.com/softrams/bulwark/commit/64bafae6afbc50da8eaa9cb4e33c79de2e19ec0c))
+* **deps:** bump ngx-markdown from 11.0.0 to 11.0.1 in /frontend ([72f0e0e](https://github.com/softrams/bulwark/commit/72f0e0e235f710998a55e5a9ddf30429780cb183))
+* **deps:** bump ts-node from 9.0.0 to 9.1.0 ([8b4064c](https://github.com/softrams/bulwark/commit/8b4064c31a53501dcb13597617b7a46212674af8))
+* **deps-dev:** bump @angular/language-service in /frontend ([655443d](https://github.com/softrams/bulwark/commit/655443db8fa41db52cbbcded63faef9f89f9e1e7))
+* **deps-dev:** bump @types/jest from 26.0.15 to 26.0.16 ([56374f8](https://github.com/softrams/bulwark/commit/56374f82f24b82e9237ce06d09e4c3c5faeba3a9))
+* **package.json:** add highlight.js v 10 to dev dependencies ([6db8153](https://github.com/softrams/bulwark/commit/6db815387426aa26a9fa5b49001c9f2f6d6f4973))
+* **package.json:** remove yargs package ([b17ec21](https://github.com/softrams/bulwark/commit/b17ec21f3637364c0d474e63204ab5cf89ccb076))
+
 ### [6.2.6](https://github.com/softrams/bulwark/compare/v6.2.5...v6.2.6) (2020-12-02)
 
 
