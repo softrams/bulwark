@@ -74,11 +74,11 @@ export class ReportComponent implements OnInit {
         {
           data: [infoVulns, lowVulns, mediumVulns, highVulns, criticalVulns],
           backgroundColor: [
-            '#157a6e',
-            '#499f68',
-            '#77B28C',
-            '#fec601',
-            '#ae0a0a',
+            '#205493',
+            '#2e8540',
+            '#fdb81e',
+            '#981b1e',
+            '#e31c3d',
           ],
           hoverBackgroundColor: [
             '#157a6e',
