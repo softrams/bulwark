@@ -33,12 +33,14 @@ export class ReportComponent implements OnInit {
     }
     this.activatedRoute.data.subscribe(({ report }) => {
       this.report = report;
+      this.sortRisk(this.report.vulns);
       this.numOfDays = Math.floor(
         (Date.parse(this.report.assessment.endDate) -
           Date.parse(this.report.assessment.startDate)) /
           86400000
       );
-      this.pluralDays = (this.numOfDays > 1 || this.numOfDays === 0) ? 'days' : 'day';
+      this.pluralDays =
+        this.numOfDays > 1 || this.numOfDays === 0 ? 'days' : 'day';
       this.buildPieChart(report.vulns);
       this.buildRadarChart(report.vulns);
       for (const vuln of report.vulns) {
@@ -62,6 +64,20 @@ export class ReportComponent implements OnInit {
     });
   }
 
+  sortRisk(vulns: Vulnerability[]) {
+    // https://stackoverflow.com/a/14872766
+    const ordering = {},
+      sortOrder = ['Critical', 'High', 'Medium', 'Low', 'Informational'];
+    for (let i = 0; i < sortOrder.length; i++) {
+      ordering[sortOrder[i]] = i;
+    }
+    vulns.sort((a, b) => {
+      return (
+        ordering[a.risk] - ordering[b.risk] || a.name.localeCompare(b.risk)
+      );
+    });
+  }
+
   buildPieChart(vulns: Vulnerability[]) {
     const infoVulns = vulns.filter((x) => x.risk === 'Informational').length;
     const lowVulns = vulns.filter((x) => x.risk === 'Low').length;
@@ -69,7 +85,13 @@ export class ReportComponent implements OnInit {
     const highVulns = vulns.filter((x) => x.risk === 'High').length;
     const criticalVulns = vulns.filter((x) => x.risk === 'Critical').length;
     this.pieData = {
-      labels: [`Informational (${infoVulns})`, `Low (${lowVulns})`, `Medium (${mediumVulns})`, `High (${highVulns})`, `Critical (${criticalVulns})`],
+      labels: [
+        `Informational (${infoVulns})`,
+        `Low (${lowVulns})`,
+        `Medium (${mediumVulns})`,
+        `High (${highVulns})`,
+        `Critical (${criticalVulns})`,
+      ],
       datasets: [
         {
           data: [infoVulns, lowVulns, mediumVulns, highVulns, criticalVulns],
