@@ -66,8 +66,8 @@ export class ReportComponent implements OnInit {
 
   sortRisk(vulns: Vulnerability[]) {
     // https://stackoverflow.com/a/14872766
-    const ordering = {},
-      sortOrder = ['Critical', 'High', 'Medium', 'Low', 'Informational'];
+    const ordering = {};
+    const sortOrder = ['Critical', 'High', 'Medium', 'Low', 'Informational'];
     for (let i = 0; i < sortOrder.length; i++) {
       ordering[sortOrder[i]] = i;
     }
