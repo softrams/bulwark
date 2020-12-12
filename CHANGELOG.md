@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.3.1](https://github.com/softrams/bulwark/compare/v6.3.0...v6.3.1) (2020-12-12)
+
+
+### Others
+
+* **deps:** bump ini from 1.3.5 to 1.3.8 ([88ab044](https://github.com/softrams/bulwark/commit/88ab044a4a7a8ace0c8da6b7d7486cd4652e836c))
+
 ## [6.3.0](https://github.com/softrams/bulwark/compare/v6.2.6...v6.3.0) (2020-12-10)
 
 
