@@ -82,8 +82,8 @@
         </thead>
         <tbody *ngFor="let vuln of report.vulns">
           <tr>
-            <th>{{ vuln?.id }}</th>
-            <th>{{ vuln?.name }}</th>
+            <td>{{ vuln?.id }}</td>
+            <td>{{ vuln?.name }}</td>
             <td>{{ vuln?.risk }}</td>
             <td>{{ vuln?.status }}</td>
           </tr>
