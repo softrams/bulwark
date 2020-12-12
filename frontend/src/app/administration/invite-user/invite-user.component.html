@@ -1,0 +1,26 @@
+<div class="container col-12 col-md-7 mx-auto">
+  <p-card>
+  <h6>Invite a User</h6>
+  <div id="formContent">
+    <form [formGroup]="inviteForm" (ngSubmit)="onSubmit(inviteForm)" id="userForm">
+      <input
+        formControlName="email"
+        type="text"
+        class="fill-width"
+        id="email"
+        class="form-control"
+        name="email"
+        placeholder="Email"
+        style="margin-bottom: 5px;"
+      />
+        <input
+          [disabled]="!inviteForm.valid"
+          type="submit"
+          class="btn btn-success centerBtn"
+          value="Submit"
+        />
+      <br>
+    </form>
+  </div>
+</p-card>
+</div>

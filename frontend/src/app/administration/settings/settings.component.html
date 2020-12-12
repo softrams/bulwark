@@ -1,11 +1,9 @@
 <div class="container col-12 col-md-7 mx-auto">
     <p-card>
-      <h4>Settings</h4>
-      <hr />
+      <h6>Application Email Settings</h6>
         <div id="formContent">
           <form [formGroup]="settingsForm" (ngSubmit)="onSubmit(settingsForm)" id="userForm">
             <div class="col-12">
-              <p-card>
                   <div class="p-d-flex p-flex-column">
                     <div class="p-d-flex p-flex-column">
                     <span>
@@ -31,22 +29,17 @@
                           style="margin-bottom: 5px;" pInputText/>
                       </div>
                     </div>
-                
                 </div>
-              </p-card>
-              <br>
-              <div class="p-d-flex p-flex-column p-flex-md-row pb-2">
-                <label for="companyName" class="col-12 col-md-4 col-form-label">Company Name:</label>
+                <div class="p-d-flex p-flex-column p-flex-md-row">
+                  <label for="companyName" class="col-12 col-md-4 col-form-label">Company Name:</label>
                 <div class="col-12 col-md-8">
                   <input formControlName="companyName" type="text" id="companyName" class="form-control"
                     name="companyName" placeholder="Company Name" style="margin-bottom: 5px;" pInputText/>
                 </div>
               </div>
-              <div class="col-12 p-d-flex p-jc-end">
-              <input [disabled]="isEdit ? !settingsForm.valid : false" type="submit" class="btn btn-primary px-3"
-                [value]="isEdit ? 'Update' : 'Edit'" pInputText/>
-                </div>
             </div>
+            <input [disabled]="isEdit ? !settingsForm.valid : false" type="submit" class="btn btn-success centerBtn"
+            [value]="isEdit ? 'Update' : 'Edit'" pInputText/>
           </form>
         </div>
     </p-card>

@@ -29,10 +29,11 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
-import { InviteUserComponent } from './invite-user/invite-user.component';
+import { InviteUserComponent } from './administration/invite-user/invite-user.component';
+import { AdministrationComponent } from './administration/administration.component';
 import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
-import { SettingsComponent } from './settings/settings.component';
+import { SettingsComponent } from './administration/settings/settings.component';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -62,6 +63,7 @@ import { ChartModule } from 'primeng/chart';
     ForgotPasswordComponent,
     PasswordResetComponent,
     InviteUserComponent,
+    AdministrationComponent,
     RegisterComponent,
     UserProfileComponent,
     SettingsComponent,
