@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../auth.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AlertService } from '../alert/alert.service';
-import { Settings } from '../interfaces/Settings';
-import { UserService } from '../user.service';
-import { AppService } from '../app.service';
+import { AlertService } from '../../alert/alert.service';
+import { Settings } from '../../interfaces/Settings';
+import { UserService } from '../../user.service';
+import { AppService } from '../../app.service';
 
 @Component({
   selector: 'app-settings',

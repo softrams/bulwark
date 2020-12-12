@@ -22,10 +22,11 @@ import { AuthGuard } from './auth.guard';
 import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
-import { InviteUserComponent } from './invite-user/invite-user.component';
+import { InviteUserComponent } from './administration/invite-user/invite-user.component';
+import { AdministrationComponent } from './administration/administration.component';
 import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
-import { SettingsComponent } from './settings/settings.component';
+import { SettingsComponent } from './administration/settings/settings.component';
 import { EmailValidateComponent } from './email-validate/email-validate.component';
 import { UserService } from './user.service';
 import { forkJoin } from 'rxjs';
@@ -169,6 +170,11 @@ const routes: Routes = [
   {
     path: 'invite',
     component: InviteUserComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'administration',
+    component: AdministrationComponent,
     canActivate: [AuthGuard],
   },
   {
