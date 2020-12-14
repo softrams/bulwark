@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FilterUtils } from 'primeng/utils';
+import { SelectItem, FilterService, FilterMatchMode } from 'primeng/api';
 import { AppService } from '../app.service';
 import { AlertService } from '../alert/alert.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,12 +28,12 @@ export class AssessmentsComponent implements OnInit {
   cols = [
     {
       field: 'id',
-      filterMatchMode: 'contains',
+      filterMatchMode: FilterMatchMode.CONTAINS,
       header: 'Assessment ID',
     },
     {
       field: 'name',
-      filterMatchMode: 'contains',
+      filterMatchMode: FilterMatchMode.CONTAINS,
       header: 'Assessment Name',
     },
     {
@@ -43,17 +43,17 @@ export class AssessmentsComponent implements OnInit {
     },
     {
       field: 'jiraId',
-      filterMatchMode: 'contains',
+      filterMatchMode: FilterMatchMode.CONTAINS,
       header: 'Jira ID',
     },
     {
       field: 'startDate',
-      filterMatchMode: 'equals',
+      filterMatchMode: FilterMatchMode.EQUALS,
       header: 'Start Date',
     },
     {
       field: 'startDate',
-      filterMatchMode: 'equals',
+      filterMatchMode: FilterMatchMode.EQUALS,
       header: 'End Date',
     },
   ];
@@ -64,14 +64,13 @@ export class AssessmentsComponent implements OnInit {
     public appService: AppService,
     public alertService: AlertService,
     public userService: UserService,
+    private filterService: FilterService
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.data.subscribe(
-      ({assessments}) => {
-        this.assessmentAry = assessments;
-      },
-    );
+    this.activatedRoute.data.subscribe(({ assessments }) => {
+      this.assessmentAry = assessments;
+    });
     this.activatedRoute.params.subscribe((params) => {
       this.assetId = params.assetId;
       this.orgId = params.orgId;
@@ -85,6 +84,23 @@ export class AssessmentsComponent implements OnInit {
     });
 
     this.addArrayCompareTableFilter();
+  }
+
+  /**
+   * Create custom table filter "matchMode" to compare multiselect filter array values to array of values in a table row field
+   */
+  private addArrayCompareTableFilter() {
+    this.filterService.register(
+      'arrayCompare',
+      (values: User[], selections: FormattedUser[]): boolean => {
+        console.log(values, selections);
+        return values.some((value) => {
+          return !!selections.some(
+            (selection) => selection.name === this.formatName(value)
+          );
+        });
+      }
+    );
   }
 
   /**
@@ -152,18 +168,6 @@ export class AssessmentsComponent implements OnInit {
     } else if (type === 'endDate') {
       this.table.filter(date.toISOString(), 'endDate', 'equals');
     }
-  }
-
-  /**
-   * Create custom table filter "matchMode" to compare multiselect filter array values to array of values in a table row field
-   */
-  private addArrayCompareTableFilter() {
-    // @ts-ignore-next-line
-    FilterUtils.arrayCompare = (values: User[], selections: FormattedUser[]) => {
-      return values.some((value) => {
-        return !!selections.some((selection) => selection.name === this.formatName(value));
-      });
-    };
   }
 
   /**
