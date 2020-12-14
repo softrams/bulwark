@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { SelectItem, FilterService, FilterMatchMode } from 'primeng/api';
+import { FilterService, FilterMatchMode } from 'primeng/api';
 import { AppService } from '../app.service';
 import { AlertService } from '../alert/alert.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -93,7 +93,6 @@ export class AssessmentsComponent implements OnInit {
     this.filterService.register(
       'arrayCompare',
       (values: User[], selections: FormattedUser[]): boolean => {
-        console.log(values, selections);
         return values.some((value) => {
           return !!selections.some(
             (selection) => selection.name === this.formatName(value)
