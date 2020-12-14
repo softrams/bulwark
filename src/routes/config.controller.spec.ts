@@ -1,14 +1,10 @@
-import {
-  createConnection,
-  getConnection,
-  Entity,
-  getRepository,
-} from 'typeorm';
+import { createConnection, getConnection, Entity, getRepository } from 'typeorm';
 import * as configController from './config.controller';
 import { Config } from '../entity/Config';
 import MockExpressResponse = require('mock-express-response');
 import MockExpressRequest = require('mock-express-request');
 import { User } from '../entity/User';
+import { Team } from '../entity/Team';
 import { compare } from '../utilities/password.utility';
 
 describe('config controller', () => {
@@ -17,9 +13,9 @@ describe('config controller', () => {
       type: 'sqlite',
       database: ':memory:',
       dropSchema: true,
-      entities: [Config, User],
+      entities: [Config, User, Team],
       synchronize: true,
-      logging: false,
+      logging: false
     });
   });
   afterEach(() => {
@@ -30,6 +26,7 @@ describe('config controller', () => {
     await configController.initialInsert();
     const userAry = await getConnection().getRepository(User).find({});
     const configAry = await getConnection().getRepository(Config).find({});
+    const teamAry = await getConnection().getRepository(Team).find({});
     expect(userAry.length).toBe(1);
     expect(configAry.length).toBe(1);
     expect(userAry[0].firstName).toBe('Master');
@@ -37,6 +34,10 @@ describe('config controller', () => {
     expect(userAry[0].email).toBe('admin@example.com');
     expect(userAry[0].title).toBe('Spartan 117');
     expect(userAry[0].active).toBeTruthy();
+    expect(teamAry.length).toBe(3);
+    expect(teamAry[0].name).toBe('Administrators');
+    expect(teamAry[1].name).toBe('Global Testers');
+    expect(teamAry[2].name).toBe('Global Read-Only');
     const initUsrPw = userAry[0].password;
     expect(compare('changeMe', initUsrPw)).toBeTruthy();
   });
@@ -52,8 +53,8 @@ describe('config controller', () => {
       body: {
         fromEmail: 'test@jest.com',
         fromEmailPassword: 'abc123',
-        companyName: 'UNFC',
-      },
+        companyName: 'UNFC'
+      }
     });
     await configController.saveConfig(request, response);
     expect(response.statusCode).toBe(200);
@@ -70,8 +71,8 @@ describe('config controller', () => {
       body: {
         fromEmail: 'test',
         fromEmailPassword: 'abc123',
-        companyName: 'UNFC',
-      },
+        companyName: 'UNFC'
+      }
     });
     await configController.saveConfig(request, response);
     expect(response.statusCode).toBe(400);
@@ -88,8 +89,8 @@ describe('config controller', () => {
       body: {
         fromEmail: 'test@jest.com',
         fromEmailPassword: 'abc123',
-        companyName: 'UNFC',
-      },
+        companyName: 'UNFC'
+      }
     });
     await configController.saveConfig(request, response);
     expect(response.statusCode).toBe(200);
@@ -106,8 +107,8 @@ describe('config controller', () => {
       body: {
         fromEmail: 'test',
         fromEmailPassword: 'abc123',
-        companyName: 'UNFC',
-      },
+        companyName: 'UNFC'
+      }
     });
     await configController.saveConfig(request, response);
     expect(response.statusCode).toBe(400);

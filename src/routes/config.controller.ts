@@ -2,13 +2,17 @@ import { getConnection } from 'typeorm';
 import { Response, Request } from 'express';
 import { Config } from '../entity/Config';
 import { User } from '../entity/User';
+import { Team } from '../entity/Team';
 import { encrypt } from '../utilities/crypto.utility';
 import { validate } from 'class-validator';
 import { generateHash } from '../utilities/password.utility';
+import { ROLE } from '../enums/roles-enum';
 
 export const initialInsert = async () => {
   const configAry = await getConnection().getRepository(Config).find({});
   const usrAry = await getConnection().getRepository(User).find({});
+  let savedUser: User;
+  const defaultTeamAry = await getConnection().getRepository(Team).find({});
   if (!configAry.length) {
     const initialConfig = new Config();
     initialConfig.companyName = null;
@@ -24,7 +28,36 @@ export const initialInsert = async () => {
     initialUser.lastName = 'Chief';
     initialUser.title = 'Spartan 117';
     initialUser.password = await generateHash('changeMe');
-    await getConnection().getRepository(User).save(initialUser);
+    savedUser = await getConnection().getRepository(User).save(initialUser);
+  }
+  if (!defaultTeamAry.length) {
+    const defaultAdminTeam = new Team();
+    defaultAdminTeam.name = 'Administrators';
+    defaultAdminTeam.createdDate = new Date();
+    defaultAdminTeam.lastUpdatedDate = new Date();
+    defaultAdminTeam.createdBy = savedUser ? savedUser.id : null;
+    defaultAdminTeam.lastUpdatedBy = savedUser ? savedUser.id : null;
+    defaultAdminTeam.role = ROLE.ADMIN;
+    if (savedUser) {
+      defaultAdminTeam.users = [savedUser];
+    }
+    await getConnection().getRepository(Team).save(defaultAdminTeam);
+    const defaultTestersTeam = new Team();
+    defaultTestersTeam.name = 'Global Testers';
+    defaultTestersTeam.createdDate = new Date();
+    defaultTestersTeam.lastUpdatedDate = new Date();
+    defaultTestersTeam.createdBy = savedUser ? savedUser.id : null;
+    defaultTestersTeam.lastUpdatedBy = savedUser ? savedUser.id : null;
+    defaultTestersTeam.role = ROLE.TESTER;
+    await getConnection().getRepository(Team).save(defaultTestersTeam);
+    const defaultReadOnlyTeam = new Team();
+    defaultReadOnlyTeam.name = 'Global Read-Only';
+    defaultReadOnlyTeam.createdDate = new Date();
+    defaultReadOnlyTeam.lastUpdatedDate = new Date();
+    defaultReadOnlyTeam.createdBy = savedUser ? savedUser.id : null;
+    defaultReadOnlyTeam.lastUpdatedBy = savedUser ? savedUser.id : null;
+    defaultReadOnlyTeam.role = ROLE.READONLY;
+    await getConnection().getRepository(Team).save(defaultReadOnlyTeam);
   }
 };
 
@@ -46,7 +79,7 @@ export const saveConfig = async (req: Request, res: Response) => {
     existingConfig.fromEmailPassword = encryptedPassword;
   }
   const errors = await validate(existingConfig, {
-    skipMissingProperties: true,
+    skipMissingProperties: true
   });
   if (errors.length > 0) {
     return res.status(400).json('Settings validation failed');
