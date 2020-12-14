@@ -97,7 +97,7 @@
     "password-validator": "^5.1.1",
     "puppeteer": "^5.5.0",
     "reflect-metadata": "^0.1.13",
-    "ts-node": "^9.1.0",
+    "ts-node": "^9.1.1",
     "tsconfig-paths": "^3.9.0",
     "typeorm": "^0.2.29",
     "uuid": "^8.3.2"
