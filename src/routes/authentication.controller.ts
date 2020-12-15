@@ -1,6 +1,7 @@
 import { UserRequest } from '../interfaces/user-request.interface';
 import { getConnection } from 'typeorm';
 import { User } from '../entity/User';
+import { TeamInfo } from '../interfaces/team-info.interface';
 import { v4 as uuidv4 } from 'uuid';
 import { Response } from 'express';
 import jwt = require('jsonwebtoken');
@@ -19,8 +20,9 @@ const login = async (req: UserRequest, res: Response) => {
   const { password, email } = req.body;
   const user = await getConnection()
     .getRepository(User)
-    .createQueryBuilder()
-    .where('User.email = :email', {
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.teams', 'team')
+    .where('user.email = :email', {
       email
     })
     .getOne();
@@ -132,7 +134,14 @@ const resetPassword = async (req: UserRequest, res: Response) => {
  * @returns Tokens
  */
 const refreshSession = async (req: UserRequest, res: Response) => {
-  const user = await getConnection().getRepository(User).findOne(req.user);
+  const user = await getConnection()
+    .getRepository(User)
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.teams', 'team')
+    .where('user.id = :userId', {
+      userId: req.user
+    })
+    .getOne();
   if (user) {
     const tokens = generateTokens(user);
     res.status(200).json(tokens);
@@ -147,7 +156,8 @@ const refreshSession = async (req: UserRequest, res: Response) => {
  * @returns Tokens
  */
 const generateTokens = (user: User) => {
-  const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, { expiresIn: '15m' });
+  const teamInfoAry = fetchUserTeams(user);
+  const token = jwt.sign({ userId: user.id, teams: teamInfoAry }, process.env.JWT_KEY, { expiresIn: '15m' });
   const refreshToken = jwt.sign({ userId: user.id }, process.env.JWT_REFRESH_KEY, { expiresIn: '8h' });
   const tokens = {
     token,
@@ -155,6 +165,26 @@ const generateTokens = (user: User) => {
   };
   return tokens;
 };
+
+/**
+ * @description Fetch user teams
+ * @param {User} user
+ * @returns array of user teams
+ */
+const fetchUserTeams = (user: User): TeamInfo[] => {
+  const teamInfoAry: TeamInfo[] = [];
+  for (const team of user.teams) {
+    const teamInfo: TeamInfo = {
+      id: team.id,
+      role: team.role,
+      organization: team.organization,
+      asset: team.asset
+    };
+    teamInfoAry.push(teamInfo);
+  }
+  return teamInfoAry;
+};
+
 module.exports = {
   login,
   forgotPassword,

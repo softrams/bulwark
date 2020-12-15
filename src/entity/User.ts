@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { IsEmail, IsUUID, IsAlpha, IsOptional } from 'class-validator';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
+import { IsEmail, IsUUID, IsOptional } from 'class-validator';
 import { dynamicNullable } from '../utilities/column-mapper.utility';
+import { Team } from '../entity/Team';
 
 @Entity()
 export class User {
@@ -32,4 +33,6 @@ export class User {
   lastName: string;
   @dynamicNullable()
   title: string;
+  @ManyToMany(() => Team, (team) => team.users)
+  teams: Team[];
 }

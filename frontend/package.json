@@ -26,6 +26,7 @@
     "@ng-select/ng-select": "^5.0.9",
     "chart.js": "^2.9.4",
     "core-js": "^3.8.1",
+    "jwt-decode": "^3.1.2",
     "ngx-markdown": "^11.0.1",
     "primeflex": "^2.0.0",
     "primeicons": "^4.1.0",

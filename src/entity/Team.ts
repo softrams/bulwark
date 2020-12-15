@@ -8,6 +8,10 @@ export class Team {
   id: number;
   @Column()
   name: string;
+  @Column({ nullable: true })
+  organization: number;
+  @Column({ nullable: true })
+  asset: number;
   @Column()
   @IsDate()
   createdDate: Date;
@@ -21,7 +25,7 @@ export class Team {
   @Column()
   @IsIn(['Admin', 'Read-Only', 'Tester'])
   role: string;
-  @ManyToMany(() => User)
+  @ManyToMany(() => User, (user) => user.teams)
   @JoinTable()
   users: User[];
 }

@@ -82,7 +82,7 @@ createConnection().then((_) => {
   app.post('/api/login', authController.login);
   app.post('/api/upload', jwtMiddleware.checkToken, fileUploadController.uploadFile);
   app.get('/api/file/:id', jwtMiddleware.checkToken, fileUploadController.getFileById);
-  app.get('/api/organization', jwtMiddleware.checkToken, orgController.getActiveOrgs);
+  app.get('/api/organization', [jwtMiddleware.checkToken, jwtMiddleware.isAdmin], orgController.getActiveOrgs);
   app.get('/api/organization/archive', jwtMiddleware.checkToken, orgController.getArchivedOrgs);
   app.get('/api/organization/:id', jwtMiddleware.checkToken, orgController.getOrgById);
   app.patch('/api/organization/:id/archive', jwtMiddleware.checkToken, orgController.archiveOrgById);
