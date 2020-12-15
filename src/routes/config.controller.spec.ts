@@ -6,6 +6,7 @@ import MockExpressRequest = require('mock-express-request');
 import { User } from '../entity/User';
 import { Team } from '../entity/Team';
 import { compare } from '../utilities/password.utility';
+import { v4 as uuidv4 } from 'uuid';
 
 describe('config controller', () => {
   beforeEach(() => {
@@ -26,9 +27,12 @@ describe('config controller', () => {
     await configController.initialInsert();
     const userAry = await getConnection().getRepository(User).find({});
     const configAry = await getConnection().getRepository(Config).find({});
-    const teamAry = await getConnection().getRepository(Team).find({});
+    const teamAry = await getConnection()
+      .getRepository(Team)
+      .find({ relations: ['users'] });
     expect(userAry.length).toBe(1);
     expect(configAry.length).toBe(1);
+    expect(userAry[0].id).toBe(1);
     expect(userAry[0].firstName).toBe('Master');
     expect(userAry[0].lastName).toBe('Chief');
     expect(userAry[0].email).toBe('admin@example.com');
@@ -36,10 +40,32 @@ describe('config controller', () => {
     expect(userAry[0].active).toBeTruthy();
     expect(teamAry.length).toBe(3);
     expect(teamAry[0].name).toBe('Administrators');
+    expect(teamAry[0].users[0].email).toBe('admin@example.com');
+    expect(teamAry[0].createdBy && teamAry[0].lastUpdatedBy).toBe(1);
     expect(teamAry[1].name).toBe('Global Testers');
+    expect(teamAry[1].createdBy && teamAry[1].lastUpdatedBy).toBe(1);
     expect(teamAry[2].name).toBe('Global Read-Only');
+    expect(teamAry[2].createdBy && teamAry[2].lastUpdatedBy).toBe(1);
     const initUsrPw = userAry[0].password;
     expect(compare('changeMe', initUsrPw)).toBeTruthy();
+  });
+  test('initial user exists. teams do not exist', async () => {
+    const user = new User();
+    user.active = false;
+    user.uuid = uuidv4();
+    user.email = 'testing@jest.com';
+    user.newEmail = null;
+    await getConnection().getRepository(User).save(user);
+    await configController.initialInsert();
+    const teamAry = await getConnection()
+      .getRepository(Team)
+      .find({ relations: ['users'] });
+    expect(teamAry[0].users).toHaveLength(0);
+    expect(teamAry[0].createdBy && teamAry[0].lastUpdatedBy).toBeNull();
+    expect(teamAry[1].users).toHaveLength(0);
+    expect(teamAry[1].createdBy && teamAry[1].lastUpdatedBy).toBeNull();
+    expect(teamAry[2].users).toHaveLength(0);
+    expect(teamAry[2].createdBy && teamAry[2].lastUpdatedBy).toBeNull();
   });
   test('save configuration success', async () => {
     const config = new Config();
