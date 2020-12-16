@@ -20,6 +20,11 @@
 
 - Run `npm run test` to execute the unit tests.
 
+## Installing Prettier
+
+1. Prettier is used for code consistency. Install it by running `npm install --save-dev --save-exact prettier`
+2. Once the pre-commit occurs, this will run `lint-staged` which calls `prettier --write `. This will format the code.
+
 ## Linting
 
 ```
