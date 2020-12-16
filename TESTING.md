@@ -27,3 +27,7 @@ npm run lint
 ```
 
 In case your PR is failing from style guide issues try running `npm run lint:fix` - this will fix all syntax or code style issues automatically without breaking your code.
+
+### Prettier
+
+Bulwark uses [Prettier](https://prettier.io/) for opinionating code formatting. It is recommended to run it from your editor. Use the following [steps](https://prettier.io/docs/en/editors.html) to integrate Prettier into your editor.
