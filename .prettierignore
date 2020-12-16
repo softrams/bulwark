@@ -1,0 +1,8 @@
+coverage
+dist
+frontend/dist
+node_modules
+frontend/node_modules
+
+# Ignore all HTML files:
+*.html
