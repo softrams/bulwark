@@ -1,26 +1,23 @@
 <div class="container col-12 col-md-7 mx-auto">
   <p-card>
-  <h6>Invite a User</h6>
-  <div id="formContent">
-    <form [formGroup]="inviteForm" (ngSubmit)="onSubmit(inviteForm)" id="userForm">
-      <input
-        formControlName="email"
-        type="text"
-        class="fill-width"
-        id="email"
-        class="form-control"
-        name="email"
-        placeholder="Email"
-        style="margin-bottom: 5px;"
-      />
-        <input
-          [disabled]="!inviteForm.valid"
-          type="submit"
-          class="btn btn-success centerBtn"
-          value="Submit"
-        />
-      <br>
-    </form>
-  </div>
-</p-card>
+    <h6>Invite a User</h6>
+    <div id="formContent">
+      <form [formGroup]="inviteForm" (ngSubmit)="onSubmit(inviteForm)" id="userForm">
+        <div class="col-12">
+          <div class="p-d-flex p-flex-column">
+            <div class="p-d-flex p-flex-column p-flex-md-row">
+              <label for="inviteUser" class="col-12 col-md-4 col-form-label">User Email:</label>
+              <div class="col-12 col-md-8">
+                <input pInputText formControlName="email" type="text" class="fill-width" id="email" class="form-control"
+                  name="email" placeholder="Email" style="margin-bottom: 5px;" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <input pInputText [disabled]="!inviteForm.valid" type="submit" class="btn btn-primary float-right"
+          value="Submit" />
+        <br />
+      </form>
+    </div>
+  </p-card>
 </div>

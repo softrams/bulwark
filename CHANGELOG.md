@@ -2,267 +2,297 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [6.3.1](https://github.com/softrams/bulwark/compare/v6.3.0...v6.3.1) (2020-12-12)
+## [6.4.0](https://github.com/softrams/bulwark/compare/v6.3.1...v6.4.0) (2021-01-04)
 
+### Features
+
+- **adminsitration area:** adding Administration Area ([e5d91b2](https://github.com/softrams/bulwark/commit/e5d91b21459a5460ea848d3530085596a15b7cbf)), closes [#491](https://github.com/softrams/bulwark/issues/491)
+- **invite-user.component:** update look and feel of invite-user and settings component ([cdcf572](https://github.com/softrams/bulwark/commit/cdcf572ed6022ba5acd0e477f0580f8013e46349))
+- **package.json:** add prettier pre-commit hook ([7602dfb](https://github.com/softrams/bulwark/commit/7602dfb39f95d0e4349ee8dde8da885508c17b7e)), closes [#509](https://github.com/softrams/bulwark/issues/509)
+- **prettier:** adding prettier ([eb44eb1](https://github.com/softrams/bulwark/commit/eb44eb111f7d028a9282071ac67fe9b2a67b0b5d)), closes [#508](https://github.com/softrams/bulwark/issues/508)
+- **prettier:** update prettier config ([ba2c5f1](https://github.com/softrams/bulwark/commit/ba2c5f188f0248d05231c4b5abe8c68ccf154219)), closes [#509](https://github.com/softrams/bulwark/issues/509)
+- **report component:** color changes to pie chart ([7269d62](https://github.com/softrams/bulwark/commit/7269d6282c46a4284ad58dd008ca73f982c3deae)), closes [#487](https://github.com/softrams/bulwark/issues/487)
+- **report component:** color changes to the pie chart ([707271e](https://github.com/softrams/bulwark/commit/707271e409b3be5a28731fedd6b88fac1a7f860d)), closes [#487](https://github.com/softrams/bulwark/issues/487)
+- **report.component:** implement overall risk sort ([e31c76c](https://github.com/softrams/bulwark/commit/e31c76ce26f8ce22b3af616650414555cf1a1b1b)), closes [#482](https://github.com/softrams/bulwark/issues/482)
+
+### Bug Fixes
+
+- **assessments.component.ts:** fixed build break due to deprecated FilterUtils ([d7c2ae3](https://github.com/softrams/bulwark/commit/d7c2ae32cf274c27e1c55284e4765543d5449dbf))
 
 ### Others
 
-* **deps:** bump ini from 1.3.5 to 1.3.8 ([88ab044](https://github.com/softrams/bulwark/commit/88ab044a4a7a8ace0c8da6b7d7486cd4652e836c))
+- **assessments.component.ts:** remove library and console.log ([0cab4ea](https://github.com/softrams/bulwark/commit/0cab4ea553e6241a89df73d0c04e6c5154b45815))
+- **deps:** bump @angular-devkit/build-angular in /frontend ([b33ce85](https://github.com/softrams/bulwark/commit/b33ce85f8b2e9199c3a12a3c7a8de5cd6f7d0d15))
+- **deps:** bump @angular/cdk from 11.0.1 to 11.0.2 in /frontend ([49da433](https://github.com/softrams/bulwark/commit/49da433b38adb03d86aa0680e85019f01bfae331))
+- **deps:** bump @angular/cdk from 11.0.2 to 11.0.3 in /frontend ([786c8f0](https://github.com/softrams/bulwark/commit/786c8f09d801cd8cd0a0a3758d65a23b121b334b))
+- **deps:** bump @angular/cli from 11.0.3 to 11.0.5 in /frontend ([d9033e4](https://github.com/softrams/bulwark/commit/d9033e4306de09eff073cec9355c097b779c00e5))
+- **deps:** bump @ng-select/ng-select from 5.0.9 to 5.0.11 in /frontend ([b1428ab](https://github.com/softrams/bulwark/commit/b1428ab991b37c18a3805caa237354be2239bf86))
+- **deps:** bump @ng-select/ng-select in /frontend ([1cdc8ab](https://github.com/softrams/bulwark/commit/1cdc8ab676bbc2320eafe04d746d3bb2bce4382f))
+- **deps:** bump core-js from 3.8.1 to 3.8.2 in /frontend ([6c05e06](https://github.com/softrams/bulwark/commit/6c05e06b90ef53ad168bbb7d638d23e62b38515b))
+- **deps:** bump helmet from 4.2.0 to 4.3.1 ([2f0e7fb](https://github.com/softrams/bulwark/commit/2f0e7fbf405dcf4bf758f248fbc6e313a0279d72))
+- **deps:** bump mime-types from 2.1.27 to 2.1.28 ([0c85c5f](https://github.com/softrams/bulwark/commit/0c85c5f9904219fb4dbf89eb935fe4a2208e05e3))
+- **deps:** bump nodemailer from 6.4.16 to 6.4.17 ([3c7456d](https://github.com/softrams/bulwark/commit/3c7456df86e7dcc5c29ab8b6da3034ddaf04f07c))
+- **deps:** bump primeng from 10.0.3 to 11.0.0 in /frontend ([992dc1a](https://github.com/softrams/bulwark/commit/992dc1a6c6d5d12c406f1cfd1fa1ba6eba65a6a4))
+- **deps:** bump ts-node from 9.1.0 to 9.1.1 ([24f3afa](https://github.com/softrams/bulwark/commit/24f3afaec8a4e010e4382ce48243b37a7c3c3ad7))
+- **deps:** bump uuid from 8.3.1 to 8.3.2 ([a9d5a1b](https://github.com/softrams/bulwark/commit/a9d5a1b3854043b2e4c2852a9056103de2f692a0))
+- **deps-dev:** bump @angular/language-service in /frontend ([6b9bb89](https://github.com/softrams/bulwark/commit/6b9bb89cc1ece2f94bd3b1b186ea09159d524314))
+- **deps-dev:** bump @angular/language-service in /frontend ([65f5818](https://github.com/softrams/bulwark/commit/65f5818de0ebe716348a99877e68b7fc8a676387))
+- **deps-dev:** bump @babel/core from 7.12.9 to 7.12.10 ([ba5a326](https://github.com/softrams/bulwark/commit/ba5a32667b6b8c6a7b8a7c54bf2e8cedc3045b91))
+- **deps-dev:** bump @babel/preset-env from 7.12.7 to 7.12.11 ([dde25dd](https://github.com/softrams/bulwark/commit/dde25dde0fd497552ca931c6dbd43c53eab95790))
+- **deps-dev:** bump @types/jest from 26.0.16 to 26.0.19 ([463675c](https://github.com/softrams/bulwark/commit/463675cf2f763b534d16a070a780155c34742373))
+- **deps-dev:** bump @types/node from 14.14.10 to 14.14.13 in /frontend ([424df1c](https://github.com/softrams/bulwark/commit/424df1c5566ac300c8237e90f56794ef06aad476))
+- **deps-dev:** bump @types/node from 14.14.13 to 14.14.14 in /frontend ([5b61ed8](https://github.com/softrams/bulwark/commit/5b61ed8774a1130d954513d3fa788ca4d5ed588e))
+- **deps-dev:** bump @types/node from 14.14.14 to 14.14.16 in /frontend ([d322e2d](https://github.com/softrams/bulwark/commit/d322e2d6316ec92dcdfcef1cf988468f618256f1))
+- **deps-dev:** bump @types/node from 14.14.16 to 14.14.19 in /frontend ([9b41c20](https://github.com/softrams/bulwark/commit/9b41c20204699310a1b65a09a31b6052d5a68765))
+- **deps-dev:** bump highlight.js from 10.4.1 to 10.5.0 ([2fbf9c6](https://github.com/softrams/bulwark/commit/2fbf9c69aace53f3abb55af007c70a6aacf71a46))
+- **deps-dev:** bump husky from 4.3.0 to 4.3.6 ([7266035](https://github.com/softrams/bulwark/commit/7266035a5ecf43389c3d9f2f8b79c39866695cf3))
+- **deps-dev:** bump karma from 5.1.1 to 5.2.3 in /frontend ([a58dbf9](https://github.com/softrams/bulwark/commit/a58dbf9af33270f5d8d9d153ce73cc9e1c74c9dd))
+- **deps-dev:** bump mock-express-response from 0.2.2 to 0.3.0 ([e9588b8](https://github.com/softrams/bulwark/commit/e9588b884b6656aa59058c5de58bd539da61c6f0))
+- **deps-dev:** bump standard-version from 9.0.0 to 9.1.0 ([a497d0e](https://github.com/softrams/bulwark/commit/a497d0e14d1fb8a9adebde6d2da836efde70e48f))
+- **deps-dev:** bump ts-node from 9.0.0 to 9.1.1 in /frontend ([f18666b](https://github.com/softrams/bulwark/commit/f18666b4ccf5c8550ba6e94146673bed50a0d855))
+- **deps-dev:** bump typescript from 4.1.2 to 4.1.3 ([29c5db5](https://github.com/softrams/bulwark/commit/29c5db53093cc51615eacc5ce2c3999987987aac))
+- **report.component:** fix lint issue ([aca3ea9](https://github.com/softrams/bulwark/commit/aca3ea918f1c772d9907e10b8c476595ecfc1976)), closes [#482](https://github.com/softrams/bulwark/issues/482)
+
+### Docs
+
+- **testing.md:** minor changes to testing.md file ([a9c04c0](https://github.com/softrams/bulwark/commit/a9c04c0a3f5e8501dc77c7e20854c3536767f639)), closes [#509](https://github.com/softrams/bulwark/issues/509)
+- **testing.md:** uopdating documentation ([840f4e2](https://github.com/softrams/bulwark/commit/840f4e2f1394b096c57885611e696f7de993afac)), closes [#509](https://github.com/softrams/bulwark/issues/509)
+- **testing.md:** update prettier documentation ([48fbef4](https://github.com/softrams/bulwark/commit/48fbef44c60a7de22fca694ac3a2f0f85651031b)), closes [#509](https://github.com/softrams/bulwark/issues/509)
+
+### [6.3.1](https://github.com/softrams/bulwark/compare/v6.3.0...v6.3.1) (2020-12-12)
+
+### Others
+
+- **deps:** bump ini from 1.3.5 to 1.3.8 ([88ab044](https://github.com/softrams/bulwark/commit/88ab044a4a7a8ace0c8da6b7d7486cd4652e836c))
 
 ## [6.3.0](https://github.com/softrams/bulwark/compare/v6.2.6...v6.3.0) (2020-12-10)
 
-
 ### Features
 
-* **report component:** add numbering for list ([e6d3877](https://github.com/softrams/bulwark/commit/e6d3877547c1e2287f1fa4169034994566643a9b)), closes [#478](https://github.com/softrams/bulwark/issues/478) [#478](https://github.com/softrams/bulwark/issues/478)
-* **report component:** add numbers to pie chart ([4b12bfb](https://github.com/softrams/bulwark/commit/4b12bfbc56d48c05ef13ddb12861a180a06a8c12)), closes [#485](https://github.com/softrams/bulwark/issues/485)
-* **report component:** numbered list for reports ([75f6793](https://github.com/softrams/bulwark/commit/75f67934d66c67c1cd6cf38ab048373f11b432ad)), closes [#478](https://github.com/softrams/bulwark/issues/478) [#478](https://github.com/softrams/bulwark/issues/478)
-
+- **report component:** add numbering for list ([e6d3877](https://github.com/softrams/bulwark/commit/e6d3877547c1e2287f1fa4169034994566643a9b)), closes [#478](https://github.com/softrams/bulwark/issues/478) [#478](https://github.com/softrams/bulwark/issues/478)
+- **report component:** add numbers to pie chart ([4b12bfb](https://github.com/softrams/bulwark/commit/4b12bfbc56d48c05ef13ddb12861a180a06a8c12)), closes [#485](https://github.com/softrams/bulwark/issues/485)
+- **report component:** numbered list for reports ([75f6793](https://github.com/softrams/bulwark/commit/75f67934d66c67c1cd6cf38ab048373f11b432ad)), closes [#478](https://github.com/softrams/bulwark/issues/478) [#478](https://github.com/softrams/bulwark/issues/478)
 
 ### Others
 
-* **deps:** bump @angular-devkit/build-angular in /frontend ([0df647a](https://github.com/softrams/bulwark/commit/0df647ab9bdb33ad004c96eb613c6a6e9765a495))
-* **deps:** bump @angular/cli from 11.0.2 to 11.0.3 in /frontend ([9f38774](https://github.com/softrams/bulwark/commit/9f38774412d2e383cd0539aca7ce13802fe8d1c6))
-* **deps:** bump core-js from 3.7.0 to 3.8.1 in /frontend ([64bafae](https://github.com/softrams/bulwark/commit/64bafae6afbc50da8eaa9cb4e33c79de2e19ec0c))
-* **deps:** bump ngx-markdown from 11.0.0 to 11.0.1 in /frontend ([72f0e0e](https://github.com/softrams/bulwark/commit/72f0e0e235f710998a55e5a9ddf30429780cb183))
-* **deps:** bump ts-node from 9.0.0 to 9.1.0 ([8b4064c](https://github.com/softrams/bulwark/commit/8b4064c31a53501dcb13597617b7a46212674af8))
-* **deps-dev:** bump @angular/language-service in /frontend ([655443d](https://github.com/softrams/bulwark/commit/655443db8fa41db52cbbcded63faef9f89f9e1e7))
-* **deps-dev:** bump @types/jest from 26.0.15 to 26.0.16 ([56374f8](https://github.com/softrams/bulwark/commit/56374f82f24b82e9237ce06d09e4c3c5faeba3a9))
-* **package.json:** add highlight.js v 10 to dev dependencies ([6db8153](https://github.com/softrams/bulwark/commit/6db815387426aa26a9fa5b49001c9f2f6d6f4973))
-* **package.json:** remove yargs package ([b17ec21](https://github.com/softrams/bulwark/commit/b17ec21f3637364c0d474e63204ab5cf89ccb076))
+- **deps:** bump @angular-devkit/build-angular in /frontend ([0df647a](https://github.com/softrams/bulwark/commit/0df647ab9bdb33ad004c96eb613c6a6e9765a495))
+- **deps:** bump @angular/cli from 11.0.2 to 11.0.3 in /frontend ([9f38774](https://github.com/softrams/bulwark/commit/9f38774412d2e383cd0539aca7ce13802fe8d1c6))
+- **deps:** bump core-js from 3.7.0 to 3.8.1 in /frontend ([64bafae](https://github.com/softrams/bulwark/commit/64bafae6afbc50da8eaa9cb4e33c79de2e19ec0c))
+- **deps:** bump ngx-markdown from 11.0.0 to 11.0.1 in /frontend ([72f0e0e](https://github.com/softrams/bulwark/commit/72f0e0e235f710998a55e5a9ddf30429780cb183))
+- **deps:** bump ts-node from 9.0.0 to 9.1.0 ([8b4064c](https://github.com/softrams/bulwark/commit/8b4064c31a53501dcb13597617b7a46212674af8))
+- **deps-dev:** bump @angular/language-service in /frontend ([655443d](https://github.com/softrams/bulwark/commit/655443db8fa41db52cbbcded63faef9f89f9e1e7))
+- **deps-dev:** bump @types/jest from 26.0.15 to 26.0.16 ([56374f8](https://github.com/softrams/bulwark/commit/56374f82f24b82e9237ce06d09e4c3c5faeba3a9))
+- **package.json:** add highlight.js v 10 to dev dependencies ([6db8153](https://github.com/softrams/bulwark/commit/6db815387426aa26a9fa5b49001c9f2f6d6f4973))
+- **package.json:** remove yargs package ([b17ec21](https://github.com/softrams/bulwark/commit/b17ec21f3637364c0d474e63204ab5cf89ccb076))
 
 ### [6.2.6](https://github.com/softrams/bulwark/compare/v6.2.5...v6.2.6) (2020-12-02)
 
-
 ### Bug Fixes
 
-* **vuln form component:** fixing the markdown icon ([a7eee64](https://github.com/softrams/bulwark/commit/a7eee640297fbd76ad98aae37b66afd9c8bf5a86)), closes [#468](https://github.com/softrams/bulwark/issues/468)
-
+- **vuln form component:** fixing the markdown icon ([a7eee64](https://github.com/softrams/bulwark/commit/a7eee640297fbd76ad98aae37b66afd9c8bf5a86)), closes [#468](https://github.com/softrams/bulwark/issues/468)
 
 ### Code Refactoring
 
-* **file.utility.ts:** update max file size to 5m ([d3d1a44](https://github.com/softrams/bulwark/commit/d3d1a4408ef127317ac9daf95db1a91415a34f5d))
+- **file.utility.ts:** update max file size to 5m ([d3d1a44](https://github.com/softrams/bulwark/commit/d3d1a4408ef127317ac9daf95db1a91415a34f5d))
 
 ### [6.2.5](https://github.com/softrams/bulwark/compare/v6.2.4...v6.2.5) (2020-12-01)
 
-
 ### CI
 
-* **docker updates:** docker updates ([1bd423d](https://github.com/softrams/bulwark/commit/1bd423d9700dc0ec9b5c819351ac5b54379855cd))
-
+- **docker updates:** docker updates ([1bd423d](https://github.com/softrams/bulwark/commit/1bd423d9700dc0ec9b5c819351ac5b54379855cd))
 
 ### Build System
 
-* **@angular/cli migrate:** update @angular/cli to version 10 ([93cd1e2](https://github.com/softrams/bulwark/commit/93cd1e2b8bd589a09df6db52d304e8b1c97de6e1))
-* **angular 11:** upgrade to Angular 11 ([d5e4ea9](https://github.com/softrams/bulwark/commit/d5e4ea9582d01e5d88827ede0d73a2558853e0e5))
-* **dockerfile:** cleanup docker tech debt and refactor for quicker builds ([cc7dcf6](https://github.com/softrams/bulwark/commit/cc7dcf642a92f4e7d0785b356d779c39ec9f80d7))
-
+- **@angular/cli migrate:** update @angular/cli to version 10 ([93cd1e2](https://github.com/softrams/bulwark/commit/93cd1e2b8bd589a09df6db52d304e8b1c97de6e1))
+- **angular 11:** upgrade to Angular 11 ([d5e4ea9](https://github.com/softrams/bulwark/commit/d5e4ea9582d01e5d88827ede0d73a2558853e0e5))
+- **dockerfile:** cleanup docker tech debt and refactor for quicker builds ([cc7dcf6](https://github.com/softrams/bulwark/commit/cc7dcf642a92f4e7d0785b356d779c39ec9f80d7))
 
 ### Others
 
-* **deps:** bump @angular-devkit/build-angular in /frontend ([d8e134e](https://github.com/softrams/bulwark/commit/d8e134ef70b18dae29d356be0a01449ece788c4c))
-* **deps:** bump @angular/cdk from 10.2.7 to 11.0.1 in /frontend ([6161aa8](https://github.com/softrams/bulwark/commit/6161aa881b3a160a7cf775a470d05f8bff9585ce))
-* **deps:** bump @angular/cli from 11.0.1 to 11.0.2 in /frontend ([32434b9](https://github.com/softrams/bulwark/commit/32434b9ac7128cca0a08380052a241d2b6bc1141))
-* **deps:** bump @ng-select/ng-select from 5.0.8 to 5.0.9 in /frontend ([500c86d](https://github.com/softrams/bulwark/commit/500c86d680f586538635cb4258cbb15733afa130))
-* **deps:** bump @types/express from 4.17.8 to 4.17.9 ([9cb8fef](https://github.com/softrams/bulwark/commit/9cb8fefbe69c4282cd63d8a98fb6681132291847))
-* **deps:** bump ngx-markdown from 10.1.1 to 11.0.0 in /frontend ([47ac561](https://github.com/softrams/bulwark/commit/47ac56140eebff27ba37d6089247304f68d4e68c))
-* **deps:** bump nodemailer from 6.4.15 to 6.4.16 ([d871df5](https://github.com/softrams/bulwark/commit/d871df5af925a136fe52728be754426777c5f504))
-* **deps:** bump primeicons from 4.0.0 to 4.1.0 in /frontend ([1db7906](https://github.com/softrams/bulwark/commit/1db7906a1b2217266bbd76c92d60374733f74132))
-* **deps:** bump puppeteer from 5.4.1 to 5.5.0 ([2205441](https://github.com/softrams/bulwark/commit/2205441f6de1038252a8321b3e86d87604643adb))
-* **deps:** bump yargs from 16.1.0 to 16.1.1 ([63bacea](https://github.com/softrams/bulwark/commit/63baceac6270d593a6e02aad44b064060d54bfae))
-* **deps-dev:** bump @angular/language-service in /frontend ([c20f6b1](https://github.com/softrams/bulwark/commit/c20f6b12d3c1a3c3b1cc43cb993b6d06595f3a3d))
-* **deps-dev:** bump @babel/core from 7.12.3 to 7.12.7 ([f9f61d4](https://github.com/softrams/bulwark/commit/f9f61d4373e71a0e706e37279ac823d35547cec7))
-* **deps-dev:** bump @babel/core from 7.12.7 to 7.12.9 ([2e314f1](https://github.com/softrams/bulwark/commit/2e314f12b61a07a326413f1d6f2beabeea97a7e2))
-* **deps-dev:** bump @babel/preset-env from 7.12.1 to 7.12.7 ([7cfeb91](https://github.com/softrams/bulwark/commit/7cfeb916419d56c1ac0b4b97cfedb4f5eb4aba73))
-* **deps-dev:** bump @babel/preset-typescript from 7.12.1 to 7.12.7 ([3090314](https://github.com/softrams/bulwark/commit/3090314675942148fb1d2332e1ea58051b6d412d))
-* **deps-dev:** bump @types/jasmine from 3.6.1 to 3.6.2 in /frontend ([920851f](https://github.com/softrams/bulwark/commit/920851f62269ee5acd4392b8027c6210236df95a))
-* **deps-dev:** bump @types/node from 14.14.6 to 14.14.8 in /frontend ([51e8005](https://github.com/softrams/bulwark/commit/51e8005fe67e94ac4847b2f9b153df22ba1e42c0))
-* **deps-dev:** bump @types/node from 14.14.8 to 14.14.9 in /frontend ([f0d7650](https://github.com/softrams/bulwark/commit/f0d7650421bd9acc40a91a088307cc0d4cf71f5c))
-* **deps-dev:** bump @types/node from 14.14.9 to 14.14.10 in /frontend ([7a835f7](https://github.com/softrams/bulwark/commit/7a835f7b0beff8612f07d2a0b71e34df72dabee0))
-* **deps-dev:** bump jasmine-spec-reporter in /frontend ([ed06f8e](https://github.com/softrams/bulwark/commit/ed06f8e14cfe0c9599a52545cdb0768501a3d11f))
-* **deps-dev:** bump typescript from 4.0.5 to 4.1.2 ([a5588f4](https://github.com/softrams/bulwark/commit/a5588f490a24b547146ccfd06b3fc95b30625532))
-* **package.json:** fix package.json conflict ([d3ace4e](https://github.com/softrams/bulwark/commit/d3ace4e50c0c4c5299753dc833790550fc4e894d))
-* **package.json:** update `npm run commit` script ([cdf1948](https://github.com/softrams/bulwark/commit/cdf1948dbb2b0df00dd02b050962809bd32f04a6))
-* **stale.yml:** add stale bot configuration ([8c86b2a](https://github.com/softrams/bulwark/commit/8c86b2ae2361b5e46c44f049e9c4403cac8687bb))
-
+- **deps:** bump @angular-devkit/build-angular in /frontend ([d8e134e](https://github.com/softrams/bulwark/commit/d8e134ef70b18dae29d356be0a01449ece788c4c))
+- **deps:** bump @angular/cdk from 10.2.7 to 11.0.1 in /frontend ([6161aa8](https://github.com/softrams/bulwark/commit/6161aa881b3a160a7cf775a470d05f8bff9585ce))
+- **deps:** bump @angular/cli from 11.0.1 to 11.0.2 in /frontend ([32434b9](https://github.com/softrams/bulwark/commit/32434b9ac7128cca0a08380052a241d2b6bc1141))
+- **deps:** bump @ng-select/ng-select from 5.0.8 to 5.0.9 in /frontend ([500c86d](https://github.com/softrams/bulwark/commit/500c86d680f586538635cb4258cbb15733afa130))
+- **deps:** bump @types/express from 4.17.8 to 4.17.9 ([9cb8fef](https://github.com/softrams/bulwark/commit/9cb8fefbe69c4282cd63d8a98fb6681132291847))
+- **deps:** bump ngx-markdown from 10.1.1 to 11.0.0 in /frontend ([47ac561](https://github.com/softrams/bulwark/commit/47ac56140eebff27ba37d6089247304f68d4e68c))
+- **deps:** bump nodemailer from 6.4.15 to 6.4.16 ([d871df5](https://github.com/softrams/bulwark/commit/d871df5af925a136fe52728be754426777c5f504))
+- **deps:** bump primeicons from 4.0.0 to 4.1.0 in /frontend ([1db7906](https://github.com/softrams/bulwark/commit/1db7906a1b2217266bbd76c92d60374733f74132))
+- **deps:** bump puppeteer from 5.4.1 to 5.5.0 ([2205441](https://github.com/softrams/bulwark/commit/2205441f6de1038252a8321b3e86d87604643adb))
+- **deps:** bump yargs from 16.1.0 to 16.1.1 ([63bacea](https://github.com/softrams/bulwark/commit/63baceac6270d593a6e02aad44b064060d54bfae))
+- **deps-dev:** bump @angular/language-service in /frontend ([c20f6b1](https://github.com/softrams/bulwark/commit/c20f6b12d3c1a3c3b1cc43cb993b6d06595f3a3d))
+- **deps-dev:** bump @babel/core from 7.12.3 to 7.12.7 ([f9f61d4](https://github.com/softrams/bulwark/commit/f9f61d4373e71a0e706e37279ac823d35547cec7))
+- **deps-dev:** bump @babel/core from 7.12.7 to 7.12.9 ([2e314f1](https://github.com/softrams/bulwark/commit/2e314f12b61a07a326413f1d6f2beabeea97a7e2))
+- **deps-dev:** bump @babel/preset-env from 7.12.1 to 7.12.7 ([7cfeb91](https://github.com/softrams/bulwark/commit/7cfeb916419d56c1ac0b4b97cfedb4f5eb4aba73))
+- **deps-dev:** bump @babel/preset-typescript from 7.12.1 to 7.12.7 ([3090314](https://github.com/softrams/bulwark/commit/3090314675942148fb1d2332e1ea58051b6d412d))
+- **deps-dev:** bump @types/jasmine from 3.6.1 to 3.6.2 in /frontend ([920851f](https://github.com/softrams/bulwark/commit/920851f62269ee5acd4392b8027c6210236df95a))
+- **deps-dev:** bump @types/node from 14.14.6 to 14.14.8 in /frontend ([51e8005](https://github.com/softrams/bulwark/commit/51e8005fe67e94ac4847b2f9b153df22ba1e42c0))
+- **deps-dev:** bump @types/node from 14.14.8 to 14.14.9 in /frontend ([f0d7650](https://github.com/softrams/bulwark/commit/f0d7650421bd9acc40a91a088307cc0d4cf71f5c))
+- **deps-dev:** bump @types/node from 14.14.9 to 14.14.10 in /frontend ([7a835f7](https://github.com/softrams/bulwark/commit/7a835f7b0beff8612f07d2a0b71e34df72dabee0))
+- **deps-dev:** bump jasmine-spec-reporter in /frontend ([ed06f8e](https://github.com/softrams/bulwark/commit/ed06f8e14cfe0c9599a52545cdb0768501a3d11f))
+- **deps-dev:** bump typescript from 4.0.5 to 4.1.2 ([a5588f4](https://github.com/softrams/bulwark/commit/a5588f490a24b547146ccfd06b3fc95b30625532))
+- **package.json:** fix package.json conflict ([d3ace4e](https://github.com/softrams/bulwark/commit/d3ace4e50c0c4c5299753dc833790550fc4e894d))
+- **package.json:** update `npm run commit` script ([cdf1948](https://github.com/softrams/bulwark/commit/cdf1948dbb2b0df00dd02b050962809bd32f04a6))
+- **stale.yml:** add stale bot configuration ([8c86b2a](https://github.com/softrams/bulwark/commit/8c86b2ae2361b5e46c44f049e9c4403cac8687bb))
 
 ### Code Refactoring
 
-* **report component:** fix plurality of day vs days ([861469b](https://github.com/softrams/bulwark/commit/861469b318feb59f5cdc28ce2c1efeb8ed31c665))
-* **report component:** grammar Changes ([f99ab88](https://github.com/softrams/bulwark/commit/f99ab887e5de54fffe1a54e5250e390ad9cb96d0))
-
+- **report component:** fix plurality of day vs days ([861469b](https://github.com/softrams/bulwark/commit/861469b318feb59f5cdc28ce2c1efeb8ed31c665))
+- **report component:** grammar Changes ([f99ab88](https://github.com/softrams/bulwark/commit/f99ab887e5de54fffe1a54e5250e390ad9cb96d0))
 
 ### Docs
 
-* **readme.md:** update README ([6441177](https://github.com/softrams/bulwark/commit/6441177020b0f866391ed77e8401420761c7bcac))
+- **readme.md:** update README ([6441177](https://github.com/softrams/bulwark/commit/6441177020b0f866391ed77e8401420761c7bcac))
 
 ### [6.2.4](https://github.com/softrams/bulwark/compare/v6.2.3...v6.2.4) (2020-11-11)
 
-
 ### Bug Fixes
 
-* **docker-run-exec.ts:** update docker-compose.yml with new npm script ([cd81ba7](https://github.com/softrams/bulwark/commit/cd81ba74f5687f168dd25cce9a4147b9ed5b3214)), closes [#434](https://github.com/softrams/bulwark/issues/434)
-* **update docker tag to latest:** no longer using a pinned version in docker-compse.yml ([6505c1c](https://github.com/softrams/bulwark/commit/6505c1cff2e548fa47e4b51ab06f69d5240f9439)), closes [#434](https://github.com/softrams/bulwark/issues/434)
-
+- **docker-run-exec.ts:** update docker-compose.yml with new npm script ([cd81ba7](https://github.com/softrams/bulwark/commit/cd81ba74f5687f168dd25cce9a4147b9ed5b3214)), closes [#434](https://github.com/softrams/bulwark/issues/434)
+- **update docker tag to latest:** no longer using a pinned version in docker-compse.yml ([6505c1c](https://github.com/softrams/bulwark/commit/6505c1cff2e548fa47e4b51ab06f69d5240f9439)), closes [#434](https://github.com/softrams/bulwark/issues/434)
 
 ### Others
 
-* **deps:** bump core-js from 3.6.5 to 3.7.0 in /frontend ([2ed9be8](https://github.com/softrams/bulwark/commit/2ed9be8ace1cd606525cceb18c204fd67fafd390))
-* **deps:** bump nodemailer from 6.4.14 to 6.4.15 ([c476958](https://github.com/softrams/bulwark/commit/c476958b1d749c8a26b1b595ae856e2bba084cd9))
-* **deps:** bump password-validator from 5.1.0 to 5.1.1 ([c97982c](https://github.com/softrams/bulwark/commit/c97982c1637961ff15c3b22775614ab858d6954d))
-* **deps-dev:** bump ts-jest from 26.4.3 to 26.4.4 ([efe384b](https://github.com/softrams/bulwark/commit/efe384bf12c611a07cc41fa7d10bf45324a0761e))
+- **deps:** bump core-js from 3.6.5 to 3.7.0 in /frontend ([2ed9be8](https://github.com/softrams/bulwark/commit/2ed9be8ace1cd606525cceb18c204fd67fafd390))
+- **deps:** bump nodemailer from 6.4.14 to 6.4.15 ([c476958](https://github.com/softrams/bulwark/commit/c476958b1d749c8a26b1b595ae856e2bba084cd9))
+- **deps:** bump password-validator from 5.1.0 to 5.1.1 ([c97982c](https://github.com/softrams/bulwark/commit/c97982c1637961ff15c3b22775614ab858d6954d))
+- **deps-dev:** bump ts-jest from 26.4.3 to 26.4.4 ([efe384b](https://github.com/softrams/bulwark/commit/efe384bf12c611a07cc41fa7d10bf45324a0761e))
 
 ### [6.2.3](https://github.com/softrams/bulwark/compare/v6.2.2...v6.2.3) (2020-11-05)
 
-
 ### Docs
 
-* **docker-compose.yml:** update image version to 6.2.3 ([a90bddf](https://github.com/softrams/bulwark/commit/a90bddf2992e68f3317283cda77c5416b7c88120))
-* **testing.md contributing.md:** update testing and contribution documentation ([9b84c2b](https://github.com/softrams/bulwark/commit/9b84c2b6996c31ef7130f26afd8dc4814194b077))
-
+- **docker-compose.yml:** update image version to 6.2.3 ([a90bddf](https://github.com/softrams/bulwark/commit/a90bddf2992e68f3317283cda77c5416b7c88120))
+- **testing.md contributing.md:** update testing and contribution documentation ([9b84c2b](https://github.com/softrams/bulwark/commit/9b84c2b6996c31ef7130f26afd8dc4814194b077))
 
 ### Others
 
-* **deps:** bump @angular/animations from 10.2.0 to 10.2.1 in /frontend ([52e5888](https://github.com/softrams/bulwark/commit/52e588822b139ef3e536a01a167779bb4f7b53dc))
-* **deps:** bump @angular/animations from 10.2.1 to 10.2.2 in /frontend ([b0e69b8](https://github.com/softrams/bulwark/commit/b0e69b8921fbc4ec34593c9c3d7b48298f065fc0))
-* **deps:** bump @angular/cdk from 10.2.6 to 10.2.7 in /frontend ([59dd1f2](https://github.com/softrams/bulwark/commit/59dd1f28584577d744ef7c36086d772c97dfee5e))
-* **deps:** bump helmet from 4.1.1 to 4.2.0 ([ce2be8b](https://github.com/softrams/bulwark/commit/ce2be8bfd77ababcb800e0f91b49076f18cf1abe))
-* **deps:** bump typeorm from 0.2.28 to 0.2.29 ([191c98e](https://github.com/softrams/bulwark/commit/191c98e01d0cc34ff5deccb1ca8e29dc4f46fa05))
-* **deps-dev:** bump @angular/language-service in /frontend ([7c2854b](https://github.com/softrams/bulwark/commit/7c2854b34aaeb8ab40e22380e68a2f343bf80802))
-* **deps-dev:** bump @angular/language-service in /frontend ([771a992](https://github.com/softrams/bulwark/commit/771a992a413c50174c4ee094eddf1191007029a0))
-* **deps-dev:** bump @types/jasmine from 3.6.0 to 3.6.1 in /frontend ([d050ff0](https://github.com/softrams/bulwark/commit/d050ff0f1040061f229c8ea813bafaec261c6a95))
-* **deps-dev:** bump @types/node from 14.14.5 to 14.14.6 in /frontend ([cb4e421](https://github.com/softrams/bulwark/commit/cb4e42145217270a9d8b76809998ba6f0948a90f))
-* **deps-dev:** bump babel-jest from 26.6.1 to 26.6.2 ([684a36e](https://github.com/softrams/bulwark/commit/684a36edb9167027e5db8f0042a9dc43992154b9))
-* **deps-dev:** bump babel-jest from 26.6.2 to 26.6.3 ([05ff020](https://github.com/softrams/bulwark/commit/05ff020a0b0dcb4b8c2f28ab466a84f66c630272))
-* **deps-dev:** bump jest from 26.6.1 to 26.6.2 ([beed374](https://github.com/softrams/bulwark/commit/beed374f1510bd000b8c2366ac2606357a2ba82c))
-* **deps-dev:** bump jest from 26.6.2 to 26.6.3 ([d6be217](https://github.com/softrams/bulwark/commit/d6be2173339386df7db1d6009e291da66e976558))
-
+- **deps:** bump @angular/animations from 10.2.0 to 10.2.1 in /frontend ([52e5888](https://github.com/softrams/bulwark/commit/52e588822b139ef3e536a01a167779bb4f7b53dc))
+- **deps:** bump @angular/animations from 10.2.1 to 10.2.2 in /frontend ([b0e69b8](https://github.com/softrams/bulwark/commit/b0e69b8921fbc4ec34593c9c3d7b48298f065fc0))
+- **deps:** bump @angular/cdk from 10.2.6 to 10.2.7 in /frontend ([59dd1f2](https://github.com/softrams/bulwark/commit/59dd1f28584577d744ef7c36086d772c97dfee5e))
+- **deps:** bump helmet from 4.1.1 to 4.2.0 ([ce2be8b](https://github.com/softrams/bulwark/commit/ce2be8bfd77ababcb800e0f91b49076f18cf1abe))
+- **deps:** bump typeorm from 0.2.28 to 0.2.29 ([191c98e](https://github.com/softrams/bulwark/commit/191c98e01d0cc34ff5deccb1ca8e29dc4f46fa05))
+- **deps-dev:** bump @angular/language-service in /frontend ([7c2854b](https://github.com/softrams/bulwark/commit/7c2854b34aaeb8ab40e22380e68a2f343bf80802))
+- **deps-dev:** bump @angular/language-service in /frontend ([771a992](https://github.com/softrams/bulwark/commit/771a992a413c50174c4ee094eddf1191007029a0))
+- **deps-dev:** bump @types/jasmine from 3.6.0 to 3.6.1 in /frontend ([d050ff0](https://github.com/softrams/bulwark/commit/d050ff0f1040061f229c8ea813bafaec261c6a95))
+- **deps-dev:** bump @types/node from 14.14.5 to 14.14.6 in /frontend ([cb4e421](https://github.com/softrams/bulwark/commit/cb4e42145217270a9d8b76809998ba6f0948a90f))
+- **deps-dev:** bump babel-jest from 26.6.1 to 26.6.2 ([684a36e](https://github.com/softrams/bulwark/commit/684a36edb9167027e5db8f0042a9dc43992154b9))
+- **deps-dev:** bump babel-jest from 26.6.2 to 26.6.3 ([05ff020](https://github.com/softrams/bulwark/commit/05ff020a0b0dcb4b8c2f28ab466a84f66c630272))
+- **deps-dev:** bump jest from 26.6.1 to 26.6.2 ([beed374](https://github.com/softrams/bulwark/commit/beed374f1510bd000b8c2366ac2606357a2ba82c))
+- **deps-dev:** bump jest from 26.6.2 to 26.6.3 ([d6be217](https://github.com/softrams/bulwark/commit/d6be2173339386df7db1d6009e291da66e976558))
 
 ### CI
 
-* **codeql-analysis.yml:** update codeql-analysis.yml ([c46b22a](https://github.com/softrams/bulwark/commit/c46b22a14973226b872adeec4a3059b427ee19ee))
-* **dependabot.yml:** update dependabot.yml configuration ([3f2c01b](https://github.com/softrams/bulwark/commit/3f2c01b476141c80d4eb75d010447c007dcb6f10))
+- **codeql-analysis.yml:** update codeql-analysis.yml ([c46b22a](https://github.com/softrams/bulwark/commit/c46b22a14973226b872adeec4a3059b427ee19ee))
+- **dependabot.yml:** update dependabot.yml configuration ([3f2c01b](https://github.com/softrams/bulwark/commit/3f2c01b476141c80d4eb75d010447c007dcb6f10))
 
 ### [6.2.2](https://github.com/softrams/bulwark/compare/v6.2.1...v6.2.2) (2020-11-02)
 
-
 ### Docs
 
-* **security.md:** update security policy supported version statement. Update docker-compose.yml ver ([14f6b92](https://github.com/softrams/bulwark/commit/14f6b920af6d72841df273aca6c35e5a94ced819))
+- **security.md:** update security policy supported version statement. Update docker-compose.yml ver ([14f6b92](https://github.com/softrams/bulwark/commit/14f6b920af6d72841df273aca6c35e5a94ced819))
 
 ### [6.2.1](https://github.com/softrams/bulwark/compare/v6.2.0...v6.2.1) (2020-10-28)
 
-
 ### CI
 
-* **docker-compose.yml:** update docker container version to run Bulwark 6.2.0 ([8618557](https://github.com/softrams/bulwark/commit/86185571bce6adf51db362f2a74960cd531acc44))
+- **docker-compose.yml:** update docker container version to run Bulwark 6.2.0 ([8618557](https://github.com/softrams/bulwark/commit/86185571bce6adf51db362f2a74960cd531acc44))
 
 ## [6.2.0](https://github.com/softrams/bulwark/compare/v6.1.0...v6.2.0) (2020-10-28)
 
-
 ### Features
 
-* **asset-form:** use Prime NG for inputs, buttons and password form components ([e8f8e46](https://github.com/softrams/bulwark/commit/e8f8e46439b505e2f6a0a6656f98331dff20470a)), closes [#369](https://github.com/softrams/bulwark/issues/369)
-* **report component:** added pie chart and radar chart to report ([d955720](https://github.com/softrams/bulwark/commit/d955720db93482dd3f12f34a37a77f4f04005776)), closes [#410](https://github.com/softrams/bulwark/issues/410)
-* **report component:** update report structure ([ec5d06c](https://github.com/softrams/bulwark/commit/ec5d06cc67b8471d829bc64022243bbf2fd13413))
-* **user-profile:** use Prime NG for inputs and cards ([5623cb5](https://github.com/softrams/bulwark/commit/5623cb5f5b65c50037d5b8aeb0e963ff51bd4bca)), closes [#377](https://github.com/softrams/bulwark/issues/377)
-
+- **asset-form:** use Prime NG for inputs, buttons and password form components ([e8f8e46](https://github.com/softrams/bulwark/commit/e8f8e46439b505e2f6a0a6656f98331dff20470a)), closes [#369](https://github.com/softrams/bulwark/issues/369)
+- **report component:** added pie chart and radar chart to report ([d955720](https://github.com/softrams/bulwark/commit/d955720db93482dd3f12f34a37a77f4f04005776)), closes [#410](https://github.com/softrams/bulwark/issues/410)
+- **report component:** update report structure ([ec5d06c](https://github.com/softrams/bulwark/commit/ec5d06cc67b8471d829bc64022243bbf2fd13413))
+- **user-profile:** use Prime NG for inputs and cards ([5623cb5](https://github.com/softrams/bulwark/commit/5623cb5f5b65c50037d5b8aeb0e963ff51bd4bca)), closes [#377](https://github.com/softrams/bulwark/issues/377)
 
 ### Others
 
-* **deps:** bump @angular/cdk from 10.2.5 to 10.2.6 in /frontend ([3a00265](https://github.com/softrams/bulwark/commit/3a00265dcbf215591949d9ee404e6635141ff4fd))
-* **deps:** bump puppeteer from 5.3.1 to 5.4.0 ([a92cdc5](https://github.com/softrams/bulwark/commit/a92cdc52f35e87a6a788374b59a99af871eb3078))
-* **deps:** bump puppeteer from 5.4.0 to 5.4.1 ([4f83bc8](https://github.com/softrams/bulwark/commit/4f83bc81fbaec0563768c8f0008b3cb50ff5f694))
-* **deps-dev:** bump @types/jasmine from 3.5.14 to 3.6.0 in /frontend ([f596d72](https://github.com/softrams/bulwark/commit/f596d72f615f80e1c146798372d40da9664a9bd3))
-* **deps-dev:** bump @types/node from 14.14.2 to 14.14.3 in /frontend ([1c95507](https://github.com/softrams/bulwark/commit/1c95507b506bfe423cbec697dde0231c1971f9ec))
-* **deps-dev:** bump @types/node from 14.14.3 to 14.14.5 in /frontend ([3c9d0d7](https://github.com/softrams/bulwark/commit/3c9d0d732a2f4f02814efff709888d6c5a1bc95f))
-* **deps-dev:** bump babel-jest from 26.6.0 to 26.6.1 ([f5325f8](https://github.com/softrams/bulwark/commit/f5325f81f03070e5ffb0f5531fabfb66c106b8af))
-* **deps-dev:** bump jest from 26.6.0 to 26.6.1 ([53f64ab](https://github.com/softrams/bulwark/commit/53f64ab91e7db177afb8126471b33ca684b0033d))
-* **deps-dev:** bump ts-jest from 26.4.1 to 26.4.2 ([a2be373](https://github.com/softrams/bulwark/commit/a2be37332696f9c112a7b97821f4e2f93836cc8d))
-* **deps-dev:** bump ts-jest from 26.4.2 to 26.4.3 ([29d1404](https://github.com/softrams/bulwark/commit/29d14044d7ac0bf888f97f06edd1b00d567afd6b))
-* **deps-dev:** bump typescript from 4.0.3 to 4.0.5 ([b16b187](https://github.com/softrams/bulwark/commit/b16b187e53d346b8917de8addae9c02ad01243af))
-* **merge dev into branch:** merge develop into this branch ([9f7b32d](https://github.com/softrams/bulwark/commit/9f7b32dd635f47ed6f3834ebd8bea43bbdcbbe25))
-* **package.json:** updated package.json with additional contributor name ([20d8b47](https://github.com/softrams/bulwark/commit/20d8b478bc780786c8dfb6252422337f6123d737))
+- **deps:** bump @angular/cdk from 10.2.5 to 10.2.6 in /frontend ([3a00265](https://github.com/softrams/bulwark/commit/3a00265dcbf215591949d9ee404e6635141ff4fd))
+- **deps:** bump puppeteer from 5.3.1 to 5.4.0 ([a92cdc5](https://github.com/softrams/bulwark/commit/a92cdc52f35e87a6a788374b59a99af871eb3078))
+- **deps:** bump puppeteer from 5.4.0 to 5.4.1 ([4f83bc8](https://github.com/softrams/bulwark/commit/4f83bc81fbaec0563768c8f0008b3cb50ff5f694))
+- **deps-dev:** bump @types/jasmine from 3.5.14 to 3.6.0 in /frontend ([f596d72](https://github.com/softrams/bulwark/commit/f596d72f615f80e1c146798372d40da9664a9bd3))
+- **deps-dev:** bump @types/node from 14.14.2 to 14.14.3 in /frontend ([1c95507](https://github.com/softrams/bulwark/commit/1c95507b506bfe423cbec697dde0231c1971f9ec))
+- **deps-dev:** bump @types/node from 14.14.3 to 14.14.5 in /frontend ([3c9d0d7](https://github.com/softrams/bulwark/commit/3c9d0d732a2f4f02814efff709888d6c5a1bc95f))
+- **deps-dev:** bump babel-jest from 26.6.0 to 26.6.1 ([f5325f8](https://github.com/softrams/bulwark/commit/f5325f81f03070e5ffb0f5531fabfb66c106b8af))
+- **deps-dev:** bump jest from 26.6.0 to 26.6.1 ([53f64ab](https://github.com/softrams/bulwark/commit/53f64ab91e7db177afb8126471b33ca684b0033d))
+- **deps-dev:** bump ts-jest from 26.4.1 to 26.4.2 ([a2be373](https://github.com/softrams/bulwark/commit/a2be37332696f9c112a7b97821f4e2f93836cc8d))
+- **deps-dev:** bump ts-jest from 26.4.2 to 26.4.3 ([29d1404](https://github.com/softrams/bulwark/commit/29d14044d7ac0bf888f97f06edd1b00d567afd6b))
+- **deps-dev:** bump typescript from 4.0.3 to 4.0.5 ([b16b187](https://github.com/softrams/bulwark/commit/b16b187e53d346b8917de8addae9c02ad01243af))
+- **merge dev into branch:** merge develop into this branch ([9f7b32d](https://github.com/softrams/bulwark/commit/9f7b32dd635f47ed6f3834ebd8bea43bbdcbbe25))
+- **package.json:** updated package.json with additional contributor name ([20d8b47](https://github.com/softrams/bulwark/commit/20d8b478bc780786c8dfb6252422337f6123d737))
 
 ## [6.1.0](https://github.com/softrams/bulwark/compare/v6.0.6...v6.1.0) (2020-10-23)
 
-
 ### Features
 
-* email validate with prime ng ([b40f588](https://github.com/softrams/bulwark/commit/b40f588f36435f4a0828c55c76cd042623dd867e))
-* forgot password  with prime ng ([36e1d10](https://github.com/softrams/bulwark/commit/36e1d10ce841748e66cbc61e79e0daf2f173e61c))
-* login with prime ng ([eca4924](https://github.com/softrams/bulwark/commit/eca49249a8d933671f6afd6d67276cc53cd34b30))
-* register with prime ng ([2688138](https://github.com/softrams/bulwark/commit/2688138634dd64d5282c22e24ea1c0819a082546))
-* reset password with prime ng ([b1f082c](https://github.com/softrams/bulwark/commit/b1f082cc41012d8a52736689e4401c28e78cbfbe))
-* settings with prime ng ([a830258](https://github.com/softrams/bulwark/commit/a830258a79621b7ec70ab30c908ec9c8646c3e00))
-
+- email validate with prime ng ([b40f588](https://github.com/softrams/bulwark/commit/b40f588f36435f4a0828c55c76cd042623dd867e))
+- forgot password with prime ng ([36e1d10](https://github.com/softrams/bulwark/commit/36e1d10ce841748e66cbc61e79e0daf2f173e61c))
+- login with prime ng ([eca4924](https://github.com/softrams/bulwark/commit/eca49249a8d933671f6afd6d67276cc53cd34b30))
+- register with prime ng ([2688138](https://github.com/softrams/bulwark/commit/2688138634dd64d5282c22e24ea1c0819a082546))
+- reset password with prime ng ([b1f082c](https://github.com/softrams/bulwark/commit/b1f082cc41012d8a52736689e4401c28e78cbfbe))
+- settings with prime ng ([a830258](https://github.com/softrams/bulwark/commit/a830258a79621b7ec70ab30c908ec9c8646c3e00))
 
 ### Bug Fixes
 
-* button scss side effect ([4e0cf29](https://github.com/softrams/bulwark/commit/4e0cf298f3bc6ff43bbb72d884d21f1e0206f25e))
-
+- button scss side effect ([4e0cf29](https://github.com/softrams/bulwark/commit/4e0cf298f3bc6ff43bbb72d884d21f1e0206f25e))
 
 ### Others
 
-* **deps:** bump @angular-devkit/build-angular in /frontend ([535777d](https://github.com/softrams/bulwark/commit/535777de4f6c40c17a1e321a7f580130803f69f1))
-* **deps:** bump @angular/animations from 10.1.6 to 10.2.0 in /frontend ([002a996](https://github.com/softrams/bulwark/commit/002a996996f7ca00f0cf50f63fce6c6e768006b7))
-* **deps:** bump @angular/cli from 10.1.7 to 10.2.0 in /frontend ([dc5a468](https://github.com/softrams/bulwark/commit/dc5a4688a3951d7d68fc350c0f51de54fa794634))
-* **deps-dev:** bump @angular/language-service in /frontend ([22879fb](https://github.com/softrams/bulwark/commit/22879fb82a811b539ca6be26bee879de673fba5f))
-* **deps-dev:** bump @babel/core from 7.12.1 to 7.12.3 ([9adb353](https://github.com/softrams/bulwark/commit/9adb3536fbd74dcf36b79683f0f13b1376ce6607))
-* **deps-dev:** bump @types/jest from 26.0.14 to 26.0.15 ([0e3e7f0](https://github.com/softrams/bulwark/commit/0e3e7f006c4ef845ee2b252458a4cf106210653f))
-* **deps-dev:** bump @types/node from 14.11.10 to 14.14.0 in /frontend ([86f9969](https://github.com/softrams/bulwark/commit/86f99697d9e72506162a9567976d2a1d91a8c1c6))
-* **deps-dev:** bump @types/node from 14.11.8 to 14.11.10 in /frontend ([cb2f61c](https://github.com/softrams/bulwark/commit/cb2f61cd2e1e7ba2914c661596583182e923db3c))
-* **deps-dev:** bump @types/node from 14.14.0 to 14.14.2 in /frontend ([84ae92c](https://github.com/softrams/bulwark/commit/84ae92c28921d417b2fddb735a830b6bb5d0c33f))
-* **deps-dev:** bump babel-jest from 26.5.2 to 26.6.0 ([022c89d](https://github.com/softrams/bulwark/commit/022c89de15c2d526e33cf60b4fc1ee14789aa094))
-* **deps-dev:** bump jest from 26.5.3 to 26.6.0 ([81aea5a](https://github.com/softrams/bulwark/commit/81aea5a5334f77e46a533ab3a7777a51450bdc2c))
+- **deps:** bump @angular-devkit/build-angular in /frontend ([535777d](https://github.com/softrams/bulwark/commit/535777de4f6c40c17a1e321a7f580130803f69f1))
+- **deps:** bump @angular/animations from 10.1.6 to 10.2.0 in /frontend ([002a996](https://github.com/softrams/bulwark/commit/002a996996f7ca00f0cf50f63fce6c6e768006b7))
+- **deps:** bump @angular/cli from 10.1.7 to 10.2.0 in /frontend ([dc5a468](https://github.com/softrams/bulwark/commit/dc5a4688a3951d7d68fc350c0f51de54fa794634))
+- **deps-dev:** bump @angular/language-service in /frontend ([22879fb](https://github.com/softrams/bulwark/commit/22879fb82a811b539ca6be26bee879de673fba5f))
+- **deps-dev:** bump @babel/core from 7.12.1 to 7.12.3 ([9adb353](https://github.com/softrams/bulwark/commit/9adb3536fbd74dcf36b79683f0f13b1376ce6607))
+- **deps-dev:** bump @types/jest from 26.0.14 to 26.0.15 ([0e3e7f0](https://github.com/softrams/bulwark/commit/0e3e7f006c4ef845ee2b252458a4cf106210653f))
+- **deps-dev:** bump @types/node from 14.11.10 to 14.14.0 in /frontend ([86f9969](https://github.com/softrams/bulwark/commit/86f99697d9e72506162a9567976d2a1d91a8c1c6))
+- **deps-dev:** bump @types/node from 14.11.8 to 14.11.10 in /frontend ([cb2f61c](https://github.com/softrams/bulwark/commit/cb2f61cd2e1e7ba2914c661596583182e923db3c))
+- **deps-dev:** bump @types/node from 14.14.0 to 14.14.2 in /frontend ([84ae92c](https://github.com/softrams/bulwark/commit/84ae92c28921d417b2fddb735a830b6bb5d0c33f))
+- **deps-dev:** bump babel-jest from 26.5.2 to 26.6.0 ([022c89d](https://github.com/softrams/bulwark/commit/022c89de15c2d526e33cf60b4fc1ee14789aa094))
+- **deps-dev:** bump jest from 26.5.3 to 26.6.0 ([81aea5a](https://github.com/softrams/bulwark/commit/81aea5a5334f77e46a533ab3a7777a51450bdc2c))
 
 ### [6.0.6](https://github.com/softrams/bulwark/compare/v6.0.5...v6.0.6) (2020-10-21)
 
-
 ### Bug Fixes
 
-* **vuln-form component:** fixed missing delete screenshot icon ([60be8a9](https://github.com/softrams/bulwark/commit/60be8a9f58fa79885384f17d459121dd41c058fa))
+- **vuln-form component:** fixed missing delete screenshot icon ([60be8a9](https://github.com/softrams/bulwark/commit/60be8a9f58fa79885384f17d459121dd41c058fa))
 
 ### [6.0.5](https://github.com/softrams/bulwark/compare/v6.0.4...v6.0.5) (2020-10-16)
 
-
 ### Others
 
-* **deps:** bump @angular-devkit/build-angular in /frontend ([3ce0d49](https://github.com/softrams/bulwark/commit/3ce0d49bc84ceaee825b22e917e7328e3c8bb8f0))
-* **deps:** bump @angular/animations from 10.1.5 to 10.1.6 in /frontend ([1eea3d3](https://github.com/softrams/bulwark/commit/1eea3d375b816d6bcc69f3a8285124758af2fd47))
-* **deps:** bump @angular/cdk from 10.2.4 to 10.2.5 in /frontend ([ffeacb9](https://github.com/softrams/bulwark/commit/ffeacb910c2fd7fb281cd9798221c923177eca93))
-* **deps:** bump @angular/cli from 10.1.6 to 10.1.7 in /frontend ([8af8735](https://github.com/softrams/bulwark/commit/8af87353f97799dfbe91aeec013375212e5953f7))
-* **deps:** bump nodemailer from 6.4.13 to 6.4.14 ([0f0201f](https://github.com/softrams/bulwark/commit/0f0201f491ca69fddad912b492e3a727911ec41a))
-* **deps:** bump yargs from 16.0.3 to 16.1.0 ([541bbf3](https://github.com/softrams/bulwark/commit/541bbf32b3a02df6655901857d1502070fe40585))
-* **deps-dev:** bump @angular/language-service in /frontend ([94914f5](https://github.com/softrams/bulwark/commit/94914f52c55d69dc48144c0ce5105687e08788b6))
-* **deps-dev:** bump @babel/core from 7.11.6 to 7.12.0 ([0538836](https://github.com/softrams/bulwark/commit/0538836658c07c5854f9d87fe77de61eaac273c8))
-* **deps-dev:** bump @babel/core from 7.12.0 to 7.12.1 ([55c6f86](https://github.com/softrams/bulwark/commit/55c6f86613aec80204ce1f2b1d01b1bef4943503))
-* **deps-dev:** bump @babel/preset-env from 7.11.5 to 7.12.0 ([4a3c1c6](https://github.com/softrams/bulwark/commit/4a3c1c61ff6cca5118d289994196b0519a09d07f))
-* **deps-dev:** bump @babel/preset-env from 7.12.0 to 7.12.1 ([def2233](https://github.com/softrams/bulwark/commit/def2233f2c8c76e7174f68cebc9a1a0c1e621b91))
-* **deps-dev:** bump @babel/preset-typescript from 7.10.4 to 7.12.0 ([2a2861b](https://github.com/softrams/bulwark/commit/2a2861b6407b5df398481eead368578ee5edf3b0))
-* **deps-dev:** bump @babel/preset-typescript from 7.12.0 to 7.12.1 ([a3ed773](https://github.com/softrams/bulwark/commit/a3ed7738028ff4ea26b52a1762291c649ec24a57))
+- **deps:** bump @angular-devkit/build-angular in /frontend ([3ce0d49](https://github.com/softrams/bulwark/commit/3ce0d49bc84ceaee825b22e917e7328e3c8bb8f0))
+- **deps:** bump @angular/animations from 10.1.5 to 10.1.6 in /frontend ([1eea3d3](https://github.com/softrams/bulwark/commit/1eea3d375b816d6bcc69f3a8285124758af2fd47))
+- **deps:** bump @angular/cdk from 10.2.4 to 10.2.5 in /frontend ([ffeacb9](https://github.com/softrams/bulwark/commit/ffeacb910c2fd7fb281cd9798221c923177eca93))
+- **deps:** bump @angular/cli from 10.1.6 to 10.1.7 in /frontend ([8af8735](https://github.com/softrams/bulwark/commit/8af87353f97799dfbe91aeec013375212e5953f7))
+- **deps:** bump nodemailer from 6.4.13 to 6.4.14 ([0f0201f](https://github.com/softrams/bulwark/commit/0f0201f491ca69fddad912b492e3a727911ec41a))
+- **deps:** bump yargs from 16.0.3 to 16.1.0 ([541bbf3](https://github.com/softrams/bulwark/commit/541bbf32b3a02df6655901857d1502070fe40585))
+- **deps-dev:** bump @angular/language-service in /frontend ([94914f5](https://github.com/softrams/bulwark/commit/94914f52c55d69dc48144c0ce5105687e08788b6))
+- **deps-dev:** bump @babel/core from 7.11.6 to 7.12.0 ([0538836](https://github.com/softrams/bulwark/commit/0538836658c07c5854f9d87fe77de61eaac273c8))
+- **deps-dev:** bump @babel/core from 7.12.0 to 7.12.1 ([55c6f86](https://github.com/softrams/bulwark/commit/55c6f86613aec80204ce1f2b1d01b1bef4943503))
+- **deps-dev:** bump @babel/preset-env from 7.11.5 to 7.12.0 ([4a3c1c6](https://github.com/softrams/bulwark/commit/4a3c1c61ff6cca5118d289994196b0519a09d07f))
+- **deps-dev:** bump @babel/preset-env from 7.12.0 to 7.12.1 ([def2233](https://github.com/softrams/bulwark/commit/def2233f2c8c76e7174f68cebc9a1a0c1e621b91))
+- **deps-dev:** bump @babel/preset-typescript from 7.10.4 to 7.12.0 ([2a2861b](https://github.com/softrams/bulwark/commit/2a2861b6407b5df398481eead368578ee5edf3b0))
+- **deps-dev:** bump @babel/preset-typescript from 7.12.0 to 7.12.1 ([a3ed773](https://github.com/softrams/bulwark/commit/a3ed7738028ff4ea26b52a1762291c649ec24a57))
 
 ### [6.0.4](https://github.com/softrams/bulwark/compare/v6.0.3...v6.0.4) (2020-10-14)
 
-
 ### Docs
 
-* **readme.md:** updated README.md ([0966f9f](https://github.com/softrams/bulwark/commit/0966f9f6b0a35fb6397b083dda8ed222802136ed))
+- **readme.md:** updated README.md ([0966f9f](https://github.com/softrams/bulwark/commit/0966f9f6b0a35fb6397b083dda8ed222802136ed))
 
 ### [6.0.3](https://github.com/softrams/bulwark/compare/v6.0.2...v6.0.3) (2020-10-13)
 
-
 ### Others
 
-* **release:** 6.0.1 ([0fbf5c2](https://github.com/softrams/bulwark/commit/0fbf5c2b77e3cb045350d9eca757e26fbbc48377))
-* **release:** 6.0.3 ([4a186ba](https://github.com/softrams/bulwark/commit/4a186ba061cdf00480d0cb9c7e6bb51b977ed47e))
-* **release:** 6.0.3 ([b296c2b](https://github.com/softrams/bulwark/commit/b296c2b7529b8047cda3a5bbe14a74ceca996986))
-* **release:** 6.0.5 ([6f50575](https://github.com/softrams/bulwark/commit/6f505752302ed7a539fc7b8cabe4807e4f21e662))
-
+- **release:** 6.0.1 ([0fbf5c2](https://github.com/softrams/bulwark/commit/0fbf5c2b77e3cb045350d9eca757e26fbbc48377))
+- **release:** 6.0.3 ([4a186ba](https://github.com/softrams/bulwark/commit/4a186ba061cdf00480d0cb9c7e6bb51b977ed47e))
+- **release:** 6.0.3 ([b296c2b](https://github.com/softrams/bulwark/commit/b296c2b7529b8047cda3a5bbe14a74ceca996986))
+- **release:** 6.0.5 ([6f50575](https://github.com/softrams/bulwark/commit/6f505752302ed7a539fc7b8cabe4807e4f21e662))
 
 ### Docs
 
-* **updated readme:** updated readme ([d9b19b5](https://github.com/softrams/bulwark/commit/d9b19b508fa705e94a5cd6cd26625ae7673c8cee))
+- **updated readme:** updated readme ([d9b19b5](https://github.com/softrams/bulwark/commit/d9b19b508fa705e94a5cd6cd26625ae7673c8cee))
 
 ### [6.0.1](https://github.com/softrams/bulwark/compare/v6.0.2...v6.0.1) (2020-10-13)
 
