@@ -21,6 +21,8 @@ import {
   createTeam,
   addTeamMember,
   removeTeamMember,
+  fetchTeamMembers,
+  updateTeamInfo,
 } from '../routes/team.controller';
 
 describe('Team Controller', () => {
@@ -90,6 +92,7 @@ describe('Team Controller', () => {
     expect(teams.length).toBe(1);
     expect(teams[0].users.length).toBe(0);
   });
+
   test('Create Team Failure', async () => {
     const existUser = new User();
     existUser.firstName = 'master';
@@ -129,6 +132,7 @@ describe('Team Controller', () => {
     const teams = await getConnection().getRepository(Team).find({});
     expect(teams.length).toBe(0);
   });
+
   test('add team member', async () => {
     // create org
     const newOrg: Organization = {
@@ -228,6 +232,7 @@ describe('Team Controller', () => {
       .findOne(savedTeam.id, { relations: ['users'] });
     expect(team.users.length).toBe(3);
   });
+
   test('remove team member', async () => {
     // create org
     const newOrg: Organization = {
@@ -335,5 +340,96 @@ describe('Team Controller', () => {
     const badResponse3 = new MockExpressResponse();
     await removeTeamMember(badRequest3, badResponse3);
     expect(badResponse3.statusCode).toBe(404);
+  });
+
+  test('fetch team members', async () => {
+    const teamUserIds: number[] = [];
+    const fetchedUsers = await fetchTeamMembers(teamUserIds);
+    expect(fetchedUsers.length).toBe(0);
+  });
+
+  test('update team info', async () => {
+    // create org
+    const newOrg: Organization = {
+      id: null,
+      name: 'Test Org',
+      status: status.active,
+      asset: null,
+    };
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .save(newOrg);
+    // create team
+    const bravoTeam = new Team();
+    bravoTeam.name = 'Bravo';
+    bravoTeam.organization = savedOrg.id;
+    bravoTeam.id = null;
+    bravoTeam.createdDate = new Date();
+    bravoTeam.lastUpdatedDate = new Date();
+    bravoTeam.createdBy = 0;
+    bravoTeam.lastUpdatedBy = 0;
+    bravoTeam.role = ROLE.READONLY;
+    const savedTeam = await getConnection().getRepository(Team).save(bravoTeam);
+    const request = new MockExpressRequest({
+      body: {
+        name: 'Alpha',
+        organization: savedOrg.id,
+        asset: null,
+        role: ROLE.TESTER,
+        teamId: savedTeam.id,
+      },
+    });
+    const response = new MockExpressResponse();
+    await updateTeamInfo(request, response);
+    expect(response.statusCode).toBe(200);
+    const updatedTeam = await getConnection()
+      .getRepository(Team)
+      .findOne(savedTeam.id);
+    expect(updatedTeam.name).toBe('Alpha');
+    expect(updatedTeam.role).toBe(ROLE.TESTER);
+    const badRequest = new MockExpressRequest({
+      body: {
+        teamId: savedTeam.id,
+      },
+    });
+    const badResponse = new MockExpressResponse();
+    await updateTeamInfo(badRequest, badResponse);
+    expect(badResponse.statusCode).toBe(400);
+    const badRequest2 = new MockExpressRequest({
+      body: {
+        name: 'Alpha',
+        organization: savedOrg.id,
+        asset: null,
+        role: ROLE.TESTER,
+      },
+    });
+    const badResponse2 = new MockExpressResponse();
+    await updateTeamInfo(badRequest2, badResponse2);
+    expect(badResponse2.statusCode).toBe(400);
+    const badRequest3 = new MockExpressRequest({
+      body: {
+        name: 'Alpha',
+        organization: savedOrg.id,
+        asset: null,
+        role: ROLE.TESTER,
+        teamId: 6,
+      },
+    });
+    const badResponse3 = new MockExpressResponse();
+    await updateTeamInfo(badRequest3, badResponse3);
+    expect(badResponse3.statusCode).toBe(404);
+    expect(badResponse2.statusCode).toBe(400);
+    const badRequest4 = new MockExpressRequest({
+      body: {
+        name: 'Alpha',
+        organization: savedOrg.id,
+        asset: null,
+        role: 'not a role',
+        teamId: savedTeam.id,
+      },
+    });
+    const badResponse4 = new MockExpressResponse();
+    await updateTeamInfo(badRequest4, badResponse4);
+    expect(badResponse4.statusCode).toBe(400);
   });
 });

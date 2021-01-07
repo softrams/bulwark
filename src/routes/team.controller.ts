@@ -1,4 +1,4 @@
-import { getConnection, In } from 'typeorm';
+import { getConnection, getRepository, In } from 'typeorm';
 import { Team } from '../entity/Team';
 import { User } from '../entity/User';
 import { Response, Request } from 'express';
@@ -94,14 +94,34 @@ export const removeTeamMember = async (req: UserRequest, res: Response) => {
   return res.status(200).json('Team membership has been successfully updated');
 };
 
-export const updateTeam = (req: Request, res: Response) => {
-  //
+export const updateTeamInfo = async (req: Request, res: Response) => {
+  const { name, organization, asset, role, teamId } = req.body;
+  if (!(name || organization || asset || role)) {
+    return res.status(400).json('Team is invalid');
+  }
+  if (!teamId) {
+    return res.status(400).json('The Team ID is invalid');
+  }
+  const team = await getConnection().getRepository(Team).findOne(teamId);
+  if (!team) {
+    return res.status(404).json(`A Team with ID ${teamId} does not exist`);
+  }
+  // Update with parameters passed in
+  team.name = name;
+  team.organization = organization;
+  team.asset = asset;
+  team.role = role;
+  const errors = await validate(team);
+  if (errors.length > 0) {
+    return res.status(400).json('Submitted Team is Invalid');
+  } else {
+    await getConnection().getRepository(Team).save(team);
+    return res.status(200).json('Team has been patched successfully');
+  }
 };
 
 export const deleteTeam = (req: Request, res: Response) => {
   //
 };
 
-export const getMyTeams = (req: Request, res: Response) => {
-  //
-};
+export const getMyTeams = (req: Request, res: Response) => {};
