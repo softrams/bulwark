@@ -12,6 +12,7 @@ import MockExpressResponse = require('mock-express-response');
 import MockExpressRequest = require('mock-express-request');
 import * as assessmentController from './assessment.controller';
 import { Jira } from '../entity/Jira';
+import { Team } from '../entity/Team';
 
 describe('Assessment Controller', () => {
   beforeEach(async () => {
@@ -19,10 +20,21 @@ describe('Assessment Controller', () => {
       type: 'sqlite',
       database: ':memory:',
       dropSchema: true,
-      entities: [Asset, Organization, File, Vulnerability, Assessment, User, ProblemLocation, Resource, Jira],
+      entities: [
+        Asset,
+        Organization,
+        File,
+        Vulnerability,
+        Assessment,
+        User,
+        ProblemLocation,
+        Resource,
+        Jira,
+        Team,
+      ],
       synchronize: true,
       logging: false,
-      name: 'default'
+      name: 'default',
     });
   });
   afterEach(() => {
@@ -33,24 +45,24 @@ describe('Assessment Controller', () => {
     const response = new MockExpressResponse();
     const request = new MockExpressRequest({
       params: {
-        assessmentId: 'abc'
-      }
+        assessmentId: 'abc',
+      },
     });
     await assessmentController.deleteAssessmentById(request, response);
     expect(response.statusCode).toBe(400);
     const response2 = new MockExpressResponse();
     const request2 = new MockExpressRequest({
       params: {
-        assessmentId: null
-      }
+        assessmentId: null,
+      },
     });
     await assessmentController.deleteAssessmentById(request2, response2);
     expect(response2.statusCode).toBe(400);
     const response3 = new MockExpressResponse();
     const request3 = new MockExpressRequest({
       params: {
-        assessmentId: 3
-      }
+        assessmentId: 3,
+      },
     });
     await assessmentController.deleteAssessmentById(request3, response3);
     expect(response3.statusCode).toBe(404);
@@ -67,14 +79,14 @@ describe('Assessment Controller', () => {
       endDate: new Date(),
       asset: new Asset(),
       testers: null,
-      vulnerabilities: null
+      vulnerabilities: null,
     };
     await getConnection().getRepository(Assessment).insert(assessment);
     const response4 = new MockExpressResponse();
     const request4 = new MockExpressRequest({
       params: {
-        assessmentId: 1
-      }
+        assessmentId: 1,
+      },
     });
     await assessmentController.deleteAssessmentById(request4, response4);
     expect(response4.statusCode).toBe(200);
@@ -83,24 +95,24 @@ describe('Assessment Controller', () => {
     const response = new MockExpressResponse();
     const request = new MockExpressRequest({
       params: {
-        id: 1
-      }
+        id: 1,
+      },
     });
     await assessmentController.getAssessmentsByAssetId(request, response);
     expect(response.statusCode).toBe(200);
     const response2 = new MockExpressResponse();
     const request2 = new MockExpressRequest({
       params: {
-        blah: 1
-      }
+        blah: 1,
+      },
     });
     await assessmentController.getAssessmentsByAssetId(request2, response2);
     expect(response2.statusCode).toBe(400);
     const response3 = new MockExpressResponse();
     const request3 = new MockExpressRequest({
       params: {
-        id: 'abc'
-      }
+        id: 'abc',
+      },
     });
     await assessmentController.getAssessmentsByAssetId(request3, response3);
     expect(response3.statusCode).toBe(400);

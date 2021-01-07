@@ -1,4 +1,9 @@
-import { createConnection, getConnection, Entity, getRepository } from 'typeorm';
+import {
+  createConnection,
+  getConnection,
+  Entity,
+  getRepository,
+} from 'typeorm';
 import * as userController from './user.controller';
 import { User } from '../entity/User';
 import { v4 as uuidv4 } from 'uuid';
@@ -6,12 +11,13 @@ import { generateHash } from '../utilities/password.utility';
 import { Config } from '../entity/Config';
 import MockExpressResponse = require('mock-express-response');
 import MockExpressRequest = require('mock-express-request');
+import { Team } from '../entity/Team';
 describe('User Controller', () => {
   // Mocks the Request Object that is returned
   const mockRequest = () => {
     const req = {
       body: {},
-      user: Function
+      user: Function,
     };
     req.user = jest.fn().mockReturnValue(req);
     return req;
@@ -20,7 +26,7 @@ describe('User Controller', () => {
   const mockResponse = () => {
     const res = {
       status: Function,
-      json: Function
+      json: Function,
     };
     res.status = jest.fn().mockReturnValue(res);
     res.json = jest.fn().mockReturnValue(res);
@@ -31,9 +37,9 @@ describe('User Controller', () => {
       type: 'sqlite',
       database: ':memory:',
       dropSchema: true,
-      entities: [User, Config],
+      entities: [User, Config, Team],
       synchronize: true,
-      logging: false
+      logging: false,
     });
   });
 
@@ -51,7 +57,7 @@ describe('User Controller', () => {
     const req = new MockExpressRequest();
     const res = new MockExpressResponse();
     req.body = {
-      email: 'testing@jest.com'
+      email: 'testing@jest.com',
     };
     await userController.invite(req, res);
     expect(res.statusCode).toBe(400);
@@ -79,7 +85,7 @@ describe('User Controller', () => {
     const req = new MockExpressRequest();
     const res = new MockExpressResponse();
     req.body = {
-      email: 'testing@jest.com'
+      email: 'testing@jest.com',
     };
     const existUser = new User();
     existUser.firstName = 'master';
@@ -97,7 +103,7 @@ describe('User Controller', () => {
       email: 'testing@jest.com',
       title: 'Spartan 117',
       lastName: 'Chief',
-      password: 'notSecure123'
+      password: 'notSecure123',
     };
     await userController.register(req, res);
     expect(res.statusCode).toBe(400);
@@ -108,7 +114,7 @@ describe('User Controller', () => {
       email: 'testing@jest.com',
       title: 'Spartan 117',
       firstName: 'Master',
-      password: 'notSecure123'
+      password: 'notSecure123',
     };
     const res = new MockExpressResponse();
     await userController.register(req, res);
@@ -120,7 +126,7 @@ describe('User Controller', () => {
       email: 'testing@jest.com',
       lastName: 'Chief',
       firstName: 'Master',
-      password: 'notSecure123'
+      password: 'notSecure123',
     };
     const res = new MockExpressResponse();
     await userController.register(req, res);
@@ -134,7 +140,7 @@ describe('User Controller', () => {
       firstName: 'Master',
       password: 'notSecure123',
       confirmPassword: 'notSecureAbc',
-      title: 'Spartan 117'
+      title: 'Spartan 117',
     };
     const res = new MockExpressResponse();
     await userController.register(req, res);
@@ -148,7 +154,7 @@ describe('User Controller', () => {
       firstName: 'Master',
       password: '123',
       confirmPassword: '123',
-      title: 'Spartan 117'
+      title: 'Spartan 117',
     };
     const res = new MockExpressResponse();
     await userController.register(req, res);
@@ -170,7 +176,7 @@ describe('User Controller', () => {
     const req = new MockExpressRequest();
     const invReq = new MockExpressRequest();
     invReq.body = {
-      email: 'testing@jest.com'
+      email: 'testing@jest.com',
     };
     const res = new MockExpressResponse();
     await userController.invite(invReq, res);
@@ -184,7 +190,7 @@ describe('User Controller', () => {
       password: '&3x1GqpeFO61*HJ',
       confirmPassword: '&3x1GqpeFO61*HJ',
       title: 'Spartan 117',
-      uuid: invUser[0].uuid
+      uuid: invUser[0].uuid,
     };
     const res2 = new MockExpressResponse();
     await userController.register(req, res2);
@@ -194,7 +200,7 @@ describe('User Controller', () => {
     const mRequest = () => {
       const req = {
         params: {},
-        user: Function
+        user: Function,
       };
       req.user = jest.fn().mockReturnValue(req);
       return req;
@@ -210,7 +216,7 @@ describe('User Controller', () => {
     const mRequest = () => {
       const r = {
         params: {},
-        user: Function
+        user: Function,
       };
       r.user = jest.fn().mockReturnValue(r);
       return r;
@@ -225,7 +231,7 @@ describe('User Controller', () => {
     await getConnection().getRepository(User).insert(existUser);
     const verifyReq = new MockExpressRequest();
     verifyReq.params = {
-      uuid
+      uuid,
     };
     await userController.verify(verifyReq, res);
     expect(res.statusCode).toBe(200);
@@ -235,7 +241,7 @@ describe('User Controller', () => {
     const mRequest = () => {
       const r = {
         params: {},
-        user: Function
+        user: Function,
       };
       r.user = jest.fn().mockReturnValue(r);
       return r;
@@ -251,7 +257,7 @@ describe('User Controller', () => {
     const verifyReq = new MockExpressRequest();
     const uuid2 = uuidv4();
     verifyReq.params = {
-      uuid: uuid2
+      uuid: uuid2,
     };
     await userController.verify(verifyReq, res);
     expect(res.statusCode).toBe(400);
@@ -262,7 +268,7 @@ describe('User Controller', () => {
     req.body = {
       oldPassword: 'fakePassword',
       newPassword: 'fakePassword2',
-      confirmNewPassword: 'fakePasswordDifferent'
+      confirmNewPassword: 'fakePasswordDifferent',
     };
     await userController.updateUserPassword(req, res);
     expect(res.statusCode).toBe(400);
@@ -273,7 +279,7 @@ describe('User Controller', () => {
     req.body = {
       oldPassword: 'fakePassword',
       newPassword: 'fakePassword',
-      confirmNewPassword: 'fakePassword'
+      confirmNewPassword: 'fakePassword',
     };
     await userController.updateUserPassword(req, res);
     expect(res.statusCode).toBe(400);
@@ -284,7 +290,7 @@ describe('User Controller', () => {
     req.body = {
       oldPassword: '123',
       newPassword: '234',
-      confirmNewPassword: '234'
+      confirmNewPassword: '234',
     };
     await userController.updateUserPassword(req, res);
     expect(res.statusCode).toBe(400);
@@ -295,7 +301,7 @@ describe('User Controller', () => {
     req.body = {
       oldPassword: 'TangoDown123!!!',
       newPassword: '9z4O4^HSvHkt3iU',
-      confirmNewPassword: '9z4O4^HSvHkt3iU'
+      confirmNewPassword: '9z4O4^HSvHkt3iU',
     };
     const existUser = new User();
     existUser.firstName = 'master';
@@ -316,7 +322,7 @@ describe('User Controller', () => {
     req.body = {
       oldPassword: 'TangoDown123!!!',
       newPassword: '9z4O4^HSvHkt3iU',
-      confirmNewPassword: '9z4O4^HSvHkt3iU'
+      confirmNewPassword: '9z4O4^HSvHkt3iU',
     };
     const existUser = new User();
     existUser.firstName = 'master';
@@ -339,7 +345,7 @@ describe('User Controller', () => {
     req.body = {
       firstName: 'Master',
       lastName: 'Chief',
-      title: 'Spartan 117'
+      title: 'Spartan 117',
     };
     const existUser = new User();
     existUser.firstName = 'Cortana';
@@ -431,7 +437,7 @@ describe('User Controller', () => {
     const res = new MockExpressResponse();
     req.body = {
       email: '123',
-      newEmail: '234'
+      newEmail: '234',
     };
     await userController.updateUserEmail(req, res);
     expect(res.statusCode).toBe(400);
@@ -452,7 +458,7 @@ describe('User Controller', () => {
     const res = new MockExpressResponse();
     req.body = {
       email: 'test@jest.com',
-      newEmail: 'test@jest.com'
+      newEmail: 'test@jest.com',
     };
     req.user = 1;
     await userController.updateUserEmail(req, res);
@@ -484,7 +490,7 @@ describe('User Controller', () => {
     const res = new MockExpressResponse();
     req.body = {
       email: 'testing2@jest.com',
-      newEmail: 'testing2@jest.com'
+      newEmail: 'testing2@jest.com',
     };
     req.user = 1;
     await userController.updateUserEmail(req, res);
@@ -506,7 +512,7 @@ describe('User Controller', () => {
     const res = new MockExpressResponse();
     req.body = {
       email: 'test@',
-      newEmail: 'test@'
+      newEmail: 'test@',
     };
     req.user = 1;
     await userController.updateUserEmail(req, res);
@@ -528,7 +534,9 @@ describe('User Controller', () => {
     user1.password = await generateHash('TangoDown123!!!');
     const insUser1 = await getConnection().getRepository(User).insert(user1);
     await userController.revokeEmailRequest(req, res);
-    const checkUser = await getConnection().getRepository(User).findOne(req.user);
+    const checkUser = await getConnection()
+      .getRepository(User)
+      .findOne(req.user);
     expect(checkUser.uuid).toBeNull();
     expect(checkUser.newEmail).toBeNull();
     expect(res.statusCode).toBe(200);
@@ -545,7 +553,7 @@ describe('User Controller', () => {
     const res = new MockExpressResponse();
     req.body = {
       password: 'test',
-      uuid: ''
+      uuid: '',
     };
     await userController.validateEmailRequest(req, res);
     expect(res.statusCode).toBe(400);
@@ -553,7 +561,7 @@ describe('User Controller', () => {
     const res2 = new MockExpressResponse();
     req2.body = {
       password: '',
-      uuid: 'test'
+      uuid: 'test',
     };
     await userController.validateEmailRequest(req2, res2);
     expect(res2.statusCode).toBe(400);
@@ -564,7 +572,7 @@ describe('User Controller', () => {
     const uuid = uuidv4();
     req.body = {
       password: 'test',
-      uuid
+      uuid,
     };
     await userController.validateEmailRequest(req, res);
     expect(res.statusCode).toBe(404);
@@ -575,7 +583,7 @@ describe('User Controller', () => {
     const uuid = uuidv4();
     req.body = {
       password: 'test',
-      uuid
+      uuid,
     };
     req.user = 1;
     const user1 = new User();
@@ -597,7 +605,7 @@ describe('User Controller', () => {
     const uuid = uuidv4();
     req.body = {
       password: 'TangoDown123!!!',
-      uuid
+      uuid,
     };
     req.user = 1;
     const user1 = new User();
@@ -611,7 +619,9 @@ describe('User Controller', () => {
     user1.password = await generateHash('TangoDown123!!!');
     const insUser1 = await getConnection().getRepository(User).insert(user1);
     await userController.validateEmailRequest(req, res);
-    const checkUser = await getConnection().getRepository(User).findOne(req.user);
+    const checkUser = await getConnection()
+      .getRepository(User)
+      .findOne(req.user);
     expect(checkUser.email).toBe('newEmail@jest.com');
     expect(checkUser.newEmail).toBeNull();
     expect(checkUser.uuid).toBeNull();

@@ -47,7 +47,7 @@ export const checkRefreshToken = (req, res, next) => {
 };
 
 /**
- * @description Validates user role before executing route
+ * @description Validates Admin user role before executing route
  * @param {Request} req
  * @param {Response} res
  */

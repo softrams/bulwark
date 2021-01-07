@@ -1,4 +1,9 @@
-import { createConnection, getConnection, Entity, getRepository } from 'typeorm';
+import {
+  createConnection,
+  getConnection,
+  Entity,
+  getRepository,
+} from 'typeorm';
 import { ReportAudit } from '../entity/ReportAudit';
 import { insertReportAuditRecord } from './report-audit.controller';
 import { User } from '../entity/User';
@@ -13,6 +18,7 @@ import { Jira } from '../entity/Jira';
 import { v4 as uuidv4 } from 'uuid';
 import { generateHash } from '../utilities/password.utility';
 import MockExpressRequest = require('mock-express-request');
+import { Team } from '../entity/Team';
 
 describe('Report Audit Controller', () => {
   beforeEach(() => {
@@ -30,10 +36,11 @@ describe('Report Audit Controller', () => {
         Jira,
         Vulnerability,
         ProblemLocation,
-        Resource
+        Resource,
+        Team,
       ],
       synchronize: true,
-      logging: false
+      logging: false,
     });
   });
 
@@ -66,12 +73,19 @@ describe('Report Audit Controller', () => {
       endDate: new Date(),
       asset: new Asset(),
       testers: null,
-      vulnerabilities: null
+      vulnerabilities: null,
     };
-    const savedAssessment = await getConnection().getRepository(Assessment).save(assessment);
+    const savedAssessment = await getConnection()
+      .getRepository(Assessment)
+      .save(assessment);
     req.user = savedUser.id;
-    const auditRecord = await insertReportAuditRecord(req.user, savedAssessment.id);
-    const savedAuditRecord = await getConnection().getRepository(ReportAudit).findOne(auditRecord.id);
+    const auditRecord = await insertReportAuditRecord(
+      req.user,
+      savedAssessment.id
+    );
+    const savedAuditRecord = await getConnection()
+      .getRepository(ReportAudit)
+      .findOne(auditRecord.id);
     expect(savedAuditRecord.assessmentId).toBe(savedAssessment.id);
   });
 });

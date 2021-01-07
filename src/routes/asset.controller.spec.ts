@@ -1,7 +1,12 @@
 import { Asset } from '../entity/Asset';
 import { Organization } from '../entity/Organization';
 import * as assetController from './asset.controller';
-import { createConnection, getConnection, Entity, getRepository } from 'typeorm';
+import {
+  createConnection,
+  getConnection,
+  Entity,
+  getRepository,
+} from 'typeorm';
 import { File } from '../entity/File';
 import { Vulnerability } from '../entity/Vulnerability';
 import { Assessment } from '../entity/Assessment';
@@ -11,6 +16,7 @@ import { Resource } from '../entity/Resource';
 import MockExpressResponse = require('mock-express-response');
 import MockExpressRequest = require('mock-express-request');
 import { Jira } from '../entity/Jira';
+import { Team } from '../entity/Team';
 
 describe('Asset Controller', () => {
   beforeEach(async () => {
@@ -18,10 +24,21 @@ describe('Asset Controller', () => {
       type: 'sqlite',
       database: ':memory:',
       dropSchema: true,
-      entities: [Asset, Organization, File, Vulnerability, Assessment, User, ProblemLocation, Resource, Jira],
+      entities: [
+        Asset,
+        Organization,
+        File,
+        Vulnerability,
+        Assessment,
+        User,
+        ProblemLocation,
+        Resource,
+        Jira,
+        Team,
+      ],
       synchronize: true,
       logging: false,
-      name: 'default'
+      name: 'default',
     });
   });
   afterEach(() => {
@@ -32,16 +49,16 @@ describe('Asset Controller', () => {
     const response = new MockExpressResponse();
     const request = new MockExpressRequest({
       params: {
-        assetId: null
-      }
+        assetId: null,
+      },
     });
     await assetController.activateAssetById(request, response);
     expect(response.statusCode).toBe(400);
     const response2 = new MockExpressResponse();
     const request2 = new MockExpressRequest({
       params: {
-        assetId: 999
-      }
+        assetId: 999,
+      },
     });
     await assetController.activateAssetById(request2, response2);
     expect(response2.statusCode).toBe(404);
@@ -49,10 +66,12 @@ describe('Asset Controller', () => {
       id: null,
       name: 'testOrg',
       asset: null,
-      status: 'A'
+      status: 'A',
     };
     await getConnection().getRepository(Organization).insert(org);
-    const savedOrg = await getConnection().getRepository(Organization).findOne(1);
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(1);
     const assessments: Assessment[] = [];
     const insertAsset: Asset = {
       id: null,
@@ -60,14 +79,14 @@ describe('Asset Controller', () => {
       status: 'AH',
       organization: savedOrg,
       assessment: assessments,
-      jira: null
+      jira: null,
     };
     await getConnection().getRepository(Asset).insert(insertAsset);
     const response3 = new MockExpressResponse();
     const request3 = new MockExpressRequest({
       params: {
-        assetId: 1
-      }
+        assetId: 1,
+      },
     });
     await assetController.activateAssetById(request3, response3);
     expect(response3.statusCode).toBe(200);
@@ -76,16 +95,16 @@ describe('Asset Controller', () => {
     const response = new MockExpressResponse();
     const request = new MockExpressRequest({
       params: {
-        assetId: null
-      }
+        assetId: null,
+      },
     });
     await assetController.archiveAssetById(request, response);
     expect(response.statusCode).toBe(400);
     const response2 = new MockExpressResponse();
     const request2 = new MockExpressRequest({
       params: {
-        assetId: 999
-      }
+        assetId: 999,
+      },
     });
     await assetController.archiveAssetById(request2, response2);
     expect(response2.statusCode).toBe(404);
@@ -93,10 +112,12 @@ describe('Asset Controller', () => {
       id: null,
       name: 'testOrg',
       asset: null,
-      status: 'A'
+      status: 'A',
     };
     await getConnection().getRepository(Organization).insert(org);
-    const savedOrg = await getConnection().getRepository(Organization).findOne(1);
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(1);
     const assessments: Assessment[] = [];
     const insertAsset: Asset = {
       id: null,
@@ -104,14 +125,14 @@ describe('Asset Controller', () => {
       status: 'A',
       organization: savedOrg,
       assessment: assessments,
-      jira: null
+      jira: null,
     };
     await getConnection().getRepository(Asset).insert(insertAsset);
     const response3 = new MockExpressResponse();
     const request3 = new MockExpressRequest({
       params: {
-        assetId: 1
-      }
+        assetId: 1,
+      },
     });
     await assetController.archiveAssetById(request3, response3);
     expect(response3.statusCode).toBe(200);
@@ -120,15 +141,15 @@ describe('Asset Controller', () => {
     const response = new MockExpressResponse();
     const request = new MockExpressRequest({
       params: {
-        id: null
-      }
+        id: null,
+      },
     });
     await assetController.getOrgAssets(request, response);
     expect(response.statusCode).toBe(400);
     const request2 = new MockExpressRequest({
       params: {
-        id: 'abc'
-      }
+        id: 'abc',
+      },
     });
     const response2 = new MockExpressResponse();
     await assetController.getOrgAssets(request2, response2);
@@ -137,10 +158,12 @@ describe('Asset Controller', () => {
       id: null,
       name: 'testOrg',
       asset: null,
-      status: 'A'
+      status: 'A',
     };
     await getConnection().getRepository(Organization).insert(org);
-    const savedOrg = await getConnection().getRepository(Organization).findOne(1);
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(1);
     const assessments: Assessment[] = [];
     const insertAsset: Asset = {
       id: null,
@@ -148,13 +171,13 @@ describe('Asset Controller', () => {
       status: 'A',
       organization: savedOrg,
       assessment: assessments,
-      jira: null
+      jira: null,
     };
     await getConnection().getRepository(Asset).insert(insertAsset);
     const request3 = new MockExpressRequest({
       params: {
-        id: 1
-      }
+        id: 1,
+      },
     });
     const response3 = new MockExpressResponse();
     await assetController.getOrgAssets(request3, response3);
@@ -164,15 +187,15 @@ describe('Asset Controller', () => {
     const response = new MockExpressResponse();
     const request = new MockExpressRequest({
       params: {
-        id: null
-      }
+        id: null,
+      },
     });
     await assetController.getArchivedOrgAssets(request, response);
     expect(response.statusCode).toBe(400);
     const request2 = new MockExpressRequest({
       params: {
-        id: 'abc'
-      }
+        id: 'abc',
+      },
     });
     const response2 = new MockExpressResponse();
     await assetController.getArchivedOrgAssets(request2, response2);
@@ -181,10 +204,12 @@ describe('Asset Controller', () => {
       id: null,
       name: 'testOrg',
       asset: null,
-      status: 'A'
+      status: 'A',
     };
     await getConnection().getRepository(Organization).insert(org);
-    const savedOrg = await getConnection().getRepository(Organization).findOne(1);
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(1);
     const assessments: Assessment[] = [];
     const insertAsset: Asset = {
       id: null,
@@ -192,13 +217,13 @@ describe('Asset Controller', () => {
       status: 'AH',
       organization: savedOrg,
       assessment: assessments,
-      jira: null
+      jira: null,
     };
     await getConnection().getRepository(Asset).insert(insertAsset);
     const request3 = new MockExpressRequest({
       params: {
-        id: 1
-      }
+        id: 1,
+      },
     });
     const response3 = new MockExpressResponse();
     await assetController.getArchivedOrgAssets(request3, response3);
@@ -209,10 +234,12 @@ describe('Asset Controller', () => {
       id: null,
       name: 'testOrg',
       asset: null,
-      status: 'A'
+      status: 'A',
     };
     await getConnection().getRepository(Organization).insert(org);
-    const savedOrg = await getConnection().getRepository(Organization).findOne(1);
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(1);
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -220,7 +247,7 @@ describe('Asset Controller', () => {
       status: 'A',
       assessment: assessments,
       organization: savedOrg,
-      jira: null
+      jira: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
     let savedAsset = await getConnection().getRepository(Asset).findOne(1);
@@ -229,7 +256,7 @@ describe('Asset Controller', () => {
       username: 'test',
       host: 'test',
       apiKey: 'test',
-      asset: null
+      asset: null,
     };
     await getConnection().getRepository(Asset).save(savedAsset);
     savedAsset = await getConnection().getRepository(Asset).findOne(1);
@@ -237,8 +264,8 @@ describe('Asset Controller', () => {
     await getConnection().getRepository(Jira).insert(jira);
     const request = new MockExpressRequest({
       params: {
-        assetId: 1
-      }
+        assetId: 1,
+      },
     });
     const response = new MockExpressResponse();
     await assetController.purgeJiraInfo(request, response);
@@ -247,16 +274,16 @@ describe('Asset Controller', () => {
   test('Purge jira info failure', async () => {
     const request = new MockExpressRequest({
       params: {
-        id: 1
-      }
+        id: 1,
+      },
     });
     const response = new MockExpressResponse();
     await assetController.purgeJiraInfo(request, response);
     expect(response.statusCode).toBe(400);
     const request2 = new MockExpressRequest({
       params: {
-        assetId: 'test'
-      }
+        assetId: 'test',
+      },
     });
     const response2 = new MockExpressResponse();
     await assetController.purgeJiraInfo(request2, response2);
@@ -265,19 +292,19 @@ describe('Asset Controller', () => {
   test('Create Asset no jira success', async () => {
     const request = new MockExpressRequest({
       params: {
-        id: 1
+        id: 1,
       },
       body: {
         name: 'test asset',
-        jira: null
-      }
+        jira: null,
+      },
     });
     const response = new MockExpressResponse();
     const org: Organization = {
       id: null,
       name: 'testOrg',
       asset: null,
-      status: 'A'
+      status: 'A',
     };
     await getConnection().getRepository(Organization).insert(org);
     await getConnection().getRepository(Organization).findOne(1);
@@ -287,42 +314,44 @@ describe('Asset Controller', () => {
   test('Create Asset with jira success', async () => {
     const request = new MockExpressRequest({
       params: {
-        id: 1
+        id: 1,
       },
       body: {
         name: 'test asset',
         jira: {
           username: 'test',
           apiKey: 'test',
-          host: 'test'
-        }
-      }
+          host: 'test',
+        },
+      },
     });
     const response = new MockExpressResponse();
     const org: Organization = {
       id: null,
       name: 'testOrg',
       asset: null,
-      status: 'A'
+      status: 'A',
     };
     await getConnection().getRepository(Organization).insert(org);
-    const savedOrg = await getConnection().getRepository(Organization).findOne(1);
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(1);
     await assetController.createAsset(request, response);
     expect(response.statusCode).toBe(200);
   });
   test('Create Asset failure org id not valid', async () => {
     const request = new MockExpressRequest({
       params: {
-        badId: 1
+        badId: 1,
       },
       body: {
         name: 'test asset',
         jira: {
           username: 'test',
           apiKey: 'test',
-          host: 'test'
-        }
-      }
+          host: 'test',
+        },
+      },
     });
     const response = new MockExpressResponse();
     await assetController.createAsset(request, response);
@@ -331,16 +360,16 @@ describe('Asset Controller', () => {
   test('Create Asset failure org does not exist', async () => {
     const request = new MockExpressRequest({
       params: {
-        id: 1
+        id: 1,
       },
       body: {
         name: 'test asset',
         jira: {
           username: 'test',
           apiKey: 'test',
-          host: 'test'
-        }
-      }
+          host: 'test',
+        },
+      },
     });
     const response = new MockExpressResponse();
     await assetController.createAsset(request, response);
@@ -349,22 +378,22 @@ describe('Asset Controller', () => {
   test('Create Asset failure missing name', async () => {
     const request = new MockExpressRequest({
       params: {
-        id: 1
+        id: 1,
       },
       body: {
         jira: {
           username: 'test',
           apiKey: 'test',
-          host: 'test'
-        }
-      }
+          host: 'test',
+        },
+      },
     });
     const response = new MockExpressResponse();
     const org: Organization = {
       id: null,
       name: 'testOrg',
       asset: null,
-      status: 'A'
+      status: 'A',
     };
     await getConnection().getRepository(Organization).insert(org);
     await assetController.createAsset(request, response);
@@ -375,10 +404,12 @@ describe('Asset Controller', () => {
       id: null,
       name: 'testOrg',
       asset: null,
-      status: 'A'
+      status: 'A',
     };
     await getConnection().getRepository(Organization).insert(org);
-    const savedOrg = await getConnection().getRepository(Organization).findOne(1);
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(1);
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -386,13 +417,13 @@ describe('Asset Controller', () => {
       status: 'A',
       assessment: assessments,
       organization: savedOrg,
-      jira: null
+      jira: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
     const request = new MockExpressRequest({
       params: {
-        assetId: 1
-      }
+        assetId: 1,
+      },
     });
     const response = new MockExpressResponse();
     await assetController.getAssetById(request, response);
@@ -401,8 +432,8 @@ describe('Asset Controller', () => {
   test('get asset by id failure', async () => {
     const request = new MockExpressRequest({
       params: {
-        id: 1
-      }
+        id: 1,
+      },
     });
     const response = new MockExpressResponse();
     await assetController.getAssetById(request, response);
@@ -413,10 +444,12 @@ describe('Asset Controller', () => {
       id: null,
       name: 'testOrg',
       asset: null,
-      status: 'A'
+      status: 'A',
     };
     await getConnection().getRepository(Organization).insert(org);
-    const savedOrg = await getConnection().getRepository(Organization).findOne(1);
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(1);
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -424,13 +457,13 @@ describe('Asset Controller', () => {
       status: 'A',
       assessment: assessments,
       organization: savedOrg,
-      jira: null
+      jira: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
     const request = new MockExpressRequest({
       params: {
-        assetId: 2
-      }
+        assetId: 2,
+      },
     });
     const response = new MockExpressResponse();
     await assetController.getAssetById(request, response);
@@ -441,10 +474,12 @@ describe('Asset Controller', () => {
       id: null,
       name: 'testOrg',
       asset: null,
-      status: 'A'
+      status: 'A',
     };
     await getConnection().getRepository(Organization).insert(org);
-    const savedOrg = await getConnection().getRepository(Organization).findOne(1);
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(1);
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -452,7 +487,7 @@ describe('Asset Controller', () => {
       status: 'A',
       assessment: assessments,
       organization: savedOrg,
-      jira: null
+      jira: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
     const savedAsset = await getConnection().getRepository(Asset).findOne(1);
@@ -461,13 +496,13 @@ describe('Asset Controller', () => {
       username: 'test',
       host: 'test',
       apiKey: 'test',
-      asset: savedAsset
+      asset: savedAsset,
     };
     await getConnection().getRepository(Jira).insert(jira);
     const request = new MockExpressRequest({
       params: {
-        assetId: 1
-      }
+        assetId: 1,
+      },
     });
     const response = new MockExpressResponse();
     await assetController.getAssetById(request, response);
@@ -478,10 +513,12 @@ describe('Asset Controller', () => {
       id: null,
       name: 'testOrg',
       asset: null,
-      status: 'A'
+      status: 'A',
     };
     await getConnection().getRepository(Organization).insert(org);
-    const savedOrg = await getConnection().getRepository(Organization).findOne(1);
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(1);
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -489,13 +526,13 @@ describe('Asset Controller', () => {
       status: 'A',
       assessment: assessments,
       organization: savedOrg,
-      jira: null
+      jira: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
     await getConnection().getRepository(Asset).findOne(1);
     const request = new MockExpressRequest({
       params: {
-        assetId: 1
+        assetId: 1,
       },
       body: {
         name: 'updated asset',
@@ -503,9 +540,9 @@ describe('Asset Controller', () => {
           id: null,
           host: 'test',
           username: 'test',
-          apiKey: 'test'
-        } as Jira
-      }
+          apiKey: 'test',
+        } as Jira,
+      },
     });
     const response = new MockExpressResponse();
     await assetController.updateAssetById(request, response);
@@ -514,7 +551,7 @@ describe('Asset Controller', () => {
   test('Update asset by id failure asset id is not valid', async () => {
     const request = new MockExpressRequest({
       params: {
-        id: 1
+        id: 1,
       },
       body: {
         name: 'updated asset',
@@ -522,9 +559,9 @@ describe('Asset Controller', () => {
           id: null,
           host: 'test',
           username: 'test',
-          apiKey: 'test'
-        } as Jira
-      }
+          apiKey: 'test',
+        } as Jira,
+      },
     });
     const response = new MockExpressResponse();
     await assetController.updateAssetById(request, response);
@@ -533,7 +570,7 @@ describe('Asset Controller', () => {
   test('Update asset by id failure asset does not exist', async () => {
     const request = new MockExpressRequest({
       params: {
-        assetId: 1
+        assetId: 1,
       },
       body: {
         name: 'updated asset',
@@ -541,9 +578,9 @@ describe('Asset Controller', () => {
           id: null,
           host: 'test',
           username: 'test',
-          apiKey: 'test'
-        } as Jira
-      }
+          apiKey: 'test',
+        } as Jira,
+      },
     });
     const response = new MockExpressResponse();
     await assetController.updateAssetById(request, response);
@@ -554,10 +591,12 @@ describe('Asset Controller', () => {
       id: null,
       name: 'testOrg',
       asset: null,
-      status: 'A'
+      status: 'A',
     };
     await getConnection().getRepository(Organization).insert(org);
-    const savedOrg = await getConnection().getRepository(Organization).findOne(1);
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(1);
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -565,22 +604,22 @@ describe('Asset Controller', () => {
       status: 'A',
       assessment: assessments,
       organization: savedOrg,
-      jira: null
+      jira: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
     await getConnection().getRepository(Asset).findOne(1);
     const request = new MockExpressRequest({
       params: {
-        assetId: 1
+        assetId: 1,
       },
       body: {
         jira: {
           id: null,
           host: 'test',
           username: 'test',
-          apiKey: 'test'
-        } as Jira
-      }
+          apiKey: 'test',
+        } as Jira,
+      },
     });
     const response = new MockExpressResponse();
     await assetController.updateAssetById(request, response);
@@ -591,10 +630,12 @@ describe('Asset Controller', () => {
       id: null,
       name: 'testOrg',
       asset: null,
-      status: 'A'
+      status: 'A',
     };
     await getConnection().getRepository(Organization).insert(org);
-    const savedOrg = await getConnection().getRepository(Organization).findOne(1);
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(1);
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -602,13 +643,13 @@ describe('Asset Controller', () => {
       status: 'A',
       assessment: assessments,
       organization: savedOrg,
-      jira: null
+      jira: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
     await getConnection().getRepository(Asset).findOne(1);
     const request = new MockExpressRequest({
       params: {
-        assetId: 1
+        assetId: 1,
       },
       body: {
         name: 'test',
@@ -616,9 +657,9 @@ describe('Asset Controller', () => {
           id: null,
           host: 1,
           username: 1,
-          apiKey: 1
-        }
-      }
+          apiKey: 1,
+        },
+      },
     });
     const response = new MockExpressResponse();
     await assetController.updateAssetById(request, response);
