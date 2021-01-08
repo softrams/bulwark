@@ -12,32 +12,36 @@ import { Config } from '../entity/Config';
 import MockExpressResponse = require('mock-express-response');
 import MockExpressRequest = require('mock-express-request');
 import { Team } from '../entity/Team';
+import { Organization } from '../entity/Organization';
+import { Asset } from '../entity/Asset';
+import { Assessment } from '../entity/Assessment';
+import { Jira } from '../entity/Jira';
+import { ProblemLocation } from '../entity/ProblemLocation';
+import { ReportAudit } from '../entity/ReportAudit';
+import { Resource } from '../entity/Resource';
+import { Vulnerability } from '../entity/Vulnerability';
+import { File } from '../entity/File';
+
 describe('User Controller', () => {
-  // Mocks the Request Object that is returned
-  const mockRequest = () => {
-    const req = {
-      body: {},
-      user: Function,
-    };
-    req.user = jest.fn().mockReturnValue(req);
-    return req;
-  };
-  // Mocks the Response Object that is returned
-  const mockResponse = () => {
-    const res = {
-      status: Function,
-      json: Function,
-    };
-    res.status = jest.fn().mockReturnValue(res);
-    res.json = jest.fn().mockReturnValue(res);
-    return res;
-  };
   beforeEach(() => {
     return createConnection({
       type: 'sqlite',
       database: ':memory:',
       dropSchema: true,
-      entities: [User, Config, Team],
+      entities: [
+        Config,
+        User,
+        Team,
+        Organization,
+        Asset,
+        Assessment,
+        Vulnerability,
+        ProblemLocation,
+        ReportAudit,
+        Resource,
+        Jira,
+        File,
+      ],
       synchronize: true,
       logging: false,
     });

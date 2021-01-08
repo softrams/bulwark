@@ -37,6 +37,7 @@ export const initialInsert = async () => {
     defaultAdminTeam.lastUpdatedDate = new Date();
     defaultAdminTeam.createdBy = savedUser ? savedUser.id : null;
     defaultAdminTeam.lastUpdatedBy = savedUser ? savedUser.id : null;
+    defaultAdminTeam.organization = null;
     defaultAdminTeam.role = ROLE.ADMIN;
     if (savedUser) {
       defaultAdminTeam.users = [savedUser];
@@ -49,6 +50,7 @@ export const initialInsert = async () => {
     defaultTestersTeam.createdBy = savedUser ? savedUser.id : null;
     defaultTestersTeam.lastUpdatedBy = savedUser ? savedUser.id : null;
     defaultTestersTeam.role = ROLE.TESTER;
+    defaultTestersTeam.organization = null;
     await getConnection().getRepository(Team).save(defaultTestersTeam);
     const defaultReadOnlyTeam = new Team();
     defaultReadOnlyTeam.name = 'Global Read-Only';
@@ -57,6 +59,7 @@ export const initialInsert = async () => {
     defaultReadOnlyTeam.createdBy = savedUser ? savedUser.id : null;
     defaultReadOnlyTeam.lastUpdatedBy = savedUser ? savedUser.id : null;
     defaultReadOnlyTeam.role = ROLE.READONLY;
+    defaultReadOnlyTeam.organization = null;
     await getConnection().getRepository(Team).save(defaultReadOnlyTeam);
   }
 };
@@ -79,7 +82,7 @@ export const saveConfig = async (req: Request, res: Response) => {
     existingConfig.fromEmailPassword = encryptedPassword;
   }
   const errors = await validate(existingConfig, {
-    skipMissingProperties: true
+    skipMissingProperties: true,
   });
   if (errors.length > 0) {
     return res.status(400).json('Settings validation failed');

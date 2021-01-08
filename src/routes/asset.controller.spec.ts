@@ -67,6 +67,7 @@ describe('Asset Controller', () => {
       name: 'testOrg',
       asset: null,
       status: 'A',
+      teams: null,
     };
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
@@ -113,6 +114,7 @@ describe('Asset Controller', () => {
       name: 'testOrg',
       asset: null,
       status: 'A',
+      teams: null,
     };
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
@@ -159,6 +161,7 @@ describe('Asset Controller', () => {
       name: 'testOrg',
       asset: null,
       status: 'A',
+      teams: null,
     };
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
@@ -205,6 +208,7 @@ describe('Asset Controller', () => {
       name: 'testOrg',
       asset: null,
       status: 'A',
+      teams: null,
     };
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
@@ -235,6 +239,7 @@ describe('Asset Controller', () => {
       name: 'testOrg',
       asset: null,
       status: 'A',
+      teams: null,
     };
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
@@ -305,6 +310,7 @@ describe('Asset Controller', () => {
       name: 'testOrg',
       asset: null,
       status: 'A',
+      teams: null,
     };
     await getConnection().getRepository(Organization).insert(org);
     await getConnection().getRepository(Organization).findOne(1);
@@ -331,6 +337,7 @@ describe('Asset Controller', () => {
       name: 'testOrg',
       asset: null,
       status: 'A',
+      teams: null,
     };
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
@@ -394,6 +401,7 @@ describe('Asset Controller', () => {
       name: 'testOrg',
       asset: null,
       status: 'A',
+      teams: null,
     };
     await getConnection().getRepository(Organization).insert(org);
     await assetController.createAsset(request, response);
@@ -405,6 +413,7 @@ describe('Asset Controller', () => {
       name: 'testOrg',
       asset: null,
       status: 'A',
+      teams: null,
     };
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
@@ -445,6 +454,7 @@ describe('Asset Controller', () => {
       name: 'testOrg',
       asset: null,
       status: 'A',
+      teams: null,
     };
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
@@ -475,6 +485,7 @@ describe('Asset Controller', () => {
       name: 'testOrg',
       asset: null,
       status: 'A',
+      teams: null,
     };
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
@@ -514,6 +525,7 @@ describe('Asset Controller', () => {
       name: 'testOrg',
       asset: null,
       status: 'A',
+      teams: null,
     };
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
@@ -592,6 +604,7 @@ describe('Asset Controller', () => {
       name: 'testOrg',
       asset: null,
       status: 'A',
+      teams: null,
     };
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
@@ -631,6 +644,7 @@ describe('Asset Controller', () => {
       name: 'testOrg',
       asset: null,
       status: 'A',
+      teams: null,
     };
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()

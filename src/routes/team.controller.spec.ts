@@ -1,6 +1,5 @@
 import { createConnection, getConnection } from 'typeorm';
 import { ReportAudit } from '../entity/ReportAudit';
-import { insertReportAuditRecord } from './report-audit.controller';
 import { User } from '../entity/User';
 import { Assessment } from '../entity/Assessment';
 import { Organization } from '../entity/Organization';
@@ -70,6 +69,7 @@ describe('Team Controller', () => {
       name: 'Test Org',
       status: status.active,
       asset: null,
+      teams: null,
     };
     const savedOrg = await getConnection()
       .getRepository(Organization)
@@ -109,6 +109,7 @@ describe('Team Controller', () => {
       name: 'Test Org',
       status: status.active,
       asset: null,
+      teams: null,
     };
     const savedOrg = await getConnection()
       .getRepository(Organization)
@@ -141,6 +142,7 @@ describe('Team Controller', () => {
       name: 'Test Org',
       status: status.active,
       asset: null,
+      teams: null,
     };
     const savedOrg = await getConnection()
       .getRepository(Organization)
@@ -184,7 +186,7 @@ describe('Team Controller', () => {
     // create team
     const bravoTeam = new Team();
     bravoTeam.name = 'Bravo';
-    bravoTeam.organization = savedOrg.id;
+    bravoTeam.organization = savedOrg;
     bravoTeam.id = null;
     bravoTeam.createdDate = new Date();
     bravoTeam.lastUpdatedDate = new Date();
@@ -241,6 +243,7 @@ describe('Team Controller', () => {
       name: 'Test Org',
       status: status.active,
       asset: null,
+      teams: null,
     };
     const savedOrg = await getConnection()
       .getRepository(Organization)
@@ -284,7 +287,7 @@ describe('Team Controller', () => {
     // create team
     const bravoTeam = new Team();
     bravoTeam.name = 'Bravo';
-    bravoTeam.organization = savedOrg.id;
+    bravoTeam.organization = savedOrg;
     bravoTeam.id = null;
     bravoTeam.createdDate = new Date();
     bravoTeam.lastUpdatedDate = new Date();
@@ -350,6 +353,7 @@ describe('Team Controller', () => {
       name: 'Test Org',
       status: status.active,
       asset: null,
+      teams: null,
     };
     const savedOrg = await getConnection()
       .getRepository(Organization)
@@ -357,7 +361,7 @@ describe('Team Controller', () => {
     // create team
     const bravoTeam = new Team();
     bravoTeam.name = 'Bravo';
-    bravoTeam.organization = savedOrg.id;
+    bravoTeam.organization = savedOrg;
     bravoTeam.id = null;
     bravoTeam.createdDate = new Date();
     bravoTeam.lastUpdatedDate = new Date();
@@ -435,6 +439,7 @@ describe('Team Controller', () => {
       name: 'Test Org',
       status: status.active,
       asset: null,
+      teams: null,
     };
     const savedOrg = await getConnection()
       .getRepository(Organization)
@@ -454,7 +459,7 @@ describe('Team Controller', () => {
     // create team
     const bravoTeam = new Team();
     bravoTeam.name = 'Bravo';
-    bravoTeam.organization = savedOrg.id;
+    bravoTeam.organization = savedOrg;
     bravoTeam.id = null;
     bravoTeam.createdDate = new Date();
     bravoTeam.lastUpdatedDate = new Date();
@@ -498,6 +503,7 @@ describe('Team Controller', () => {
       name: 'Test Org',
       status: status.active,
       asset: null,
+      teams: null,
     };
     const savedOrg = await getConnection()
       .getRepository(Organization)
@@ -516,7 +522,7 @@ describe('Team Controller', () => {
     // Team 1
     const bravoTeam = new Team();
     bravoTeam.name = 'Bravo';
-    bravoTeam.organization = savedOrg.id;
+    bravoTeam.organization = savedOrg;
     bravoTeam.id = null;
     bravoTeam.createdDate = new Date();
     bravoTeam.lastUpdatedDate = new Date();
@@ -532,7 +538,7 @@ describe('Team Controller', () => {
     // Team 2
     const alphaTeam = new Team();
     alphaTeam.name = 'Alpha';
-    alphaTeam.organization = savedOrg.id;
+    alphaTeam.organization = savedOrg;
     alphaTeam.id = null;
     alphaTeam.createdDate = new Date();
     alphaTeam.lastUpdatedDate = new Date();

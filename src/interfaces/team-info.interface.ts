@@ -1,6 +1,8 @@
+import { Organization } from '../entity/Organization';
+
 export interface TeamInfo {
   id: number;
   role: string;
-  organization: number;
+  organization: Organization;
   asset: number;
 }

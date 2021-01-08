@@ -4,9 +4,11 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
+  ManyToOne,
 } from 'typeorm';
 import { IsDate, IsIn } from 'class-validator';
 import { User } from './User';
+import { Organization } from './Organization';
 
 @Entity()
 export class Team {
@@ -14,8 +16,8 @@ export class Team {
   id: number;
   @Column()
   name: string;
-  @Column({ nullable: true })
-  organization: number;
+  @ManyToOne((type) => Organization, (organization) => organization.teams)
+  organization: Organization;
   @Column({ nullable: true })
   asset: number;
   @Column()
