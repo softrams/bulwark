@@ -9,6 +9,7 @@ import {
 import { IsDate, IsIn } from 'class-validator';
 import { User } from './User';
 import { Organization } from './Organization';
+import { Asset } from './Asset';
 
 @Entity()
 export class Team {
@@ -36,4 +37,7 @@ export class Team {
   @ManyToMany(() => User, (user) => user.teams)
   @JoinTable()
   users: User[];
+  @ManyToMany(() => Asset, (asset) => asset.teams)
+  @JoinTable()
+  assets: Asset[];
 }

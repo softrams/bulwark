@@ -81,6 +81,7 @@ describe('Asset Controller', () => {
       organization: savedOrg,
       assessment: assessments,
       jira: null,
+      teams: null,
     };
     await getConnection().getRepository(Asset).insert(insertAsset);
     const response3 = new MockExpressResponse();
@@ -128,6 +129,7 @@ describe('Asset Controller', () => {
       organization: savedOrg,
       assessment: assessments,
       jira: null,
+      teams: null,
     };
     await getConnection().getRepository(Asset).insert(insertAsset);
     const response3 = new MockExpressResponse();
@@ -175,6 +177,7 @@ describe('Asset Controller', () => {
       organization: savedOrg,
       assessment: assessments,
       jira: null,
+      teams: null,
     };
     await getConnection().getRepository(Asset).insert(insertAsset);
     const request3 = new MockExpressRequest({
@@ -222,6 +225,7 @@ describe('Asset Controller', () => {
       organization: savedOrg,
       assessment: assessments,
       jira: null,
+      teams: null,
     };
     await getConnection().getRepository(Asset).insert(insertAsset);
     const request3 = new MockExpressRequest({
@@ -253,6 +257,7 @@ describe('Asset Controller', () => {
       assessment: assessments,
       organization: savedOrg,
       jira: null,
+      teams: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
     let savedAsset = await getConnection().getRepository(Asset).findOne(1);
@@ -427,6 +432,7 @@ describe('Asset Controller', () => {
       assessment: assessments,
       organization: savedOrg,
       jira: null,
+      teams: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
     const request = new MockExpressRequest({
@@ -468,6 +474,7 @@ describe('Asset Controller', () => {
       assessment: assessments,
       organization: savedOrg,
       jira: null,
+      teams: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
     const request = new MockExpressRequest({
@@ -499,6 +506,7 @@ describe('Asset Controller', () => {
       assessment: assessments,
       organization: savedOrg,
       jira: null,
+      teams: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
     const savedAsset = await getConnection().getRepository(Asset).findOne(1);
@@ -539,6 +547,7 @@ describe('Asset Controller', () => {
       assessment: assessments,
       organization: savedOrg,
       jira: null,
+      teams: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
     await getConnection().getRepository(Asset).findOne(1);
@@ -618,6 +627,7 @@ describe('Asset Controller', () => {
       assessment: assessments,
       organization: savedOrg,
       jira: null,
+      teams: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
     await getConnection().getRepository(Asset).findOne(1);
@@ -658,6 +668,7 @@ describe('Asset Controller', () => {
       assessment: assessments,
       organization: savedOrg,
       jira: null,
+      teams: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
     await getConnection().getRepository(Asset).findOne(1);

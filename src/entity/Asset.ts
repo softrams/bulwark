@@ -1,8 +1,17 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany, OneToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  ManyToMany,
+} from 'typeorm';
 import { Organization } from './Organization';
 import { Assessment } from './Assessment';
 import { IsIn } from 'class-validator';
 import { Jira } from './Jira';
+import { Team } from './Team';
 
 @Entity()
 export class Asset {
@@ -19,4 +28,6 @@ export class Asset {
   assessment: Assessment[];
   @OneToOne((type) => Jira, (jira) => jira.asset)
   jira: Jira;
+  @ManyToMany(() => Team, (team) => team.assets)
+  teams: Team[];
 }
