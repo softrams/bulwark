@@ -23,6 +23,9 @@ import {
   deleteTeam,
   updateTeamInfo,
   getMyTeams,
+  addTeamAsset,
+  removeTeamAsset,
+  getAllTeams,
 } from '../routes/team.controller';
 
 describe('Team Controller', () => {
@@ -494,6 +497,20 @@ describe('Team Controller', () => {
       .getRepository(User)
       .findOne(addedUser1.id, { relations: ['teams'] });
     expect(userNoTeam.teams.length).toBe(0);
+    const badRequest = new MockExpressRequest({
+      body: {},
+    });
+    const badResponse = new MockExpressResponse();
+    await deleteTeam(badRequest, badResponse);
+    expect(badResponse.statusCode).toBe(400);
+    const badRequest2 = new MockExpressRequest({
+      body: {
+        teamId: 34,
+      },
+    });
+    const badResponse2 = new MockExpressResponse();
+    await deleteTeam(badRequest2, badResponse2);
+    expect(badResponse2.statusCode).toBe(404);
   });
 
   test('get user teams', async () => {
@@ -562,5 +579,212 @@ describe('Team Controller', () => {
     const userTeams: Team[] = response._getJSON();
     expect(userTeams[0].name).toBe(bravoTeam.name);
     expect(userTeams[1].name).toBe(alphaTeam.name);
+  });
+
+  test('add asset to team', async () => {
+    // create org
+    const newOrg: Organization = {
+      id: null,
+      name: 'Test Org',
+      status: status.active,
+      asset: null,
+      teams: null,
+    };
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .save(newOrg);
+    const assessments: Assessment[] = [];
+    const asset1: Asset = {
+      id: null,
+      name: 'testAsset1',
+      status: status.active,
+      organization: savedOrg,
+      assessment: assessments,
+      jira: null,
+      teams: null,
+    };
+    const savedAsset1 = await getConnection().getRepository(Asset).save(asset1);
+    const asset2: Asset = {
+      id: null,
+      name: 'testAsset2',
+      status: status.active,
+      organization: savedOrg,
+      assessment: assessments,
+      jira: null,
+      teams: null,
+    };
+    const savedAsset2 = await getConnection().getRepository(Asset).save(asset2);
+    const asset3: Asset = {
+      id: null,
+      name: 'testAsset3',
+      status: status.active,
+      organization: savedOrg,
+      assessment: assessments,
+      jira: null,
+      teams: null,
+    };
+    const savedAsset3 = await getConnection().getRepository(Asset).save(asset3);
+    // Team 1
+    const team1 = new Team();
+    team1.name = 'Bravo';
+    team1.organization = savedOrg;
+    team1.id = null;
+    team1.createdDate = new Date();
+    team1.lastUpdatedDate = new Date();
+    team1.createdBy = 0;
+    team1.lastUpdatedBy = 0;
+    team1.role = ROLE.READONLY;
+    const savedTeam = await getConnection().getRepository(Team).save(team1);
+    const request = new MockExpressRequest({
+      body: {
+        assetIds: [savedAsset1.id, savedAsset2.id, savedAsset3.id],
+        teamId: savedTeam.id,
+      },
+    });
+    const response = new MockExpressResponse();
+    await addTeamAsset(request, response);
+    expect(response.statusCode).toBe(200);
+    const fetchTeam = await getConnection()
+      .getRepository(Team)
+      .findOne(savedTeam.id, { relations: ['assets'] });
+    expect(fetchTeam.assets.length).toBe(3);
+    const badRequest = new MockExpressRequest({
+      body: {
+        assetIds: [savedAsset1.id, savedAsset2.id, savedAsset3.id],
+      },
+    });
+    const badResponse = new MockExpressResponse();
+    await addTeamAsset(badRequest, badResponse);
+    expect(badResponse.statusCode).toBe(400);
+    const badRequest2 = new MockExpressRequest({
+      body: {
+        assetIds: [savedAsset1.id, savedAsset2.id, savedAsset3.id],
+        teamId: 5,
+      },
+    });
+    const badResponse2 = new MockExpressResponse();
+    await addTeamAsset(badRequest2, badResponse2);
+    expect(badResponse2.statusCode).toBe(404);
+    const badRequest3 = new MockExpressRequest({
+      body: {
+        assetIds: [savedAsset1.id, savedAsset2.id, 5],
+        teamId: savedTeam.id,
+      },
+    });
+    const badResponse3 = new MockExpressResponse();
+    await addTeamAsset(badRequest3, badResponse3);
+    expect(badResponse3.statusCode).toBe(401);
+  });
+
+  test('remove asset from team', async () => {
+    // create org
+    const newOrg: Organization = {
+      id: null,
+      name: 'Test Org',
+      status: status.active,
+      asset: null,
+      teams: null,
+    };
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .save(newOrg);
+    const assessments: Assessment[] = [];
+    const asset1: Asset = {
+      id: null,
+      name: 'testAsset1',
+      status: status.active,
+      organization: savedOrg,
+      assessment: assessments,
+      jira: null,
+      teams: null,
+    };
+    const savedAsset1 = await getConnection().getRepository(Asset).save(asset1);
+    const asset2: Asset = {
+      id: null,
+      name: 'testAsset2',
+      status: status.active,
+      organization: savedOrg,
+      assessment: assessments,
+      jira: null,
+      teams: null,
+    };
+    const savedAsset2 = await getConnection().getRepository(Asset).save(asset2);
+    const asset3: Asset = {
+      id: null,
+      name: 'testAsset3',
+      status: status.active,
+      organization: savedOrg,
+      assessment: assessments,
+      jira: null,
+      teams: null,
+    };
+    const savedAsset3 = await getConnection().getRepository(Asset).save(asset3);
+    // Team 1
+    const team1 = new Team();
+    team1.name = 'Bravo';
+    team1.organization = savedOrg;
+    team1.id = null;
+    team1.createdDate = new Date();
+    team1.lastUpdatedDate = new Date();
+    team1.createdBy = 0;
+    team1.lastUpdatedBy = 0;
+    team1.role = ROLE.READONLY;
+    const savedTeam = await getConnection().getRepository(Team).save(team1);
+    const fetchTeam = await getConnection()
+      .getRepository(Team)
+      .findOne(savedTeam.id, { relations: ['assets'] });
+    fetchTeam.assets.push(savedAsset1, savedAsset2, savedAsset3);
+    await getConnection().getRepository(Team).save(fetchTeam);
+    const fetchTeamWithAssets = await getConnection()
+      .getRepository(Team)
+      .findOne(savedTeam.id, { relations: ['assets'] });
+    expect(fetchTeamWithAssets.assets.length).toBe(3);
+    const request = new MockExpressRequest({
+      body: {
+        assetIds: [savedAsset1.id, savedAsset2.id],
+        teamId: savedTeam.id,
+      },
+    });
+    const response = new MockExpressResponse();
+    await removeTeamAsset(request, response);
+    const fetchTeamWithRemovedAsset = await getConnection()
+      .getRepository(Team)
+      .findOne(savedTeam.id, { relations: ['assets'] });
+    expect(fetchTeamWithRemovedAsset.assets.length).toBe(1);
+
+    const badRequest = new MockExpressRequest({
+      body: {
+        assetIds: [savedAsset1.id, savedAsset2.id, savedAsset3.id],
+      },
+    });
+    const badResponse = new MockExpressResponse();
+    await removeTeamAsset(badRequest, badResponse);
+    expect(badResponse.statusCode).toBe(400);
+    const badRequest2 = new MockExpressRequest({
+      body: {
+        assetIds: [savedAsset1.id, savedAsset2.id, savedAsset3.id],
+        teamId: 5,
+      },
+    });
+    const badResponse2 = new MockExpressResponse();
+    await removeTeamAsset(badRequest2, badResponse2);
+    expect(badResponse2.statusCode).toBe(404);
+    const badRequest3 = new MockExpressRequest({
+      body: {
+        assetIds: [savedAsset1.id, savedAsset2.id, 5],
+        teamId: savedTeam.id,
+      },
+    });
+    const badResponse3 = new MockExpressResponse();
+    await removeTeamAsset(badRequest3, badResponse3);
+    expect(badResponse3.statusCode).toBe(401);
+  });
+
+  test('get all teams', async () => {
+    const request = new MockExpressRequest({});
+    const response = new MockExpressResponse();
+    await getAllTeams(request, response);
+    const fetchedTeams: Team[] = response._getJSON();
+    expect(fetchedTeams.length).toBe(0);
   });
 });

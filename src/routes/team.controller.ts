@@ -4,6 +4,8 @@ import { User } from '../entity/User';
 import { Response, Request } from 'express';
 import { validate } from 'class-validator';
 import { UserRequest } from '../interfaces/user-request.interface';
+import { Asset } from '../entity/Asset';
+import { Organization } from '../entity/Organization';
 
 export const getAllTeams = async (req: Request, res: Response) => {
   const teams = await getConnection().getRepository(Team).find({});
@@ -133,4 +135,66 @@ export const getMyTeams = async (req: UserRequest, res: Response) => {
     .getRepository(User)
     .findOne(req.user, { relations: ['teams'] });
   return res.status(200).json(user.teams);
+};
+
+export const addTeamAsset = async (req: Request, res: Response) => {
+  const { assetIds, teamId } = req.body;
+  if (!teamId) {
+    return res.status(400).json('Invalid Team ID');
+  }
+  const team = await getConnection()
+    .getRepository(Team)
+    .findOne(teamId, { relations: ['assets', 'organization'] });
+  if (!team) {
+    return res.status(404).json(`A Team with ID ${teamId} does not exist`);
+  }
+  const org = await getConnection()
+    .getRepository(Organization)
+    .findOne(team.organization.id, { relations: ['asset'] });
+  const orgAssets = org.asset.map((asset) => asset.id);
+  // Verify each asset ID links to a valid user
+  for (const assetId of assetIds) {
+    // Verify we are only associating assets of that organization
+    if (!orgAssets.includes(assetId)) {
+      return res
+        .status(401)
+        .json(`The Asset with ID ${assetId} is unauthorized`);
+    }
+    const asset = await getConnection().getRepository(Asset).findOne(assetId);
+    team.assets.push(asset);
+  }
+  // Save the team once valid assets have been pushed to team
+  await getConnection().getRepository(Team).save(team);
+  return res.status(200).json('Team Assets has been successfully updated');
+};
+
+export const removeTeamAsset = async (req: Request, res: Response) => {
+  const { assetIds, teamId } = req.body;
+  if (!teamId) {
+    return res.status(400).json('Invalid Team ID');
+  }
+  const team = await getConnection()
+    .getRepository(Team)
+    .findOne(teamId, { relations: ['assets', 'organization'] });
+  if (!team) {
+    return res.status(404).json(`A Team with ID ${teamId} does not exist`);
+  }
+  const org = await getConnection()
+    .getRepository(Organization)
+    .findOne(team.organization.id, { relations: ['asset'] });
+  const orgAssets = org.asset.map((asset) => asset.id);
+  // Verify each asset ID links to a valid user
+  for (const assetId of assetIds) {
+    // Verify we are only associating assets of that organization
+    if (!orgAssets.includes(assetId)) {
+      return res
+        .status(401)
+        .json(`The Asset with ID ${assetId} is unauthorized`);
+    }
+    const asset = await getConnection().getRepository(Asset).findOne(assetId);
+    team.assets = team.assets.filter((assetIdx) => assetIdx.id !== asset.id);
+  }
+  // Save the team once valid assets have been pushed to team
+  await getConnection().getRepository(Team).save(team);
+  return res.status(200).json('Team Assets has been successfully updated');
 };

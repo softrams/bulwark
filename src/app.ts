@@ -295,4 +295,14 @@ createConnection().then((_) => {
     [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
     teamController.deleteTeam
   );
+  app.post(
+    '/api/team/asset/add',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    teamController.addTeamAsset
+  );
+  app.post(
+    '/api/team/asset/remove',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    teamController.removeTeamAsset
+  );
 });
