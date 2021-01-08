@@ -192,6 +192,11 @@ createConnection().then((_) => {
     jwtMiddleware.checkToken,
     vulnController.exportToJira
   );
+  app.get(
+    '/api/user/teams',
+    jwtMiddleware.checkToken,
+    teamController.getMyTeams
+  );
 
   // Public Routes
   app.post('/api/user/register', userController.register);
@@ -284,5 +289,10 @@ createConnection().then((_) => {
     '/api/team/member/remove',
     [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
     teamController.removeTeamMember
+  );
+  app.delete(
+    '/api/team/delete',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    teamController.deleteTeam
   );
 });

@@ -21,8 +21,9 @@ import {
   createTeam,
   addTeamMember,
   removeTeamMember,
-  fetchTeamMembers,
+  deleteTeam,
   updateTeamInfo,
+  getMyTeams,
 } from '../routes/team.controller';
 
 describe('Team Controller', () => {
@@ -342,12 +343,6 @@ describe('Team Controller', () => {
     expect(badResponse3.statusCode).toBe(404);
   });
 
-  test('fetch team members', async () => {
-    const teamUserIds: number[] = [];
-    const fetchedUsers = await fetchTeamMembers(teamUserIds);
-    expect(fetchedUsers.length).toBe(0);
-  });
-
   test('update team info', async () => {
     // create org
     const newOrg: Organization = {
@@ -431,5 +426,135 @@ describe('Team Controller', () => {
     const badResponse4 = new MockExpressResponse();
     await updateTeamInfo(badRequest4, badResponse4);
     expect(badResponse4.statusCode).toBe(400);
+  });
+
+  test('delete team', async () => {
+    // create org
+    const newOrg: Organization = {
+      id: null,
+      name: 'Test Org',
+      status: status.active,
+      asset: null,
+    };
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .save(newOrg);
+    // user 1
+    const teamMember1 = new User();
+    teamMember1.firstName = 'master';
+    teamMember1.lastName = 'chief';
+    teamMember1.email = 'testing1@jest.com';
+    teamMember1.active = true;
+    const uuid = uuidv4();
+    teamMember1.uuid = uuid;
+    teamMember1.password = await generateHash('TangoDown123!!!');
+    const addedUser1 = await getConnection()
+      .getRepository(User)
+      .save(teamMember1);
+    // create team
+    const bravoTeam = new Team();
+    bravoTeam.name = 'Bravo';
+    bravoTeam.organization = savedOrg.id;
+    bravoTeam.id = null;
+    bravoTeam.createdDate = new Date();
+    bravoTeam.lastUpdatedDate = new Date();
+    bravoTeam.createdBy = 0;
+    bravoTeam.lastUpdatedBy = 0;
+    bravoTeam.role = ROLE.READONLY;
+    const savedTeam = await getConnection().getRepository(Team).save(bravoTeam);
+    const fetchTeam = await getConnection()
+      .getRepository(Team)
+      .findOne(savedTeam.id, { relations: ['users'] });
+    fetchTeam.users.push(addedUser1);
+    const savedTeamWithUser = await getConnection()
+      .getRepository(Team)
+      .save(fetchTeam);
+    const userWithTeam = await getConnection()
+      .getRepository(User)
+      .findOne(addedUser1.id, { relations: ['teams'] });
+    expect(userWithTeam.teams.length).toBe(1);
+    let teams = await getConnection().getRepository(Team).find({});
+    expect(teams.length).toBe(1);
+    const request = new MockExpressRequest({
+      body: {
+        teamId: savedTeamWithUser.id,
+      },
+    });
+    const response = new MockExpressResponse();
+    await deleteTeam(request, response);
+    expect(response.statusCode).toBe(200);
+    teams = await getConnection().getRepository(Team).find({});
+    expect(teams.length).toBe(0);
+    const userNoTeam = await getConnection()
+      .getRepository(User)
+      .findOne(addedUser1.id, { relations: ['teams'] });
+    expect(userNoTeam.teams.length).toBe(0);
+  });
+
+  test('get user teams', async () => {
+    // create org
+    const newOrg: Organization = {
+      id: null,
+      name: 'Test Org',
+      status: status.active,
+      asset: null,
+    };
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .save(newOrg);
+    const teamMember1 = new User();
+    teamMember1.firstName = 'master';
+    teamMember1.lastName = 'chief';
+    teamMember1.email = 'testing1@jest.com';
+    teamMember1.active = true;
+    const uuid = uuidv4();
+    teamMember1.uuid = uuid;
+    teamMember1.password = await generateHash('TangoDown123!!!');
+    const addedUser1 = await getConnection()
+      .getRepository(User)
+      .save(teamMember1);
+    // Team 1
+    const bravoTeam = new Team();
+    bravoTeam.name = 'Bravo';
+    bravoTeam.organization = savedOrg.id;
+    bravoTeam.id = null;
+    bravoTeam.createdDate = new Date();
+    bravoTeam.lastUpdatedDate = new Date();
+    bravoTeam.createdBy = 0;
+    bravoTeam.lastUpdatedBy = 0;
+    bravoTeam.role = ROLE.READONLY;
+    const savedTeam = await getConnection().getRepository(Team).save(bravoTeam);
+    const fetchTeam = await getConnection()
+      .getRepository(Team)
+      .findOne(savedTeam.id, { relations: ['users'] });
+    fetchTeam.users.push(addedUser1);
+    await getConnection().getRepository(Team).save(fetchTeam);
+    // Team 2
+    const alphaTeam = new Team();
+    alphaTeam.name = 'Alpha';
+    alphaTeam.organization = savedOrg.id;
+    alphaTeam.id = null;
+    alphaTeam.createdDate = new Date();
+    alphaTeam.lastUpdatedDate = new Date();
+    alphaTeam.createdBy = 0;
+    alphaTeam.lastUpdatedBy = 0;
+    alphaTeam.role = ROLE.TESTER;
+    const savedTeam2 = await getConnection()
+      .getRepository(Team)
+      .save(alphaTeam);
+    const fetchTeam2 = await getConnection()
+      .getRepository(Team)
+      .findOne(savedTeam2.id, { relations: ['users'] });
+    fetchTeam2.users.push(addedUser1);
+    await getConnection().getRepository(Team).save(fetchTeam2);
+    const request = new MockExpressRequest({
+      user: addedUser1.id,
+    });
+    const response = new MockExpressResponse();
+    await getMyTeams(request, response);
+    expect(response.statusCode).toBe(200);
+    const userTeams: Team[] = response._getJSON();
+    expect(userTeams[0].name).toBe(bravoTeam.name);
+    expect(userTeams[1].name).toBe(alphaTeam.name);
   });
 });

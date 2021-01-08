@@ -33,13 +33,6 @@ export const createTeam = async (req: UserRequest, res: Response) => {
   }
 };
 
-export const fetchTeamMembers = async (teamUserIds: number[]) => {
-  const users = await getConnection()
-    .getRepository(User)
-    .find({ where: { id: In(teamUserIds) } });
-  return users;
-};
-
 export const addTeamMember = async (req: UserRequest, res: Response) => {
   const userIds = req.body.userIds;
   const teamId = req.body.teamId;
@@ -120,8 +113,24 @@ export const updateTeamInfo = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteTeam = (req: Request, res: Response) => {
-  //
+export const deleteTeam = async (req: Request, res: Response) => {
+  const { teamId } = req.body;
+  if (!teamId) {
+    return res.status(400).json('Invalid Team ID');
+  }
+  const team = await getConnection().getRepository(Team).findOne(teamId);
+  if (!team) {
+    return res.status(404).json(`A Team with ID ${teamId} does not exist`);
+  }
+  await getConnection().getRepository(Team).delete(team.id);
+  return res
+    .status(200)
+    .json(`The Team ${team.name} has been successfully deleted`);
 };
 
-export const getMyTeams = (req: Request, res: Response) => {};
+export const getMyTeams = async (req: UserRequest, res: Response) => {
+  const user = await getConnection()
+    .getRepository(User)
+    .findOne(req.user, { relations: ['teams'] });
+  return res.status(200).json(user.teams);
+};
