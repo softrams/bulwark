@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.4.1](https://github.com/softrams/bulwark/compare/v6.4.0...v6.4.1) (2021-01-11)
+
+### Others
+
+- **deps:** bump @angular-devkit/build-angular in /frontend ([b388648](https://github.com/softrams/bulwark/commit/b388648a4314e9efba338c39ccbe0516319f5675))
+- **deps:** bump @angular/cli from 11.0.5 to 11.0.6 in /frontend ([ca9ef69](https://github.com/softrams/bulwark/commit/ca9ef69a6e84607e8c8a47a6ff9ac1ca63e6d803))
+- **deps:** bump @ng-select/ng-select in /frontend ([ade5b50](https://github.com/softrams/bulwark/commit/ade5b508303e8b13b174c918208125cb6c3bcd40))
+- **deps:** bump tslib from 2.0.3 to 2.1.0 in /frontend ([45b481e](https://github.com/softrams/bulwark/commit/45b481eef0f7012f71c2f20da045251201ce75b8))
+- **deps-dev:** bump @angular/language-service in /frontend ([0597a7f](https://github.com/softrams/bulwark/commit/0597a7fea71bdd31c0873630fa52a6f3959601cc))
+- **deps-dev:** bump @types/jest from 26.0.19 to 26.0.20 ([eab0403](https://github.com/softrams/bulwark/commit/eab040333f752b96b970bf7fbb67781f3061dbb0))
+- **deps-dev:** bump @types/node from 14.14.19 to 14.14.20 in /frontend ([6c95f9c](https://github.com/softrams/bulwark/commit/6c95f9c8994fb5d04881846f8465d7b4dcb45383))
+- **deps-dev:** bump husky from 4.3.6 to 4.3.7 ([db63af4](https://github.com/softrams/bulwark/commit/db63af4c13f76386a6a7ad331aa62045ba4edfad))
+- **deps-dev:** bump sqlite3 from 5.0.0 to 5.0.1 ([45e0a8c](https://github.com/softrams/bulwark/commit/45e0a8c4452e994728295e8f0ee4479c1d077b23))
+
 ## [6.4.0](https://github.com/softrams/bulwark/compare/v6.3.1...v6.4.0) (2021-01-04)
 
 ### Features
