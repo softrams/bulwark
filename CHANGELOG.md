@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.4.2](https://github.com/softrams/bulwark/compare/v6.4.1...v6.4.2) (2021-01-12)
+
+### Bug Fixes
+
+- **vulnerability.component.html:** fixed Risk and Status undefined error ([bbc407f](https://github.com/softrams/bulwark/commit/bbc407fa03d3294744595dc26af0421f168c5589)), closes [#539](https://github.com/softrams/bulwark/issues/539)
+
+### Others
+
+- **package-lock.json:** commit package-lock.json ([22caf95](https://github.com/softrams/bulwark/commit/22caf95efd36ee10a477b5f5cf756f4697c776fc))
+
 ### [6.4.1](https://github.com/softrams/bulwark/compare/v6.4.0...v6.4.1) (2021-01-11)
 
 ### Others
