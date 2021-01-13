@@ -4,6 +4,7 @@ import { getConnection, In } from 'typeorm';
 import { Organization } from '../entity/Organization';
 import { status } from '../enums/status-enum';
 import { validate } from 'class-validator';
+import { fetchRole } from '../utilities/role.utility';
 
 /**
  * @description Get active organizations
@@ -15,7 +16,7 @@ export const getActiveOrgs = async (req: UserRequest, res: Response) => {
   const orgs = await getConnection()
     .getRepository(Organization)
     .find({
-      where: { status: status.active, id: In(req.organization) },
+      where: { status: status.active, id: In(req.userOrgs) },
     });
   if (!orgs) {
     return res.status(404).json('Organizations do not exist');
@@ -53,16 +54,16 @@ export const getOrgById = async (req: UserRequest, res: Response) => {
   if (isNaN(+req.params.id)) {
     return res.status(400).json('Invalid Organization iD');
   }
+  if (!req.userOrgs.includes(+req.params.id)) {
+    return res.status(404).json('Organization not found');
+  }
   const org = await getConnection()
     .getRepository(Organization)
     .findOne(req.params.id);
   if (!org) {
     return res.status(404).json('Organization does not exist');
   }
-  const resObj = {
-    name: org.name,
-  };
-  res.json(resObj);
+  return res.status(200).json({ name: org.name });
 };
 /**
  * @description Archive organization by ID

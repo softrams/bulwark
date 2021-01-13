@@ -85,19 +85,22 @@ export const fetchRoles = async (req: UserRequest) => {
         },
       },
     });
-  const isAdmin = user.teams.some((team) => team.role === ROLE.ADMIN);
+  req.userTeams = user.teams;
+  const isAdmin = req.userTeams.some((team) => team.role === ROLE.ADMIN);
   if (isAdmin) {
     const orgs = await getConnection().getRepository(Organization).find({});
     const assets = await getConnection().getRepository(Asset).find({});
-    req.organization = orgs.map((org) => org.id);
-    req.assets = assets.map((asset) => asset.id);
+    req.userOrgs = orgs.map((org) => org.id);
+    req.userAssets = assets.map((asset) => asset.id);
+    req.isAdmin = true;
   } else {
-    req.organization = user.teams.map((team) => team.organization.id);
-    req.assets = [];
-    for (const team of user.teams) {
+    req.isAdmin = false;
+    req.userOrgs = req.userTeams.map((team) => team.organization.id);
+    req.userAssets = [];
+    for (const team of req.userTeams) {
       const assets = team.assets.map((asset) => asset.id);
       for (const asset of assets) {
-        req.assets.push(asset);
+        req.userAssets.push(asset);
       }
     }
   }

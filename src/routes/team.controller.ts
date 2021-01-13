@@ -14,11 +14,17 @@ export const getAllTeams = async (req: Request, res: Response) => {
 
 export const createTeam = async (req: UserRequest, res: Response) => {
   const { name, organization, asset, role } = req.body;
+  const fetchedOrg = await getConnection()
+    .getRepository(Organization)
+    .findOne(organization, { relations: ['teams'] });
+  if (!fetchedOrg) {
+    return res.status(404).json('Organization not found');
+  }
   const teamUsers: User[] = [];
   const newTeam = new Team();
   newTeam.id = null;
   newTeam.name = name;
-  newTeam.organization = organization;
+  newTeam.organization = fetchedOrg;
   newTeam.asset = asset;
   newTeam.role = role;
   newTeam.createdBy = +req.user;

@@ -1,13 +1,13 @@
 import { Request } from 'express';
+import { Team } from '../entity/Team';
 import { File } from '../entity/File';
-import { TeamInfo } from './team-info.interface';
-
 export interface UserRequest extends Request {
   user: string;
-  organization: number[];
-  assets: number[];
   fileExtError: string;
   file: File;
   files: File[];
   isAdmin: boolean;
+  userTeams: Team[];
+  userOrgs: number[];
+  userAssets: number[];
 }
