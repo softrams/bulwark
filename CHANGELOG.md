@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.4.6](https://github.com/softrams/bulwark/compare/v6.4.5...v6.4.6) (2021-01-14)
+
+
+### Build System
+
+* **dockerfile:** add rimraf library ([70e63ba](https://github.com/softrams/bulwark/commit/70e63bab5787d5d40f81c402ea2a6653311e2e52))
+
 ### [6.4.5](https://github.com/softrams/bulwark/compare/v6.4.4...v6.4.5) (2021-01-14)
 
 
