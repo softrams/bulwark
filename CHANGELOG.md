@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.4.7](https://github.com/softrams/bulwark/compare/v6.4.6...v6.4.7) (2021-01-14)
+
+
+### Build System
+
+* **dockerfile:** add python to container ([6224469](https://github.com/softrams/bulwark/commit/62244692a50beb155073192656f2a03456dc61ff))
+
 ### [6.4.6](https://github.com/softrams/bulwark/compare/v6.4.5...v6.4.6) (2021-01-14)
 
 
