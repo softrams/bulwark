@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.4.5](https://github.com/softrams/bulwark/compare/v6.4.4...v6.4.5) (2021-01-14)
+
+
+### Build System
+
+* **dockerfile:** install typescript globally ([eac63c8](https://github.com/softrams/bulwark/commit/eac63c8d4a19668f2c3f6e70445a2f43360bd51f))
+
 ### [6.4.4](https://github.com/softrams/bulwark/compare/v6.4.3...v6.4.4) (2021-01-14)
 
 
