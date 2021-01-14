@@ -4,5 +4,7 @@ frontend/dist
 node_modules
 frontend/node_modules
 .prettierignore
+Dockerfile
+CHANGELOG.md
 # Ignore all HTML files:
 *.html

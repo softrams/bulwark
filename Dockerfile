@@ -1,5 +1,7 @@
 FROM softramsdocker/bulwark-base:latest
 
+USER root
+
 # Environment Arguments for Bulwark
 ARG MYSQL_USER
 ARG MYSQL_ROOT_PASSWORD
@@ -26,17 +28,25 @@ WORKDIR "bulwark"
 # Permissions for Bulwark
 RUN chown -R bulwark:bulwark /bulwark
 
-# DB Wait MySQL Status Up, requires mysql-client
-RUN apk add --no-cache mysql-client
+# DB Wait MySQL Status Up, requires mysql-client and python
+RUN apk add --no-cache --update mysql-client \
+    python2 
 
 # Runas User
 USER bulwark
 
 # Bulwark Specific Startup
-RUN npm install
-
 # Cleanup NPM to save some space
-RUN rm -rf /bulwark/.npm
+RUN npm install \
+    && rm -rf /bulwark/.npm 
+
+# Swap to root and delete python
+USER root
+# Clean up apk
+RUN apk del python2
+
+# Runas User
+USER bulwark
 
 # Running Port
 EXPOSE 5000

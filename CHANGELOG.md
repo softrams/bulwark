@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.4.8](https://github.com/softrams/bulwark/compare/v6.4.7...v6.4.8) (2021-01-14)
+
+
+### Build System
+
+* **dockerfile:** remove unneeded packages ([b6c9de1](https://github.com/softrams/bulwark/commit/b6c9de185359cf3c7028492d780f670484a83f53))
+
+### [6.4.7](https://github.com/softrams/bulwark/compare/v6.4.6...v6.4.7) (2021-01-14)
+
+
+### Build System
+
+* **dockerfile:** add python to container ([6224469](https://github.com/softrams/bulwark/commit/62244692a50beb155073192656f2a03456dc61ff))
+
+### [6.4.6](https://github.com/softrams/bulwark/compare/v6.4.5...v6.4.6) (2021-01-14)
+
+
+### Build System
+
+* **dockerfile:** add rimraf library ([70e63ba](https://github.com/softrams/bulwark/commit/70e63bab5787d5d40f81c402ea2a6653311e2e52))
+
+### [6.4.5](https://github.com/softrams/bulwark/compare/v6.4.4...v6.4.5) (2021-01-14)
+
+
+### Build System
+
+* **dockerfile:** install typescript globally ([eac63c8](https://github.com/softrams/bulwark/commit/eac63c8d4a19668f2c3f6e70445a2f43360bd51f))
+
+### [6.4.4](https://github.com/softrams/bulwark/compare/v6.4.3...v6.4.4) (2021-01-14)
+
+
+### Build System
+
+* **dockerfile:** root !== ROOT ([2f22d20](https://github.com/softrams/bulwark/commit/2f22d20fbc027e01427339fa068c3ab18ffe7f7b))
+
+### [6.4.3](https://github.com/softrams/bulwark/compare/v6.4.2...v6.4.3) (2021-01-14)
+
+### Build System
+
+- **dockerfile:** add USER ROOT ([3bf6e0e](https://github.com/softrams/bulwark/commit/3bf6e0e240db62090fb1adf4b8aa2f4f3fb78284))
+- **dockerfile:** update npm install ([ca447d3](https://github.com/softrams/bulwark/commit/ca447d35d1fc9cae2efe6b8876faa34df9ed1540))
+
 ### [6.4.2](https://github.com/softrams/bulwark/compare/v6.4.1...v6.4.2) (2021-01-12)
 
 ### Bug Fixes
