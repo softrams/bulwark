@@ -33,7 +33,7 @@ RUN apk add --no-cache mysql-client
 USER bulwark
 
 # Bulwark Specific Startup
-RUN npm install
+RUN npm install --production
 
 # Cleanup NPM to save some space
 RUN rm -rf /bulwark/.npm
