@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.4.8](https://github.com/softrams/bulwark/compare/v6.4.7...v6.4.8) (2021-01-14)
+
+
+### Build System
+
+* **dockerfile:** remove unneeded packages ([b6c9de1](https://github.com/softrams/bulwark/commit/b6c9de185359cf3c7028492d780f670484a83f53))
+
 ### [6.4.7](https://github.com/softrams/bulwark/compare/v6.4.6...v6.4.7) (2021-01-14)
 
 
