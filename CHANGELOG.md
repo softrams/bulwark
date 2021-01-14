@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.4.4](https://github.com/softrams/bulwark/compare/v6.4.3...v6.4.4) (2021-01-14)
+
+
+### Build System
+
+* **dockerfile:** root !== ROOT ([2f22d20](https://github.com/softrams/bulwark/commit/2f22d20fbc027e01427339fa068c3ab18ffe7f7b))
+
 ### [6.4.3](https://github.com/softrams/bulwark/compare/v6.4.2...v6.4.3) (2021-01-14)
 
 ### Build System
