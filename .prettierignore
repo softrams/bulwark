@@ -3,6 +3,7 @@ dist
 frontend/dist
 node_modules
 frontend/node_modules
-
+.prettierignore
+Dockerfile
 # Ignore all HTML files:
 *.html

@@ -1,5 +1,7 @@
 FROM softramsdocker/bulwark-base:latest
 
+USER ROOT
+
 # Environment Arguments for Bulwark
 ARG MYSQL_USER
 ARG MYSQL_ROOT_PASSWORD
