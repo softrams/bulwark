@@ -31,6 +31,8 @@ RUN chown -R bulwark:bulwark /bulwark
 # DB Wait MySQL Status Up, requires mysql-client
 RUN apk add --no-cache mysql-client
 
+RUN npm install typescript -g
+
 # Runas User
 USER bulwark
 
