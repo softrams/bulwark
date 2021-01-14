@@ -28,19 +28,20 @@ WORKDIR "bulwark"
 # Permissions for Bulwark
 RUN chown -R bulwark:bulwark /bulwark
 
-# DB Wait MySQL Status Up, requires mysql-client
-RUN apk add --no-cache mysql-client
-
-RUN npm install typescript -g && npm install rimraf -g
+# DB Wait MySQL Status Up, requires mysql-client and python
+RUN apk add --no-cache --update mysql-client \
+    python2 \
+    make \
+    g++ \
+    bash 
 
 # Runas User
 USER bulwark
 
 # Bulwark Specific Startup
-RUN npm install --production
-
 # Cleanup NPM to save some space
-RUN rm -rf /bulwark/.npm
+RUN npm install \
+    && rm -rf /bulwark/.npm 
 
 # Running Port
 EXPOSE 5000
