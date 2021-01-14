@@ -30,10 +30,7 @@ RUN chown -R bulwark:bulwark /bulwark
 
 # DB Wait MySQL Status Up, requires mysql-client and python
 RUN apk add --no-cache --update mysql-client \
-    python2 \
-    make \
-    g++ \
-    bash 
+    python2 
 
 # Runas User
 USER bulwark
@@ -42,6 +39,14 @@ USER bulwark
 # Cleanup NPM to save some space
 RUN npm install \
     && rm -rf /bulwark/.npm 
+
+# Swap to root and delete python
+USER root
+# Clean up apk
+RUN apk del python2
+
+# Runas User
+USER bulwark
 
 # Running Port
 EXPOSE 5000
