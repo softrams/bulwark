@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.4.3](https://github.com/softrams/bulwark/compare/v6.4.2...v6.4.3) (2021-01-14)
+
+### Build System
+
+- **dockerfile:** add USER ROOT ([3bf6e0e](https://github.com/softrams/bulwark/commit/3bf6e0e240db62090fb1adf4b8aa2f4f3fb78284))
+- **dockerfile:** update npm install ([ca447d3](https://github.com/softrams/bulwark/commit/ca447d35d1fc9cae2efe6b8876faa34df9ed1540))
+
 ### [6.4.2](https://github.com/softrams/bulwark/compare/v6.4.1...v6.4.2) (2021-01-12)
 
 ### Bug Fixes
