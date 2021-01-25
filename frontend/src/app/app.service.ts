@@ -11,13 +11,7 @@ import { environment } from '../environments/environment';
 })
 export class AppService {
   constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
-
   api = environment.apiUrl;
-  // TODO:  Delete this monstrosity that I have created
-  //       Please forgive me coding gods!
-  //       We need to find a better solution than to individually
-  //       query for each image.  This will not work well with reports!
-
   /**
    * Function is responsible for initial retrevial of organizations on dashboard loading
    * @returns all organization information to the dashboard
@@ -238,7 +232,7 @@ export class AppService {
   createAsset(asset: Asset) {
     return this.http.post(
       `${this.api}/organization/${asset.organization}/asset`,
-      asset,
+      asset
     );
   }
 
@@ -264,7 +258,7 @@ export class AppService {
   updateAsset(asset: Asset) {
     return this.http.patch(
       `${this.api}/organization/${asset.organization}/asset/${asset.id}`,
-      asset,
+      asset
     );
   }
 
@@ -305,11 +299,11 @@ export class AppService {
   updateAssessment(
     assessment: Assessment,
     assessmentId: number,
-    assetId: number,
+    assetId: number
   ) {
     return this.http.patch(
       `${this.api}/asset/${assetId}/assessment/${assessmentId}`,
-      assessment,
+      assessment
     );
   }
 
@@ -321,7 +315,7 @@ export class AppService {
    */
   getAssessment(assetId: number, assessmentId: number) {
     return this.http.get(
-      `${this.api}/asset/${assetId}/assessment/${assessmentId}`,
+      `${this.api}/asset/${assetId}/assessment/${assessmentId}`
     );
   }
 
@@ -373,7 +367,7 @@ export class AppService {
     return this.http.post(
       `${this.api}/report/generate`,
       generateObject,
-      httpOptions,
+      httpOptions
     );
   }
 
