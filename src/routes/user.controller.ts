@@ -277,6 +277,27 @@ export const getUsers = async (req: Request, res: Response) => {
   return res.status(200).json(users);
 };
 /**
+ * @description Get all active/inactive users
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns user array
+ */
+export const getAllUsers = async (req: Request, res: Response) => {
+  console.log('here');
+  const users = await getConnection()
+    .getRepository(User)
+    .createQueryBuilder('user')
+    .select([
+      'user.id',
+      'user.firstName',
+      'user.lastName',
+      'user.title',
+      'user.active',
+    ])
+    .getMany();
+  return res.status(200).json(users);
+};
+/**
  * @description Get user IDs and validate users
  * @param {UserRequest} req
  * @param {Response} res

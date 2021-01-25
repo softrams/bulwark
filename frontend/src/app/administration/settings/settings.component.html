@@ -1,6 +1,7 @@
-<div>
-  <p-card>
-    <h6>Application Email Settings</h6>
+<p-card>
+  <div class="card-body">
+    <h4>Application Email Settings</h4>
+    <hr />
     <div id="formContent">
       <form [formGroup]="settingsForm" (ngSubmit)="onSubmit(settingsForm)" id="userForm">
         <div class="col-12">
@@ -44,5 +45,5 @@
         <br />
       </form>
     </div>
-  </p-card>
-</div>
+  </div>
+</p-card>

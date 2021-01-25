@@ -45,9 +45,9 @@ export class SettingsComponent implements OnInit {
 
   rebuildForm() {
     this.settingsForm.reset({
-      fromEmail: this.settings.fromEmail,
-      fromEmailPassword: this.settings.fromEmailPassword,
-      companyName: this.settings.companyName,
+      fromEmail: this.settings?.fromEmail,
+      fromEmailPassword: this.settings?.fromEmailPassword,
+      companyName: this.settings?.companyName,
     });
   }
 

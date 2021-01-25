@@ -87,6 +87,11 @@ createConnection().then((_) => {
   app.patch('/api/user', jwtMiddleware.checkToken, userController.patch);
   app.get('/api/user', jwtMiddleware.checkToken, userController.getUser);
   app.get('/api/users', jwtMiddleware.checkToken, userController.getUsers);
+  app.get(
+    '/api/users/all',
+    jwtMiddleware.checkToken,
+    userController.getAllUsers
+  );
   app.get('/api/user/verify/:uuid', userController.verify);
   app.patch('/api/forgot-password', authController.forgotPassword);
   app.patch('/api/password-reset', authController.resetPassword);

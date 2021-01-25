@@ -5,6 +5,8 @@ import { Asset } from './asset-form/Asset';
 import { Assessment } from './assessment-form/Assessment';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../environments/environment';
+import { User } from './interfaces/User';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
