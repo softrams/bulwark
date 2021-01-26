@@ -131,7 +131,6 @@ export const create = async (req: Request, res: Response) => {
     return res.status(400).json('Passwords do not match');
   }
   if (!passwordSchema.validate(password)) {
-    console.log(password);
     return res.status(400).json(passwordRequirement);
   }
   const existUser = await getConnection()
@@ -283,7 +282,6 @@ export const getUsers = async (req: Request, res: Response) => {
  * @returns user array
  */
 export const getAllUsers = async (req: Request, res: Response) => {
-  console.log('here');
   const users = await getConnection()
     .getRepository(User)
     .createQueryBuilder('user')

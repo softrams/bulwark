@@ -72,7 +72,6 @@ createConnection().then((_) => {
   // register routes
   app.post('/api/user/register', userController.register);
   app.post('/api/user/invite', jwtMiddleware.checkToken, userController.invite);
-  app.post('/api/user/create', jwtMiddleware.checkToken, userController.create);
   app.post(
     '/api/user/email',
     jwtMiddleware.checkToken,
@@ -85,6 +84,7 @@ createConnection().then((_) => {
   );
   app.post('/api/user/email/validate', userController.validateEmailRequest);
   app.patch('/api/user', jwtMiddleware.checkToken, userController.patch);
+  app.post('/api/user', jwtMiddleware.checkToken, userController.create);
   app.get('/api/user', jwtMiddleware.checkToken, userController.getUser);
   app.get('/api/users', jwtMiddleware.checkToken, userController.getUsers);
   app.get(

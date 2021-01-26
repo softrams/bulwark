@@ -51,6 +51,10 @@ export class UserManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
+    this.getUsers();
+  }
+
+  getUsers() {
     this.userService
       .getAllUsers()
       .subscribe((fetchedUsers) => (this.users = fetchedUsers));
@@ -68,16 +72,17 @@ export class UserManagementComponent implements OnInit {
   }
 
   onSubmit(form) {
-    let newUser: User;
-    newUser.email = form.value.email;
-    newUser.firstName = form.value.firstName;
-    newUser.lastName = form.value.lastName;
-    newUser.title = form.value.title;
-    newUser.password = form.value.password;
-    newUser.confirmPassword = form.value.newPassword;
-    console.log(newUser);
-    // this.userService.inviteUser(email).subscribe((res: string) => {
-    //   this.alertService.success(res);
-    // });
+    const user: User = {
+      firstName: form.value.firstName,
+      lastName: form.value.lastName,
+      title: form.value.title,
+      password: form.value.password,
+      confirmPassword: form.value.confirmPassword,
+      email: form.value.email,
+    };
+    this.userService.createUser(user).subscribe((res: string) => {
+      this.alertService.success(res);
+      this.getUsers();
+    });
   }
 }

@@ -30,4 +30,7 @@ export class UserService {
   patchUser(user: User) {
     return this.http.patch(`${this.api}/user`, user);
   }
+  createUser(user: User) {
+    return this.http.post(`${this.api}/user`, user);
+  }
 }
