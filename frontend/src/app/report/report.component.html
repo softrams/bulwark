@@ -13,7 +13,7 @@
   </div>
   <br />
 
-  <div class="page">
+  <div>
     <h1 class="text-center">
       {{ report?.org?.name }}: {{ report?.asset?.name }} &
       {{ report?.assessment?.name }} Application Security Report
@@ -95,7 +95,7 @@
     </ng-template>
   </div>
   <div *ngFor="let vuln of report?.vulns; last as isLast">
-    <div [ngClass]="{ page: !isLast }">
+    <div class="page">
       <br />
       <h3 class="text-center">{{ vuln?.name }}</h3>
       <table class="table">

@@ -1,9 +1,4 @@
-import {
-  createConnection,
-  getConnection,
-  Entity,
-  getRepository,
-} from 'typeorm';
+import { createConnection, getConnection } from 'typeorm';
 import * as userController from './user.controller';
 import { User } from '../entity/User';
 import { v4 as uuidv4 } from 'uuid';
@@ -630,5 +625,83 @@ describe('User Controller', () => {
     expect(checkUser.newEmail).toBeNull();
     expect(checkUser.uuid).toBeNull();
     expect(res.statusCode).toBe(200);
+  });
+  test('create user', async () => {
+    const req = new MockExpressRequest();
+    const res = new MockExpressResponse();
+    req.body = {
+      email: 'createUser1@jest.com',
+      firstName: 'John',
+      lastName: 'Doe',
+      title: 'Senior Dairy Farmer',
+    };
+    await userController.create(req, res);
+    expect(res.statusCode).toBe(400);
+    const req2 = new MockExpressRequest();
+    const res2 = new MockExpressResponse();
+    req2.body = {
+      email: 'createUser1@jest.com',
+      firstName: 'John',
+      lastName: 'Doe',
+      title: 'Senior Dairy Farmer',
+      password: 'as;dfk23a234adsf',
+      confirmPassword: '123',
+    };
+    await userController.create(req2, res2);
+    expect(res2.statusCode).toBe(400);
+    const req3 = new MockExpressRequest();
+    const res3 = new MockExpressResponse();
+    req3.body = {
+      email: 'createUser1@jest.com',
+      firstName: 'John',
+      lastName: 'Doe',
+      title: 'Senior Dairy Farmer',
+      password: 'weak',
+      confirmPassword: 'weak',
+    };
+    await userController.create(req3, res3);
+    expect(res3.statusCode).toBe(400);
+    const req4 = new MockExpressRequest();
+    const res4 = new MockExpressResponse();
+    req4.body = {
+      email: 'createUser1@jest.com',
+      firstName: 'John',
+      lastName: 'Doe',
+      title: 'Senior Dairy Farmer',
+      password: '&3x1GqpeFO61*HJ',
+      confirmPassword: '&3x1GqpeFO61*HJ',
+    };
+    await userController.create(req4, res4);
+    expect(res4.statusCode).toBe(200);
+    const existUser = new User();
+    existUser.firstName = 'master';
+    existUser.lastName = 'chief';
+    existUser.email = 'createUserExist@jest.com';
+    existUser.active = true;
+    await getConnection().getRepository(User).save(existUser);
+    const req5 = new MockExpressRequest();
+    const res5 = new MockExpressResponse();
+    req5.body = {
+      email: 'createUserExist@jest.com',
+      firstName: 'John',
+      lastName: 'Doe',
+      title: 'Senior Dairy Farmer',
+      password: '&3x1GqpeFO61*HJ',
+      confirmPassword: '&3x1GqpeFO61*HJ',
+    };
+    await userController.create(req5, res5);
+    expect(res5.statusCode).toBe(400);
+    const req6 = new MockExpressRequest();
+    const res6 = new MockExpressResponse();
+    req6.body = {
+      email: 'createUserExist@jest.com',
+      firstName: 'John',
+      lastName: 'Doe',
+      title: 'Senior Dairy Farmer',
+      password: '&3x1GqpeFO61*HJ',
+      confirmPassword: '&3x1GqpeFO61*HJ',
+    };
+    await userController.create(req6, res6);
+    expect(res6.statusCode).toBe(400);
   });
 });

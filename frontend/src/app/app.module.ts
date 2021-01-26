@@ -44,6 +44,7 @@ import { CardModule } from 'primeng/card';
 import { PasswordModule } from 'primeng/password';
 import { EmailValidateComponent } from './email-validate/email-validate.component';
 import { ChartModule } from 'primeng/chart';
+import { UserManagementComponent } from './user-management/user-management.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -68,6 +69,7 @@ import { ChartModule } from 'primeng/chart';
     UserProfileComponent,
     SettingsComponent,
     EmailValidateComponent,
+    UserManagementComponent,
   ],
   imports: [
     BrowserModule,

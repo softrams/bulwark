@@ -8,3 +8,4 @@ Dockerfile
 CHANGELOG.md
 # Ignore all HTML files:
 *.html
+*.sass
