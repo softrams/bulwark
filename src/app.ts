@@ -86,6 +86,12 @@ createConnection().then((_) => {
   app.patch('/api/user', jwtMiddleware.checkToken, userController.patch);
   app.post('/api/user', jwtMiddleware.checkToken, userController.create);
   app.get('/api/user', jwtMiddleware.checkToken, userController.getUser);
+  app.get('/api/user', jwtMiddleware.checkToken, userController.getUser);
+  app.get(
+    '/api/users/all',
+    jwtMiddleware.checkToken,
+    userController.getAllUsers
+  );
   app.get('/api/users', jwtMiddleware.checkToken, userController.getUsers);
   app.post(
     '/api/refresh',

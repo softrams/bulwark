@@ -39,11 +39,7 @@ export class AuthService {
     const token = this.getUserFromToken();
     let found = false;
     // tslint:disable-next-line: no-string-literal
-    for (const team of token['teams']) {
-      if (team.role === 'Admin') {
-        found = true;
-      }
-    }
+    found = token['admin'];
     return found;
   }
 

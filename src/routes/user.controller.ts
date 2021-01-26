@@ -291,6 +291,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
       'user.lastName',
       'user.title',
       'user.active',
+      'user.email',
     ])
     .getMany();
   return res.status(200).json(users);

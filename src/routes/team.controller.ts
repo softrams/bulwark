@@ -8,7 +8,10 @@ import { Asset } from '../entity/Asset';
 import { Organization } from '../entity/Organization';
 
 export const getAllTeams = async (req: Request, res: Response) => {
-  const teams = await getConnection().getRepository(Team).find({});
+  // TODO: Remove user passwords
+  const teams = await getConnection()
+    .getRepository(Team)
+    .find({ relations: ['organization', 'users'] });
   return res.status(200).json(teams);
 };
 
