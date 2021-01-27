@@ -16,9 +16,9 @@ export const generateReport = async (req: UserRequest, res: Response) => {
   }
   const url =
     process.env.NODE_ENV === 'production'
-      ? `${process.env.PROD_URL}/#/organization/${req.body.orgId}
+      ? `${process.env.PROD_IP}:${process.env.PORT}/#/organization/${req.body.orgId}
           /asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report/puppeteer`
-      : `${process.env.DEV_URL}/#/organization/${req.body.orgId}
+      : `${process.env.DEV_IP}:${process.env.PORT}/#/organization/${req.body.orgId}
           /asset/${req.body.assetId}/assessment/${req.body.assessmentId}/report/puppeteer`;
   const browser = await puppeteer.launch({
     args: ['--no-sandbox', '--disable-setuid-sandbox'],

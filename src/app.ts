@@ -1,7 +1,24 @@
 import * as express from 'express';
 import * as path from 'path';
-import { setEnv } from './init/setEnv';
-setEnv();
+const fs = require('fs');
+const dotenv = require('dotenv');
+
+if (fs.existsSync(path.join(__dirname, '../.env'))) {
+  const envPath = fs.readFileSync(path.join(__dirname, '../.env'));
+  // tslint:disable-next-line: no-console
+  console.log('A .env file has been found found and will now be parsed.');
+  // https://github.com/motdotla/dotenv#what-happens-to-environment-variables-that-were-already-set
+  const envConfig = dotenv.parse(envPath);
+  if (envConfig) {
+    for (const key in envConfig) {
+      if (envConfig.hasOwnProperty(key)) {
+        process.env[key] = envConfig[key];
+      }
+    }
+    // tslint:disable-next-line: no-console
+    console.log('The provided .env file has been parsed successfully.');
+  }
+}
 import * as bodyParser from 'body-parser';
 import { createConnection } from 'typeorm';
 const authController = require('./routes/authentication.controller');
@@ -17,6 +34,12 @@ import * as configController from './routes/config.controller';
 const helmet = require('helmet');
 const cors = require('cors');
 const app = express();
+app.use(cors());
+app.use(
+  express.static(path.join(__dirname, '../frontend/dist/frontend'), {
+    etag: false,
+  })
+);
 app.use(helmet());
 app.use(
   helmet.contentSecurityPolicy({
@@ -27,16 +50,10 @@ app.use(
     },
   })
 );
-app.use(cors());
-app.use(
-  express.static(path.join(__dirname, '../frontend/dist/frontend'), {
-    etag: false,
-  })
-);
 app.use(bodyParser.json({ limit: '2mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 const serverPort = process.env.PORT || 5000;
-const serverIpAddress = process.env.IP || '127.0.0.1';
+const serverIpAddress = process.env.PROD_IP || '127.0.0.1';
 app.set('port', serverPort);
 app.set('serverIpAddress', serverIpAddress);
 // tslint:disable-next-line: no-console
@@ -45,6 +62,8 @@ app.listen(serverPort, () =>
 );
 // create typeorm connection
 createConnection().then((_) => {
+  // tslint:disable-next-line: no-console
+  console.info(`Database connection successful`);
   // Check for initial configuration and user
   // If none exist, insert
   configController.initialInsert();
