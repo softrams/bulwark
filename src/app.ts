@@ -45,6 +45,7 @@ app.use(
     etag: false,
   })
 );
+app.use(helmet());
 app.use(bodyParser.json({ limit: '2mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 const serverPort = process.env.PORT || 5000;
@@ -56,7 +57,6 @@ app.listen(serverPort, () =>
   console.info(`Server running on ${serverIpAddress}:${serverPort}`)
 );
 
-app.use(helmet());
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
