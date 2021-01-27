@@ -16,7 +16,7 @@ export const getAllTeams = async (req: Request, res: Response) => {
 };
 
 export const createTeam = async (req: UserRequest, res: Response) => {
-  const { name, organization, asset, role } = req.body;
+  const { name, organization, role } = req.body;
   const fetchedOrg = await getConnection()
     .getRepository(Organization)
     .findOne(organization, { relations: ['teams'] });
@@ -28,7 +28,6 @@ export const createTeam = async (req: UserRequest, res: Response) => {
   newTeam.id = null;
   newTeam.name = name;
   newTeam.organization = fetchedOrg;
-  newTeam.asset = asset;
   newTeam.role = role;
   newTeam.createdBy = +req.user;
   newTeam.createdDate = new Date();
@@ -99,8 +98,8 @@ export const removeTeamMember = async (req: UserRequest, res: Response) => {
 };
 
 export const updateTeamInfo = async (req: Request, res: Response) => {
-  const { name, organization, asset, role, teamId } = req.body;
-  if (!(name || organization || asset || role)) {
+  const { name, organization, role, teamId } = req.body;
+  if (!(name || organization || role)) {
     return res.status(400).json('Team is invalid');
   }
   if (!teamId) {
@@ -113,7 +112,6 @@ export const updateTeamInfo = async (req: Request, res: Response) => {
   // Update with parameters passed in
   team.name = name;
   team.organization = organization;
-  team.asset = asset;
   team.role = role;
   const errors = await validate(team);
   if (errors.length > 0) {

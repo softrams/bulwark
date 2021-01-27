@@ -19,8 +19,6 @@ export class Team {
   name: string;
   @ManyToOne((type) => Organization, (organization) => organization.teams)
   organization: Organization;
-  @Column({ nullable: true })
-  asset: number;
   @Column()
   @IsDate()
   createdDate: Date;
