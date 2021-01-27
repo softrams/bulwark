@@ -107,6 +107,7 @@
             <th scope="col">Risk</th>
             <th scope="col">Systemic</th>
             <th scope="col">CVSS Score</th>
+            <th scope="col">Jira ID</th>
             <th scope="col">Status</th>
           </tr>
         </thead>
@@ -120,6 +121,7 @@
             <td>
               <a [href]="vuln.cvssUrl" target="_blank">{{ vuln.cvssScore }}</a>
             </td>
+            <td>{{ vuln?.jiraId }}</td>
             <td>{{ vuln.status }}</td>
           </tr>
         </tbody>
