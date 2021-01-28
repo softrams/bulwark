@@ -53,7 +53,7 @@ app.use(
 app.use(bodyParser.json({ limit: '2mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 const serverPort = process.env.PORT || 5000;
-const serverIpAddress = process.env.PROD_IP || '127.0.0.1';
+const serverIpAddress = process.env.SERVER_ADDRESS || '127.0.0.1';
 app.set('port', serverPort);
 app.set('serverIpAddress', serverIpAddress);
 // tslint:disable-next-line: no-console

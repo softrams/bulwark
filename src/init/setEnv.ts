@@ -20,18 +20,16 @@ if (fs.existsSync(path.join(__dirname, '../../.env'))) {
   }
   let targetPath: string;
   let isProduction: boolean;
-  let apiUrl: string;
+  const apiUrl = `${process.env.SERVER_ADDRESS}:${process.env.PORT}/api`;
 
   if (process.env.NODE_ENV === 'production') {
     isProduction = true;
-    apiUrl = `${process.env.PROD_IP}:${process.env.PORT}/api`;
     targetPath = path.join(
       __dirname,
       '../../frontend/src/environments/environment.prod.ts'
     );
   } else {
     isProduction = false;
-    apiUrl = `${process.env.DEV_IP}:${process.env.PORT}/api`;
     targetPath = path.join(
       __dirname,
       '../../frontend/src/environments/environment.dev.ts'

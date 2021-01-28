@@ -41,7 +41,8 @@ DB_NAME="bulwark"
 DB_TYPE="mysql"
 NODE_ENV="production"
 DEV_URL="http://localhost:4200"
-PROD_URL="http://localhost:5000"
+SERVER_ADDRESS="http://localhost"
+PORT=5000
 JWT_KEY="changeme"
 JWT_REFRESH_KEY="changeme"
 CRYPTO_SECRET="changeme"
@@ -77,15 +78,24 @@ $ cd bulwark
 $ npm install
 ```
 
-Run in development mode:
+Running `npm install` will install both server-side and client-side modules. Furthermore, it will run the npm script `npm run config` which will dynamically set the environment variables in addition to dynamically updating the [Angular environment](https://angular.io/guide/build).
+
+### Development Mode
+
+Set `NODE_ENV="development"`
 
 ```
+$ npm run config
 $ npm run start:dev
 ```
 
-Run in production mode:
+### Production Mode
+
+Set `NODE_ENV="production"`
 
 ```
+$ npm run config
+$ npm run build:prod
 $ npm start
 ```
 
@@ -137,11 +147,15 @@ Set this variable to determine node environment
 
 #### `DEV_URL="http://localhost:4200"`
 
-Only update if a different port is required
+Used by Angular to build and serve the application
 
-#### `PROD_URL="http://localhost:5000"`
+#### `SERVER_ADDRESS="http://localhost"`
 
-Only update if a different port is required
+Update if a different server address is required
+
+#### `PORT=5000`
+
+Update if a different server port is required
 
 #### `JWT_KEY`
 
@@ -178,7 +192,8 @@ DB_NAME=""
 DB_TYPE=""
 NODE_ENV=""
 DEV_URL="http://localhost:4200"
-PROD_URL="http://localhost:5000"
+SERVER_ADDRESS="http://localhost"
+PORT=5000
 JWT_KEY=""
 JWT_REFRESH_KEY=""
 CRYPTO_SECRET=""
