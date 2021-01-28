@@ -46,6 +46,9 @@ import { EmailValidateComponent } from './email-validate/email-validate.componen
 import { ChartModule } from 'primeng/chart';
 import { UserManagementComponent } from './user-management/user-management.component';
 import { TeamComponent } from './team/team.component';
+import { TeamFormComponent } from './team-form/team-form.component';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { ListboxModule } from 'primeng/listbox';
 @NgModule({
   declarations: [
     AppComponent,
@@ -72,6 +75,7 @@ import { TeamComponent } from './team/team.component';
     EmailValidateComponent,
     UserManagementComponent,
     TeamComponent,
+    TeamFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -91,6 +95,8 @@ import { TeamComponent } from './team/team.component';
     CardModule,
     ChartModule,
     PasswordModule,
+    SelectButtonModule,
+    ListboxModule,
   ],
   providers: [
     AppService,

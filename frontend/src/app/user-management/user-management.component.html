@@ -2,7 +2,7 @@
   <div class="card-body">
     <h4>User Management</h4>
     <hr />
-    <p-table [value]="users">
+    <p-table [value]="users" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
       <ng-template pTemplate="header">
         <tr>
           <th>Email</th>

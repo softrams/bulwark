@@ -19,9 +19,6 @@ export class AppService {
    * @returns all organization information to the dashboard
    */
   getOrganizations() {
-    const httpOptions = {
-      responseType: 'blob' as 'json',
-    };
     return this.http
       .get(`${this.api}/organization`)
       .toPromise()

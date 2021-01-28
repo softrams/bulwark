@@ -278,6 +278,11 @@ createConnection().then((_) => {
     assetController.purgeJiraInfo
   );
   app.get(
+    '/api/team/:teamId',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    teamController.getTeamById
+  );
+  app.get(
     '/api/team',
     [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
     teamController.getAllTeams

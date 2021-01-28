@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AlertService } from '../alert/alert.service';
 import { Team } from '../interfaces/Team';
 import { TeamService } from '../team.service';
 import { UserService } from '../user.service';
 import { Table } from 'primeng/table';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-team',
@@ -13,16 +13,13 @@ import { Table } from 'primeng/table';
 })
 export class TeamComponent implements OnInit {
   teams: Team[];
-  teamForm: FormGroup;
 
   constructor(
     public userService: UserService,
-    private fb: FormBuilder,
     public alertService: AlertService,
-    public teamService: TeamService
-  ) {
-    this.createForm();
-  }
+    public teamService: TeamService,
+    public router: Router
+  ) {}
   @ViewChild('teamTable') table: Table;
 
   ngOnInit(): void {
@@ -32,24 +29,7 @@ export class TeamComponent implements OnInit {
   getTeams() {
     this.teamService.getTeams().subscribe((teams) => (this.teams = teams));
   }
-
-  createForm() {
-    this.teamForm = this.fb.group({
-      name: ['', [Validators.required]],
-      organization: ['', [Validators.required]],
-      assets: ['', [Validators.required]],
-      role: ['', [Validators.required]],
-      userIds: ['', [Validators.required]],
-    });
-  }
-  onSubmit(form) {
-    const team: Team = {
-      name: form.value.name,
-      organization: form.value.organization,
-      assets: form.value.assets,
-      role: form.value.role,
-      userIds: form.value.userIds,
-    };
-    console.log(team);
+  navigateToTeamCreateForm() {
+    this.router.navigate([`administration/team`]);
   }
 }

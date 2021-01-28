@@ -1,0 +1,9 @@
+<div class="container col-12 col-md-8 mx-auto">
+  <form [formGroup]="teamForm" (ngSubmit)="onSubmit(teamForm)" id="teamForm">
+    <input type="text" pInputText formControlName="name" placeholder="Team Name" name="name" class="form-control" />
+    <p-selectButton name="roles" [options]="roles" formControlName="role" optionLabel="name">
+    </p-selectButton>
+    <p-listbox [options]="organizations" (click)="fetchOrgAssets(teamForm.controls['organization'].value)"
+      formControlName="organization" optionLabel="name"></p-listbox>
+  </form>
+</div>

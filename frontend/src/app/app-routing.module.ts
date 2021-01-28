@@ -25,6 +25,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { InviteUserComponent } from './administration/invite-user/invite-user.component';
 import { AdministrationComponent } from './administration/administration.component';
+import { TeamFormComponent } from './team-form/team-form.component';
 import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { SettingsComponent } from './administration/settings/settings.component';
@@ -32,6 +33,7 @@ import { EmailValidateComponent } from './email-validate/email-validate.componen
 import { UserService } from './user.service';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
+import { TeamService } from './team.service';
 @Injectable()
 export class AssetsResolver implements Resolve<any> {
   constructor(private apiService: AppService) {}
@@ -96,6 +98,21 @@ export class VulnerabilityResolver implements Resolve<any> {
 
   resolve(route: ActivatedRouteSnapshot) {
     return this.apiService.getVulnerability(route.params.vulnId);
+  }
+}
+@Injectable()
+export class TeamResolver implements Resolve<any> {
+  constructor(private teamService: TeamService) {}
+
+  resolve(route: ActivatedRouteSnapshot) {
+    return this.teamService.getTeamById(route.params.teamId);
+  }
+}
+@Injectable()
+export class TeamFormResolver implements Resolve<any> {
+  constructor(private appService: AppService) {}
+  resolve() {
+    return this.appService.getOrganizations();
   }
 }
 @Injectable()
@@ -177,6 +194,23 @@ const routes: Routes = [
     path: 'administration',
     component: AdministrationComponent,
     canActivate: [AdminGuard],
+  },
+  {
+    path: 'administration',
+    component: AdministrationComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path: 'administration/team/:teamId',
+    component: TeamFormComponent,
+    canActivate: [AdminGuard],
+    resolve: { team: TeamResolver },
+  },
+  {
+    path: 'administration/team',
+    component: TeamFormComponent,
+    canActivate: [AdminGuard],
+    resolve: { organizations: TeamFormResolver },
   },
   {
     path: 'dashboard',
@@ -284,6 +318,8 @@ const routes: Routes = [
     ReportResolver,
     UserResolver,
     SettingsResolver,
+    TeamFormResolver,
+    TeamResolver,
   ],
 })
 export class AppRoutingModule {}

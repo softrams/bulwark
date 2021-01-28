@@ -71,6 +71,21 @@ export const fetchAssetsAndUpdateTeam = async (
   }
 };
 
+export const getTeamById = async (req: UserRequest, res: Response) => {
+  const { teamId } = req.body;
+  if (isNaN(+teamId)) {
+    return res.status(400).json('Invalid Team ID');
+  }
+  const fetchedTeam = await getConnection()
+    .getRepository(Team)
+    .findOne(teamId, { relations: ['users', 'assets'] });
+  if (!fetchedTeam) {
+    return res.status(404).json('Team not found');
+  } else {
+    return res.status(200).json(fetchedTeam);
+  }
+};
+
 export const createTeam = async (req: UserRequest, res: Response) => {
   const { name, organization, role, assetIds, userIds } = req.body;
   const newTeam = new Team();

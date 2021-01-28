@@ -31,7 +31,6 @@ export class AuthService {
   }
 
   getUserFromToken() {
-    console.log(jwt_decode(localStorage.getItem('AUTH_TOKEN')));
     return jwt_decode(localStorage.getItem('AUTH_TOKEN'));
   }
 

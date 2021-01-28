@@ -12,4 +12,8 @@ export class TeamService {
   getTeams() {
     return this.http.get<Team[]>(`${this.api}/team`);
   }
+
+  getTeamById(id: number) {
+    return this.http.get<Team[]>(`${this.api}/team/${id}`);
+  }
 }

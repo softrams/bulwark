@@ -5,7 +5,6 @@
     <p-table [value]="teams" dataKey="name" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
       <ng-template pTemplate="header">
         <tr>
-          <th style="width: 3rem"></th>
           <th>Name</th>
           <th>Organization</th>
           <th>Assets</th>
@@ -15,11 +14,6 @@
       </ng-template>
       <ng-template pTemplate="body" let-team>
         <tr>
-          <td>
-            <button type="button" pButton pRipple [pRowToggler]="team"
-              class="p-button-text p-button-rounded p-button-plain"
-              [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-          </td>
           <td>{{team?.name}}</td>
           <td>{{team?.organization?.name}}</td>
           <td>TBD</td>
@@ -27,45 +21,9 @@
           <td>TBD</td>
         </tr>
       </ng-template>
-      <ng-template pTemplate="rowexpansion" let-team>
-        <tr>
-          <td colspan="7">
-            <div class="p-p-3">
-              <p-table [value]="team.users" dataKey="id" [columns]="cols" [paginator]="true" [rows]="10"
-                styleClass="p-datatable-striped">
-                <ng-template pTemplate="header">
-        <tr>
-          <th>ID</th>
-          <th>Email</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Title</th>
-          <th>Status</th>
-          <th style="width: 4rem"></th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-user>
-        <tr>
-          <td>{{user?.id}}</td>
-          <td>{{user?.email}}</td>
-          <td>{{user?.firstName}}</td>
-          <td>{{user?.lastName}}</td>
-          <td>{{user?.title}}</td>
-          <td>{{user?.active ? 'Active': 'Inactive'}}</td>
-          <td>
-            <p-button type="button" icon="pi pi-search"></p-button>
-          </td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="emptymessage">
-        <tr>
-          <td colspan="6">There are no users for this team yet.</td>
-        </tr>
-      </ng-template>
     </p-table>
-  </div>
-  </td>
-  </tr>
-  </ng-template>
-  </p-table>
+    <br>
+    <button (click)="navigateToTeamCreateForm()" pInputText type="button" class="btn btn-primary float-right">
+      Create Team
+    </button>
   </div>
