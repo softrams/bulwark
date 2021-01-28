@@ -77,6 +77,38 @@ describe('Team Controller', () => {
     const savedOrg = await getConnection()
       .getRepository(Organization)
       .save(newOrg);
+    // create assets
+    const asset: Asset = {
+      organization: savedOrg,
+      name: 'Test Asset 1',
+      status: 'A',
+      id: null,
+      jira: null,
+      assessment: null,
+      teams: null,
+    };
+    const savedAsset = await getConnection().getRepository(Asset).save(asset);
+    const asset2: Asset = {
+      organization: savedOrg,
+      name: 'Test Asset 1',
+      status: 'A',
+      id: null,
+      jira: null,
+      assessment: null,
+      teams: null,
+    };
+    const savedAsset2 = await getConnection().getRepository(Asset).save(asset2);
+    const asset3: Asset = {
+      organization: savedOrg,
+      name: 'Test Asset 1',
+      status: 'A',
+      id: null,
+      jira: null,
+      assessment: null,
+      teams: null,
+    };
+    const savedAsset3 = await getConnection().getRepository(Asset).save(asset3);
+    const assetAry: Asset[] = [];
     const request = new MockExpressRequest({
       body: {
         id: null,
@@ -84,6 +116,8 @@ describe('Team Controller', () => {
         organization: savedOrg.id,
         asset: null,
         role: ROLE.ADMIN,
+        assetIds: [savedAsset.id, savedAsset2.id],
+        userIds: [savedUser.id],
       },
       user: savedUser.id,
     });
@@ -92,9 +126,10 @@ describe('Team Controller', () => {
     expect(response.statusCode).toBe(200);
     const teams = await getConnection()
       .getRepository(Team)
-      .find({ relations: ['users'] });
+      .find({ relations: ['users', 'assets'] });
     expect(teams.length).toBe(1);
-    expect(teams[0].users.length).toBe(0);
+    expect(teams[0].users.length).toBe(1);
+    expect(teams[0].assets.length).toBe(2);
   });
 
   test('Create Team Failure', async () => {
@@ -136,6 +171,23 @@ describe('Team Controller', () => {
     expect(badResponse.statusCode).toBe(400);
     const teams = await getConnection().getRepository(Team).find({});
     expect(teams.length).toBe(0);
+    const badRequest2 = new MockExpressRequest({
+      params: {
+        id: 1,
+      },
+      body: {
+        id: null,
+        name: 'test',
+        organization: 3,
+        asset: null,
+        role: 'not a role',
+        users: [],
+      },
+      user: savedUser.id,
+    });
+    const badResponse2 = new MockExpressResponse();
+    await createTeam(badRequest2, badResponse2);
+    expect(badResponse2.statusCode).toBe(404);
   });
 
   test('add team member', async () => {
@@ -205,16 +257,6 @@ describe('Team Controller', () => {
     });
     const response = new MockExpressResponse();
     await addTeamMember(request, response);
-    expect(response.statusCode).toBe(200);
-    const badRequest = new MockExpressRequest({
-      body: {
-        userIds: [1, 2, 6],
-        teamId: savedTeam.id,
-      },
-    });
-    const badResponse = new MockExpressResponse();
-    await addTeamMember(badRequest, badResponse);
-    expect(badResponse.statusCode).toBe(404);
     expect(response.statusCode).toBe(200);
     const badRequest2 = new MockExpressRequest({
       body: {
@@ -350,6 +392,28 @@ describe('Team Controller', () => {
   });
 
   test('update team info', async () => {
+    // create user
+    const existUser = new User();
+    existUser.firstName = 'master';
+    existUser.lastName = 'chief';
+    existUser.email = 'testing@jest.com';
+    existUser.active = true;
+    const uuid = uuidv4();
+    existUser.uuid = uuid;
+    existUser.password = await generateHash('TangoDown123!!!');
+    const savedUser = await getConnection().getRepository(User).save(existUser);
+    // create user
+    const existUser2 = new User();
+    existUser2.firstName = 'master';
+    existUser2.lastName = 'chief';
+    existUser2.email = 'testing2@jest.com';
+    existUser2.active = true;
+    const uuid2 = uuidv4();
+    existUser2.uuid = uuid2;
+    existUser2.password = await generateHash('TangoDown123!!!');
+    const savedUser2 = await getConnection()
+      .getRepository(User)
+      .save(existUser2);
     // create org
     const newOrg: Organization = {
       id: null,
@@ -361,6 +425,39 @@ describe('Team Controller', () => {
     const savedOrg = await getConnection()
       .getRepository(Organization)
       .save(newOrg);
+    // create assets
+    const asset: Asset = {
+      organization: savedOrg,
+      name: 'Test Asset 1',
+      status: 'A',
+      id: null,
+      jira: null,
+      assessment: null,
+      teams: null,
+    };
+    const savedAsset = await getConnection().getRepository(Asset).save(asset);
+    const asset2: Asset = {
+      organization: savedOrg,
+      name: 'Test Asset 1',
+      status: 'A',
+      id: null,
+      jira: null,
+      assessment: null,
+      teams: null,
+    };
+    const savedAsset2 = await getConnection().getRepository(Asset).save(asset2);
+    const asset3: Asset = {
+      organization: savedOrg,
+      name: 'Test Asset 1',
+      status: 'A',
+      id: null,
+      jira: null,
+      assessment: null,
+      teams: null,
+    };
+    const savedAsset3 = await getConnection().getRepository(Asset).save(asset3);
+    const assetAry: Asset[] = [];
+    assetAry.push(savedAsset, savedAsset2);
     // create team
     const bravoTeam = new Team();
     bravoTeam.name = 'Bravo';
@@ -371,7 +468,11 @@ describe('Team Controller', () => {
     bravoTeam.createdBy = 0;
     bravoTeam.lastUpdatedBy = 0;
     bravoTeam.role = ROLE.READONLY;
+    bravoTeam.assets = assetAry;
+    bravoTeam.users = [savedUser];
     const savedTeam = await getConnection().getRepository(Team).save(bravoTeam);
+    expect(savedTeam.assets.length).toBe(2);
+    expect(savedTeam.users.length).toBe(1);
     const request = new MockExpressRequest({
       body: {
         name: 'Alpha',
@@ -379,6 +480,8 @@ describe('Team Controller', () => {
         asset: null,
         role: ROLE.TESTER,
         teamId: savedTeam.id,
+        userIds: [savedUser, savedUser2],
+        assetIds: [],
       },
     });
     const response = new MockExpressResponse();
@@ -386,9 +489,11 @@ describe('Team Controller', () => {
     expect(response.statusCode).toBe(200);
     const updatedTeam = await getConnection()
       .getRepository(Team)
-      .findOne(savedTeam.id);
+      .findOne(savedTeam.id, { relations: ['users', 'assets'] });
     expect(updatedTeam.name).toBe('Alpha');
     expect(updatedTeam.role).toBe(ROLE.TESTER);
+    expect(updatedTeam.users.length).toBe(2);
+    expect(updatedTeam.assets.length).toBe(0);
     const badRequest = new MockExpressRequest({
       body: {
         teamId: savedTeam.id,
