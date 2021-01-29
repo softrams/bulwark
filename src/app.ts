@@ -46,17 +46,6 @@ app.use(
   })
 );
 app.use(helmet());
-app.use(bodyParser.json({ limit: '2mb' }));
-app.use(bodyParser.urlencoded({ extended: true }));
-const serverPort = process.env.PORT || 5000;
-const serverIpAddress = process.env.IP || '127.0.0.1';
-app.set('port', serverPort);
-app.set('serverIpAddress', serverIpAddress);
-// tslint:disable-next-line: no-console
-app.listen(serverPort, () =>
-  console.info(`Server running on ${serverIpAddress}:${serverPort}`)
-);
-
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
@@ -70,6 +59,16 @@ app.use(
       styleSrc: ["'self'", 'stackpath.bootstrapcdn.com', "'unsafe-inline'"],
     },
   })
+);
+app.use(bodyParser.json({ limit: '2mb' }));
+app.use(bodyParser.urlencoded({ extended: true }));
+const serverPort = process.env.PORT || 5000;
+const serverIpAddress = process.env.IP || '127.0.0.1';
+app.set('port', serverPort);
+app.set('serverIpAddress', serverIpAddress);
+// tslint:disable-next-line: no-console
+app.listen(serverPort, () =>
+  console.info(`Server running on ${serverIpAddress}:${serverPort}`)
 );
 
 // create typeorm connection
