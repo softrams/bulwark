@@ -45,7 +45,12 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self' blob:", 'stackpath.bootstrapcdn.com'],
-      scriptSrc: ["'self'", 'code.jquery.com', 'stackpath.bootstrapcdn.com'],
+      scriptSrc: [
+        "'self'",
+        'code.jquery.com',
+        'stackpath.bootstrapcdn.com',
+        '${serverIpAddress}',
+      ],
       styleSrc: ["'self'", 'stackpath.bootstrapcdn.com', "'unsafe-inline'"],
     },
   })
