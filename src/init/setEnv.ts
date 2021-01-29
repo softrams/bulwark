@@ -56,6 +56,6 @@ if (fs.existsSync(path.join(__dirname, '../../.env'))) {
 } else {
   // tslint:disable-next-line: no-console
   console.info(
-    'A .env file was not found. Attempting to fetch values from existing environment variables.'
+    'A .env file was not found. This is OK if running Docker. Attempting to fetch values from existing environment variables.'
   );
 }

@@ -78,7 +78,7 @@ $ cd bulwark
 $ npm install
 ```
 
-Running `npm install` will install both server-side and client-side modules. Furthermore, it will run the npm script `npm run config` which will dynamically set the environment variables in addition to dynamically updating the [Angular environment](https://angular.io/guide/build).
+Running `npm install` will install both server-side and client-side modules. Furthermore, it will run the script `npm run config` which will dynamically set the environment variables in addition to updating the [Angular environment](https://angular.io/guide/build).
 
 ### Development Mode
 
@@ -92,6 +92,7 @@ $ npm run start:dev
 ### Production Mode
 
 Set `NODE_ENV="production"`
+_Please note: `npm install` will automatically build in production mode_
 
 ```
 $ npm run config
