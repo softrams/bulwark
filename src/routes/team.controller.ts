@@ -11,7 +11,7 @@ export const getAllTeams = async (req: Request, res: Response) => {
   // TODO: Remove user passwords
   const teams = await getConnection()
     .getRepository(Team)
-    .find({ relations: ['organization', 'users'] });
+    .find({ relations: ['organization', 'assets'] });
   return res.status(200).json(teams);
 };
 

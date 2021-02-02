@@ -110,9 +110,23 @@ export class TeamResolver implements Resolve<any> {
 }
 @Injectable()
 export class TeamFormResolver implements Resolve<any> {
-  constructor(private appService: AppService) {}
+  constructor(
+    private appService: AppService,
+    private userService: UserService
+  ) {}
   resolve() {
-    return this.appService.getOrganizations();
+    return forkJoin([
+      this.appService.getOrganizations(),
+      this.userService.getAllUsers(),
+    ]).pipe(
+      map((result) => {
+        console.log(result);
+        return {
+          organizations: result[0],
+          activeUsers: result[1],
+        };
+      })
+    );
   }
 }
 @Injectable()
@@ -210,7 +224,7 @@ const routes: Routes = [
     path: 'administration/team',
     component: TeamFormComponent,
     canActivate: [AdminGuard],
-    resolve: { organizations: TeamFormResolver },
+    resolve: { result: TeamFormResolver },
   },
   {
     path: 'dashboard',

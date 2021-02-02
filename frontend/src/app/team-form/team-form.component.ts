@@ -7,6 +7,8 @@ import { Team } from '../interfaces/Team';
 import { Organization } from '../org-form/Organization';
 import { ActivatedRoute } from '@angular/router';
 import { AppService } from '../app.service';
+import { Asset } from '../asset-form/Asset';
+import { User } from '../interfaces/User';
 interface Role {
   name: string;
 }
@@ -19,6 +21,8 @@ export class TeamFormComponent implements OnInit {
   roles: Role[];
   teamForm: FormGroup;
   organizations: Organization[];
+  assets: Asset[];
+  activeUsers: User[];
   constructor(
     private fb: FormBuilder,
     public alertService: AlertService,
@@ -30,8 +34,10 @@ export class TeamFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ organizations }) => {
-      this.organizations = organizations;
+    this.activatedRoute.data.subscribe(({ result }) => {
+      this.organizations = result.organizations;
+      this.activeUsers = result.activeUsers;
+      console.log(this.activeUsers);
     });
     this.roles = [
       { name: ROLE.ADMIN },
@@ -51,20 +57,29 @@ export class TeamFormComponent implements OnInit {
   }
 
   onSubmit(form) {
+    if (form.value.userIds) {
+      form.value.userIds = form.value.userIds.map((x) => x.id);
+    }
+    if (form.value.assetIds) {
+      form.value.assetIds = form.value.assetIds.map((x) => x.id);
+    }
     const team: Team = {
       name: form.value.name,
       organization: form.value.organization,
-      role: form.value.role,
+      role: form.value.role.name,
       userIds: form.value.userIds,
       assetIds: form.value.assetIds,
     };
-    console.log(team);
+    this.teamService.createTeam(team).subscribe((res: string) => {
+      this.alertService.success(res);
+    });
   }
 
   fetchOrgAssets(event) {
     let orgId: number = event.id;
-    this.appService
-      .getOrganizationAssets(orgId)
-      .then((assets) => console.log(assets));
+    this.appService.getOrganizationAssets(orgId).then((assets: Asset[]) => {
+      this.assets = assets;
+      console.log(this.assets);
+    });
   }
 }

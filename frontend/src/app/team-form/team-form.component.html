@@ -1,9 +1,48 @@
 <div class="container col-12 col-md-8 mx-auto">
   <form [formGroup]="teamForm" (ngSubmit)="onSubmit(teamForm)" id="teamForm">
-    <input type="text" pInputText formControlName="name" placeholder="Team Name" name="name" class="form-control" />
-    <p-selectButton name="roles" [options]="roles" formControlName="role" optionLabel="name">
-    </p-selectButton>
-    <p-listbox [options]="organizations" (click)="fetchOrgAssets(teamForm.controls['organization'].value)"
-      formControlName="organization" optionLabel="name"></p-listbox>
+    <div class="col-5">
+      <label>Team Name</label>
+      <input type="text" pInputText formControlName="name" name="name" class="form-control" />
+    </div>
+    <div class="col-5">
+      <label>Role</label>
+      <p-selectButton name="roles" [options]="roles" formControlName="role" optionLabel="name">
+      </p-selectButton>
+    </div>
+    <div class="col-5">
+      <label>Active Users</label>
+      <ng-select [items]="activeUsers" bindLabel="firstName" labelForId="testerList" [multiple]="true"
+        clearAllText="Clear" formControlName="userIds">
+        <ng-template ng-label-tmp let-item="item" let-clear="clear">
+          <span class="ng-value-icon right" (click)="clear(item)">×</span>
+          {{item.firstName}} {{item.lastName}}
+        </ng-template>
+        <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+          {{item.firstName}} {{item.lastName}}
+        </ng-template>
+      </ng-select>
+    </div>
+    <div class="col-5">
+      <label>Organization</label>
+      <p-listbox [options]="organizations" (click)="fetchOrgAssets(teamForm.controls['organization'].value)"
+        formControlName="organization" optionLabel="name"></p-listbox>
+    </div>
+    <div class="col-5">
+      <label>Assets</label>
+      <div *ngIf="assets">
+        <div *ngIf="assets.length; else no_org_assets">
+          <p-listbox [multiple]="true" [options]="assets" formControlName="assetIds" optionLabel="name"></p-listbox>
+        </div>
+      </div>
+      <ng-template #no_org_assets>The selected organization has no active assets</ng-template>
+    </div>
+    <button [disabled]="!teamForm.valid" class="btn btn-primary float-right" type="submit" data-toggle="tooltip"
+      data-placement="bottom" title="Submit">
+      Create Team
+    </button>
+    <button style="margin-right: 5px;" class="btn btn-secondary float-right" type="button" data-toggle="tooltip"
+      data-placement="bottom" title="Back to Assessments">
+      Back to Assessments
+    </button>
   </form>
 </div>
