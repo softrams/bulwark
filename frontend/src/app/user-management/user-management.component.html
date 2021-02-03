@@ -5,11 +5,32 @@
     <p-table [value]="users" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
       <ng-template pTemplate="header">
         <tr>
-          <th>Email</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Title</th>
-          <th>Status</th>
+          <th>
+            <div class="p-d-flex p-jc-between p-ai-center">
+              Email
+              <p-columnFilter type="text" field="email" display="menu"></p-columnFilter>
+            </div>
+          </th>
+          <th>
+            <div class="p-d-flex p-jc-between p-ai-center">
+              First Name
+              <p-columnFilter type="text" field="firstName" display="menu"></p-columnFilter>
+            </div>
+          </th>
+          <th>
+            <div class="p-d-flex p-jc-between p-ai-center">
+              Last Name
+              <p-columnFilter type="text" field="lastName" display="menu"></p-columnFilter>
+            </div>
+          </th>
+          <th>
+            <div class="p-d-flex p-jc-between p-ai-center">
+              Title
+              <p-columnFilter type="text" field="title" display="menu"></p-columnFilter>
+            </div>
+          </th>
+          <th pSortableColumn="active">Status <p-sortIcon field="active"></p-sortIcon>
+          </th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-user>
@@ -22,62 +43,13 @@
         </tr>
       </ng-template>
     </p-table>
+    <br>
+    <button (click)="navigateToTeamCreateUser()" pInputText type="button" class="btn btn-primary float-right">
+      Create User
+    </button>
+    <button (click)="navigateToTeamInviteUser()" style="margin-right: 5px;" pInputText type="button"
+      class="btn btn-primary float-right">
+      Invite User
+    </button>
   </div>
-  <p-card>
-    <div class="card-body">
-      <h6>Create Active User</h6>
-      <form [formGroup]="userForm" (ngSubmit)="onSubmit(userForm)" id="userForm">
-        <div class="p-d-flex p-flex-column">
-          <div class="p-d-flex p-flex-column p-flex-md-row">
-            <label for="firstName" class="col-12 col-md-4 col-form-label">First Name:</label>
-            <div class="col-12 col-md-8">
-              <input pInputText formControlName="firstName" type="text" class="fill-width" id="firstName"
-                class="form-control" name="firstName" placeholder="First Name" style="margin-bottom: 5px;" />
-            </div>
-          </div>
-          <div class="p-d-flex p-flex-column p-flex-md-row">
-            <label for="lastName" class="col-12 col-md-4 col-form-label">Last Name:</label>
-            <div class="col-12 col-md-8">
-              <input pInputText formControlName="lastName" type="text" class="fill-width" id="lastName"
-                class="form-control" name="lastName" placeholder="Last Name" style="margin-bottom: 5px;" />
-            </div>
-          </div>
-          <div class="p-d-flex p-flex-column p-flex-md-row">
-            <label for="email" class="col-12 col-md-4 col-form-label">Email:</label>
-            <div class="col-12 col-md-8">
-              <input pInputText formControlName="email" type="text" class="fill-width" id="email" class="form-control"
-                name="email" placeholder="Email" style="margin-bottom: 5px;" />
-            </div>
-          </div>
-          <div class="p-d-flex p-flex-column p-flex-md-row">
-            <label for="title" class="col-12 col-md-4 col-form-label">Title:</label>
-            <div class="col-12 col-md-8">
-              <input pInputText formControlName="title" type="text" class="fill-width" id="title" class="form-control"
-                name="title" placeholder="Title" style="margin-bottom: 5px;" />
-            </div>
-          </div>
-          <div class="p-d-flex p-flex-column p-flex-md-row">
-            <label for="password" class="col-12 col-md-4 col-form-label">Password:</label>
-            <div class="col-12 col-md-8">
-              <input pInputText formControlName="password" type="password" class="fill-width" id="password"
-                class="form-control" name="password" placeholder="Password" style="margin-bottom: 5px;" />
-            </div>
-          </div>
-          <div class="p-d-flex p-flex-column p-flex-md-row">
-            <label for="confirmPassword" class="col-12 col-md-4 col-form-label">Confirm Password:</label>
-            <div class="col-12 col-md-8">
-              <input pInputText formControlName="confirmPassword" type="password" class="fill-width"
-                id="confirmPassword" class="form-control" name="confirmPassword" placeholder="Confirm Password"
-                style="margin-bottom: 5px;" />
-            </div>
-          </div>
-        </div>
-        <input pInputText [disabled]="!userForm.valid" type="submit" class="btn btn-primary float-right"
-          value="Create" />
-        <br />
-      </form>
-    </div>
-  </p-card>
-  <br>
-  <app-invite-user></app-invite-user>
 </p-card>

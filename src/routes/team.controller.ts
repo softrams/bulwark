@@ -11,7 +11,20 @@ export const getAllTeams = async (req: Request, res: Response) => {
   // TODO: Remove user passwords
   const teams = await getConnection()
     .getRepository(Team)
-    .find({ relations: ['organization', 'assets'] });
+    .createQueryBuilder('team')
+    .leftJoinAndSelect('team.users', 'users')
+    .leftJoinAndSelect('team.assets', 'assets')
+    .leftJoinAndSelect('team.organization', 'organization')
+    .select([
+      'team',
+      'assets',
+      'organization',
+      'users.firstName',
+      'users.lastName',
+      'users.title',
+      'users.id',
+    ])
+    .getMany();
   return res.status(200).json(teams);
 };
 
@@ -43,14 +56,10 @@ export const fetchUsersAndUpdateTeam = async (
   userIds: number[],
   teamUsers: User[]
 ) => {
-  // If no userIds are coming from the client
-  // this means all users were unselected
-  // and should be removed
   if (!userIds) {
     teamUsers = [];
     return teamUsers;
   } else {
-    // Override what we already have
     const newUsers = await fetchUsers(userIds);
     teamUsers = newUsers;
     return teamUsers;
@@ -72,13 +81,29 @@ export const fetchAssetsAndUpdateTeam = async (
 };
 
 export const getTeamById = async (req: UserRequest, res: Response) => {
-  const { teamId } = req.body;
+  const { teamId } = req.params;
   if (isNaN(+teamId)) {
     return res.status(400).json('Invalid Team ID');
   }
   const fetchedTeam = await getConnection()
     .getRepository(Team)
-    .findOne(teamId, { relations: ['users', 'assets'] });
+    .createQueryBuilder('team')
+    .leftJoinAndSelect('team.users', 'users')
+    .leftJoinAndSelect('team.assets', 'assets')
+    .leftJoinAndSelect('assets.jira', 'jira')
+    .leftJoinAndSelect('team.organization', 'organization')
+    .where('team.id = :teamId', { teamId })
+    .select([
+      'team',
+      'assets',
+      'jira.id',
+      'organization',
+      'users.firstName',
+      'users.lastName',
+      'users.title',
+      'users.id',
+    ])
+    .getOne();
   if (!fetchedTeam) {
     return res.status(404).json('Team not found');
   } else {
@@ -87,7 +112,7 @@ export const getTeamById = async (req: UserRequest, res: Response) => {
 };
 
 export const createTeam = async (req: UserRequest, res: Response) => {
-  const { name, organization, role, assetIds, userIds } = req.body;
+  const { name, organization, role, assets, users } = req.body;
   const newTeam = new Team();
   const fetchedOrg = await getConnection()
     .getRepository(Organization)
@@ -103,8 +128,8 @@ export const createTeam = async (req: UserRequest, res: Response) => {
   newTeam.createdDate = new Date();
   newTeam.lastUpdatedBy = +req.user;
   newTeam.lastUpdatedDate = new Date();
-  if (userIds && userIds.length) newTeam.users = await fetchUsers(userIds);
-  if (assetIds && assetIds.length) newTeam.assets = await fetchAssets(assetIds);
+  if (users && users.length) newTeam.users = await fetchUsers(users);
+  if (assets && assets.length) newTeam.assets = await fetchAssets(assets);
   const errors = await validate(newTeam);
   if (errors.length > 0) {
     return res.status(400).json('Submitted Team is Invalid');
@@ -161,20 +186,20 @@ export const removeTeamMember = async (req: UserRequest, res: Response) => {
 };
 
 export const updateTeamInfo = async (req: Request, res: Response) => {
-  const { name, organization, role, teamId, assetIds, userIds } = req.body;
+  const { name, organization, role, id, assetIds, users } = req.body;
   if (!(name || organization || role)) {
     return res.status(400).json('Team is invalid');
   }
-  if (!teamId) {
+  if (!id) {
     return res.status(400).json('The Team ID is invalid');
   }
   const team = await getConnection()
     .getRepository(Team)
-    .findOne(teamId, { relations: ['users', 'assets'] });
+    .findOne(id, { relations: ['users', 'assets'] });
   if (!team) {
-    return res.status(404).json(`A Team with ID ${teamId} does not exist`);
+    return res.status(404).json(`A Team with ID ${id} does not exist`);
   }
-  team.users = await fetchUsersAndUpdateTeam(userIds, team.users);
+  team.users = await fetchUsersAndUpdateTeam(users, team.users);
   team.assets = await fetchAssetsAndUpdateTeam(assetIds, team.assets);
   team.name = name;
   team.organization = organization;
@@ -189,7 +214,7 @@ export const updateTeamInfo = async (req: Request, res: Response) => {
 };
 
 export const deleteTeam = async (req: Request, res: Response) => {
-  const { teamId } = req.body;
+  const { teamId } = req.params;
   if (!teamId) {
     return res.status(400).json('Invalid Team ID');
   }

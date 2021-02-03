@@ -49,6 +49,7 @@ import { TeamComponent } from './team/team.component';
 import { TeamFormComponent } from './team-form/team-form.component';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ListboxModule } from 'primeng/listbox';
+import { UserFormComponent } from './user-form/user-form.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -76,6 +77,7 @@ import { ListboxModule } from 'primeng/listbox';
     UserManagementComponent,
     TeamComponent,
     TeamFormComponent,
+    UserFormComponent,
   ],
   imports: [
     BrowserModule,

@@ -292,6 +292,11 @@ createConnection().then((_) => {
     [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
     teamController.createTeam
   );
+  app.patch(
+    '/api/team',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    teamController.updateTeamInfo
+  );
   app.post(
     '/api/team/member/add',
     [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
@@ -303,7 +308,7 @@ createConnection().then((_) => {
     teamController.removeTeamMember
   );
   app.delete(
-    '/api/team/delete',
+    '/api/team/:teamId',
     [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
     teamController.deleteTeam
   );

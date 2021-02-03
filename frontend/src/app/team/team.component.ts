@@ -32,4 +32,18 @@ export class TeamComponent implements OnInit {
   navigateToTeamCreateForm() {
     this.router.navigate([`administration/team`]);
   }
+
+  deleteTeam(team: Team) {
+    const r = confirm(`Delete the team "${team.name}"`);
+    if (r) {
+      this.teamService.deleteTeam(team.id).subscribe((res: string) => {
+        this.alertService.success(res);
+        this.getTeams();
+      });
+    }
+  }
+
+  navigateToTeam(team: Team) {
+    this.router.navigate([`administration/team/${team.id}`]);
+  }
 }

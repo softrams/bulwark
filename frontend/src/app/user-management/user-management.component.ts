@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FilterMatchMode } from 'primeng/api';
-import { Table } from 'primeng/table';
 import { User } from '../interfaces/User';
 import { UserService } from '../user.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AlertService } from '../alert/alert.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-management',
@@ -16,41 +15,11 @@ export class UserManagementComponent implements OnInit {
   userForm: FormGroup;
   constructor(
     public userService: UserService,
-    private fb: FormBuilder,
-    public alertService: AlertService
+    public alertService: AlertService,
+    public router: Router
   ) {}
-  @ViewChild('userTable') table: Table;
-
-  cols = [
-    {
-      field: 'id',
-      filterMatchMode: FilterMatchMode.CONTAINS,
-      header: 'User ID',
-    },
-    {
-      field: 'firstName',
-      filterMatchMode: FilterMatchMode.CONTAINS,
-      header: 'First Name',
-    },
-    {
-      field: 'lastName',
-      filterMatchMode: 'arrayCompare',
-      header: 'Last Name',
-    },
-    {
-      field: 'title',
-      filterMatchMode: FilterMatchMode.CONTAINS,
-      header: 'title',
-    },
-    {
-      field: 'active',
-      filterMatchMode: FilterMatchMode.EQUALS,
-      header: 'Status',
-    },
-  ];
 
   ngOnInit(): void {
-    this.createForm();
     this.getUsers();
   }
 
@@ -60,29 +29,11 @@ export class UserManagementComponent implements OnInit {
       .subscribe((fetchedUsers) => (this.users = fetchedUsers));
   }
 
-  createForm() {
-    this.userForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      title: ['', [Validators.required]],
-      password: ['', [Validators.required]],
-      confirmPassword: ['', [Validators.required]],
-    });
+  navigateToTeamCreateUser() {
+    this.router.navigate(['administration/user/create']);
   }
 
-  onSubmit(form) {
-    const user: User = {
-      firstName: form.value.firstName,
-      lastName: form.value.lastName,
-      title: form.value.title,
-      password: form.value.password,
-      confirmPassword: form.value.confirmPassword,
-      email: form.value.email,
-    };
-    this.userService.createUser(user).subscribe((res: string) => {
-      this.alertService.success(res);
-      this.getUsers();
-    });
+  navigateToTeamInviteUser() {
+    this.router.navigate(['administration/user/invite']);
   }
 }

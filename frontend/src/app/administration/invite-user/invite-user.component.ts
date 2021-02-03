@@ -31,7 +31,7 @@ export class InviteUserComponent implements OnInit {
   onSubmit(form) {
     const email = { email: form.value.email };
     this.userService.inviteUser(email).subscribe((res: string) => {
-      this.router.navigate(['dashboard']);
+      this.router.navigate(['administration']);
       this.alertService.success(res);
     });
   }

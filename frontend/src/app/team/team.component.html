@@ -5,10 +5,24 @@
     <p-table [value]="teams" dataKey="name" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
       <ng-template pTemplate="header">
         <tr>
-          <th>Name</th>
-          <th>Organization</th>
+          <th>
+            <div class="p-d-flex p-jc-between p-ai-center">
+              Name
+              <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
+            </div>
+          </th>
+          <th>
+            <div class="p-d-flex p-jc-between p-ai-center">
+              Organization
+              <p-columnFilter type="text" field="organization.name" display="menu"></p-columnFilter>
+            </div>
+          </th>
           <th>Assets</th>
-          <th>Role</th>
+          <th pSortableColumn="role">Role <p-sortIcon field="role"></p-sortIcon>
+          </th>
+          <th pSortableColumn="users.length"># of Members <p-sortIcon field="users"></p-sortIcon>
+          </th>
+          <th></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-team>
@@ -17,6 +31,16 @@
           <td>{{team?.organization?.name}}</td>
           <td><span *ngFor="let asset of team.assets; let isLast=last">{{asset.name}}{{isLast ? '' : ', '}}</span></td>
           <td>{{team?.role}}</td>
+          <td>{{team?.users?.length}}</td>
+          <td>
+            <button (click)="navigateToTeam(team)" class="btn btn-secondary" type="button" style="margin-right: 10px;"
+              data-toggle="tooltip" data-placement="bottom" title="Edit Assessment">
+              <i class="pi pi-pencil"></i>
+            </button>
+            <button (click)="deleteTeam(team)" class="btn btn-dark" type="button">
+              <i class="pi pi-trash"></i>
+            </button>
+          </td>
         </tr>
       </ng-template>
     </p-table>

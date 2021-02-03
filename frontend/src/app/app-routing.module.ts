@@ -28,6 +28,7 @@ import { AdministrationComponent } from './administration/administration.compone
 import { TeamFormComponent } from './team-form/team-form.component';
 import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { UserFormComponent } from './user-form/user-form.component';
 import { SettingsComponent } from './administration/settings/settings.component';
 import { EmailValidateComponent } from './email-validate/email-validate.component';
 import { UserService } from './user.service';
@@ -114,13 +115,12 @@ export class TeamFormResolver implements Resolve<any> {
     private appService: AppService,
     private userService: UserService
   ) {}
-  resolve() {
+  resolve(route: ActivatedRouteSnapshot) {
     return forkJoin([
       this.appService.getOrganizations(),
       this.userService.getAllUsers(),
     ]).pipe(
       map((result) => {
-        console.log(result);
         return {
           organizations: result[0],
           activeUsers: result[1],
@@ -218,13 +218,23 @@ const routes: Routes = [
     path: 'administration/team/:teamId',
     component: TeamFormComponent,
     canActivate: [AdminGuard],
-    resolve: { team: TeamResolver },
+    resolve: { result: TeamFormResolver },
   },
   {
     path: 'administration/team',
     component: TeamFormComponent,
     canActivate: [AdminGuard],
     resolve: { result: TeamFormResolver },
+  },
+  {
+    path: 'administration/user/create',
+    canActivate: [AdminGuard],
+    component: UserFormComponent,
+  },
+  {
+    path: 'administration/user/invite',
+    component: InviteUserComponent,
+    canActivate: [AdminGuard],
   },
   {
     path: 'dashboard',

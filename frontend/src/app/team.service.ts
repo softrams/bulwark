@@ -13,11 +13,19 @@ export class TeamService {
     return this.http.get<Team[]>(`${this.api}/team`);
   }
 
-  getTeamById(id: number) {
-    return this.http.get<Team[]>(`${this.api}/team/${id}`);
+  getTeamById(teamId: number) {
+    return this.http.get<Team>(`${this.api}/team/${teamId}`);
   }
 
   createTeam(team: Team) {
     return this.http.post(`${this.api}/team`, team);
+  }
+
+  updateTeam(team: Team) {
+    return this.http.patch(`${this.api}/team`, team);
+  }
+
+  deleteTeam(teamId: number) {
+    return this.http.delete(`${this.api}/team/${teamId}`);
   }
 }

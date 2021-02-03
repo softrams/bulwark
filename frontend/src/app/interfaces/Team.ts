@@ -1,10 +1,14 @@
 import { Organization } from '../org-form/Organization';
-
+import { Asset } from '../asset-form/Asset';
+interface Role {
+  name: string;
+}
 export interface Team {
-  teamId?: number;
+  id?: number;
   name: string;
   organization: Organization;
-  assetIds: number[];
-  role: string;
-  userIds: number[];
+  assets?: Asset[];
+  assetIds?: number[];
+  role: any;
+  users: number[];
 }
