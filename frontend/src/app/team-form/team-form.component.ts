@@ -51,8 +51,8 @@ export class TeamFormComponent implements OnInit, OnChanges {
           this.assets = assets;
         });
       this.activatedRoute.params.subscribe((param) => {
-        this.isCreate = false;
-        if (param.teamId) {
+        if (param && param.teamId) {
+          this.isCreate = false;
           this.teamId = param.teamId;
           this.teamService.getTeamById(param.teamId).subscribe((team: Team) => {
             const role: Role = {

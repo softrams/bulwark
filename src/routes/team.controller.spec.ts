@@ -117,7 +117,7 @@ describe('Team Controller', () => {
         asset: null,
         role: ROLE.ADMIN,
         assetIds: [savedAsset.id, savedAsset2.id],
-        userIds: [savedUser.id],
+        users: [savedUser.id],
       },
       user: savedUser.id,
     });
@@ -479,8 +479,8 @@ describe('Team Controller', () => {
         organization: savedOrg.id,
         asset: null,
         role: ROLE.TESTER,
-        teamId: savedTeam.id,
-        userIds: [savedUser, savedUser2],
+        id: savedTeam.id,
+        users: [savedUser, savedUser2],
         assetIds: [],
       },
     });
@@ -496,7 +496,7 @@ describe('Team Controller', () => {
     expect(updatedTeam.assets.length).toBe(0);
     const badRequest = new MockExpressRequest({
       body: {
-        teamId: savedTeam.id,
+        id: savedTeam.id,
       },
     });
     const badResponse = new MockExpressResponse();
@@ -519,7 +519,7 @@ describe('Team Controller', () => {
         organization: savedOrg.id,
         asset: null,
         role: ROLE.TESTER,
-        teamId: 6,
+        id: 6,
       },
     });
     const badResponse3 = new MockExpressResponse();
@@ -532,7 +532,7 @@ describe('Team Controller', () => {
         organization: savedOrg.id,
         asset: null,
         role: 'not a role',
-        teamId: savedTeam.id,
+        id: savedTeam.id,
       },
     });
     const badResponse4 = new MockExpressResponse();
@@ -589,7 +589,7 @@ describe('Team Controller', () => {
     let teams = await getConnection().getRepository(Team).find({});
     expect(teams.length).toBe(1);
     const request = new MockExpressRequest({
-      body: {
+      params: {
         teamId: savedTeamWithUser.id,
       },
     });
@@ -603,13 +603,13 @@ describe('Team Controller', () => {
       .findOne(addedUser1.id, { relations: ['teams'] });
     expect(userNoTeam.teams.length).toBe(0);
     const badRequest = new MockExpressRequest({
-      body: {},
+      params: {},
     });
     const badResponse = new MockExpressResponse();
     await deleteTeam(badRequest, badResponse);
     expect(badResponse.statusCode).toBe(400);
     const badRequest2 = new MockExpressRequest({
-      body: {
+      params: {
         teamId: 34,
       },
     });

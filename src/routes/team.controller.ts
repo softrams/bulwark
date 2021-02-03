@@ -112,7 +112,7 @@ export const getTeamById = async (req: UserRequest, res: Response) => {
 };
 
 export const createTeam = async (req: UserRequest, res: Response) => {
-  const { name, organization, role, assets, users } = req.body;
+  const { name, organization, role, assetIds, users } = req.body;
   const newTeam = new Team();
   const fetchedOrg = await getConnection()
     .getRepository(Organization)
@@ -129,7 +129,7 @@ export const createTeam = async (req: UserRequest, res: Response) => {
   newTeam.lastUpdatedBy = +req.user;
   newTeam.lastUpdatedDate = new Date();
   if (users && users.length) newTeam.users = await fetchUsers(users);
-  if (assets && assets.length) newTeam.assets = await fetchAssets(assets);
+  if (assetIds && assetIds.length) newTeam.assets = await fetchAssets(assetIds);
   const errors = await validate(newTeam);
   if (errors.length > 0) {
     return res.status(400).json('Submitted Team is Invalid');
