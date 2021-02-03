@@ -9,3 +9,5 @@ CHANGELOG.md
 # Ignore all HTML files:
 *.html
 *.sass
+.gitignore
+frontend/.gitignore
