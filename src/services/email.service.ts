@@ -16,9 +16,9 @@ export const sendEmail = async (mailOptions, callback) => {
     const transporter = nodemailer.createTransport({
       auth: {
         pass: decryptedEmailPassword,
-        user: config.fromEmail
+        user: config.fromEmail,
       },
-      service: 'Gmail'
+      service: 'Gmail',
     });
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -47,8 +47,8 @@ export const sendVerificationEmail = (uuid: string, userEmail: string) => {
               \n A Bulwark account was created with the email: ${userEmail}.
               As an extra security measure, please verify this is the correct email address
               linked to Bulwark by clicking the link below.
-              \n ${process.env.PROD_URL}/api/user/verify/${uuid}`,
-    to: userEmail
+              \n ${process.env.SERVER_ADDRESS}:${process.env.PORT}/api/user/verify/${uuid}`,
+    to: userEmail,
   };
   sendEmail(mailOptions, (err, info) => {
     if (err) {
@@ -71,8 +71,8 @@ export const sendForgotPasswordEmail = (uuid, userEmail) => {
     text: `Forgot password request
                 \n A password request has been initiated for the email: ${userEmail}.
                 Please click the link below to initiate the process.
-                \n ${process.env.PROD_URL}/#/password-reset/${uuid}`,
-    to: userEmail
+                \n ${process.env.SERVER_ADDRESS}:${process.env.PORT}/#/password-reset/${uuid}`,
+    to: userEmail,
   };
   sendEmail(mailOptions, (err, info) => {
     if (err) {
@@ -94,8 +94,8 @@ export const sendInvitationEmail = (uuid, userEmail) => {
     subject: 'Bulwark - Welcome!',
     text: `You have been invited to Bulwark!
                 Please click the link below to initiate the process.
-                \n ${process.env.PROD_URL}/#/register/${uuid}`,
-    to: userEmail
+                \n ${process.env.SERVER_ADDRESS}:${process.env.PORT}/#/register/${uuid}`,
+    to: userEmail,
   };
   sendEmail(mailOptions, (err, info) => {
     if (err) {
@@ -115,8 +115,8 @@ export const sendUpdateUserEmail = (user: User, callback) => {
   const mailOptions = {
     from: process.env.FROM_EMAIL,
     subject: 'Bulwark - Email update request',
-    text: `An email update has been requested for Bulwark.  Please click the link to confirm this update. ${process.env.PROD_URL}/#/email/validate/${user.uuid}`,
-    to: user.newEmail
+    text: `An email update has been requested for Bulwark.  Please click the link to confirm this update. ${process.env.SERVER_ADDRESS}:${process.env.PORT}/#/email/validate/${user.uuid}`,
+    to: user.newEmail,
   };
   sendEmail(mailOptions, (err, info) => {
     if (err) {

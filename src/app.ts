@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as path from 'path';
 const fs = require('fs');
 const dotenv = require('dotenv');
+
 if (fs.existsSync(path.join(__dirname, '../.env'))) {
   const envPath = fs.readFileSync(path.join(__dirname, '../.env'));
   // tslint:disable-next-line: no-console
@@ -17,11 +18,6 @@ if (fs.existsSync(path.join(__dirname, '../.env'))) {
     // tslint:disable-next-line: no-console
     console.log('The provided .env file has been parsed successfully.');
   }
-} else {
-  // tslint:disable-next-line: no-console
-  console.info(
-    'A .env file was not found. Attempting to fetch values from existing environment variables.'
-  );
 }
 import * as bodyParser from 'body-parser';
 import { createConnection } from 'typeorm';
@@ -39,35 +35,41 @@ import * as teamController from './routes/team.controller';
 const helmet = require('helmet');
 const cors = require('cors');
 const app = express();
-app.use(helmet());
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self' blob:", 'stackpath.bootstrapcdn.com'],
-      scriptSrc: ["'self'", 'code.jquery.com', 'stackpath.bootstrapcdn.com'],
-      styleSrc: ["'self'", 'stackpath.bootstrapcdn.com', "'unsafe-inline'"],
-    },
-  })
-);
 app.use(cors());
 app.use(
   express.static(path.join(__dirname, '../frontend/dist/frontend'), {
     etag: false,
   })
 );
+app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self' blob:", 'stackpath.bootstrapcdn.com'],
+      scriptSrc: [
+        "'self'",
+        'code.jquery.com',
+        'stackpath.bootstrapcdn.com',
+        '${serverIpAddress}',
+      ],
+      styleSrc: ["'self'", 'stackpath.bootstrapcdn.com', "'unsafe-inline'"],
+    },
+  })
+);
 app.use(bodyParser.json({ limit: '2mb' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 const serverPort = process.env.PORT || 5000;
-const serverIpAddress = process.env.IP || '127.0.0.1';
+const serverIpAddress = process.env.SERVER_ADDRESS || '127.0.0.1';
 app.set('port', serverPort);
 app.set('serverIpAddress', serverIpAddress);
 // tslint:disable-next-line: no-console
 app.listen(serverPort, () =>
-  // tslint:disable-next-line: no-console
   console.info(`Server running on ${serverIpAddress}:${serverPort}`)
 );
 // create typeorm connection
 createConnection().then((_) => {
+  // tslint:disable-next-line: no-console
+  console.info(`Database connection successful`);
   // Check for initial configuration and user
   // If none exist, insert
   configController.initialInsert();
