@@ -4,6 +4,7 @@ import { Organization } from './Organization';
 import { AppService } from '../app.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService } from '../alert/alert.service';
+import { AuthService } from '../auth.service';
 @Component({
   selector: 'app-org-form',
   templateUrl: './org-form.component.html',
@@ -14,12 +15,14 @@ export class OrgFormComponent implements OnInit, OnChanges {
   orgForm: FormGroup;
   fileToUpload: File = null;
   orgId: number;
+  isAdmin: boolean;
   constructor(
     private fb: FormBuilder,
     public appService: AppService,
     public route: Router,
     public activatedRoute: ActivatedRoute,
-    private alertService: AlertService
+    private alertService: AlertService,
+    public authService: AuthService
   ) {
     this.createForm();
   }
@@ -28,6 +31,10 @@ export class OrgFormComponent implements OnInit, OnChanges {
     this.activatedRoute.data.subscribe(({ organization }) => {
       if (organization) {
         this.orgModel = organization;
+        this.isAdmin = this.authService.isAdmin();
+        if (!this.isAdmin) {
+          this.disableForm();
+        }
         this.rebuildForm();
       }
     });
@@ -56,6 +63,10 @@ export class OrgFormComponent implements OnInit, OnChanges {
     this.orgForm.reset({
       name: this.orgModel.name,
     });
+  }
+
+  disableForm() {
+    this.orgForm.disable();
   }
 
   /**

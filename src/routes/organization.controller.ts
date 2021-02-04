@@ -4,7 +4,6 @@ import { getConnection, In } from 'typeorm';
 import { Organization } from '../entity/Organization';
 import { status } from '../enums/status-enum';
 import { validate } from 'class-validator';
-import { fetchRole } from '../utilities/role.utility';
 
 /**
  * @description Get active organizations
@@ -34,7 +33,7 @@ export const getArchivedOrgs = async (req: UserRequest, res: Response) => {
   const orgs = await getConnection()
     .getRepository(Organization)
     .find({
-      where: { status: status.archived },
+      where: { status: status.archived, id: In(req.userOrgs) },
     });
   if (!orgs) {
     return res.status(404).json('Organizations do not exist');
