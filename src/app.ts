@@ -135,11 +135,6 @@ createConnection().then((_) => {
     jwtMiddleware.checkToken,
     assetController.getAssetById
   );
-  app.patch(
-    '/api/organization/:id/asset/:assetId',
-    jwtMiddleware.checkToken,
-    assetController.updateAssetById
-  );
   app.get(
     '/api/assessment/:id',
     jwtMiddleware.checkToken,
@@ -222,23 +217,28 @@ createConnection().then((_) => {
     jwtMiddleware.checkToken,
     fileUploadController.uploadFile
   );
+
+  // Admin Routes
+  app.patch(
+    '/api/organization/:id/asset/:assetId',
+    [jwtMiddleware.checkToken, , jwtMiddleware.isAdmin],
+    assetController.updateAssetById
+  );
   app.post(
     '/api/organization/:id/asset',
-    jwtMiddleware.checkToken,
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
     assetController.createAsset
   );
   app.patch(
     '/api/asset/archive/:assetId',
-    jwtMiddleware.checkToken,
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
     assetController.archiveAssetById
   );
   app.patch(
     '/api/asset/activate/:assetId',
-    jwtMiddleware.checkToken,
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
     assetController.activateAssetById
   );
-
-  // Admin Routes
   app.post(
     '/api/config',
     [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],

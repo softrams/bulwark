@@ -165,7 +165,7 @@ describe('Asset Controller', () => {
       status: 'A',
       teams: null,
     };
-    await getConnection().getRepository(Organization).insert(org);
+    await getConnection().getRepository(Organization).save(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
       .findOne(1);
@@ -179,15 +179,27 @@ describe('Asset Controller', () => {
       jira: null,
       teams: null,
     };
-    await getConnection().getRepository(Asset).insert(insertAsset);
+    const savedAsset = await getConnection()
+      .getRepository(Asset)
+      .save(insertAsset);
     const request3 = new MockExpressRequest({
       params: {
         id: 1,
       },
+      userOrgs: [savedOrg.id],
+      userAssets: [savedAsset.id],
     });
     const response3 = new MockExpressResponse();
     await assetController.getOrgAssets(request3, response3);
     expect(response3._getJSON()).toHaveLength(1);
+    const request4 = new MockExpressRequest({
+      params: {
+        id: savedOrg.id,
+      },
+    });
+    const response4 = new MockExpressResponse();
+    await assetController.getOrgAssets(request4, response4);
+    expect(response4.statusCode).toBe(404);
   });
   test('Get Archived Assets', async () => {
     const response = new MockExpressResponse();
@@ -227,15 +239,27 @@ describe('Asset Controller', () => {
       jira: null,
       teams: null,
     };
-    await getConnection().getRepository(Asset).insert(insertAsset);
+    const savedAsset = await getConnection()
+      .getRepository(Asset)
+      .save(insertAsset);
     const request3 = new MockExpressRequest({
       params: {
         id: 1,
       },
+      userOrgs: [savedOrg.id],
+      userAssets: [savedAsset.id],
     });
     const response3 = new MockExpressResponse();
     await assetController.getArchivedOrgAssets(request3, response3);
     expect(response3._getJSON()).toHaveLength(1);
+    const request4 = new MockExpressRequest({
+      params: {
+        id: savedOrg.id,
+      },
+    });
+    const response4 = new MockExpressResponse();
+    await assetController.getArchivedOrgAssets(request4, response4);
+    expect(response4.statusCode).toBe(404);
   });
   test('Purge jira info success', async () => {
     const org: Organization = {
@@ -462,10 +486,9 @@ describe('Asset Controller', () => {
       status: 'A',
       teams: null,
     };
-    await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(1);
+      .save(org);
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -476,7 +499,7 @@ describe('Asset Controller', () => {
       jira: null,
       teams: null,
     };
-    await getConnection().getRepository(Asset).insert(asset);
+    const savedAsset = await getConnection().getRepository(Asset).save(asset);
     const request = new MockExpressRequest({
       params: {
         assetId: 2,

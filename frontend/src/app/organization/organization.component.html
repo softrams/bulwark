@@ -34,18 +34,19 @@
         <td>
           <button *ngIf="!isArchive" class="btn btn-secondary" type="button" style="margin-right: 10px;"
             data-toggle="tooltip" (click)="navigateToAsset(asset.id)" c data-placement="bottom" title="Edit Asset">
-            <i class="pi pi-pencil"></i>
+            <i *ngIf="isAdmin" class="pi pi-pencil"></i>
+            <i *ngIf="!isAdmin" class="pi pi-eye"></i>
           </button>
           <button *ngIf="!isArchive" (click)="navigateToAssessment(asset.id)" class="btn btn-primary"
             style="margin-right: 10px;" type="button" data-toggle="tooltip" data-placement="bottom"
             title="View Assessments">
             <i class="pi pi-list"></i>
           </button>
-          <button (click)="archiveAsset(asset);" *ngIf="!isArchive" class="btn btn-dark" type="button"
+          <button (click)="archiveAsset(asset);" *ngIf="!isArchive && isAdmin" class="btn btn-dark" type="button"
             data-toggle="tooltip" data-placement="bottom" title="Archive">
             <i class="pi pi-folder"></i>
           </button>
-          <button (click)="activateAsset(asset);" *ngIf="isArchive" class="btn btn-dark" type="button"
+          <button (click)="activateAsset(asset);" *ngIf="isArchive && isAdmin" class="btn btn-dark" type="button"
             data-toggle="tooltip" data-placement="bottom" title="Activate">
             <i class="pi pi-folder-open"></i>
           </button>
