@@ -11,6 +11,15 @@
 <img src='https://img.shields.io/docker/pulls/softramsdocker/bulwark'>
 </p>
 
+## Features
+
+- Multi-client Vulnerability Management
+- Security Report Generation
+- Jira Integration
+- Team-based Roles Authorization
+- Email Integration
+- Markdown Support
+
 ![Bulwark Walkthrough Demo](https://github.com/Whamo12/media/blob/master/bulwark_report_demo.gif)
 
 ## Jira Integration
@@ -223,6 +232,135 @@ A user account is created on initial startup with the following credentials:
 - password: `changeMe`
 
 Upon first login, update the default user password under the profile section.
+
+## Roles
+
+The application utilizes least privilege access with team-based authorization. Teams are assigned a role which determines the features available to that specific team. A user will inherit roles from team membership. Administrators have team management access and must assign users to teams. Initially, users are created with no team association and will not have access to any features in the application.
+
+The three roles include:
+
+1. Admin
+2. Tester
+3. Read-Only
+
+A team can only be associated to a single organization. However, a team can be associated to multiple assets within the same organization. A user can be a member of multiple teams. If a user is assigned to multiple teams of the same organization, the system will choose the highest authorized team.
+
+_Please note: The default user is automatically assigned to the `Administrators` team on initial startup_
+
+### Role Matrix
+
+<table>
+  <tr>
+    <td></td>
+    <th scope="col">Admin</th>
+    <th scope="col">Tester</th>
+    <th scope="col">Read-Only</th>
+  </tr>
+  <tr>
+    <th scope="row">User-Profile Management</th>
+    <td>x</td>
+    <td>x</td>
+    <td>x</td>
+  </tr>
+  <tr>
+    <th scope="row">Team Management</th>
+    <td>x</td>
+    <td></td>
+    <td></td>
+  </tr> 
+  <tr>
+    <th scope="row">User Management</th>
+    <td>x</td>
+    <td></td>
+    <td></td>
+  </tr> 
+  <tr>
+    <th scope="row">Invite User</th>
+    <td>x</td>
+    <td></td>
+    <td></td>
+  </tr> 
+  <tr>
+    <th scope="row">Create User</th>
+    <td>x</td>
+    <td></td>
+    <td></td>
+  </tr> 
+  <tr>
+    <th scope="row">Email Settings Management</th>
+    <td>x</td>
+    <td></td>
+    <td></td>
+  </tr> 
+  <tr>
+    <th scope="row">Jira Integration</th>
+    <td>x</td>
+    <td></td>
+    <td></td>
+  </tr> 
+  <tr>
+    <th scope="row">Organization: Read</th>
+    <td>x</td>
+    <td>x</td>
+    <td>x</td>
+  </tr> 
+  <tr>
+    <th scope="row">Organization: Full Write</th>
+    <td>x</td>
+    <td></td>
+    <td></td>
+  </tr> 
+  <tr>
+    <th scope="row">Asset: Read</th>
+    <td>x</td>
+    <td>x</td>
+    <td>x</td>
+  </tr> 
+  <tr>
+    <th scope="row">Asset: Full Write</th>
+    <td>x</td>
+    <td></td>
+    <td></td>
+  </tr> 
+  <tr>
+    <th scope="row">Assessment: Read</th>
+    <td>x</td>
+    <td>x</td>
+    <td>x</td>
+  </tr> 
+  <tr>
+    <th scope="row">Assessment: Full Write</th>
+    <td>x</td>
+    <td>x</td>
+    <td></td>
+  </tr> 
+  <tr>
+    <th scope="row">Vulnerability: Read</th>
+    <td>x</td>
+    <td>x</td>
+    <td>x</td>
+  </tr> 
+  <tr>
+    <th scope="row">Vulnerability: Full Write</th>
+    <td>x</td>
+    <td>x</td>
+    <td></td>
+  </tr> 
+  <tr>
+    <th scope="row">Export Vulnerability to Jira</th>
+    <td>x</td>
+    <td>x</td>
+    <td></td>
+  </tr> 
+  <tr>
+    <th scope="row">Report Generation</th>
+    <td>x</td>
+    <td>x</td>
+    <td>x</td>
+  </tr> 
+</table>
+
+<br>
 
 ## Built With
 
