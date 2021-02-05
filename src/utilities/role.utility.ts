@@ -18,6 +18,9 @@ export const hasAssetAccess = (req: UserRequest, rqstdAssetId: number) => {
 };
 
 export const hasTesterAssetAccess = (req: UserRequest, orgId: number) => {
+  if (req.isAdmin) {
+    return true;
+  }
   const testerTeams = req.userTeams.filter((team) => team.role === ROLE.TESTER);
   if (testerTeams && testerTeams.length) {
     const testerTeamIds = testerTeams.map(
@@ -33,6 +36,9 @@ export const hasAssessmentAccess = async (
   req: UserRequest,
   assessmentId: number
 ) => {
+  if (req.isAdmin) {
+    return true;
+  }
   const assessment = await getConnection()
     .getRepository(Assessment)
     .createQueryBuilder('assessment')
