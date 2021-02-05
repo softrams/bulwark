@@ -1,3 +1,5 @@
+import { Team } from './Team';
+
 export interface User {
   firstName: string;
   lastName: string;
@@ -8,4 +10,5 @@ export interface User {
   newEmail?: string;
   id?: string;
   active?: boolean;
+  teams?: Team[];
 }

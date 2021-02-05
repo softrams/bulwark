@@ -253,7 +253,9 @@ export const patch = async (req: UserRequest, res: Response) => {
  * @returns User
  */
 export const getUser = async (req: UserRequest, res: Response) => {
-  const user = await getConnection().getRepository(User).findOne(req.user);
+  const user = await getConnection()
+    .getRepository(User)
+    .findOne(req.user, { relations: ['teams'] });
   if (!user) return res.status(404).json('User not found');
   delete user.active;
   delete user.password;
@@ -314,6 +316,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
   const users = await getConnection()
     .getRepository(User)
     .createQueryBuilder('user')
+    .leftJoinAndSelect('user.teams', 'teams')
     .select([
       'user.id',
       'user.firstName',
@@ -321,6 +324,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
       'user.title',
       'user.active',
       'user.email',
+      'teams.name',
     ])
     .getMany();
   return res.status(200).json(users);

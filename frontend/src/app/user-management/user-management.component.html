@@ -31,6 +31,7 @@
           </th>
           <th pSortableColumn="active">Status <p-sortIcon field="active"></p-sortIcon>
           </th>
+          <th>Teams</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-user>
@@ -40,6 +41,7 @@
           <td>{{user?.lastName}}</td>
           <td>{{user?.title}}</td>
           <td>{{user?.active ? 'Active': 'Inactive'}}</td>
+          <td><span *ngFor="let team of user.teams; let isLast=last">{{team.name}}{{isLast ? '' : ', '}}</span></td>
         </tr>
       </ng-template>
     </p-table>
