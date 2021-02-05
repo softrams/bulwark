@@ -43,24 +43,6 @@ export const initialInsert = async () => {
       defaultAdminTeam.users = [savedUser];
     }
     await getConnection().getRepository(Team).save(defaultAdminTeam);
-    const defaultTestersTeam = new Team();
-    defaultTestersTeam.name = 'Global Testers';
-    defaultTestersTeam.createdDate = new Date();
-    defaultTestersTeam.lastUpdatedDate = new Date();
-    defaultTestersTeam.createdBy = savedUser ? savedUser.id : null;
-    defaultTestersTeam.lastUpdatedBy = savedUser ? savedUser.id : null;
-    defaultTestersTeam.role = ROLE.TESTER;
-    defaultTestersTeam.organization = null;
-    await getConnection().getRepository(Team).save(defaultTestersTeam);
-    const defaultReadOnlyTeam = new Team();
-    defaultReadOnlyTeam.name = 'Global Read-Only';
-    defaultReadOnlyTeam.createdDate = new Date();
-    defaultReadOnlyTeam.lastUpdatedDate = new Date();
-    defaultReadOnlyTeam.createdBy = savedUser ? savedUser.id : null;
-    defaultReadOnlyTeam.lastUpdatedBy = savedUser ? savedUser.id : null;
-    defaultReadOnlyTeam.role = ROLE.READONLY;
-    defaultReadOnlyTeam.organization = null;
-    await getConnection().getRepository(Team).save(defaultReadOnlyTeam);
   }
 };
 
