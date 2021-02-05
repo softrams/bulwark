@@ -37,9 +37,6 @@ export const getAssessmentsByAssetId = async (
     return res.status(404).json('Asset does not exist');
   }
   const hasAccess = await hasTesterAssetAccess(req, asset.id);
-  if (!hasAccess) {
-    return res.status(403).json('Authorization is required');
-  }
   const assessments = await getConnection()
     .getRepository(Assessment)
     .createQueryBuilder('assessment')
@@ -67,11 +64,18 @@ export const getAssessmentsByAssetId = async (
  */
 export const getAssessmentVulns = async (req: UserRequest, res: Response) => {
   if (!req.params.id) {
-    return res.status(400).json('Invalid Vulnerability request');
+    return res.status(400).json('Invalid Assessment ID');
   }
   if (isNaN(+req.params.id)) {
     return res.status(400).json('Invalid Assessment ID');
   }
+  const assessment = await getConnection()
+    .getRepository(Assessment)
+    .findOne(req.params.id, { relations: ['asset'] });
+  if (!assessment) {
+    return res.status(404).json('Assessment does not exist');
+  }
+  const hasAccess = await hasTesterAssetAccess(req, assessment.asset.id);
   const vulnerabilities = await getConnection()
     .getRepository(Vulnerability)
     .find({
@@ -80,7 +84,7 @@ export const getAssessmentVulns = async (req: UserRequest, res: Response) => {
   if (!vulnerabilities) {
     return res.status(404).json('Vulnerabilities do not exist');
   }
-  res.status(200).json(vulnerabilities);
+  return res.status(200).json({ vulnerabilities, readOnly: !hasAccess });
 };
 /**
  * @description Create assessment

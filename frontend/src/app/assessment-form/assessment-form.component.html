@@ -32,8 +32,8 @@
       <label for="endDate" class="col-form-label">End Date</label>
       <input formControlName="endDate" class="form-control" type="date" id="endDate" />
       <br />
-      <button [disabled]="!assessmentForm.valid" class="btn btn-primary float-right" type="submit" data-toggle="tooltip"
-        data-placement="bottom" title="Submit">
+      <button *ngIf="!readOnly" [disabled]="!assessmentForm.valid" class="btn btn-primary float-right" type="submit"
+        data-toggle="tooltip" data-placement="bottom" title="Submit">
         Submit
       </button>
       <button style="margin-right: 5px;" (click)="navigateToAssessments()" class="btn btn-secondary float-right"

@@ -32,7 +32,7 @@ export class VulnFormComponent implements OnChanges, OnInit {
   impactAssess = 0;
   likelihoodAssess = 0;
   riskAssess = 0;
-
+  readOnly: boolean;
   constructor(
     private appService: AppService,
     public activatedRoute: ActivatedRoute,
@@ -93,6 +93,10 @@ export class VulnFormComponent implements OnChanges, OnInit {
       }
     });
     this.activatedRoute.data.subscribe(({ vulnInfo }) => {
+      this.readOnly = vulnInfo.readOnly;
+      if (this.readOnly) {
+        this.vulnForm.disable();
+      }
       if (vulnInfo && vulnInfo.jiraHost) {
         this.jiraHost = vulnInfo.jiraHost;
       }

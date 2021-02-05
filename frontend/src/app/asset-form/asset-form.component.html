@@ -2,7 +2,7 @@
   <form [formGroup]="assetForm" (ngSubmit)="onSubmit(assetForm)">
     <div class="form-group">
       <label for="assetName">Asset Name</label>
-      <input pInputText formControlName="name" type="text" class="form-control" id="assetName"/>
+      <input pInputText formControlName="name" type="text" class="form-control" id="assetName" />
       <div class="card">
         <div class="card-body">
           <div class="col-md-12 text-center">
@@ -11,26 +11,27 @@
           </div>
           <div formGroupName="jira">
             <label for="username">Username</label>
-            <input [readonly]="!canAddApiKey" formControlName="username" type="text" class="form-control"
-              id="username" pInputText/>
+            <input [readonly]="!canAddApiKey" formControlName="username" type="text" class="form-control" id="username"
+              pInputText />
             <label for="host" style="margin-top: 10px">Host</label>
-            <input pInputText [readonly]="!canAddApiKey" formControlName="host" type="text" class="form-control" id="host"/>
+            <input pInputText [readonly]="!canAddApiKey" formControlName="host" type="text" class="form-control"
+              id="host" />
             <label for="apiKey" style="margin-top: 10px">API Key</label>
-            <input pPassword promptLabel="Enter the API key" [readonly]="!canAddApiKey" formControlName="apiKey" type="password" class="form-control" id="apiKey"
-              [placeholder]="canAddApiKey ? '':keyPlaceholder"/>
+            <input pPassword promptLabel="Enter the API key" [readonly]="!canAddApiKey" formControlName="apiKey"
+              type="password" class="form-control" id="apiKey" [placeholder]="canAddApiKey ? '':keyPlaceholder" />
           </div>
           <br>
-          <button pButton [disabled]="canAddApiKey" type="button" class="float-right btn btn-warning"
+          <button *ngIf="isAdmin" pButton [disabled]="canAddApiKey" type="button" class="float-right btn btn-warning"
             (click)="purgeJiraInfo()" label="Purge">
           </button>
         </div>
       </div>
     </div>
-    <button pButton [disabled]="!assetForm.valid" class="btn btn-primary float-right" type="submit" data-toggle="tooltip"
-      data-placement="bottom" label="Submit">
+    <button *ngIf="isAdmin" pButton [disabled]="!assetForm.valid" class="btn btn-primary float-right" type="submit"
+      data-toggle="tooltip" data-placement="bottom" label="Submit">
     </button>
-    <button pButton (click)="navigateToAssets()" class="btn btn-secondary float-right" type="button" style="margin-right: 5px"
-      data-toggle="tooltip" data-placement="bottom" label="Back to Assets">
+    <button pButton (click)="navigateToAssets()" class="btn btn-secondary float-right" type="button"
+      style="margin-right: 5px" data-toggle="tooltip" data-placement="bottom" label="Back to Assets">
     </button>
   </form>
 </div>

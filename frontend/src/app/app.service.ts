@@ -143,12 +143,9 @@ export class AppService {
    * @returns all vulnerablities related to the assessment
    */
   getVulnerabilities(assessmentId: number) {
-    return this.http
-      .get(`${this.api}/assessment/${assessmentId}/vulnerability`)
-      .toPromise()
-      .then((res) => {
-        return res;
-      });
+    return this.http.get(
+      `${this.api}/assessment/${assessmentId}/vulnerability`
+    );
   }
 
   /**
