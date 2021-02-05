@@ -19,18 +19,22 @@ import { AssessmentFormComponent } from './assessment-form/assessment-form.compo
 import { ReportComponent } from './report/report.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { AuthGuard } from './auth.guard';
+import { AdminGuard } from './admin.guard';
 import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { InviteUserComponent } from './administration/invite-user/invite-user.component';
 import { AdministrationComponent } from './administration/administration.component';
+import { TeamFormComponent } from './team-form/team-form.component';
 import { RegisterComponent } from './register/register.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { UserFormComponent } from './user-form/user-form.component';
 import { SettingsComponent } from './administration/settings/settings.component';
 import { EmailValidateComponent } from './email-validate/email-validate.component';
 import { UserService } from './user.service';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/internal/operators/map';
+import { TeamService } from './team.service';
 @Injectable()
 export class AssetsResolver implements Resolve<any> {
   constructor(private apiService: AppService) {}
@@ -53,13 +57,17 @@ export class AssessmentResolver implements Resolve<any> {
     private userService: UserService
   ) {}
   resolve(route: ActivatedRouteSnapshot) {
-    if (route.params.assetId && route.params.assessmentId) {
+    if (
+      route.params.assetId &&
+      route.params.assessmentId &&
+      route.params.orgId
+    ) {
       return forkJoin([
         this.apiService.getAssessment(
           route.params.assetId,
           route.params.assessmentId
         ),
-        this.userService.getUsers(),
+        this.userService.getTesters(route.params.orgId),
       ]).pipe(
         map((result) => {
           return {
@@ -69,7 +77,7 @@ export class AssessmentResolver implements Resolve<any> {
         })
       );
     } else {
-      return this.userService.getUsers();
+      return this.userService.getTesters(route.params.orgId);
     }
   }
 }
@@ -95,6 +103,34 @@ export class VulnerabilityResolver implements Resolve<any> {
 
   resolve(route: ActivatedRouteSnapshot) {
     return this.apiService.getVulnerability(route.params.vulnId);
+  }
+}
+@Injectable()
+export class TeamResolver implements Resolve<any> {
+  constructor(private teamService: TeamService) {}
+
+  resolve(route: ActivatedRouteSnapshot) {
+    return this.teamService.getTeamById(route.params.teamId);
+  }
+}
+@Injectable()
+export class TeamFormResolver implements Resolve<any> {
+  constructor(
+    private appService: AppService,
+    private userService: UserService
+  ) {}
+  resolve(route: ActivatedRouteSnapshot) {
+    return forkJoin([
+      this.appService.getOrganizations(),
+      this.userService.getAllUsers(),
+    ]).pipe(
+      map((result) => {
+        return {
+          organizations: result[0],
+          activeUsers: result[1],
+        };
+      })
+    );
   }
 }
 @Injectable()
@@ -175,7 +211,34 @@ const routes: Routes = [
   {
     path: 'administration',
     component: AdministrationComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AdminGuard],
+  },
+  {
+    path: 'administration',
+    component: AdministrationComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path: 'administration/team/:teamId',
+    component: TeamFormComponent,
+    canActivate: [AdminGuard],
+    resolve: { result: TeamFormResolver },
+  },
+  {
+    path: 'administration/team',
+    component: TeamFormComponent,
+    canActivate: [AdminGuard],
+    resolve: { result: TeamFormResolver },
+  },
+  {
+    path: 'administration/user/create',
+    canActivate: [AdminGuard],
+    component: UserFormComponent,
+  },
+  {
+    path: 'administration/user/invite',
+    component: InviteUserComponent,
+    canActivate: [AdminGuard],
   },
   {
     path: 'dashboard',
@@ -265,7 +328,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true, relativeLinkResolution: 'legacy' })],
+  imports: [
+    RouterModule.forRoot(routes, {
+      useHash: true,
+      relativeLinkResolution: 'legacy',
+    }),
+  ],
   exports: [RouterModule],
   providers: [
     AssetResolver,
@@ -278,6 +346,8 @@ const routes: Routes = [
     ReportResolver,
     UserResolver,
     SettingsResolver,
+    TeamFormResolver,
+    TeamResolver,
   ],
 })
 export class AppRoutingModule {}

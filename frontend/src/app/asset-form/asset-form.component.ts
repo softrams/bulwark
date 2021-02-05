@@ -4,6 +4,7 @@ import { Asset } from './Asset';
 import { AppService } from '../app.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService } from '../alert/alert.service';
+import { AuthService } from '../auth.service';
 @Component({
   selector: 'app-asset-form',
   templateUrl: './asset-form.component.html',
@@ -16,20 +17,26 @@ export class AssetFormComponent implements OnInit, OnChanges {
   public assetId: number;
   public keyPlaceholder = '************************';
   public canAddApiKey = true;
+  public isAdmin: boolean;
   constructor(
     private fb: FormBuilder,
     public appService: AppService,
     public route: Router,
     public activatedRoute: ActivatedRoute,
-    private alertService: AlertService
+    private alertService: AlertService,
+    public authService: AuthService
   ) {
     this.createForm();
   }
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ asset }) => {
+      this.isAdmin = this.authService.isAdmin();
       if (asset) {
         this.assetModel = asset;
+        if (!this.isAdmin) {
+          this.assetForm.disable();
+        }
         this.rebuildForm();
         if (asset.jira) {
           this.canAddApiKey = false;

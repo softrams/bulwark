@@ -5,9 +5,15 @@ import { Response, Request } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { validate } from 'class-validator';
 import { passwordRequirement } from '../enums/message-enum';
-import { compare, generateHash, passwordSchema, updatePassword } from '../utilities/password.utility';
+import {
+  compare,
+  generateHash,
+  passwordSchema,
+  updatePassword,
+} from '../utilities/password.utility';
 import * as emailService from '../services/email.service';
 import { Config } from '../entity/Config';
+import { ROLE } from '../enums/roles-enum';
 /**
  * @description Register user
  * @param {UserRequest} req
@@ -15,7 +21,14 @@ import { Config } from '../entity/Config';
  * @returns success message
  */
 export const register = async (req: Request, res: Response) => {
-  const { firstName, lastName, title, password, confirmPassword, uuid } = req.body;
+  const {
+    firstName,
+    lastName,
+    title,
+    password,
+    confirmPassword,
+    uuid,
+  } = req.body;
   if (!firstName || !lastName || !title) {
     return res.status(400).json('Invalid registration form');
   }
@@ -29,7 +42,7 @@ export const register = async (req: Request, res: Response) => {
     .getRepository(User)
     .createQueryBuilder()
     .where('User.uuid = :uuid', {
-      uuid
+      uuid,
     })
     .getOne();
   if (user) {
@@ -49,7 +62,9 @@ export const register = async (req: Request, res: Response) => {
   } else {
     return res
       .status(400)
-      .json('Unable to register user password at this time.  Please contact an administrator for assistance.');
+      .json(
+        'Unable to register user password at this time.  Please contact an administrator for assistance.'
+      );
   }
 };
 /**
@@ -63,15 +78,21 @@ export const invite = async (req: Request, res: Response) => {
   if (!config.fromEmail || !config.fromEmailPassword) {
     return res
       .status(400)
-      .json('Failed to invite user. Please set the email configuration in the Settings menu option.');
+      .json(
+        'Failed to invite user. Please set the email configuration in the Settings menu option.'
+      );
   } else {
     const { email } = req.body;
     if (!email) {
       return res.status(400).json('Email is invalid');
     }
-    const existUser = await getConnection().getRepository(User).find({ where: { email } });
+    const existUser = await getConnection()
+      .getRepository(User)
+      .find({ where: { email } });
     if (existUser.length) {
-      return res.status(400).json('A user associated to that email has already been invited');
+      return res
+        .status(400)
+        .json('A user associated to that email has already been invited');
     }
     const user = new User();
     user.active = false;
@@ -81,6 +102,57 @@ export const invite = async (req: Request, res: Response) => {
     emailService.sendInvitationEmail(user.uuid, user.email);
     return res.status(200).json('User invited successfully');
   }
+};
+/**
+ * @description Create user
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns success message
+ */
+export const create = async (req: Request, res: Response) => {
+  const {
+    email,
+    firstName,
+    lastName,
+    title,
+    password,
+    confirmPassword,
+  } = req.body;
+  if (
+    !email ||
+    !firstName ||
+    !lastName ||
+    !title ||
+    !password ||
+    !confirmPassword
+  ) {
+    return res.status(400).json('Invalid user form');
+  }
+  if (password !== confirmPassword) {
+    return res.status(400).json('Passwords do not match');
+  }
+  if (!passwordSchema.validate(password)) {
+    return res.status(400).json(passwordRequirement);
+  }
+  const existUser = await getConnection()
+    .getRepository(User)
+    .findOne({ where: { email } });
+  if (existUser) {
+    return res
+      .status(400)
+      .json('A user associated to that email has already been created');
+  }
+  const user = new User();
+  user.active = true;
+  user.uuid = uuidv4();
+  user.email = email;
+  user.newEmail = email;
+  user.firstName = firstName;
+  user.lastName = lastName;
+  user.title = title;
+  user.password = await generateHash(password);
+  await getConnection().getRepository(User).save(user);
+  return res.status(200).json('User created successfully');
 };
 /**
  * @description Verifies user by comparing UUID
@@ -99,7 +171,9 @@ export const verify = async (req: Request, res: Response) => {
       await getConnection().getRepository(User).save(user);
       return res.status(200).json('Email verification successful');
     } else {
-      return res.status(400).json('Email verification failed.  User does not exist.');
+      return res
+        .status(400)
+        .json('Email verification failed.  User does not exist.');
     }
   } else {
     return res.status(400).json('UUID is undefined');
@@ -117,7 +191,9 @@ export const updateUserPassword = async (req: UserRequest, res: Response) => {
     return res.status(400).json('Passwords do not match');
   }
   if (newPassword === oldPassword) {
-    return res.status(400).json('New password can not be the same as the old password');
+    return res
+      .status(400)
+      .json('New password can not be the same as the old password');
   }
   if (!passwordSchema.validate(newPassword)) {
     return res.status(400).json(passwordRequirement);
@@ -125,7 +201,11 @@ export const updateUserPassword = async (req: UserRequest, res: Response) => {
   const user = await getConnection().getRepository(User).findOne(req.user);
   if (user) {
     try {
-      user.password = await updatePassword(user.password, oldPassword, newPassword);
+      user.password = await updatePassword(
+        user.password,
+        oldPassword,
+        newPassword
+      );
     } catch (err) {
       return res.status(400).json(err);
     }
@@ -134,7 +214,9 @@ export const updateUserPassword = async (req: UserRequest, res: Response) => {
   } else {
     return res
       .status(400)
-      .json('Unable to update user password at this time.  Please contact an administrator for assistance.');
+      .json(
+        'Unable to update user password at this time.  Please contact an administrator for assistance.'
+      );
   }
 };
 /**
@@ -171,7 +253,9 @@ export const patch = async (req: UserRequest, res: Response) => {
  * @returns User
  */
 export const getUser = async (req: UserRequest, res: Response) => {
-  const user = await getConnection().getRepository(User).findOne(req.user);
+  const user = await getConnection()
+    .getRepository(User)
+    .findOne(req.user, { relations: ['teams'] });
   if (!user) return res.status(404).json('User not found');
   delete user.active;
   delete user.password;
@@ -191,6 +275,57 @@ export const getUsers = async (req: Request, res: Response) => {
     .createQueryBuilder('user')
     .where('user.active = true')
     .select(['user.id', 'user.firstName', 'user.lastName', 'user.title'])
+    .getMany();
+  return res.status(200).json(users);
+};
+/**
+ * @description Get Testers
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns user array
+ */
+export const getTesters = async (req: UserRequest, res: Response) => {
+  if (!req.params.orgId) {
+    return res.status(400).json('Invalid Organization ID');
+  }
+  if (isNaN(+req.params.orgId)) {
+    return res.status(400).json('Invalid Organization ID');
+  }
+  if (!req.userOrgs.includes(+req.params.orgId)) {
+    return res.status(404).json('Testers not found');
+  }
+  const users = await getConnection()
+    .getRepository(User)
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.teams', 'teams')
+    .leftJoinAndSelect('teams.organization', 'organization')
+    .where('user.active = true')
+    .andWhere('teams.role != :role', { role: ROLE.READONLY })
+    .andWhere('teams.organization.id = :orgId', { orgId: +req.params.orgId })
+    .select(['user.id', 'user.firstName', 'user.lastName', 'user.title'])
+    .getMany();
+  return res.status(200).json(users);
+};
+/**
+ * @description Get all active/inactive users
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns user array
+ */
+export const getAllUsers = async (req: Request, res: Response) => {
+  const users = await getConnection()
+    .getRepository(User)
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.teams', 'teams')
+    .select([
+      'user.id',
+      'user.firstName',
+      'user.lastName',
+      'user.title',
+      'user.active',
+      'user.email',
+      'teams.name',
+    ])
     .getMany();
   return res.status(200).json(users);
 };
@@ -220,13 +355,17 @@ export const updateUserEmail = async (req: UserRequest, res: Response) => {
   const email = req.body.email;
   const newEmail = req.body.newEmail;
   if (email !== newEmail) {
-    return res.status(400).json('The new email address and confirmation email address must match');
+    return res
+      .status(400)
+      .json('The new email address and confirmation email address must match');
   }
   const user = await getConnection().getRepository(User).findOne(req.user);
   if (user.newEmail) {
     return res
       .status(400)
-      .json('An email update request is already in progress. Please revoke this current request and try again.');
+      .json(
+        'An email update request is already in progress. Please revoke this current request and try again.'
+      );
   }
   const emails = await getConnection()
     .getRepository(User)
@@ -246,9 +385,13 @@ export const updateUserEmail = async (req: UserRequest, res: Response) => {
       if (err) {
         return res
           .status(400)
-          .json('There was a problem updating your email address.  Please contact an administrator for assistance.');
+          .json(
+            'There was a problem updating your email address.  Please contact an administrator for assistance.'
+          );
       } else {
-        return res.status(200).json(`A confirmation email has been sent to ${user.newEmail}`);
+        return res
+          .status(200)
+          .json(`A confirmation email has been sent to ${user.newEmail}`);
       }
     });
   }
@@ -262,12 +405,16 @@ export const updateUserEmail = async (req: UserRequest, res: Response) => {
 export const revokeEmailRequest = async (req: UserRequest, res: Response) => {
   const user = await getConnection().getRepository(User).findOne(req.user);
   if (!user || !user.newEmail) {
-    return res.status(404).json('An email update request for this user does not exist');
+    return res
+      .status(404)
+      .json('An email update request for this user does not exist');
   }
   user.newEmail = null;
   user.uuid = null;
   await getConnection().getRepository(User).save(user);
-  return res.status(200).json('The email update request has been successfully revoked');
+  return res
+    .status(200)
+    .json('The email update request has been successfully revoked');
 };
 /**
  * @description Validate current email update request
@@ -283,7 +430,9 @@ export const validateEmailRequest = async (req: UserRequest, res: Response) => {
     .getRepository(User)
     .findOne({ where: { uuid: req.body.uuid } });
   if (!user) {
-    return res.status(404).json('A user associated with this UUID does not exist');
+    return res
+      .status(404)
+      .json('A user associated with this UUID does not exist');
   }
   const valid = await compare(req.body.password, user.password);
   if (!valid) {

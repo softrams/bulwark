@@ -31,6 +31,7 @@ import * as vulnController from './routes/vulnerability.controller';
 import * as jwtMiddleware from './middleware/jwt.middleware';
 import { generateReport } from './utilities/puppeteer.utility';
 import * as configController from './routes/config.controller';
+import * as teamController from './routes/team.controller';
 const helmet = require('helmet');
 const cors = require('cors');
 const app = express();
@@ -72,9 +73,8 @@ createConnection().then((_) => {
   // Check for initial configuration and user
   // If none exist, insert
   configController.initialInsert();
-  // register routes
-  app.post('/api/user/register', userController.register);
-  app.post('/api/user/invite', jwtMiddleware.checkToken, userController.invite);
+
+  // Protected Global Routes
   app.post(
     '/api/user/email',
     jwtMiddleware.checkToken,
@@ -85,24 +85,25 @@ createConnection().then((_) => {
     jwtMiddleware.checkToken,
     userController.revokeEmailRequest
   );
-  app.post('/api/user/email/validate', userController.validateEmailRequest);
   app.patch('/api/user', jwtMiddleware.checkToken, userController.patch);
+  app.post('/api/user', jwtMiddleware.checkToken, userController.create);
   app.get('/api/user', jwtMiddleware.checkToken, userController.getUser);
+  app.get('/api/user', jwtMiddleware.checkToken, userController.getUser);
+  app.get(
+    '/api/users/all',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    userController.getAllUsers
+  );
   app.get('/api/users', jwtMiddleware.checkToken, userController.getUsers);
-  app.get('/api/user/verify/:uuid', userController.verify);
-  app.patch('/api/forgot-password', authController.forgotPassword);
-  app.patch('/api/password-reset', authController.resetPassword);
+  app.get(
+    '/api/testers/:orgId',
+    jwtMiddleware.checkToken,
+    userController.getTesters
+  );
   app.post(
     '/api/refresh',
     jwtMiddleware.checkRefreshToken,
     authController.refreshSession
-  );
-  app.patch('/api/user/password', userController.updateUserPassword);
-  app.post('/api/login', authController.login);
-  app.post(
-    '/api/upload',
-    jwtMiddleware.checkToken,
-    fileUploadController.uploadFile
   );
   app.get(
     '/api/file/:id',
@@ -124,26 +125,6 @@ createConnection().then((_) => {
     jwtMiddleware.checkToken,
     orgController.getOrgById
   );
-  app.patch(
-    '/api/organization/:id/archive',
-    jwtMiddleware.checkToken,
-    orgController.archiveOrgById
-  );
-  app.patch(
-    '/api/organization/:id/activate',
-    jwtMiddleware.checkToken,
-    orgController.activateOrgById
-  );
-  app.patch(
-    '/api/organization/:id',
-    jwtMiddleware.checkToken,
-    orgController.updateOrgById
-  );
-  app.post(
-    '/api/organization',
-    jwtMiddleware.checkToken,
-    orgController.createOrg
-  );
   app.get(
     '/api/organization/asset/:id',
     jwtMiddleware.checkToken,
@@ -154,35 +135,10 @@ createConnection().then((_) => {
     jwtMiddleware.checkToken,
     assetController.getArchivedOrgAssets
   );
-  app.post(
-    '/api/organization/:id/asset',
-    jwtMiddleware.checkToken,
-    assetController.createAsset
-  );
   app.get(
     '/api/organization/:id/asset/:assetId',
     jwtMiddleware.checkToken,
     assetController.getAssetById
-  );
-  app.patch(
-    '/api/organization/:id/asset/:assetId',
-    jwtMiddleware.checkToken,
-    assetController.updateAssetById
-  );
-  app.patch(
-    '/api/asset/archive/:assetId',
-    jwtMiddleware.checkToken,
-    assetController.archiveAssetById
-  );
-  app.patch(
-    '/api/asset/activate/:assetId',
-    jwtMiddleware.checkToken,
-    assetController.activateAssetById
-  );
-  app.delete(
-    '/api/asset/jira/:assetId',
-    jwtMiddleware.checkToken,
-    assetController.purgeJiraInfo
   );
   app.get(
     '/api/assessment/:id',
@@ -245,10 +201,132 @@ createConnection().then((_) => {
     jwtMiddleware.checkToken,
     vulnController.exportToJira
   );
+  app.get(
+    '/api/user/teams',
+    jwtMiddleware.checkToken,
+    teamController.getMyTeams
+  );
+
+  // Public Routes
+  app.post('/api/user/register', userController.register);
+  app.get('/api/user/verify/:uuid', userController.verify);
+  app.patch('/api/forgot-password', authController.forgotPassword);
+  app.patch('/api/password-reset', authController.resetPassword);
+  app.post('/api/user/email/validate', userController.validateEmailRequest);
+  app.patch('/api/user/password', userController.updateUserPassword);
+  app.post('/api/login', authController.login);
+
+  // Tester Routes
+  app.post(
+    '/api/upload',
+    jwtMiddleware.checkToken,
+    fileUploadController.uploadFile
+  );
+
+  // Admin Routes
+  app.patch(
+    '/api/organization/:id/asset/:assetId',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    assetController.updateAssetById
+  );
+  app.post(
+    '/api/organization/:id/asset',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    assetController.createAsset
+  );
+  app.patch(
+    '/api/asset/archive/:assetId',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    assetController.archiveAssetById
+  );
+  app.patch(
+    '/api/asset/activate/:assetId',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    assetController.activateAssetById
+  );
   app.post(
     '/api/config',
-    jwtMiddleware.checkToken,
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
     configController.saveConfig
   );
-  app.get('/api/config', jwtMiddleware.checkToken, configController.getConfig);
+  app.get(
+    '/api/config',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    configController.getConfig
+  );
+  app.post(
+    '/api/user/invite',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    userController.invite
+  );
+  app.patch(
+    '/api/organization/:id/archive',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    orgController.archiveOrgById
+  );
+  app.patch(
+    '/api/organization/:id/activate',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    orgController.activateOrgById
+  );
+  app.patch(
+    '/api/organization/:id',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    orgController.updateOrgById
+  );
+  app.post(
+    '/api/organization',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    orgController.createOrg
+  );
+  app.delete(
+    '/api/asset/jira/:assetId',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    assetController.purgeJiraInfo
+  );
+  app.get(
+    '/api/team/:teamId',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    teamController.getTeamById
+  );
+  app.get(
+    '/api/team',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    teamController.getAllTeams
+  );
+  app.post(
+    '/api/team',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    teamController.createTeam
+  );
+  app.patch(
+    '/api/team',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    teamController.updateTeamInfo
+  );
+  app.post(
+    '/api/team/member/add',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    teamController.addTeamMember
+  );
+  app.post(
+    '/api/team/member/remove',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    teamController.removeTeamMember
+  );
+  app.delete(
+    '/api/team/:teamId',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    teamController.deleteTeam
+  );
+  app.post(
+    '/api/team/asset/add',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    teamController.addTeamAsset
+  );
+  app.post(
+    '/api/team/asset/remove',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    teamController.removeTeamAsset
+  );
 });

@@ -59,6 +59,9 @@ export class AppInterceptor implements HttpInterceptor {
               error.error = 'Internal Server Error';
               this.alertService.error(error.error);
               break;
+            case 403:
+              this.alertService.warn(error.error);
+              break;
             case 404:
               this.alertService.warn(error.error);
               break;

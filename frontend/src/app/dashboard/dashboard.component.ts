@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Organization } from '../org-form/Organization';
 import { AlertService } from '../alert/alert.service';
 import { Table } from 'primeng/table';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,12 +16,14 @@ export class DashboardComponent implements OnInit {
   assetAry: any = [];
   orgId: number;
   isArchive = false;
+  isAdmin: boolean;
   @ViewChild('orgTable') table: Table;
   constructor(
     private appService: AppService,
     public activatedRoute: ActivatedRoute,
     public router: Router,
-    private alertService: AlertService
+    private alertService: AlertService,
+    public authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -34,6 +37,7 @@ export class DashboardComponent implements OnInit {
     this.appService.getOrganizations().then((res) => {
       this.isArchive = false;
       this.orgAry = res;
+      this.isAdmin = this.authService.isAdmin();
     });
   }
 

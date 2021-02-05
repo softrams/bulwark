@@ -27,18 +27,19 @@
         <td>
           <button *ngIf="!isArchive" (click)="navigateToOrganization(org.id)" class="btn btn-secondary"
             style="margin-right: 5px;" data-toggle="tooltip" data-placement="bottom" title="Edit {{ org.name }}">
-            <i class="pi pi-pencil"></i>
+            <i *ngIf="isAdmin" class="pi pi-pencil"></i>
+            <i *ngIf="!isAdmin" class="pi pi-eye"></i>
           </button>
           <button *ngIf="!isArchive" (click)="navigateToAsset(org.id)" class="btn btn-primary"
             style="margin-right: 5px;" data-toggle="tooltip" data-placement="bottom"
             title="View Assets of {{ org.name }}">
             <i class="pi pi-list"></i>
           </button>
-          <button *ngIf="!isArchive" (click)="archiveOrganization(org)" class="btn btn-warning"
+          <button *ngIf="!isArchive && isAdmin" (click)="archiveOrganization(org)" class="btn btn-warning"
             style="margin-right: 5px;" data-toggle="tooltip" data-placement="bottom" title="Archive {{ org.name }}">
             <i class="pi pi-folder"></i>
           </button>
-          <button *ngIf="isArchive" (click)="activateOrganization(org)" class="btn btn-warning"
+          <button *ngIf="isArchive && isAdmin" (click)="activateOrganization(org)" class="btn btn-warning"
             style="margin-right: 5px;" data-toggle="tooltip" data-placement="bottom" title="Activate {{ org.name }}">
             <i class="pi pi-folder-open"></i>
           </button>
@@ -47,7 +48,7 @@
     </ng-template>
   </p-table>
   <br>
-  <button (click)="navigateToCreate()" *ngIf="!isArchive" type="button" class="btn btn-primary float-right"
+  <button (click)="navigateToCreate()" *ngIf="!isArchive && isAdmin" type="button" class="btn btn-primary float-right"
     data-toggle="tooltip" data-placement="bottom" title="Add An Organization">
     Add Organization
   </button>

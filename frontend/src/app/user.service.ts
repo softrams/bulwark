@@ -24,7 +24,16 @@ export class UserService {
   getUsers() {
     return this.http.get<User[]>(`${this.api}/users`);
   }
+  getTesters(orgId: number) {
+    return this.http.get<User[]>(`${this.api}/testers/${orgId}`);
+  }
+  getAllUsers() {
+    return this.http.get<User[]>(`${this.api}/users/all`);
+  }
   patchUser(user: User) {
     return this.http.patch(`${this.api}/user`, user);
+  }
+  createUser(user: User) {
+    return this.http.post(`${this.api}/user`, user);
   }
 }

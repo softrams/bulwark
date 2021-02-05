@@ -18,6 +18,7 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
   public assessmentId: number;
   public orgId: number;
   public testers: User[] = [];
+  public readOnly: boolean;
   constructor(
     public appService: AppService,
     private fb: FormBuilder,
@@ -30,15 +31,19 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ result }) => {
-      if (result.assessment) {
-        result.assessment.startDate = this.transformDate(
-          result.assessment.startDate
+      this.readOnly = result.assessment.readOnly;
+      if (this.readOnly) {
+        this.assessmentForm.disable();
+      }
+      if (result.assessment.assessment) {
+        result.assessment.assessment.startDate = this.transformDate(
+          result.assessment.assessment.startDate
         );
-        result.assessment.endDate = this.transformDate(
-          result.assessment.endDate
+        result.assessment.assessment.endDate = this.transformDate(
+          result.assessment.assessment.endDate
         );
         this.testers = result.testers;
-        this.assessmentForm.patchValue(result.assessment);
+        this.assessmentForm.patchValue(result.assessment.assessment);
       } else {
         this.testers = result;
       }

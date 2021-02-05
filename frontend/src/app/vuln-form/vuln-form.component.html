@@ -105,7 +105,7 @@
             <th scope="col">Problem Location</th>
             <th scope="col">Target</th>
             <th>
-              <button class="btn btn-primary" type="button" (click)="addProbLoc()">
+              <button [disabled]="readOnly" class="btn btn-primary" type="button" (click)="addProbLoc()">
                 <i class="pi pi-plus"></i>
               </button>
             </th>
@@ -113,10 +113,10 @@
         </thead>
         <tbody *ngFor="let probLoc of probLocArr.controls; let i = index" [formGroupName]="i">
           <tr>
-            <td><input formControlName="location" class="form-control" /></td>
-            <td><input formControlName="target" class="form-control" /></td>
+            <td><input [readonly]="readOnly" formControlName="location" class="form-control" /></td>
+            <td><input [readonly]="readOnly" formControlName="target" class="form-control" /></td>
             <td>
-              <button class="btn btn-secondary" type="button" (click)="deleteProbLoc(i)">
+              <button [disabled]="readOnly" class="btn btn-secondary" type="button" (click)="deleteProbLoc(i)">
                 <i class="pi pi-trash"></i>
               </button>
             </td>
@@ -172,7 +172,8 @@
         <label for="remediation">Remediation</label>
         <div class="float-right">
           <i class="pi pi-eye" (click)="toggleRemediationPreview()" *ngIf="!previewRemediation"></i>
-          <i class="pi pi-eye-slash" (click)="toggleRemediationPreview()" *ngIf="previewRemediation" [icon]="faEyeSlash"></i>
+          <i class="pi pi-eye-slash" (click)="toggleRemediationPreview()" *ngIf="previewRemediation"
+            [icon]="faEyeSlash"></i>
         </div>
       </div>
     </div>
@@ -196,7 +197,7 @@
             <th scope="col">Description</th>
             <th scope="col">Resource URL</th>
             <th>
-              <button class="btn btn-primary" type="button" (click)="addResource()">
+              <button [disabled]="readOnly" class="btn btn-primary" type="button" (click)="addResource()">
                 <i class="pi pi-plus"></i>
               </button>
             </th>
@@ -204,10 +205,11 @@
         </thead>
         <tbody *ngFor="let resource of resourceArr.controls; let i = index" [formGroupName]="i">
           <tr>
-            <td><input formControlName="description" class="form-control" placeholder="description" /></td>
-            <td><input formControlName="url" class="form-control" placeholder="URL" /></td>
+            <td><input [readonly]="readOnly" formControlName="description" class="form-control"
+                placeholder="description" /></td>
+            <td><input [readonly]="readOnly" formControlName="url" class="form-control" placeholder="URL" /></td>
             <td>
-              <button class="btn btn-secondary" type="button" (click)="deleteResource(i)">
+              <button [disabled]="readOnly" class="btn btn-secondary" type="button" (click)="deleteResource(i)">
                 <i class="pi pi-trash"></i>
               </button>
             </td>
@@ -217,7 +219,7 @@
     </div>
     <div>
       <label for="screenshot">Screenshot Upload</label>
-      <input name="screenshots" type="file" class="form-control-file" id="screenshots"
+      <input [disabled]="readOnly" name="screenshots" type="file" class="form-control-file" id="screenshots"
         (change)="handleFileInput($event.target.files)" multiple enctype="multipart/form-data" />
       <div *ngFor="let screenshot of tempScreenshots">
         <span>
@@ -229,11 +231,11 @@
       </div>
     </div>
     <br />
-    <button [disabled]="!vulnForm.valid" type="submit" class="btn btn-primary float-right">
+    <button *ngIf="!readOnly" [disabled]="!vulnForm.valid" type="submit" class="btn btn-primary float-right">
       Submit
     </button>
-    <button type="button" style="margin-right: 5px;" (click)="exportToJira()" [disabled]="!this.vulnId"
-      class="btn btn-info float-right">
+    <button *ngIf="!readOnly" type="button" style="margin-right: 5px;" (click)="exportToJira()"
+      [disabled]="!this.vulnId" class="btn btn-info float-right">
       Export to Jira
     </button>
     <button (click)="navigateToVulnerabilities()" type="button" class="btn btn-secondary float-right"

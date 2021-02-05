@@ -4,6 +4,7 @@ import { AppService } from '../app.service';
 import { Asset } from '../asset-form/Asset';
 import { AlertService } from '../alert/alert.service';
 import { Table } from 'primeng/table';
+import { AuthService } from '../auth.service';
 @Component({
   selector: 'app-organization',
   templateUrl: './organization.component.html',
@@ -14,19 +15,22 @@ export class OrganizationComponent implements OnInit {
   orgId: number;
   org: any;
   isArchive = false;
+  isAdmin: boolean;
   @ViewChild('dt') table: Table;
 
   constructor(
     public activatedRoute: ActivatedRoute,
     public router: Router,
     public appService: AppService,
-    public alertService: AlertService
+    public alertService: AlertService,
+    public authService: AuthService
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.data.subscribe(
-      ({ assets }) => (this.assetAry = assets)
-    );
+    this.activatedRoute.data.subscribe(({ assets }) => {
+      this.assetAry = assets;
+      this.isAdmin = this.authService.isAdmin();
+    });
     this.activatedRoute.params.subscribe((params) => {
       this.orgId = params.orgId;
       this.appService

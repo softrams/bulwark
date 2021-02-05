@@ -23,6 +23,7 @@ export class AssessmentsComponent implements OnInit {
   assetId: number;
   orgId: number;
   testers: FormattedUser[];
+  readOnly: boolean;
   @ViewChild('assessmentTable') table: Table;
 
   cols = [
@@ -69,7 +70,8 @@ export class AssessmentsComponent implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ assessments }) => {
-      this.assessmentAry = assessments;
+      this.readOnly = assessments.readOnly;
+      this.assessmentAry = assessments.assessments;
     });
     this.activatedRoute.params.subscribe((params) => {
       this.assetId = params.assetId;

@@ -1,17 +1,18 @@
 import { UserRequest } from '../interfaces/user-request.interface';
-import { Response, Request, response } from 'express';
-import { getConnection, AdvancedConsoleLogger } from 'typeorm';
+import { Response, Request } from 'express';
+import { getConnection } from 'typeorm';
 import { Asset } from '../entity/Asset';
 import { validate } from 'class-validator';
 import { Organization } from '../entity/Organization';
 import { status } from '../enums/status-enum';
 import { encrypt } from '../utilities/crypto.utility';
 import { Jira } from '../entity/Jira';
+import { hasOrgAccess } from '../utilities/role.utility';
 /**
  * @description Get organization assets
  * @param {UserRequest} req
  * @param {Response} res
- * @returns assets
+ * @returns assets  where: { status: status.archived, id: In(req.userOrgs) }
  */
 export const getOrgAssets = async (req: UserRequest, res: Response) => {
   if (!req.params.id) {
@@ -20,22 +21,31 @@ export const getOrgAssets = async (req: UserRequest, res: Response) => {
   if (isNaN(+req.params.id)) {
     return res.status(400).json('Invalid Organization ID');
   }
+  if (!hasOrgAccess(req, +req.params.id)) {
+    return res.status(404).json('Organization not found');
+  }
   const asset = await getConnection()
     .getRepository(Asset)
     .createQueryBuilder('asset')
     .leftJoinAndSelect('asset.jira', 'jira')
     .where('asset.organization = :orgId', {
-      orgId: req.params.id
+      orgId: req.params.id,
     })
     .andWhere('asset.status = :status', {
-      status: status.active
+      status: status.active,
+    })
+    .andWhere('asset.id in(:userAssets)', {
+      userAssets:
+        getConnection().driver.options.type === 'sqlite'
+          ? req.userAssets
+          : [null, ...req.userAssets],
     })
     .select(['asset.id', 'asset.name', 'asset.status', 'jira.id'])
     .getMany();
   if (!asset) {
     return res.status(404).json('Assets not found');
   }
-  res.json(asset);
+  return res.status(200).json(asset);
 };
 /**
  * @description Get organization archived assets
@@ -43,22 +53,31 @@ export const getOrgAssets = async (req: UserRequest, res: Response) => {
  * @param {Response} res
  * @returns assets
  */
-export const getArchivedOrgAssets = async (req: Request, res: Response) => {
+export const getArchivedOrgAssets = async (req: UserRequest, res: Response) => {
   if (!req.params.id) {
     return res.status(400).json('Invalid Asset Request');
   }
   if (isNaN(+req.params.id)) {
     return res.status(400).json('Invalid Organization ID');
   }
+  if (!hasOrgAccess(req, +req.params.id)) {
+    return res.status(404).json('Organization not found');
+  }
   const asset = await getConnection()
     .getRepository(Asset)
     .createQueryBuilder('asset')
     .leftJoinAndSelect('asset.jira', 'jira')
     .where('asset.organization = :orgId', {
-      orgId: req.params.id
+      orgId: req.params.id,
     })
     .andWhere('asset.status = :status', {
-      status: status.archived
+      status: status.archived,
+    })
+    .andWhere('asset.id in(:userAssets)', {
+      userAssets:
+        getConnection().driver.options.type === 'sqlite'
+          ? req.userAssets
+          : [null, ...req.userAssets],
     })
     .select(['asset.id', 'asset.name', 'asset.status', 'jira.id'])
     .getMany();
@@ -77,7 +96,9 @@ export const createAsset = async (req: UserRequest, res: Response) => {
   if (isNaN(+req.params.id)) {
     return res.status(400).json('Organization ID is not valid');
   }
-  const org = await getConnection().getRepository(Organization).findOne(req.params.id);
+  const org = await getConnection()
+    .getRepository(Organization)
+    .findOne(req.params.id);
   if (!org) {
     return res.status(404).json('Organization does not exist');
   }
@@ -93,9 +114,19 @@ export const createAsset = async (req: UserRequest, res: Response) => {
     return res.status(400).send('Asset form validation failed');
   } else {
     asset = await getConnection().getRepository(Asset).save(asset);
-    if (req.body.jira && req.body.jira.username && req.body.jira.host && req.body.jira.apiKey) {
+    if (
+      req.body.jira &&
+      req.body.jira.username &&
+      req.body.jira.host &&
+      req.body.jira.apiKey
+    ) {
       try {
-        await addJiraIntegration(req.body.jira.username, req.body.jira.host, req.body.jira.apiKey, asset);
+        await addJiraIntegration(
+          req.body.jira.username,
+          req.body.jira.host,
+          req.body.jira.apiKey,
+          asset
+        );
       } catch (err) {
         return res.status(400).json(err);
       }
@@ -134,9 +165,16 @@ export const purgeJiraInfo = async (req: Request, res: Response) => {
  * @param {Response} res
  * @returns success/error message
  */
-const addJiraIntegration = (username: string, host: string, apiKey: string, asset: Asset): Promise<Jira> => {
+const addJiraIntegration = (
+  username: string,
+  host: string,
+  apiKey: string,
+  asset: Asset
+): Promise<Jira> => {
   return new Promise(async (resolve, reject) => {
-    const existingAsset = await getConnection().getRepository(Asset).findOne(asset.id);
+    const existingAsset = await getConnection()
+      .getRepository(Asset)
+      .findOne(asset.id);
     if (existingAsset.jira) {
       reject(
         `The Asset: ${existingAsset.name} contains an existing Jira integration.  Purge the existing Jira integration and try again.`
@@ -148,7 +186,7 @@ const addJiraIntegration = (username: string, host: string, apiKey: string, asse
       username,
       host,
       asset,
-      apiKey
+      apiKey,
     };
     try {
       jiraInit.apiKey = encrypt(apiKey);
@@ -161,7 +199,9 @@ const addJiraIntegration = (username: string, host: string, apiKey: string, asse
       reject('Jira integration requires username, host, and API key.');
       return;
     } else {
-      const jiraResult = await getConnection().getRepository(Jira).save(jiraInit);
+      const jiraResult = await getConnection()
+        .getRepository(Jira)
+        .save(jiraInit);
       resolve(jiraResult);
     }
   });
@@ -198,7 +238,9 @@ export const updateAssetById = async (req: UserRequest, res: Response) => {
   if (isNaN(+req.params.assetId) || !req.params.assetId) {
     return res.status(400).json('Asset ID is not valid');
   }
-  const asset = await getConnection().getRepository(Asset).findOne(req.params.assetId);
+  const asset = await getConnection()
+    .getRepository(Asset)
+    .findOne(req.params.assetId);
   if (!asset) {
     return res.status(404).json('Asset does not exist');
   }
@@ -206,8 +248,18 @@ export const updateAssetById = async (req: UserRequest, res: Response) => {
     return res.status(400).json('Asset name is not valid');
   }
   try {
-    if (req.body.jira && req.body.jira.username && req.body.jira.host && req.body.jira.apiKey) {
-      await addJiraIntegration(req.body.jira.username, req.body.jira.host, req.body.jira.apiKey, asset);
+    if (
+      req.body.jira &&
+      req.body.jira.username &&
+      req.body.jira.host &&
+      req.body.jira.apiKey
+    ) {
+      await addJiraIntegration(
+        req.body.jira.username,
+        req.body.jira.host,
+        req.body.jira.apiKey,
+        asset
+      );
     }
   } catch (err) {
     return res.status(400).json('JIRA integration validation failed');
@@ -231,7 +283,9 @@ export const archiveAssetById = async (req: UserRequest, res: Response) => {
   if (isNaN(+req.params.assetId) || !req.params.assetId) {
     return res.status(400).json('Asset ID is not valid');
   }
-  const asset = await getConnection().getRepository(Asset).findOne(req.params.assetId);
+  const asset = await getConnection()
+    .getRepository(Asset)
+    .findOne(req.params.assetId);
   if (!asset) {
     return res.status(404).json('Asset does not exist');
   }
@@ -249,7 +303,9 @@ export const activateAssetById = async (req: UserRequest, res: Response) => {
   if (isNaN(+req.params.assetId) || !req.params.assetId) {
     return res.status(400).json('Asset ID is not valid');
   }
-  const asset = await getConnection().getRepository(Asset).findOne(req.params.assetId);
+  const asset = await getConnection()
+    .getRepository(Asset)
+    .findOne(req.params.assetId);
   if (!asset) {
     return res.status(404).json('Asset does not exist');
   }

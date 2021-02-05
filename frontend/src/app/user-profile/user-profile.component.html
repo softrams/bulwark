@@ -14,15 +14,15 @@
               <div class="form-group row">
                 <label for="firstName" class="col-4 col-form-label">First Name:</label>
                 <div class="col-8">
-                  <input pInputText formControlName="firstName" type="text" id="password" class="form-control" name="firstName"
-                    placeholder="First Name" style="margin-bottom: 5px;" />
+                  <input pInputText formControlName="firstName" type="text" id="password" class="form-control"
+                    name="firstName" placeholder="First Name" style="margin-bottom: 5px;" />
                 </div>
               </div>
               <div class="form-group row">
                 <label for="lastName" class="col-4 col-form-label">Last Name:</label>
                 <div class="col-8">
-                  <input pInputText formControlName="lastName" type="text" id="lastName" class="form-control" name="lastName"
-                    placeholder="Last Name" style="margin-bottom: 5px;" />
+                  <input pInputText formControlName="lastName" type="text" id="lastName" class="form-control"
+                    name="lastName" placeholder="Last Name" style="margin-bottom: 5px;" />
                 </div>
               </div>
               <div class="form-group row">
@@ -32,8 +32,8 @@
                     placeholder="Title" style="margin-bottom: 5px;" />
                 </div>
               </div>
-              <input pInputText [disabled]="isEdit ? !userForm.valid : false" type="submit" class="btn btn-primary float-right"
-                [value]="isEdit ? 'Update' : 'Edit'" />
+              <input pInputText [disabled]="isEdit ? !userForm.valid : false" type="submit"
+                class="btn btn-primary float-right" [value]="isEdit ? 'Update' : 'Edit'" />
             </div>
           </form>
         </div>
@@ -61,8 +61,8 @@
               <div *ngIf="isEmailEdit" class="form-group row">
                 <label for="newEmail" class="col-4 col-form-label">Confirm New Email:</label>
                 <div class="col-8">
-                  <input pInputText formControlName="newEmail" type="email" id="newEmail" class="form-control" name="newEmail"
-                    placeholder="" style="margin-bottom: 5px;" />
+                  <input pInputText formControlName="newEmail" type="email" id="newEmail" class="form-control"
+                    name="newEmail" placeholder="" style="margin-bottom: 5px;" />
                   <span *ngIf="user.newEmail">
                     <i class="pi pi-info-circle"></i><i style="font-size: smaller;"> Please check your email at
                       <strong>{{user?.newEmail}}</strong> to verify the address.
@@ -115,6 +115,31 @@
                 class="btn btn-primary float-right" [value]="isSecurityEdit ? 'Update' : 'Edit'" />
             </div>
           </form>
+        </div>
+      </div>
+    </p-card>
+    <br />
+    <p-card>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <h4>Teams</h4>
+            <hr />
+            <p-table [value]="user.teams">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Name</th>
+                  <th>Role</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-team>
+                <tr>
+                  <td>{{team.name}}</td>
+                  <td>{{team.role}}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
         </div>
       </div>
     </p-card>

@@ -1,5 +1,6 @@
 import { UserRequest } from '../interfaces/user-request.interface';
 import { Response } from 'express';
+import { insertReportAuditRecord } from '../routes/report-audit.controller';
 import puppeteer = require('puppeteer');
 import * as path from 'path';
 const fs = require('fs');
@@ -39,6 +40,7 @@ export const generateReport = async (req: UserRequest, res: Response) => {
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', 'attachment; filename=report.pdf');
   file.pipe(res);
+  await insertReportAuditRecord(+req.user, req.body.assessmentId);
   fs.unlink(filePath, (err, response) => {
     if (err) {
       // handle error here

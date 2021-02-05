@@ -1,7 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, OneToMany } from 'typeorm';
-import { File } from './File';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Asset } from './Asset';
 import { IsIn } from 'class-validator';
+import { Team } from './Team';
 
 @Entity()
 export class Organization {
@@ -14,4 +14,6 @@ export class Organization {
   status: string;
   @OneToMany((type) => Asset, (asset) => asset.organization)
   asset: Asset[];
+  @OneToMany((type) => Team, (team) => team.organization)
+  teams: Team[];
 }

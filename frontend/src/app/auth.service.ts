@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { Tokens } from './interfaces/Tokens';
-
+import jwt_decode from 'jwt-decode';
 @Injectable({
   providedIn: 'root',
 })
@@ -28,6 +28,18 @@ export class AuthService {
 
   getUserToken() {
     return localStorage.getItem('AUTH_TOKEN');
+  }
+
+  getUserFromToken() {
+    return jwt_decode(localStorage.getItem('AUTH_TOKEN'));
+  }
+
+  isAdmin() {
+    const token = this.getUserFromToken();
+    let found = false;
+    // tslint:disable-next-line: no-string-literal
+    found = token['admin'];
+    return found;
   }
 
   getRefreshToken() {

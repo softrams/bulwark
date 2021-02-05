@@ -1,0 +1,59 @@
+<div class="container col-6 align-self-center">
+  <p-card>
+    <form [formGroup]="teamForm" (ngSubmit)="onSubmit(teamForm)" id="teamForm">
+      <div>
+        <label>Team Name</label>
+        <input type="text" pInputText formControlName="name" name="name" class="form-control" />
+      </div>
+      <br>
+      <div class="form-row">
+        <div class="col-5">
+          <label>Active Users</label>
+          <ng-select [items]="activeUsers" bindLabel="firstName" labelForId="testerList" [multiple]="true"
+            clearAllText="Clear" formControlName="users">
+            <ng-template ng-label-tmp let-item="item" let-clear="clear">
+              <span class="ng-value-icon right" (click)="clear(item)">×</span>
+              {{item.firstName}} {{item.lastName}}
+            </ng-template>
+            <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+              {{item.firstName}} {{item.lastName}}
+            </ng-template>
+          </ng-select>
+        </div>
+        <div class="col-7">
+          <label>Role</label>
+          <p-selectButton name="roles" [options]="roles" formControlName="role" optionLabel="name">
+          </p-selectButton>
+        </div>
+      </div>
+      <br>
+      <div class="form-row">
+        <div class="col-6">
+          <label>Organization</label>
+          <p-listbox [options]="organizations" (click)="fetchOrgAssets(teamForm.controls['organization'].value)"
+            formControlName="organization" optionLabel="name"></p-listbox>
+        </div>
+        <div class="col-6">
+          <label>Assets</label>
+          <div *ngIf="assets">
+            <div *ngIf="assets.length; else no_org_assets">
+              <p-listbox [checkbox]="true" [filter]="true" [multiple]="true" [options]="assets" formControlName="assets"
+                optionLabel="name"></p-listbox>
+            </div>
+          </div>
+          <ng-template #no_org_assets>The selected organization has no active assets</ng-template>
+        </div>
+      </div>
+      <br>
+      <button [disabled]="!teamForm.valid" class="btn btn-primary float-right" type="submit" data-toggle="tooltip"
+        data-placement="bottom" title="Submit">
+        {{isCreate ? 'Create Team': 'Update Team'}}
+      </button>
+      <button (click)="navigateToAdministration()" style="margin-right: 5px;" class="btn btn-secondary float-right"
+        type="button" data-toggle="tooltip" data-placement="bottom" title="Back to Administration">
+        Back to Administration
+      </button>
+    </form>
+    <br>
+  </p-card>
+</div>

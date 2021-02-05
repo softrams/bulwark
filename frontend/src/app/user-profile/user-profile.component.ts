@@ -26,11 +26,12 @@ export class UserProfileComponent implements OnInit {
     public alertService: AlertService,
     public activatedRoute: ActivatedRoute,
     public userService: UserService
-  ) {}
+  ) {
+    this.createForms();
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ user }) => {
-      this.createForms();
       this.user = user;
       this.rebuildForm();
       this.rebuildSecurityForm();

@@ -1,6 +1,6 @@
 import { UserRequest } from '../interfaces/user-request.interface';
 import { Response } from 'express';
-import { getConnection } from 'typeorm';
+import { getConnection, In } from 'typeorm';
 import { Organization } from '../entity/Organization';
 import { status } from '../enums/status-enum';
 import { validate } from 'class-validator';
@@ -15,12 +15,12 @@ export const getActiveOrgs = async (req: UserRequest, res: Response) => {
   const orgs = await getConnection()
     .getRepository(Organization)
     .find({
-      where: { status: status.active }
+      where: { status: status.active, id: In(req.userOrgs) },
     });
   if (!orgs) {
     return res.status(404).json('Organizations do not exist');
   }
-  res.json(orgs);
+  return res.status(200).json(orgs);
 };
 
 /**
@@ -33,7 +33,7 @@ export const getArchivedOrgs = async (req: UserRequest, res: Response) => {
   const orgs = await getConnection()
     .getRepository(Organization)
     .find({
-      where: { status: status.archived }
+      where: { status: status.archived, id: In(req.userOrgs) },
     });
   if (!orgs) {
     return res.status(404).json('Organizations do not exist');
@@ -53,14 +53,16 @@ export const getOrgById = async (req: UserRequest, res: Response) => {
   if (isNaN(+req.params.id)) {
     return res.status(400).json('Invalid Organization iD');
   }
-  const org = await getConnection().getRepository(Organization).findOne(req.params.id);
+  if (!req.userOrgs.includes(+req.params.id)) {
+    return res.status(404).json('Organization not found');
+  }
+  const org = await getConnection()
+    .getRepository(Organization)
+    .findOne(req.params.id);
   if (!org) {
     return res.status(404).json('Organization does not exist');
   }
-  const resObj = {
-    name: org.name
-  };
-  res.json(resObj);
+  return res.status(200).json({ name: org.name });
 };
 /**
  * @description Archive organization by ID
@@ -72,7 +74,9 @@ export const archiveOrgById = async (req: UserRequest, res: Response) => {
   if (isNaN(+req.params.id)) {
     return res.status(400).json('Invalid Organization ID');
   }
-  const org = await getConnection().getRepository(Organization).findOne(req.params.id);
+  const org = await getConnection()
+    .getRepository(Organization)
+    .findOne(req.params.id);
   if (!org) {
     return res.status(404).json('Organization does not exist');
   }
@@ -95,7 +99,9 @@ export const activateOrgById = async (req: UserRequest, res: Response) => {
   if (isNaN(+req.params.id)) {
     return res.status(400).json('Organization ID is not valid');
   }
-  const org = await getConnection().getRepository(Organization).findOne(req.params.id);
+  const org = await getConnection()
+    .getRepository(Organization)
+    .findOne(req.params.id);
   if (!org) {
     return res.status(404).json('Organization does not exist');
   }
@@ -118,7 +124,9 @@ export const updateOrgById = async (req: UserRequest, res: Response) => {
   if (isNaN(+req.params.id)) {
     return res.status(400).json('Organization ID is not valid');
   }
-  const org = await getConnection().getRepository(Organization).findOne(req.params.id);
+  const org = await getConnection()
+    .getRepository(Organization)
+    .findOne(req.params.id);
   if (!org) {
     return res.status(404).json('Organization does not exist');
   }

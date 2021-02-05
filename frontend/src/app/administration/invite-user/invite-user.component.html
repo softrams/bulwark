@@ -1,10 +1,10 @@
-<div class="container col-12 col-md-7 mx-auto">
+<div class="container col-6 align-self-center">
   <p-card>
-    <h6>Invite a User</h6>
-    <div id="formContent">
-      <form [formGroup]="inviteForm" (ngSubmit)="onSubmit(inviteForm)" id="userForm">
-        <div class="col-12">
-          <div class="p-d-flex p-flex-column">
+    <div class="card-body">
+      <h6>Invite a User</h6>
+      <div id="formContent">
+        <form [formGroup]="inviteForm" (ngSubmit)="onSubmit(inviteForm)" id="userForm">
+          <div class="col-12">
             <div class="p-d-flex p-flex-column p-flex-md-row">
               <label for="inviteUser" class="col-12 col-md-4 col-form-label">User Email:</label>
               <div class="col-12 col-md-8">
@@ -13,11 +13,11 @@
               </div>
             </div>
           </div>
-        </div>
-        <input pInputText [disabled]="!inviteForm.valid" type="submit" class="btn btn-primary float-right"
-          value="Submit" />
-        <br />
-      </form>
+          <input pInputText [disabled]="!inviteForm.valid" type="submit" class="btn btn-primary float-right"
+            value="Invite" />
+          <br />
+        </form>
+      </div>
     </div>
   </p-card>
 </div>

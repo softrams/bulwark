@@ -1,13 +1,19 @@
 import { UserRequest } from '../interfaces/user-request.interface';
 import { getConnection } from 'typeorm';
 import { User } from '../entity/User';
+import { TeamInfo } from '../interfaces/team-info.interface';
 import { v4 as uuidv4 } from 'uuid';
 import { Response } from 'express';
 import jwt = require('jsonwebtoken');
-import { generateHash, passwordSchema, compare } from '../utilities/password.utility';
+import {
+  generateHash,
+  passwordSchema,
+  compare,
+} from '../utilities/password.utility';
 import { passwordRequirement } from '../enums/message-enum';
 import * as emailService from '../services/email.service';
 import { Config } from '../entity/Config';
+import { ROLE } from '../enums/roles-enum';
 
 /**
  * @description Login to the application
@@ -19,9 +25,10 @@ const login = async (req: UserRequest, res: Response) => {
   const { password, email } = req.body;
   const user = await getConnection()
     .getRepository(User)
-    .createQueryBuilder()
-    .where('User.email = :email', {
-      email
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.teams', 'team')
+    .where('user.email = :email', {
+      email,
     })
     .getOne();
   if (user) {
@@ -41,7 +48,9 @@ const login = async (req: UserRequest, res: Response) => {
       }
       return res
         .status(400)
-        .json('This account has not been activated.  Please check for email verification or contact an administrator.');
+        .json(
+          'This account has not been activated.  Please check for email verification or contact an administrator.'
+        );
     }
     let valid: boolean;
     try {
@@ -74,11 +83,15 @@ const forgotPassword = async (req: UserRequest, res: Response) => {
     .getRepository(User)
     .createQueryBuilder('user')
     .where('user.email = :email', {
-      email
+      email,
     })
     .getOne();
   if (!user) {
-    return res.status(400).json('A password reset request has been initiated.  Please check your email.');
+    return res
+      .status(400)
+      .json(
+        'A password reset request has been initiated.  Please check your email.'
+      );
   }
   user.uuid = uuidv4();
   await getConnection().getRepository(User).save(user);
@@ -91,7 +104,11 @@ const forgotPassword = async (req: UserRequest, res: Response) => {
         'Unable to initiate the password reset process.  The email configuration has not been set.  Please contact an administrator.'
       );
   }
-  return res.status(200).json('A password reset request has been initiated.  Please check your email.');
+  return res
+    .status(200)
+    .json(
+      'A password reset request has been initiated.  Please check your email.'
+    );
 };
 /**
  * @description Reset user password
@@ -111,7 +128,7 @@ const resetPassword = async (req: UserRequest, res: Response) => {
     .getRepository(User)
     .createQueryBuilder()
     .where('User.uuid = :uuid', {
-      uuid
+      uuid,
     })
     .getOne();
   if (user) {
@@ -122,7 +139,9 @@ const resetPassword = async (req: UserRequest, res: Response) => {
   } else {
     return res
       .status(400)
-      .json('Unable to reset user password at this time.  Please contact an administrator for assistance.');
+      .json(
+        'Unable to reset user password at this time.  Please contact an administrator for assistance.'
+      );
   }
 };
 /**
@@ -132,7 +151,14 @@ const resetPassword = async (req: UserRequest, res: Response) => {
  * @returns Tokens
  */
 const refreshSession = async (req: UserRequest, res: Response) => {
-  const user = await getConnection().getRepository(User).findOne(req.user);
+  const user = await getConnection()
+    .getRepository(User)
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.teams', 'team')
+    .where('user.id = :userId', {
+      userId: req.user,
+    })
+    .getOne();
   if (user) {
     const tokens = generateTokens(user);
     res.status(200).json(tokens);
@@ -147,17 +173,27 @@ const refreshSession = async (req: UserRequest, res: Response) => {
  * @returns Tokens
  */
 const generateTokens = (user: User) => {
-  const token = jwt.sign({ userId: user.id }, process.env.JWT_KEY, { expiresIn: '15m' });
-  const refreshToken = jwt.sign({ userId: user.id }, process.env.JWT_REFRESH_KEY, { expiresIn: '8h' });
+  const isAdmin = user.teams.some((team) => team.role === ROLE.ADMIN);
+  const token = jwt.sign(
+    { userId: user.id, admin: isAdmin },
+    process.env.JWT_KEY,
+    { expiresIn: '15m' }
+  );
+  const refreshToken = jwt.sign(
+    { userId: user.id },
+    process.env.JWT_REFRESH_KEY,
+    { expiresIn: '8h' }
+  );
   const tokens = {
     token,
-    refreshToken
+    refreshToken,
   };
   return tokens;
 };
+
 module.exports = {
   login,
   forgotPassword,
   resetPassword,
-  refreshSession
+  refreshSession,
 };

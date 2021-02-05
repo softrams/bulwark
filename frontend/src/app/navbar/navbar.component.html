@@ -13,7 +13,7 @@
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
       <a class="dropdown-item" href="#/user/profile">Profile</a>
-      <a class="dropdown-item" href="#/administration">Administration</a>
+      <a *ngIf="authService.isAdmin()" class="dropdown-item" href="#/administration">Administration</a>
       <div class="dropdown-divider"></div>
       <a class="dropdown-item" (click)="logout()" href="">Logout</a>
     </div>
