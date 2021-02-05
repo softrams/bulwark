@@ -8,7 +8,6 @@ import { Asset } from '../entity/Asset';
 import { Organization } from '../entity/Organization';
 
 export const getAllTeams = async (req: Request, res: Response) => {
-  // TODO: Remove user passwords
   const teams = await getConnection()
     .getRepository(Team)
     .createQueryBuilder('team')
@@ -70,14 +69,9 @@ export const fetchAssetsAndUpdateTeam = async (
   assetIds: number[],
   teamAssets: Asset[]
 ) => {
-  if (!assetIds) {
-    teamAssets = [];
-    return teamAssets;
-  } else {
-    const newAssets = await fetchAssets(assetIds);
-    teamAssets = newAssets;
-    return teamAssets;
-  }
+  const newAssets = await fetchAssets(assetIds);
+  teamAssets = newAssets;
+  return teamAssets;
 };
 
 export const getTeamById = async (req: UserRequest, res: Response) => {
@@ -186,7 +180,9 @@ export const removeTeamMember = async (req: UserRequest, res: Response) => {
 };
 
 export const updateTeamInfo = async (req: Request, res: Response) => {
-  const { name, organization, role, id, assetIds, users } = req.body;
+  const { name, role, id, users } = req.body;
+  let organization: Organization = req.body.organization;
+  let assetIds: number[] = req.body.assetIds;
   if (!(name || organization || role)) {
     return res.status(400).json('Team is invalid');
   }
@@ -195,9 +191,23 @@ export const updateTeamInfo = async (req: Request, res: Response) => {
   }
   const team = await getConnection()
     .getRepository(Team)
-    .findOne(id, { relations: ['users', 'assets'] });
+    .createQueryBuilder('team')
+    .leftJoinAndSelect('team.users', 'users')
+    .leftJoinAndSelect('team.assets', 'assets')
+    .leftJoinAndSelect('team.organization', 'organization')
+    .leftJoinAndSelect('organization.asset', 'orgAssets')
+    .where('team.id = :teamId', { teamId: id })
+    .select(['team', 'users', 'assets', 'organization', 'orgAssets'])
+    .getOne();
   if (!team) {
     return res.status(404).json(`A Team with ID ${id} does not exist`);
+  }
+  // If the incoming organization has changed
+  // Remove all previous asset associations
+  if (+organization.id !== +team.organization.id) {
+    for (const orgAsset of team.organization.asset) {
+      assetIds = assetIds.filter((x) => x !== orgAsset.id);
+    }
   }
   team.users = await fetchUsersAndUpdateTeam(users, team.users);
   team.assets = await fetchAssetsAndUpdateTeam(assetIds, team.assets);

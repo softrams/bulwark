@@ -506,7 +506,7 @@ describe('Team Controller', () => {
       body: {
         name: 'Alpha',
         organization: savedOrg.id,
-        asset: null,
+        assetIds: [],
         role: ROLE.TESTER,
       },
     });
@@ -517,7 +517,7 @@ describe('Team Controller', () => {
       body: {
         name: 'Alpha',
         organization: savedOrg.id,
-        asset: null,
+        assetIds: [],
         role: ROLE.TESTER,
         id: 6,
       },
@@ -530,7 +530,7 @@ describe('Team Controller', () => {
       body: {
         name: 'Alpha',
         organization: savedOrg.id,
-        asset: null,
+        assetIds: [],
         role: 'not a role',
         id: savedTeam.id,
       },

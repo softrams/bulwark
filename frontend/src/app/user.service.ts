@@ -24,6 +24,9 @@ export class UserService {
   getUsers() {
     return this.http.get<User[]>(`${this.api}/users`);
   }
+  getTesters(orgId: number) {
+    return this.http.get<User[]>(`${this.api}/testers/${orgId}`);
+  }
   getAllUsers() {
     return this.http.get<User[]>(`${this.api}/users/all`);
   }

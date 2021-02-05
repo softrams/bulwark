@@ -165,10 +165,9 @@ describe('Asset Controller', () => {
       status: 'A',
       teams: null,
     };
-    await getConnection().getRepository(Organization).save(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(1);
+      .save(org);
     const assessments: Assessment[] = [];
     const insertAsset: Asset = {
       id: null,
@@ -184,7 +183,7 @@ describe('Asset Controller', () => {
       .save(insertAsset);
     const request3 = new MockExpressRequest({
       params: {
-        id: 1,
+        id: savedOrg.id,
       },
       userOrgs: [savedOrg.id],
       userAssets: [savedAsset.id],

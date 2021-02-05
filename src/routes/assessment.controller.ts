@@ -8,6 +8,10 @@ import { Vulnerability } from '../entity/Vulnerability';
 import { Organization } from '../entity/Organization';
 import { Report } from '../classes/Report';
 import { Config } from '../entity/Config';
+import {
+  hasAssessmentAccess,
+  hasTesterAssetAccess,
+} from '../utilities/role.utility';
 const userController = require('../routes/user.controller');
 
 /**
@@ -16,19 +20,32 @@ const userController = require('../routes/user.controller');
  * @param {Response} res
  * @returns Asset assessments
  */
-export const getAssessmentsByAssetId = async (req: UserRequest, res: Response) => {
+export const getAssessmentsByAssetId = async (
+  req: UserRequest,
+  res: Response
+) => {
   if (!req.params.id) {
-    return res.status(400).json('Invalid Assessment request');
+    return res.status(400).json('Invalid Asset request');
   }
   if (isNaN(+req.params.id)) {
     return res.status(400).json('Invalid Asset ID');
   }
-  const assessment = await getConnection()
+  const asset = await getConnection()
+    .getRepository(Asset)
+    .findOne(req.params.id);
+  if (!asset) {
+    return res.status(404).json('Asset does not exist');
+  }
+  const hasAccess = await hasTesterAssetAccess(req, asset.id);
+  if (!hasAccess) {
+    return res.status(403).json('Authorization is required');
+  }
+  const assessments = await getConnection()
     .getRepository(Assessment)
     .createQueryBuilder('assessment')
     .leftJoinAndSelect('assessment.testers', 'tester')
     .where('assessment.asset = :assessmentId', {
-      assessmentId: req.params.id
+      assessmentId: asset.id,
     })
     .select([
       'assessment.id',
@@ -37,10 +54,10 @@ export const getAssessmentsByAssetId = async (req: UserRequest, res: Response) =
       'assessment.startDate',
       'assessment.endDate',
       'tester.firstName',
-      'tester.lastName'
+      'tester.lastName',
     ])
     .getMany();
-  res.status(200).json(assessment);
+  return res.status(200).json({ assessments, readOnly: !hasAccess });
 };
 /**
  * @description Get all vulnerabilities by assessment
@@ -58,7 +75,7 @@ export const getAssessmentVulns = async (req: UserRequest, res: Response) => {
   const vulnerabilities = await getConnection()
     .getRepository(Vulnerability)
     .find({
-      where: { assessment: req.params.id }
+      where: { assessment: req.params.id },
     });
   if (!vulnerabilities) {
     return res.status(404).json('Vulnerabilities do not exist');
@@ -75,9 +92,15 @@ export const createAssessment = async (req: UserRequest, res: Response) => {
   if (isNaN(req.body.asset)) {
     return res.status(400).json('Asset ID is invalid');
   }
-  const asset = await getConnection().getRepository(Asset).findOne(req.body.asset);
+  const asset = await getConnection()
+    .getRepository(Asset)
+    .findOne(req.body.asset);
   if (!asset) {
     return res.status(404).json('Asset does not exist');
+  }
+  const hasAccess = await hasTesterAssetAccess(req, asset.id);
+  if (!hasAccess) {
+    return res.status(403).json('Authorization is required');
   }
   if (!req.body.testers) {
     return res.status(400).json('No testers have been selected');
@@ -121,14 +144,21 @@ export const getAssessmentById = async (req: UserRequest, res: Response) => {
     .createQueryBuilder('assessment')
     .leftJoinAndSelect('assessment.testers', 'tester')
     .where('assessment.id = :assessmentId', {
-      assessmentId: req.params.assessmentId
+      assessmentId: req.params.assessmentId,
     })
-    .select(['assessment', 'tester.firstName', 'tester.lastName', 'tester.title', 'tester.id'])
+    .select([
+      'assessment',
+      'tester.firstName',
+      'tester.lastName',
+      'tester.title',
+      'tester.id',
+    ])
     .getOne();
   if (!assessment) {
     return res.status(404).json('Assessment does not exist');
   }
-  res.status(200).json(assessment);
+  const hasAccess = await hasAssessmentAccess(req, assessment.id);
+  return res.status(200).json({ assessment, readOnly: !hasAccess });
 };
 /**
  * @description Update assessment
@@ -149,6 +179,10 @@ export const updateAssessmentById = async (req: UserRequest, res: Response) => {
   if (!assessment) {
     return res.status(404).json('Assessment does not exist');
   }
+  const hasAccess = await hasAssessmentAccess(req, assessment.id);
+  if (!hasAccess) {
+    return res.status(403).json('Authorization is required');
+  }
   if (!req.body.testers) {
     return res.status(400).json('No testers have been selected');
   }
@@ -158,7 +192,9 @@ export const updateAssessmentById = async (req: UserRequest, res: Response) => {
   assessment.id = assessmentId;
   assessment.testers = await userController.getUsersById(req.body.testers);
   if (assessment.startDate > assessment.endDate) {
-    return res.status(400).send('The assessment start date can not be later than the end date');
+    return res
+      .status(400)
+      .send('The assessment start date can not be later than the end date');
   }
   const errors = await validate(assessment);
   if (errors.length > 0) {
@@ -174,7 +210,10 @@ export const updateAssessmentById = async (req: UserRequest, res: Response) => {
  * @param {Response} res
  * @returns report information
  */
-export const queryReportDataByAssessment = async (req: UserRequest, res: Response) => {
+export const queryReportDataByAssessment = async (
+  req: UserRequest,
+  res: Response
+) => {
   if (!req.params.assessmentId) {
     return res.status(400).send('Invalid report request');
   }
@@ -186,10 +225,15 @@ export const queryReportDataByAssessment = async (req: UserRequest, res: Respons
     .createQueryBuilder('assessment')
     .leftJoinAndSelect('assessment.testers', 'tester')
     .where('assessment.id = :assessmentId', {
-      assessmentId: req.params.assessmentId
+      assessmentId: req.params.assessmentId,
     })
     .leftJoinAndSelect('assessment.asset', 'asset')
-    .select(['assessment', 'tester.firstName', 'tester.lastName', 'tester.title'])
+    .select([
+      'assessment',
+      'tester.firstName',
+      'tester.lastName',
+      'tester.title',
+    ])
     .getOne();
   const assessmentForId = await getConnection()
     .getRepository(Assessment)
@@ -197,9 +241,11 @@ export const queryReportDataByAssessment = async (req: UserRequest, res: Respons
   const asset = await getConnection()
     .getRepository(Asset)
     .findOne(assessmentForId.asset.id, {
-      relations: ['organization']
+      relations: ['organization'],
     });
-  const organization = await getConnection().getRepository(Organization).findOne(asset.organization.id);
+  const organization = await getConnection()
+    .getRepository(Organization)
+    .findOne(asset.organization.id);
   const vulnerabilities = await getConnection()
     .getRepository(Vulnerability)
     .createQueryBuilder('vuln')
@@ -207,9 +253,16 @@ export const queryReportDataByAssessment = async (req: UserRequest, res: Respons
     .leftJoinAndSelect('vuln.problemLocations', 'problemLocation')
     .leftJoinAndSelect('vuln.resources', 'resource')
     .where('vuln.assessmentId = :assessmentId', {
-      assessmentId: assessment.id
+      assessmentId: assessment.id,
     })
-    .select(['vuln', 'screenshot.id', 'screenshot.originalname', 'screenshot.mimetype', 'problemLocation', 'resource'])
+    .select([
+      'vuln',
+      'screenshot.id',
+      'screenshot.originalname',
+      'screenshot.mimetype',
+      'problemLocation',
+      'resource',
+    ])
     .getMany();
   const config = await getConnection()
     .getRepository(Config)
@@ -224,7 +277,7 @@ export const queryReportDataByAssessment = async (req: UserRequest, res: Respons
   } else {
     report.companyName = null;
   }
-  res.status(200).json(report);
+  return res.status(200).json(report);
 };
 
 /**
@@ -240,11 +293,21 @@ export const deleteAssessmentById = async (req: UserRequest, res: Response) => {
   if (isNaN(+req.params.assessmentId)) {
     return res.status(400).send('Invalid assessment ID');
   }
-  const assessment = await getConnection().getRepository(Assessment).findOne(req.params.assessmentId);
+  const assessment = await getConnection()
+    .getRepository(Assessment)
+    .findOne(req.params.assessmentId);
   if (!assessment) {
     return res.status(404).send('Assessment does not exist.');
   } else {
+    const hasAccess = await hasAssessmentAccess(req, assessment.id);
+    if (!hasAccess) {
+      return res.status(403).json('Authorization is required');
+    }
     await getConnection().getRepository(Assessment).delete(assessment);
-    res.status(200).json(`Assessment #${assessment.id}: "${assessment.name}" successfully deleted`);
+    return res
+      .status(200)
+      .json(
+        `Assessment #${assessment.id}: "${assessment.name}" successfully deleted`
+      );
   }
 };

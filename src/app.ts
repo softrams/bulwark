@@ -91,10 +91,15 @@ createConnection().then((_) => {
   app.get('/api/user', jwtMiddleware.checkToken, userController.getUser);
   app.get(
     '/api/users/all',
-    jwtMiddleware.checkToken,
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
     userController.getAllUsers
   );
   app.get('/api/users', jwtMiddleware.checkToken, userController.getUsers);
+  app.get(
+    '/api/testers/:orgId',
+    jwtMiddleware.checkToken,
+    userController.getTesters
+  );
   app.post(
     '/api/refresh',
     jwtMiddleware.checkRefreshToken,
@@ -221,7 +226,7 @@ createConnection().then((_) => {
   // Admin Routes
   app.patch(
     '/api/organization/:id/asset/:assetId',
-    [jwtMiddleware.checkToken, , jwtMiddleware.isAdmin],
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
     assetController.updateAssetById
   );
   app.post(

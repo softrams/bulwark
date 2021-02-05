@@ -57,13 +57,17 @@ export class AssessmentResolver implements Resolve<any> {
     private userService: UserService
   ) {}
   resolve(route: ActivatedRouteSnapshot) {
-    if (route.params.assetId && route.params.assessmentId) {
+    if (
+      route.params.assetId &&
+      route.params.assessmentId &&
+      route.params.orgId
+    ) {
       return forkJoin([
         this.apiService.getAssessment(
           route.params.assetId,
           route.params.assessmentId
         ),
-        this.userService.getUsers(),
+        this.userService.getTesters(route.params.orgId),
       ]).pipe(
         map((result) => {
           return {
@@ -73,7 +77,7 @@ export class AssessmentResolver implements Resolve<any> {
         })
       );
     } else {
-      return this.userService.getUsers();
+      return this.userService.getTesters(route.params.orgId);
     }
   }
 }

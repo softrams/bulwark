@@ -67,7 +67,7 @@
       data-toggle="tooltip" data-placement="bottom" title="View Active Assets">
       View Active
     </button>
-    <button (click)="navigateToCreateAsset()" *ngIf="!isArchive" type="button" class="btn btn-primary ">
+    <button (click)="navigateToCreateAsset()" *ngIf="!isArchive && isAdmin" type="button" class="btn btn-primary ">
       Add Asset
     </button>
   </div>

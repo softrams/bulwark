@@ -35,14 +35,17 @@ export const getOrgAssets = async (req: UserRequest, res: Response) => {
       status: status.active,
     })
     .andWhere('asset.id in(:userAssets)', {
-      userAssets: req.userAssets,
+      userAssets:
+        getConnection().driver.options.type === 'sqlite'
+          ? req.userAssets
+          : [null, ...req.userAssets],
     })
     .select(['asset.id', 'asset.name', 'asset.status', 'jira.id'])
     .getMany();
   if (!asset) {
     return res.status(404).json('Assets not found');
   }
-  res.json(asset);
+  return res.status(200).json(asset);
 };
 /**
  * @description Get organization archived assets
@@ -71,7 +74,10 @@ export const getArchivedOrgAssets = async (req: UserRequest, res: Response) => {
       status: status.archived,
     })
     .andWhere('asset.id in(:userAssets)', {
-      userAssets: req.userAssets,
+      userAssets:
+        getConnection().driver.options.type === 'sqlite'
+          ? req.userAssets
+          : [null, ...req.userAssets],
     })
     .select(['asset.id', 'asset.name', 'asset.status', 'jira.id'])
     .getMany();

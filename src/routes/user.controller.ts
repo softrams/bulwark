@@ -13,6 +13,7 @@ import {
 } from '../utilities/password.utility';
 import * as emailService from '../services/email.service';
 import { Config } from '../entity/Config';
+import { ROLE } from '../enums/roles-enum';
 /**
  * @description Register user
  * @param {UserRequest} req
@@ -271,6 +272,34 @@ export const getUsers = async (req: Request, res: Response) => {
     .getRepository(User)
     .createQueryBuilder('user')
     .where('user.active = true')
+    .select(['user.id', 'user.firstName', 'user.lastName', 'user.title'])
+    .getMany();
+  return res.status(200).json(users);
+};
+/**
+ * @description Get Testers
+ * @param {UserRequest} req
+ * @param {Response} res
+ * @returns user array
+ */
+export const getTesters = async (req: UserRequest, res: Response) => {
+  if (!req.params.orgId) {
+    return res.status(400).json('Invalid Organization ID');
+  }
+  if (isNaN(+req.params.orgId)) {
+    return res.status(400).json('Invalid Organization ID');
+  }
+  if (!req.userOrgs.includes(+req.params.orgId)) {
+    return res.status(404).json('Testers not found');
+  }
+  const users = await getConnection()
+    .getRepository(User)
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.teams', 'teams')
+    .leftJoinAndSelect('teams.organization', 'organization')
+    .where('user.active = true')
+    .andWhere('teams.role != :role', { role: ROLE.READONLY })
+    .andWhere('teams.organization.id = :orgId', { orgId: +req.params.orgId })
     .select(['user.id', 'user.firstName', 'user.lastName', 'user.title'])
     .getMany();
   return res.status(200).json(users);
