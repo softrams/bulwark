@@ -40,6 +40,7 @@ services:
         sleep 1
       done
       && echo MySQL should be up - starting up Bulwark.
+      && npm run postinstall
       && echo Initial DB Creation
       && npm run docker:check
       && npm run start"
