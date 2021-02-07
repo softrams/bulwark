@@ -59,20 +59,22 @@ export class TeamFormComponent implements OnInit, OnChanges {
               name: team.role,
             };
             team.role = role;
-            this.appService
-              .getOrganizationAssets(team.organization.id)
-              .then((assets: Asset[]) => {
-                this.assets = assets;
-                this.teamForm.patchValue(team);
-              });
+            this.teamForm.patchValue(team);
+            if (team.organization) {
+              this.appService
+                .getOrganizationAssets(team.organization.id)
+                .then((assets: Asset[]) => {
+                  this.assets = assets;
+                });
+            }
           });
         }
       });
     });
     this.roles = [
-      { name: ROLE.ADMIN },
-      { name: ROLE.TESTER },
       { name: ROLE.READONLY },
+      { name: ROLE.TESTER },
+      { name: ROLE.ADMIN },
     ];
   }
 
@@ -86,7 +88,7 @@ export class TeamFormComponent implements OnInit, OnChanges {
       role: ['', [Validators.required]],
       users: [''],
       assets: [''],
-      organization: ['', [Validators.required]],
+      organization: [''],
     });
   }
 

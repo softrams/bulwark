@@ -28,8 +28,12 @@
       <ng-template pTemplate="body" let-team>
         <tr>
           <td>{{team?.name}}</td>
-          <td>{{team?.organization?.name}}</td>
-          <td><span *ngFor="let asset of team.assets; let isLast=last">{{asset.name}}{{isLast ? '' : ', '}}</span></td>
+          <td>{{team?.role !== 'Admin' ? team?.organization?.name : 'N/A'}}</td>
+          <td><span *ngIf="team?.role === 'Admin'; else no_org_assets">N/A</span>
+            <ng-template #no_org_assets><span *ngFor="let asset of team.assets; let isLast=last">{{asset.name}}{{isLast
+                ? '' : ',
+                '}}</span></ng-template>
+          </td>
           <td>{{team?.role}}</td>
           <td>{{team?.users?.length}}</td>
           <td>
