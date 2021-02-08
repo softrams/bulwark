@@ -6,13 +6,14 @@ import { getConnection } from 'typeorm';
 import { User } from '../entity/User';
 import { ROLE } from '../enums/roles-enum';
 import { Response } from 'express';
+import { ApiKey } from '../entity/ApiKey';
 
 /**
  * @description Checks for valid token before API logic
  * @param {Request} req
  * @param {Response} res
  */
-export const checkToken = (req: UserRequest, res: Response, next) => {
+export const checkToken = async (req: UserRequest, res: Response, next) => {
   const token = req.headers.authorization; // Express headers are auto converted to lowercase
   if (token) {
     jwt.verify(token, process.env.JWT_KEY, async (err, decoded) => {
@@ -25,7 +26,13 @@ export const checkToken = (req: UserRequest, res: Response, next) => {
       }
     });
   } else {
-    return res.status(401).json('Authorization token not supplied');
+    const apiKey = req.headers.x_api_key;
+    if (apiKey) {
+      await fetchRoles(null, apiKey);
+      next();
+    } else {
+      return res.status(401).json('Authorization token not supplied');
+    }
   }
 };
 
@@ -72,19 +79,27 @@ export const isAdmin = async (req, res, next) => {
 // Determine if the user is an Administrator
 // If the user is an administrator, return all organizations and assets
 // Else return only the organization and assets associated to team
-export const fetchRoles = async (req: UserRequest) => {
-  const user = await getConnection()
-    .getRepository(User)
-    .findOne(req.user, {
-      join: {
-        alias: 'user',
-        leftJoinAndSelect: {
-          teams: 'user.teams',
-          organization: 'teams.organization',
-          assets: 'teams.assets',
+export const fetchRoles = async (
+  req?: UserRequest,
+  apiKey?: string | string[]
+) => {
+  let user: User;
+  if (apiKey && !req.user) {
+    user = await fetchUserByApiKey(apiKey);
+  } else {
+    user = await getConnection()
+      .getRepository(User)
+      .findOne(req.user, {
+        join: {
+          alias: 'user',
+          leftJoinAndSelect: {
+            teams: 'user.teams',
+            organization: 'teams.organization',
+            assets: 'teams.assets',
+          },
         },
-      },
-    });
+      });
+  }
   req.userTeams = user.teams;
   const isAdmin = req.userTeams.some((team) => team.role === ROLE.ADMIN);
   if (isAdmin) {
@@ -104,4 +119,18 @@ export const fetchRoles = async (req: UserRequest) => {
       }
     }
   }
+};
+
+const fetchUserByApiKey = async (apiKey) => {
+  const user = await getConnection()
+    .getRepository(ApiKey)
+    .createQueryBuilder('apiKey')
+    .leftJoinAndSelect('apiKey.user', 'user')
+    .select(['user'])
+    .leftJoinAndSelect('user.teams', 'teams')
+    .leftJoinAndSelect('teams.organization', 'organization')
+    .leftJoinAndSelect('teams.assets', 'assets')
+    .where('apiKey.key =:apiKey', { apiKey })
+    .getOne();
+  return apiKey.user;
 };

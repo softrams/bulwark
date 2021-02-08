@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AlertService } from '../alert/alert.service';
 import { User } from '../interfaces/User';
 import { UserService } from '../user.service';
+import { ApiKey } from '../interfaces/ApiKey';
 
 @Component({
   selector: 'app-user-profile',
@@ -19,6 +20,7 @@ export class UserProfileComponent implements OnInit {
   isSecurityEdit = false;
   isEmailEdit = false;
   user: User;
+  userApiKeyInfo: ApiKey;
   constructor(
     private fb: FormBuilder,
     public authService: AuthService,
@@ -37,6 +39,7 @@ export class UserProfileComponent implements OnInit {
       this.rebuildSecurityForm();
       this.rebuildEmailForm();
     });
+    this.getApiKey();
   }
 
   createForms() {
@@ -156,5 +159,37 @@ export class UserProfileComponent implements OnInit {
       this.emailForm.disable();
       this.rebuildEmailForm();
     });
+  }
+
+  generateApiKey() {
+    const confirmMessage = this.userApiKeyInfo
+      ? 'Generating a new API key will deactivate the current API key. Do you want to continue?'
+      : 'Are you sure you want to generate a new API key?';
+    const r = confirm(confirmMessage);
+    if (r) {
+      this.authService.generateApiKey().subscribe((res) => {
+        this.alertService.success('API key successfully generated');
+        this.getApiKey();
+        alert(res);
+      });
+    }
+  }
+
+  getApiKey() {
+    this.authService.getApiKeyInfo().subscribe((res: ApiKey) => {
+      this.userApiKeyInfo = res;
+    });
+  }
+
+  deactivateApiKey() {
+    const r = confirm('Are you sure you want to deactivate this API key?');
+    if (r) {
+      this.authService
+        .deactivateApiKey(this.userApiKeyInfo.id)
+        .subscribe((res: string) => {
+          this.alertService.success(res);
+          this.getApiKey();
+        });
+    }
   }
 }

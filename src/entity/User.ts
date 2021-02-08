@@ -1,19 +1,26 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  OneToMany,
+} from 'typeorm';
 import { IsEmail, IsUUID, IsOptional } from 'class-validator';
 import { dynamicNullable } from '../utilities/column-mapper.utility';
 import { Team } from '../entity/Team';
+import { ApiKey } from './ApiKey';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn({})
   id: number;
   @Column({
-    unique: true
+    unique: true,
   })
   @IsEmail()
   email: string;
   @Column({
-    nullable: true
+    nullable: true,
   })
   @IsEmail()
   newEmail: string;
@@ -22,7 +29,7 @@ export class User {
   @Column()
   active: boolean;
   @Column({
-    nullable: true
+    nullable: true,
   })
   @IsOptional()
   @IsUUID()
@@ -35,4 +42,6 @@ export class User {
   title: string;
   @ManyToMany(() => Team, (team) => team.users)
   teams: Team[];
+  @OneToMany((type) => ApiKey, (apiKey) => apiKey.user)
+  apiKey: ApiKey[];
 }

@@ -88,4 +88,24 @@ export class AuthService {
     const refreshToken = this.getRefreshToken();
     return this.http.post(`${this.api}/refresh`, { refreshToken });
   }
+
+  generateApiKey() {
+    return this.http.post(`${this.api}/user/key`, null);
+  }
+
+  getApiKeyInfo() {
+    return this.http.get(`${this.api}/user/key`);
+  }
+
+  getApiKeysInfo() {
+    return this.http.get(`${this.api}/keys`);
+  }
+
+  deactivateApiKey(id: number) {
+    return this.http.patch(`${this.api}/user/key/${id}`, null);
+  }
+
+  adminDeactivateApiKey(id: number) {
+    return this.http.patch(`${this.api}/key/${id}`, null);
+  }
 }

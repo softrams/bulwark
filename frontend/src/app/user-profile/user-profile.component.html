@@ -118,6 +118,37 @@
         </div>
       </div>
     </p-card>
+    <br>
+    <p-card>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <h4>Active API Key</h4>
+            <i class="pi pi-info-circle"></i><i style="font-size: smaller;"> A generated API key can be used in place of
+              traditional username/password authentication, allowing for all actions against Bulwark that the user is
+              authorized for.</i>
+            <hr />
+            <div *ngIf="userApiKeyInfo; else noApiKey">
+              <p>
+                ID: {{userApiKeyInfo?.id}}<br>
+                Created on {{userApiKeyInfo?.createdDate | date: 'longDate':'UTC'}}<br>
+                Last used on {{userApiKeyInfo?.lastUpdatedDate | date: 'longDate':'UTC'}}<br>
+                <button (click)="deactivateApiKey()" pInputText type="button" class="btn btn-warning float-left"
+                  data-toggle="tooltip" data-placement="bottom" title="Deactivate API Key">
+                  <i class="pi pi-trash"></i>
+                </button>
+              </p>
+            </div>
+            <ng-template #noApiKey>
+              <p>An active API key does not exist.</p>
+            </ng-template>
+            <button (click)="generateApiKey()" pInputText type="button" class="btn btn-primary float-right">
+              Generate API Key
+            </button>
+          </div>
+        </div>
+      </div>
+    </p-card>
     <br />
     <p-card>
       <div class="card-body">
