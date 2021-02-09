@@ -28,21 +28,14 @@ export const generateApiKey = async (req: UserRequest, res: Response) => {
     active: true,
     user,
   };
-  const errors = await validate(apiKey);
-  if (errors.length) {
-    return res.status(400).json('Invalid API Key');
-  } else {
-    await deactivateExistingApiKeys(user);
-    const savedApiKey = await getConnection()
-      .getRepository(ApiKey)
-      .save(apiKey);
-    return res.status(200).json(
-      `Write down the following keys and keep it in a safe place. You will not be able to retrieve the keys at a later time. 
+  await deactivateExistingApiKeys(user);
+  const savedApiKey = await getConnection().getRepository(ApiKey).save(apiKey);
+  return res.status(200).json(
+    `Write down the following keys and keep it in a safe place. You will not be able to retrieve the keys at a later time. 
       
       Bulwark-Api-Key: ${savedApiKey.key}
       Bulwark-Secret-Key: ${secretBuf.toString('hex')}`
-    );
-  }
+  );
 };
 
 /**
