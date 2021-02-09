@@ -16,6 +16,7 @@ import { ReportAudit } from '../entity/ReportAudit';
 import { Resource } from '../entity/Resource';
 import { Vulnerability } from '../entity/Vulnerability';
 import { File } from '../entity/File';
+import { ApiKey } from '../entity/ApiKey';
 
 describe('User Controller', () => {
   beforeEach(() => {
@@ -36,6 +37,7 @@ describe('User Controller', () => {
         Resource,
         Jira,
         File,
+        ApiKey,
       ],
       synchronize: true,
       logging: false,

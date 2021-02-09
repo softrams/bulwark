@@ -17,6 +17,8 @@ export class ApiKey {
   @Column()
   key: string;
   @Column()
+  secretKey: string;
+  @Column()
   active: boolean;
   @Column()
   @IsDate()

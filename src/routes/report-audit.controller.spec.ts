@@ -19,6 +19,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { generateHash } from '../utilities/password.utility';
 import MockExpressRequest = require('mock-express-request');
 import { Team } from '../entity/Team';
+import { ApiKey } from '../entity/ApiKey';
 
 describe('Report Audit Controller', () => {
   beforeEach(() => {
@@ -38,6 +39,7 @@ describe('Report Audit Controller', () => {
         ProblemLocation,
         Resource,
         Team,
+        ApiKey,
       ],
       synchronize: true,
       logging: false,

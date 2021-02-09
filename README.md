@@ -17,18 +17,21 @@
 - Security Report Generation
 - Jira Integration
 - Team-based Roles Authorization
+- API Key & Management
 - Email Integration
 - Markdown Support
+
+## Note
+
+Please keep in mind, this project is in early development.
+
+## Demo
 
 ![Bulwark Walkthrough Demo](https://github.com/Whamo12/media/blob/master/bulwark_report_demo.gif)
 
 ## Jira Integration
 
 ![Bulwark Jira Demo](https://github.com/Whamo12/media/blob/master/bulwark_jira_demo.gif)
-
-## Note
-
-Please keep in mind, this project is in early development.
 
 ## Launch with Docker
 
@@ -361,6 +364,49 @@ _Please note: The default user is automatically assigned to the `Administrators`
 </table>
 
 <br>
+
+## API Key & Management
+
+A user may generate a single API key which can be used in place of their authorization token. This API key allows for all actions against the application that the user is authorized for.
+
+### Generating an API key pair
+
+1. Login to the application
+2. Navigate to the `User Profile` section
+3. Select `Generate API Key`
+
+This action will generate a pair of keys:
+
+1. `Bulwark-Api-Key`
+   1. This is a generated plaintext value to identify the user.
+2. `Bulwark-Secret-Key`
+   1. This is a generated plaintext value to verify the user by comparing a [Bcrypt](https://www.npmjs.com/package/bcrypt) hash stored in the database.
+
+<strong>Write down the generated keys in a safe place. You will not be able to retrieve the keys at a later time.</strong>
+
+### How to use API keys
+
+The API key pair values must be matched and appended to the following HTTP request headers:
+
+- `Bulwark-Api-Key`
+- `Bulwark-Secret-Key`
+
+Example:
+
+```
+GET /api/assessment/1 HTTP/1.1
+Host: localhost:5000
+Accept: application/json, text/plain, */*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Bulwark-Api-Key: {{changeMe}}
+Bulwark-Secret-Key: {{changeMe}}
+Origin: http://localhost:4200
+Connection: close
+Referer: http://localhost:4200/
+Pragma: no-cache
+Cache-Control: no-cache
+```
 
 ## Built With
 

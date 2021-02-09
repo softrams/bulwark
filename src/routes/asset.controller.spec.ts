@@ -17,7 +17,7 @@ import MockExpressResponse = require('mock-express-response');
 import MockExpressRequest = require('mock-express-request');
 import { Jira } from '../entity/Jira';
 import { Team } from '../entity/Team';
-
+import { ApiKey } from '../entity/ApiKey';
 describe('Asset Controller', () => {
   beforeEach(async () => {
     await createConnection({
@@ -35,6 +35,7 @@ describe('Asset Controller', () => {
         Resource,
         Jira,
         Team,
+        ApiKey,
       ],
       synchronize: true,
       logging: false,

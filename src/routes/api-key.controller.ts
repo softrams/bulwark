@@ -5,6 +5,7 @@ import { ApiKey } from '../entity/ApiKey';
 const crypto = require('crypto');
 import { validate } from 'class-validator';
 import { Response } from 'express';
+import { generateHash } from '../utilities/password.utility';
 
 /**
  * @description Generates an active API key.  Deactivates deprecated keys
@@ -15,9 +16,12 @@ import { Response } from 'express';
 export const generateApiKey = async (req: UserRequest, res: Response) => {
   const user = await getConnection().getRepository(User).findOne(req.user);
   const buf = crypto.randomBytes(24);
+  const secretBuf = crypto.randomBytes(24);
+  const secretKey = await generateHash(secretBuf.toString('hex'));
   const apiKey: ApiKey = {
     id: null,
     key: buf.toString('hex'),
+    secretKey,
     createdDate: new Date(),
     lastUpdatedDate: new Date(),
     lastUpdatedBy: +req.user,
@@ -32,11 +36,12 @@ export const generateApiKey = async (req: UserRequest, res: Response) => {
     const savedApiKey = await getConnection()
       .getRepository(ApiKey)
       .save(apiKey);
-    return res
-      .status(200)
-      .json(
-        `Write down the API key and keep it in a safe place: ${savedApiKey.key}`
-      );
+    return res.status(200).json(
+      `Write down the following keys and keep it in a safe place. You will not be able to retrieve the keys at a later time. 
+      
+      Bulwark-Api-Key: ${savedApiKey.key}
+      Bulwark-Secret-Key: ${secretBuf.toString('hex')}`
+    );
   }
 };
 
