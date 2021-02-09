@@ -16,6 +16,7 @@ import MockExpressRequest = require('mock-express-request');
 import MockExpressResponse = require('mock-express-response');
 import { ROLE } from '../enums/roles-enum';
 import { status } from '../enums/status-enum';
+import { ApiKey } from '../entity/ApiKey';
 import {
   createTeam,
   addTeamMember,
@@ -46,6 +47,7 @@ describe('Team Controller', () => {
         ProblemLocation,
         Resource,
         Team,
+        ApiKey,
       ],
       synchronize: true,
       logging: false,

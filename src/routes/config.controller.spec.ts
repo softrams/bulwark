@@ -16,6 +16,8 @@ import { Resource } from '../entity/Resource';
 import { Vulnerability } from '../entity/Vulnerability';
 import { Config } from '../entity/Config';
 import { File } from '../entity/File';
+import { ApiKey } from '../entity/ApiKey';
+
 describe('config controller', () => {
   beforeEach(() => {
     return createConnection({
@@ -35,6 +37,7 @@ describe('config controller', () => {
         Resource,
         Jira,
         File,
+        ApiKey,
       ],
       synchronize: true,
       logging: false,

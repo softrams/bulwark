@@ -32,6 +32,7 @@ import * as jwtMiddleware from './middleware/jwt.middleware';
 import { generateReport } from './utilities/puppeteer.utility';
 import * as configController from './routes/config.controller';
 import * as teamController from './routes/team.controller';
+import * as apiKeyController from './routes/api-key.controller';
 const helmet = require('helmet');
 const cors = require('cors');
 const app = express();
@@ -206,6 +207,21 @@ createConnection().then((_) => {
     jwtMiddleware.checkToken,
     teamController.getMyTeams
   );
+  app.post(
+    '/api/user/key',
+    jwtMiddleware.checkToken,
+    apiKeyController.generateApiKey
+  );
+  app.get(
+    '/api/user/key',
+    jwtMiddleware.checkToken,
+    apiKeyController.getUserApiKeyInfo
+  );
+  app.patch(
+    '/api/user/key/:id',
+    jwtMiddleware.checkToken,
+    apiKeyController.deleteApiKeyAsUser
+  );
 
   // Public Routes
   app.post('/api/user/register', userController.register);
@@ -328,5 +344,15 @@ createConnection().then((_) => {
     '/api/team/asset/remove',
     [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
     teamController.removeTeamAsset
+  );
+  app.get(
+    '/api/keys',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    apiKeyController.getAdminApiKeyInfo
+  );
+  app.patch(
+    '/api/key/:id',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    apiKeyController.deleteApiKeyAsAdmin
   );
 });

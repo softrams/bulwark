@@ -14,6 +14,7 @@ import * as assessmentController from './assessment.controller';
 import { Jira } from '../entity/Jira';
 import { Team } from '../entity/Team';
 import { ROLE } from '../enums/roles-enum';
+import { ApiKey } from '../entity/ApiKey';
 
 describe('Assessment Controller', () => {
   beforeEach(async () => {
@@ -32,6 +33,7 @@ describe('Assessment Controller', () => {
         Resource,
         Jira,
         Team,
+        ApiKey,
       ],
       synchronize: true,
       logging: false,

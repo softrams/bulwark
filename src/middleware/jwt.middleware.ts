@@ -6,15 +6,17 @@ import { getConnection } from 'typeorm';
 import { User } from '../entity/User';
 import { ROLE } from '../enums/roles-enum';
 import { Response } from 'express';
+import { ApiKey } from '../entity/ApiKey';
+import { compare } from '../utilities/password.utility';
 
 /**
  * @description Checks for valid token before API logic
  * @param {Request} req
  * @param {Response} res
  */
-export const checkToken = (req: UserRequest, res: Response, next) => {
-  const token = req.headers.authorization; // Express headers are auto converted to lowercase
-  if (token) {
+export const checkToken = async (req: UserRequest, res: Response, next) => {
+  if (req.headers.authorization) {
+    const token = req.headers.authorization; // Express headers are auto converted to lowercase
     jwt.verify(token, process.env.JWT_KEY, async (err, decoded) => {
       if (err) {
         return res.status(401).json('Authorization token is not valid');
@@ -25,7 +27,13 @@ export const checkToken = (req: UserRequest, res: Response, next) => {
       }
     });
   } else {
-    return res.status(401).json('Authorization token not supplied');
+    const apiKey = req.header('Bulwark-Api-Key');
+    const secretApiKey = req.header('Bulwark-Secret-Key');
+    if (apiKey && secretApiKey) {
+      await fetchRoles(req, res, apiKey, secretApiKey, next);
+    } else {
+      return res.status(401).json('Authorization token not supplied');
+    }
   }
 };
 
@@ -72,19 +80,33 @@ export const isAdmin = async (req, res, next) => {
 // Determine if the user is an Administrator
 // If the user is an administrator, return all organizations and assets
 // Else return only the organization and assets associated to team
-export const fetchRoles = async (req: UserRequest) => {
-  const user = await getConnection()
-    .getRepository(User)
-    .findOne(req.user, {
-      join: {
-        alias: 'user',
-        leftJoinAndSelect: {
-          teams: 'user.teams',
-          organization: 'teams.organization',
-          assets: 'teams.assets',
-        },
-      },
-    });
+export const fetchRoles = async (
+  req?: UserRequest,
+  res?: Response,
+  apiKey?: string | string[],
+  secretKey?: string | string[],
+  next?
+) => {
+  let user: User;
+  if (apiKey && secretKey) {
+    const apiKeyInfo = await fetchUserByApiKey(apiKey, secretKey);
+    if (!apiKeyInfo) {
+      return res
+        .status(401)
+        .json('The provided API key or Secret key is not valid');
+    } else {
+      user = apiKeyInfo.user;
+      req.user = user.id.toString();
+      await setUserRoles(req, user);
+      next();
+    }
+  } else {
+    user = await fetchUserByJwt(req.user);
+    await setUserRoles(req, user);
+  }
+};
+
+const setUserRoles = async (req: UserRequest, user: User) => {
   req.userTeams = user.teams;
   const isAdmin = req.userTeams.some((team) => team.role === ROLE.ADMIN);
   if (isAdmin) {
@@ -104,4 +126,46 @@ export const fetchRoles = async (req: UserRequest) => {
       }
     }
   }
+};
+
+const fetchUserByApiKey = async (
+  apiKey: string | string[],
+  secretKey: string | string[]
+) => {
+  const apiKeyInfo = await getConnection()
+    .getRepository(ApiKey)
+    .createQueryBuilder('apiKey')
+    .leftJoinAndSelect('apiKey.user', 'user')
+    .leftJoinAndSelect('user.teams', 'teams')
+    .leftJoinAndSelect('teams.organization', 'organization')
+    .leftJoinAndSelect('teams.assets', 'assets')
+    .select(['user', 'teams', 'organization', 'assets', 'apiKey'])
+    .where('apiKey.key =:apiKey', { apiKey })
+    .andWhere('apiKey.active = true')
+    .getOne();
+  if (!apiKeyInfo) {
+    return null;
+  }
+  const valid = await compare(secretKey, apiKeyInfo.secretKey);
+  if (valid) {
+    return apiKeyInfo;
+  } else {
+    return null;
+  }
+};
+
+const fetchUserByJwt = async (userId: string) => {
+  const user = await getConnection()
+    .getRepository(User)
+    .findOne(userId, {
+      join: {
+        alias: 'user',
+        leftJoinAndSelect: {
+          teams: 'user.teams',
+          organization: 'teams.organization',
+          assets: 'teams.assets',
+        },
+      },
+    });
+  return user;
 };

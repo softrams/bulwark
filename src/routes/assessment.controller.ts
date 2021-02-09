@@ -37,12 +37,15 @@ export const getAssessmentsByAssetId = async (
     return res.status(404).json('Asset does not exist');
   }
   const hasAccess = await hasTesterAssetAccess(req, asset.id);
+  if (!hasAccess) {
+    return res.status(403).json('Authorization is required');
+  }
   const assessments = await getConnection()
     .getRepository(Assessment)
     .createQueryBuilder('assessment')
     .leftJoinAndSelect('assessment.testers', 'tester')
-    .where('assessment.asset = :assessmentId', {
-      assessmentId: asset.id,
+    .where('assessment.asset = :assetId', {
+      assetId: asset.id,
     })
     .select([
       'assessment.id',
@@ -76,6 +79,9 @@ export const getAssessmentVulns = async (req: UserRequest, res: Response) => {
     return res.status(404).json('Assessment does not exist');
   }
   const hasAccess = await hasTesterAssetAccess(req, assessment.asset.id);
+  if (!hasAccess) {
+    return res.status(403).json('Authorization is required');
+  }
   const vulnerabilities = await getConnection()
     .getRepository(Vulnerability)
     .find({
@@ -162,6 +168,9 @@ export const getAssessmentById = async (req: UserRequest, res: Response) => {
     return res.status(404).json('Assessment does not exist');
   }
   const hasAccess = await hasAssessmentAccess(req, assessment.id);
+  if (!hasAccess) {
+    return res.status(403).json('Authorization is required');
+  }
   return res.status(200).json({ assessment, readOnly: !hasAccess });
 };
 /**
