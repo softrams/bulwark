@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.1](https://github.com/softrams/bulwark/compare/v7.0.0...v7.0.1) (2021-02-10)
+
+
+### Bug Fixes
+
+* **src:** fixed tester authz. Fixed no organization in system with admin. fixed the config script ([ff4696e](https://github.com/softrams/bulwark/commit/ff4696e88fcb7dcf892f9639dfc7d63d96500595))
+
 ## [7.0.0](https://github.com/softrams/bulwark/compare/v6.4.8...v7.0.0) (2021-02-10)
 
 
