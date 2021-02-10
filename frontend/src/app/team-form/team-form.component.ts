@@ -41,15 +41,21 @@ export class TeamFormComponent implements OnInit, OnChanges {
     this.activatedRoute.data.subscribe(({ result }) => {
       this.organizations = result.organizations;
       this.activeUsers = result.activeUsers;
-      this.appService
-        .getOrganizationAssets(this.organizations[0].id)
-        .then((assets: Asset[]) => {
-          // tslint:disable-next-line: no-string-literal
-          this.teamForm.controls['organization'].setValue(
-            this.organizations[0]
-          );
-          this.assets = assets;
-        });
+      if (this.organizations && this.organizations.length) {
+        this.appService
+          .getOrganizationAssets(this.organizations[0].id)
+          .then((assets: Asset[]) => {
+            // tslint:disable-next-line: no-string-literal
+            this.teamForm.controls['organization'].setValue(
+              this.organizations[0]
+            );
+            this.assets = assets;
+          });
+      } else {
+        this.alertService.warn(
+          'Tester and Read-Only teams require an organization and no organizations exist in the system.'
+        );
+      }
       this.activatedRoute.params.subscribe((param) => {
         if (param && param.teamId) {
           this.isCreate = false;

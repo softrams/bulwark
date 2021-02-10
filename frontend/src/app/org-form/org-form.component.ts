@@ -29,9 +29,9 @@ export class OrgFormComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ organization }) => {
+      this.isAdmin = this.authService.isAdmin();
       if (organization) {
         this.orgModel = organization;
-        this.isAdmin = this.authService.isAdmin();
         if (!this.isAdmin) {
           this.disableForm();
         }

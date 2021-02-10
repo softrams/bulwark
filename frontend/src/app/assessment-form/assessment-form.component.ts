@@ -31,11 +31,13 @@ export class AssessmentFormComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.activatedRoute.data.subscribe(({ result }) => {
-      this.readOnly = result.assessment.readOnly;
-      if (this.readOnly) {
-        this.assessmentForm.disable();
+      if (result && result.assessment) {
+        this.readOnly = result.assessment.readOnly;
+        if (this.readOnly) {
+          this.assessmentForm.disable();
+        }
       }
-      if (result.assessment.assessment) {
+      if (result?.assessment?.assessment) {
         result.assessment.assessment.startDate = this.transformDate(
           result.assessment.assessment.startDate
         );

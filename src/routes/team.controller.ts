@@ -6,6 +6,7 @@ import { validate } from 'class-validator';
 import { UserRequest } from '../interfaces/user-request.interface';
 import { Asset } from '../entity/Asset';
 import { Organization } from '../entity/Organization';
+import { ROLE } from '../enums/roles-enum';
 
 export const getAllTeams = async (req: Request, res: Response) => {
   const teams = await getConnection()
@@ -108,11 +109,16 @@ export const getTeamById = async (req: UserRequest, res: Response) => {
 export const createTeam = async (req: UserRequest, res: Response) => {
   const { name, organization, role, assetIds, users } = req.body;
   const newTeam = new Team();
-  const fetchedOrg = await getConnection()
-    .getRepository(Organization)
-    .findOne(organization, { relations: ['teams'] });
-  if (!fetchedOrg) {
-    return res.status(404).json('Organization not found');
+  let fetchedOrg: Organization;
+  if (role !== ROLE.ADMIN) {
+    fetchedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(organization, { relations: ['teams'] });
+    if (!fetchedOrg) {
+      return res.status(404).json('Organization not found');
+    }
+  } else {
+    fetchedOrg = null;
   }
   newTeam.id = null;
   newTeam.name = name;
@@ -203,11 +209,21 @@ export const updateTeamInfo = async (req: Request, res: Response) => {
     return res.status(404).json(`A Team with ID ${id} does not exist`);
   }
   // If the incoming organization has changed
-  // Remove all previous asset associations
-  if (+organization.id !== +team.organization.id) {
-    for (const orgAsset of team.organization.asset) {
-      assetIds = assetIds.filter((x) => x !== orgAsset.id);
+  // Remove all previous asset associations  let fetchedOrg: Organization;
+  if (role !== ROLE.ADMIN) {
+    organization = await getConnection()
+      .getRepository(Organization)
+      .findOne(organization, { relations: ['teams'] });
+    if (!organization) {
+      return res.status(404).json('Organization not found');
     }
+    if (+organization.id !== +team.organization.id) {
+      for (const orgAsset of team.organization.asset) {
+        assetIds = assetIds.filter((x) => x !== orgAsset.id);
+      }
+    }
+  } else {
+    organization = null;
   }
   team.users = await fetchUsersAndUpdateTeam(users, team.users);
   team.assets = await fetchAssetsAndUpdateTeam(assetIds, team.assets);

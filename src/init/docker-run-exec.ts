@@ -12,7 +12,9 @@ export const initDbCheck = async () => {
       console.error(err);
     }
     // tslint:disable-next-line: no-console
-    console.info('Initial migration not found. Running generating initial migration.');
+    console.info(
+      'Initial migration not found. Running generating initial migration.'
+    );
     // If the migrations table does not exist, run the migration:init script
     // to create schema
     exec('npm run migration:init', (err, stdout, stderr) => {
@@ -28,7 +30,9 @@ export const initDbCheck = async () => {
           terminate();
         }
         // tslint:disable-next-line: no-console
-        console.info('Initial migration has been generated successfully.  Running initial migration.');
+        console.info(
+          'Initial migration has been generated successfully.  Running initial migration.'
+        );
         // tslint:disable-next-line: no-console
         console.log(stdout);
         terminate();
@@ -41,26 +45,30 @@ export const initDbCheck = async () => {
     // else run the migration:generate script
     if (migrations[0].includes('CreateDatabase')) {
       // tslint:disable-next-line: no-console
-      console.info(`Initial migration ${migrations[0]} exists. Skipping migration:init script`);
+      console.info(
+        `Initial migration ${migrations[0]} exists. Skipping migration:init script`
+      );
     }
     // If the init migration was already created check to see
     // if there has been an update to the database
     // If there was a DB update, run the migration
-    exec('npm run migration:generate', (err) => {
+    exec('npm run migration:generate', (err, stdout) => {
       if (err) {
         // tslint:disable-next-line: no-console
         console.info('No database updates detected');
         terminate();
       }
+      console.log(stdout);
       // tslint:disable-next-line: no-console
       exec('npm run migration:run', (runErr, runStdout) => {
         // tslint:disable-next-line: no-console
         console.info('Database updates detected. Running generated migrations');
         if (runErr) {
-          console.error(err);
+          console.error(runErr);
           terminate();
         }
         // tslint:disable-next-line: no-console
+        console.log('Database migration success!');
         console.log(runStdout);
         terminate();
       });
