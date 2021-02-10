@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.3](https://github.com/softrams/bulwark/compare/v7.0.2...v7.0.3) (2021-02-10)
+
+
+### Bug Fixes
+
+* **assessment/vulnerability.controller.ts:** fixed authz tester roles issue with vulnerabilities ([a2febf7](https://github.com/softrams/bulwark/commit/a2febf7314b7bc349cc97ba696d106472e5f25da))
+
 ### [7.0.2](https://github.com/softrams/bulwark/compare/v7.0.1...v7.0.2) (2021-02-10)
 
 
