@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.4](https://github.com/softrams/bulwark/compare/v7.0.3...v7.0.4) (2021-02-10)
+
+
+### Bug Fixes
+
+* **assessment.controller.ts:** fixed authz issue ([7436e41](https://github.com/softrams/bulwark/commit/7436e41cc38fce6e34031aa43d7de81eb82cd1e2))
+
 ### [7.0.3](https://github.com/softrams/bulwark/compare/v7.0.2...v7.0.3) (2021-02-10)
 
 
