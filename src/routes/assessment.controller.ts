@@ -32,11 +32,11 @@ export const getAssessmentsByAssetId = async (
   }
   const asset = await getConnection()
     .getRepository(Asset)
-    .findOne(req.params.id);
+    .findOne(req.params.id, { relations: ['organization'] });
   if (!asset) {
     return res.status(404).json('Asset does not exist');
   }
-  const hasAccess = await hasTesterAssetAccess(req, asset.id);
+  const hasAccess = await hasTesterAssetAccess(req, asset.organization.id);
   const assessments = await getConnection()
     .getRepository(Assessment)
     .createQueryBuilder('assessment')
@@ -106,11 +106,11 @@ export const createAssessment = async (req: UserRequest, res: Response) => {
   }
   const asset = await getConnection()
     .getRepository(Asset)
-    .findOne(req.body.asset);
+    .findOne(req.body.asset, { relations: ['organization'] });
   if (!asset) {
     return res.status(404).json('Asset does not exist');
   }
-  const hasAccess = await hasTesterAssetAccess(req, asset.id);
+  const hasAccess = await hasTesterAssetAccess(req, asset.organization.id);
   if (!hasAccess) {
     return res.status(403).json('Authorization is required');
   }
