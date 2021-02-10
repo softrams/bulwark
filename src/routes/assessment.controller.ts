@@ -71,11 +71,19 @@ export const getAssessmentVulns = async (req: UserRequest, res: Response) => {
   }
   const assessment = await getConnection()
     .getRepository(Assessment)
-    .findOne(req.params.id, { relations: ['asset'] });
+    .createQueryBuilder('assessment')
+    .leftJoinAndSelect('assessment.asset', 'asset')
+    .leftJoinAndSelect('asset.organization', 'organization')
+    .where('assessment.id = :assessmentId', { assessmentId: req.params.id })
+    .select(['assessment', 'asset', 'organization'])
+    .getOne();
   if (!assessment) {
     return res.status(404).json('Assessment does not exist');
   }
-  const hasAccess = await hasTesterAssetAccess(req, assessment.asset.id);
+  const hasAccess = await hasTesterAssetAccess(
+    req,
+    assessment.asset.organization.id
+  );
   const vulnerabilities = await getConnection()
     .getRepository(Vulnerability)
     .find({
