@@ -2,6 +2,134 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.0.0](https://github.com/softrams/bulwark/compare/v6.4.8...v7.0.0) (2021-02-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* **api-key.controller:** New `API_KEY` column for secret key
+* **api-key.controller:** New API_KEY table with many-to-one relation with the User table
+* **package.json:** Added additional process env variables.  Puppeteer functionality has been updated
+to use these new process env variables.
+* **authentication/authorization for admins:** Updated many-to-many relationship between Team and User entities
+* **team.ts, roles-enum.ts, config.controller:** Added Team entity to database
+* **reportaudit.ts:** Added new database table
+
+### Features
+
+* **api-key.controller:** added `SecretKey` column to API_KEY table ([6bdfaca](https://github.com/softrams/bulwark/commit/6bdfaca609d71ea6c64bb844411747e1160d8092)), closes [#483](https://github.com/softrams/bulwark/issues/483)
+* **api-key.controller:** implement API key integration ([bb34a64](https://github.com/softrams/bulwark/commit/bb34a6463b11d6122fefcf19d71b3186e7c3c8e1)), closes [#483](https://github.com/softrams/bulwark/issues/483)
+* **assessment.controller:** wire roles into assessment controller and component ([0660050](https://github.com/softrams/bulwark/commit/06600501d7e9a93acd6d1817ec2d820bd0f657e6)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **asset team entities:** add many-to-many relationship between Team and Asset ([5d27d5c](https://github.com/softrams/bulwark/commit/5d27d5cc972380a4d1825f4341df67e3d4850593)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **authentication/authorization for admins:** update many-to-many relationship user and teams ([f22e7de](https://github.com/softrams/bulwark/commit/f22e7dee01f667345e558ea96c84ad917b2fb63a)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **dashboard.component org-form:** add role checks to org controller api's and angular components ([64de7a0](https://github.com/softrams/bulwark/commit/64de7a0dffd8136af05c254ed7d2941c47851994)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **jwt.middleware.ts:** integrate roles into jwt middleware ([54e4647](https://github.com/softrams/bulwark/commit/54e46476441ce6c0cde3e89b80606026694f484a)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **organization team entity:** add many-to-one relation ship between Team and Organization Entities ([1dfc435](https://github.com/softrams/bulwark/commit/1dfc43514c37e284b182714b98365325bfc1300a)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **report-audit.controller:** implement report auditing function ([7a86b96](https://github.com/softrams/bulwark/commit/7a86b96ca6f68502a795e7623628d0735d2206b3)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **reportaudit.ts:** create ReportAudit table.  Implement insert function ([a0e766d](https://github.com/softrams/bulwark/commit/a0e766d1e26b56647ed6b01d3f52ba01cb8a1fe6)), closes [#497](https://github.com/softrams/bulwark/issues/497)
+* **role.utility.ts:** implement role checking for organization ([ff8b5b8](https://github.com/softrams/bulwark/commit/ff8b5b845bfb3f720c5b5b0aa89e7067bccc3d86)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **tea-form.component:** initial commit for team-form component ([67a4e6f](https://github.com/softrams/bulwark/commit/67a4e6fd623baa610e8f56512f24a116900c5f68)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **team.component:** implement team component ([ad4d045](https://github.com/softrams/bulwark/commit/ad4d045eb7d5d4c301447de06f1a156a48230891)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **team.component:** wire team form to api ([5a2fc4e](https://github.com/softrams/bulwark/commit/5a2fc4eb61c2772bb17e0301a42025935f741341)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **team.controller:** implement additional Team APIs ([71292f1](https://github.com/softrams/bulwark/commit/71292f132e432c984a5750a21651c36d1d5e1117)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **team.controller:** implement API routes for getMyTeams and deleteTeam ([842ca1e](https://github.com/softrams/bulwark/commit/842ca1efa23980ef27d997a36f67960e85aa3db2)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **team.controller:** implement route functions for Add/Remove team assets ([6e68127](https://github.com/softrams/bulwark/commit/6e68127aee505d45a523f3ef585d6b31ced75956)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **team.controller:** implment updateTeamInfo function ([c7761ea](https://github.com/softrams/bulwark/commit/c7761ea57d83a9e98cbdf9fc479371f729a697a5)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **team.controller.ts:** added helper functions to team controller ([13a2cca](https://github.com/softrams/bulwark/commit/13a2ccaa9153e0e45c505efa4cddf7bb919397e1)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **team.ts:** remove single asset column ([89e1e84](https://github.com/softrams/bulwark/commit/89e1e840461921486a3984412260d322c9a8a89d)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **team.ts, roles-enum.ts, config.controller:** add Team entity to database ([71469cc](https://github.com/softrams/bulwark/commit/71469ccaae2620e0f7b686828579a813d26431f2)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **user-management:** update user management component.  Update team component ([4fa4425](https://github.com/softrams/bulwark/commit/4fa4425444f4ca423f7e5abe3867513a2046ffd5)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **user-management.component:** initial commit for user-management.component ([7ca32e2](https://github.com/softrams/bulwark/commit/7ca32e2d68a7e4ba5899dde974e5e5b7f26446f5)), closes [#553](https://github.com/softrams/bulwark/issues/553)
+* **user-management.component:** initial commit of user-management template ([b373629](https://github.com/softrams/bulwark/commit/b37362934ddbf9a6a5015fc263715e4da768cac1)), closes [#554](https://github.com/softrams/bulwark/issues/554)
+* **user-management.component:** updated user-management.component template and component ([44bd8ff](https://github.com/softrams/bulwark/commit/44bd8ffb8d41645f5014e7bf86b573f8656625b5)), closes [#553](https://github.com/softrams/bulwark/issues/553)
+* **user-profile.component:** add teams to user profile ([aba66fc](https://github.com/softrams/bulwark/commit/aba66fc231ea1e3f0cbade7a4228bce3e1159294)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **user.controller.ts:** implement API to create a user ([37aea71](https://github.com/softrams/bulwark/commit/37aea71654a8245f1e82aa78f8bb601e2de71a6d)), closes [#553](https://github.com/softrams/bulwark/issues/553)
+* **vuln.controller:** wire roles into vuln controller and component ([d4db2fc](https://github.com/softrams/bulwark/commit/d4db2fccea945b9269bb4d3147dd0cf0125f248a)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+
+
+### Bug Fixes
+
+* no Vulns Blank page ([6a4247a](https://github.com/softrams/bulwark/commit/6a4247a7eef8fe7cb5e667720bf6b25da6173067))
+* **app.ts:** cSP error fix ([b6a02f8](https://github.com/softrams/bulwark/commit/b6a02f8c5e6943cbae4735c43d0f6fb3fd96ff13)), closes [#566](https://github.com/softrams/bulwark/issues/566)
+* **app.ts:** fix CSP errors ([594628c](https://github.com/softrams/bulwark/commit/594628c0672cfbe647be21a2fbefe7b7120ef0ff)), closes [#566](https://github.com/softrams/bulwark/issues/566)
+* **docker-compose.yml:** fix docker-compose bug ([58a549f](https://github.com/softrams/bulwark/commit/58a549f397d54fab63352b20b426fdbb4439c090))
+* **fix csp errors:** cSP errors were generated in console ([801c9a3](https://github.com/softrams/bulwark/commit/801c9a3742ffb515a90880147d2d1ab97c67774f))
+* **frontend/package.json:** update script to use different angular envv ([8c2481e](https://github.com/softrams/bulwark/commit/8c2481ec7297033ea27a85690c80e89bed89ebfe)), closes [#567](https://github.com/softrams/bulwark/issues/567)
+* **package.json:** updated package.json script ([3e201eb](https://github.com/softrams/bulwark/commit/3e201eb9b14facd7808874d69604c4beee9c909e)), closes [#567](https://github.com/softrams/bulwark/issues/567)
+* **role.utility.ts:** fixed role bug ([24db31a](https://github.com/softrams/bulwark/commit/24db31af83bf687c74ba10ebef0c7dcbad6f6cc5))
+* **setenv.ts:** implement dynamic port and IP address based on env var ([f52e696](https://github.com/softrams/bulwark/commit/f52e69673cdbf0df0a533437d62f198d8afb69b9)), closes [#567](https://github.com/softrams/bulwark/issues/567)
+* **team-form.component:** fix undefined bug if team does not have org ([64e15f1](https://github.com/softrams/bulwark/commit/64e15f1e168327c900f70e24d7a08ddebc2559be))
+
+
+### Tests
+
+* **api-key.controller.spec.ts:** implement unit tests for API key controller ([48df0ef](https://github.com/softrams/bulwark/commit/48df0efa8561be549e88e4306692f58f5c44a0da)), closes [#483](https://github.com/softrams/bulwark/issues/483)
+* **asset.controller:** implemented roles into asset controller ([a63b8dd](https://github.com/softrams/bulwark/commit/a63b8dd53c4d36483ceed188c717af6d06561c5e)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **config.controller.spec.ts:** implement unit tests for Teams ([b95e398](https://github.com/softrams/bulwark/commit/b95e39804f7be517262e4fc6a7961ce1d54b184f)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **team.controller:** fix broken unit tests ([ad9c3c9](https://github.com/softrams/bulwark/commit/ad9c3c911456b36b65ed486bd044df7465230d99)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+
+
+### Others
+
+* **.prettierignore:** fix merge conflict ([953def8](https://github.com/softrams/bulwark/commit/953def8b4eb56227d4e486e3357c7193256249b9))
+* **.prettierignore:** fix merge conflicts. fix prettier config error ([baf5767](https://github.com/softrams/bulwark/commit/baf57670053079ddfd52435a2a5e19297ab9efde)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **deps:** bump @angular-devkit/build-angular in /frontend ([c2c2184](https://github.com/softrams/bulwark/commit/c2c2184b007eb7b85b33af24db0aba2c938a1be0))
+* **deps:** bump @angular-devkit/build-angular in /frontend ([7ec05d3](https://github.com/softrams/bulwark/commit/7ec05d34b112779549bd41506eb6de17dc8510f4))
+* **deps:** bump @angular-devkit/build-angular in /frontend ([c100c14](https://github.com/softrams/bulwark/commit/c100c147ca781676382a82e86eb3e70112f350f2))
+* **deps:** bump @angular/cdk from 11.0.3 to 11.0.4 in /frontend ([4e2db70](https://github.com/softrams/bulwark/commit/4e2db700078e161eb0a80189801b49bfc765264d))
+* **deps:** bump @angular/cdk from 11.0.4 to 11.1.0 in /frontend ([d4829cc](https://github.com/softrams/bulwark/commit/d4829ccf8c5b4303427696fa4b369793326e7b6b))
+* **deps:** bump @angular/cdk from 11.1.0 to 11.1.2 in /frontend ([63ee378](https://github.com/softrams/bulwark/commit/63ee378b8c750210053cde47a4ac765156a14a05))
+* **deps:** bump @angular/cli from 11.0.6 to 11.0.7 in /frontend ([22fd855](https://github.com/softrams/bulwark/commit/22fd85561ef8d1147f977e63fdd44f85f838861e))
+* **deps:** bump @angular/cli from 11.0.7 to 11.1.1 in /frontend ([df3c6c5](https://github.com/softrams/bulwark/commit/df3c6c561e57fd5eceee1d455e82b44619dd17ab))
+* **deps:** bump @angular/cli from 11.1.1 to 11.1.4 in /frontend ([a3ecf96](https://github.com/softrams/bulwark/commit/a3ecf9652a037a8ed7bb30c5a9b6b6c9c6f258f9))
+* **deps:** bump @ng-select/ng-select from 5.0.15 to 5.1.0 in /frontend ([0d1c7a7](https://github.com/softrams/bulwark/commit/0d1c7a79e2e504e0aa77cc88741f2b31cc29ab3b))
+* **deps:** bump @ng-select/ng-select from 5.1.0 to 6.0.0 in /frontend ([d4fa635](https://github.com/softrams/bulwark/commit/d4fa635cf360959565a62b45d676d3b5c3875cce))
+* **deps:** bump @types/express from 4.17.9 to 4.17.11 ([fcfd3ee](https://github.com/softrams/bulwark/commit/fcfd3eef5ce03f04bc1ca4495308e867f476275a))
+* **deps:** bump class-validator from 0.12.2 to 0.13.1 ([404493a](https://github.com/softrams/bulwark/commit/404493abb16837298ac8f5863d53e22a68e808d9))
+* **deps:** bump core-js from 3.8.2 to 3.8.3 in /frontend ([1aff860](https://github.com/softrams/bulwark/commit/1aff860c3dacbe905bea8bc44e6aede86af343d9))
+* **deps:** bump helmet from 4.3.1 to 4.4.0 ([349d1b6](https://github.com/softrams/bulwark/commit/349d1b68976d36232f3f0be86474dc818b78df5e))
+* **deps:** bump helmet from 4.4.0 to 4.4.1 ([92b5ae9](https://github.com/softrams/bulwark/commit/92b5ae98ba0bdee4a218805a8042a61c2d14538e))
+* **deps:** bump jira2md from 2.0.4 to 2.0.5 ([2e0fd53](https://github.com/softrams/bulwark/commit/2e0fd532ad67c33f545bc225ac5103ecfe0fa3e9))
+* **deps:** bump primeng from 11.0.0 to 11.1.0 in /frontend ([474f4aa](https://github.com/softrams/bulwark/commit/474f4aafec9e3b4c75a5e8621fa8d9fc047bf622))
+* **deps:** bump primeng from 11.1.0 to 11.2.0 in /frontend ([697aa33](https://github.com/softrams/bulwark/commit/697aa33ad9f8eed67f1a2bc09d3e9ba562a131ae))
+* **deps:** bump typeorm from 0.2.29 to 0.2.30 ([a3c091c](https://github.com/softrams/bulwark/commit/a3c091c54ad044980eed8c1e8d7434960a77618e))
+* **deps-dev:** bump @angular/language-service in /frontend ([b104657](https://github.com/softrams/bulwark/commit/b104657d512caaaa0ed3c77f09d78774e534e0b7))
+* **deps-dev:** bump @angular/language-service in /frontend ([5dc85dd](https://github.com/softrams/bulwark/commit/5dc85dd16c9ac7765960e21a8b1b738367be7fd7))
+* **deps-dev:** bump @angular/language-service in /frontend ([f418dd1](https://github.com/softrams/bulwark/commit/f418dd1e0c4d79a2d8651832b099b2b5d18990cf))
+* **deps-dev:** bump @babel/core from 7.12.10 to 7.12.13 ([6d7cf75](https://github.com/softrams/bulwark/commit/6d7cf7516b591881a5b9f3e65e776bc8c5acfd22))
+* **deps-dev:** bump @babel/preset-env from 7.12.11 to 7.12.13 ([042cbb2](https://github.com/softrams/bulwark/commit/042cbb25c6f9b976ec7caff7a3dc52c6c359c39d))
+* **deps-dev:** bump @babel/preset-typescript from 7.12.7 to 7.12.13 ([acaa0e7](https://github.com/softrams/bulwark/commit/acaa0e73b1c28ae2ad30b34d7c14e0ad42d59137))
+* **deps-dev:** bump @types/jasmine from 3.6.2 to 3.6.3 in /frontend ([3eb9afa](https://github.com/softrams/bulwark/commit/3eb9afa34b92a973d875f6d4638f327accf4c5b2))
+* **deps-dev:** bump @types/node from 14.14.20 to 14.14.21 in /frontend ([6d5d746](https://github.com/softrams/bulwark/commit/6d5d7462e132f847a7b13515d263bde71085a061))
+* **deps-dev:** bump @types/node from 14.14.21 to 14.14.22 in /frontend ([8810309](https://github.com/softrams/bulwark/commit/8810309ee41068fcdb5ffbf0346ab72d6204b290))
+* **deps-dev:** bump @types/node from 14.14.22 to 14.14.25 in /frontend ([90f8f93](https://github.com/softrams/bulwark/commit/90f8f937247ea4490909bc444f6fa18a23cf98ad))
+* **deps-dev:** bump highlight.js from 10.5.0 to 10.6.0 ([a0c45be](https://github.com/softrams/bulwark/commit/a0c45be652e787029694d4055f63ce7019d2608d))
+* **deps-dev:** bump husky from 4.3.7 to 4.3.8 ([c2ea443](https://github.com/softrams/bulwark/commit/c2ea443fbbdcea71836db4a32e97add1e4f4f160))
+* **deps-dev:** bump karma from 5.2.3 to 6.0.0 in /frontend ([4e6b2b5](https://github.com/softrams/bulwark/commit/4e6b2b5524a3637798344ce2ddda2caa64d5cc75))
+* **deps-dev:** bump karma from 6.0.0 to 6.0.1 in /frontend ([6c5f2ce](https://github.com/softrams/bulwark/commit/6c5f2ce9aea265d7ddddbe7402eb2dfbcf9444d3))
+* **deps-dev:** bump karma from 6.0.1 to 6.1.0 in /frontend ([48c7b74](https://github.com/softrams/bulwark/commit/48c7b74f473478995251a6854f28b4ee482ffe53))
+* **deps-dev:** bump lint-staged from 10.5.3 to 10.5.4 ([2e8aa42](https://github.com/softrams/bulwark/commit/2e8aa4249744a846e79c286b887ef6651181b87b))
+* **deps-dev:** bump ts-jest from 26.4.4 to 26.5.0 ([9232d26](https://github.com/softrams/bulwark/commit/9232d2657c228f71839baed49915994344d4d910))
+* **fixing merge conflicts:** fix merge conflicts ([a2c2148](https://github.com/softrams/bulwark/commit/a2c21483fd61227a8afa8dac10f9d197d2cfbd97)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **global:** merge [#553](https://github.com/softrams/bulwark/issues/553) branch into roles ([28414e1](https://github.com/softrams/bulwark/commit/28414e11348056d7c46ad35ae6c899e95b27b29e)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+* **merge conflicts:** fix merge conflicts ([a431af0](https://github.com/softrams/bulwark/commit/a431af0e9efc8a1d0425c690c615ab4d0c1ab30e)), closes [#567](https://github.com/softrams/bulwark/issues/567)
+* **setenv.ts:** update console.info and documentation ([3aa0e94](https://github.com/softrams/bulwark/commit/3aa0e94b526932fdf70fde6901e5a2ffa33a4a55)), closes [#567](https://github.com/softrams/bulwark/issues/567)
+
+
+### Docs
+
+* **readme.md:** update README.md ([ba3a77d](https://github.com/softrams/bulwark/commit/ba3a77d138bc43e81b119ef0c781c121b3d580fb)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+
+
+### Code Refactoring
+
+* **config.controller:** remove global teams ([ab8bd9b](https://github.com/softrams/bulwark/commit/ab8bd9b8be68aa951c628eda651a5ca446a5edfe)), closes [#484](https://github.com/softrams/bulwark/issues/484)
+
+
+### Build System
+
+* **.gitignore:** delete generated angular env files ([3be81a2](https://github.com/softrams/bulwark/commit/3be81a2395c933efd71e1b6b8453b84ad34fc050)), closes [#567](https://github.com/softrams/bulwark/issues/567)
+
 ### [6.4.8](https://github.com/softrams/bulwark/compare/v6.4.7...v6.4.8) (2021-01-14)
 
 
