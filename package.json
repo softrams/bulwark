@@ -57,7 +57,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.12.13",
+    "@babel/core": "^7.12.16",
     "@babel/preset-env": "^7.12.13",
     "@babel/preset-typescript": "^7.12.13",
     "@commitlint/cli": "^11.0.0",
@@ -105,7 +105,7 @@
     "reflect-metadata": "^0.1.13",
     "ts-node": "^9.1.1",
     "tsconfig-paths": "^3.9.0",
-    "typeorm": "^0.2.30",
+    "typeorm": "^0.2.31",
     "uuid": "^8.3.2"
   },
   "husky": {
