@@ -73,7 +73,7 @@
     "mock-express-response": "^0.3.0",
     "prettier": "2.2.1",
     "rimraf": "^3.0.2",
-    "sqlite3": "^5.0.1",
+    "sqlite3": "^5.0.2",
     "standard-version": "^9.1.0",
     "ts-jest": "^26.5.1",
     "tsc-watch": "^4.2.9",
