@@ -2,6 +2,63 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.5](https://github.com/softrams/bulwark/compare/v7.0.4...v7.0.5) (2021-02-25)
+
+
+### Bug Fixes
+
+* **report component:** fix pdf bug ([32f49cf](https://github.com/softrams/bulwark/commit/32f49cf954676990bbe20375effd7fdc852260da)), closes [#630](https://github.com/softrams/bulwark/issues/630)
+
+
+### Others
+
+* **deps:** bump @angular-devkit/build-angular in /frontend ([d0d3aa6](https://github.com/softrams/bulwark/commit/d0d3aa6222b3f42270643b507a2f84b46d6348d8))
+* **deps:** bump @angular-devkit/build-angular in /frontend ([06a7952](https://github.com/softrams/bulwark/commit/06a7952a6c6ded4d252d9eae4e48ca9f200d68ce))
+* **deps:** bump @angular/cdk from 11.1.2 to 11.2.0 in /frontend ([50f4127](https://github.com/softrams/bulwark/commit/50f41271566127f54ce9bcc76044a1078e7823c0))
+* **deps:** bump @angular/cdk from 11.2.0 to 11.2.1 in /frontend ([9183a72](https://github.com/softrams/bulwark/commit/9183a7203289d432ed540f2cfa6227f153f19d4b))
+* **deps:** bump @angular/cli from 11.1.4 to 11.2.0 in /frontend ([5efdefd](https://github.com/softrams/bulwark/commit/5efdefdd07dc0319054bf78784c0c9e3edb9ee7c))
+* **deps:** bump @angular/cli from 11.2.0 to 11.2.1 in /frontend ([4f33044](https://github.com/softrams/bulwark/commit/4f33044754b8591ba79652418300ea1f984449bd))
+* **deps:** bump @ng-select/ng-select from 6.0.0 to 6.1.0 in /frontend ([2ed6465](https://github.com/softrams/bulwark/commit/2ed64654f6a235c50da8901bd74f7e32f21d4622))
+* **deps:** bump concurrently from 5.3.0 to 6.0.0 ([710b652](https://github.com/softrams/bulwark/commit/710b652ddcc0651f8943f25e6fca6461f09e3952))
+* **deps:** bump core-js from 3.8.3 to 3.9.0 in /frontend ([58d28ef](https://github.com/softrams/bulwark/commit/58d28ef00548c2919c8119a3850b3f85e2fa63ff))
+* **deps:** bump mime-types from 2.1.28 to 2.1.29 ([a1b5ad9](https://github.com/softrams/bulwark/commit/a1b5ad9e8d60d95a06e55e400e4765f179a2b694))
+* **deps:** bump ngx-markdown from 11.0.1 to 11.1.0 in /frontend ([589fe38](https://github.com/softrams/bulwark/commit/589fe38acb5facc458c579f75fdada71ca62c0b0))
+* **deps:** bump nodemailer from 6.4.17 to 6.4.18 ([81f845c](https://github.com/softrams/bulwark/commit/81f845ce080047191a3e61c55a6b6b9311ef1f55))
+* **deps:** bump primeng from 11.2.0 to 11.2.1 in /frontend ([ae7815f](https://github.com/softrams/bulwark/commit/ae7815fa8ffe9ac76e581c0e1a696a537a3d07dc))
+* **deps:** bump primeng from 11.2.1 to 11.2.2 in /frontend ([22bc78e](https://github.com/softrams/bulwark/commit/22bc78e64ec67d731c3daccb1509ca561b5a8ce7))
+* **deps:** bump primeng from 11.2.2 to 11.2.3 in /frontend ([0cef0b7](https://github.com/softrams/bulwark/commit/0cef0b7cdda0d0986319823a0c8dfa6069cece78))
+* **deps:** bump typeorm from 0.2.30 to 0.2.31 ([07baf54](https://github.com/softrams/bulwark/commit/07baf546f05187b28d5e03142487ca17ab9a7f88))
+* **deps:** bump typescript from 4.0.5 to 4.0.7 in /frontend ([3d72b16](https://github.com/softrams/bulwark/commit/3d72b16035e92adbe219b0e48a7694c26a8d2ddf))
+* **deps-dev:** bump @angular/language-service in /frontend ([b7c03b0](https://github.com/softrams/bulwark/commit/b7c03b03ec2b769afe5fbc68d5552f7b475ca6f0))
+* **deps-dev:** bump @angular/language-service in /frontend ([b914a9d](https://github.com/softrams/bulwark/commit/b914a9d1f4178f1e37a10a66efe08829e3c8c4e4))
+* **deps-dev:** bump @babel/core from 7.12.13 to 7.12.16 ([0c682df](https://github.com/softrams/bulwark/commit/0c682df0f1ae8b73645f41b18ad5b8dce29014e3))
+* **deps-dev:** bump @babel/core from 7.12.16 to 7.12.17 ([49dd4d4](https://github.com/softrams/bulwark/commit/49dd4d4d41a6b869fda026b8422a8febafaf7f1b))
+* **deps-dev:** bump @babel/preset-env from 7.12.13 to 7.12.16 ([eb6f370](https://github.com/softrams/bulwark/commit/eb6f37013bf27789dd989ae25899345076515c1e))
+* **deps-dev:** bump @babel/preset-env from 7.12.16 to 7.12.17 ([a1ddf66](https://github.com/softrams/bulwark/commit/a1ddf66ea5c72b8db3df7385ca35f4026d88829e))
+* **deps-dev:** bump @babel/preset-typescript from 7.12.13 to 7.12.16 ([0875b9c](https://github.com/softrams/bulwark/commit/0875b9cc5f293bf13542195043d1a826239d6a1a))
+* **deps-dev:** bump @babel/preset-typescript from 7.12.16 to 7.12.17 ([5096b4f](https://github.com/softrams/bulwark/commit/5096b4f2314a3382d0afeb0bcbfd4453bda6e65a))
+* **deps-dev:** bump @types/jasmine from 3.6.3 to 3.6.4 in /frontend ([7b4fb70](https://github.com/softrams/bulwark/commit/7b4fb70051bd7af9cfb91bf58bfe422819bd48d3))
+* **deps-dev:** bump @types/node from 14.14.25 to 14.14.28 in /frontend ([5219d46](https://github.com/softrams/bulwark/commit/5219d46e6f9f0777c9695d968bac298539ee8b8b))
+* **deps-dev:** bump @types/node from 14.14.28 to 14.14.31 in /frontend ([e1ffb08](https://github.com/softrams/bulwark/commit/e1ffb08ac0887bb3c947f71edcbc815bda3a7fb3))
+* **deps-dev:** bump husky from 4.3.8 to 5.0.9 ([760fc1f](https://github.com/softrams/bulwark/commit/760fc1f6e5e8dc05392c54715c7d1e99e51a5a72))
+* **deps-dev:** bump husky from 5.0.9 to 5.1.0 ([b0f7733](https://github.com/softrams/bulwark/commit/b0f7733bfecf5056290129d413d206e06066bd09))
+* **deps-dev:** bump karma from 6.1.0 to 6.1.1 in /frontend ([dab7567](https://github.com/softrams/bulwark/commit/dab75670900e43c74286b084189c942b7bcdbc50))
+* **deps-dev:** bump sqlite3 from 5.0.1 to 5.0.2 ([269859e](https://github.com/softrams/bulwark/commit/269859edef5dca35beb9c9b5c07b6b300cb73ecb))
+* **deps-dev:** bump standard-version from 9.1.0 to 9.1.1 ([4a546fa](https://github.com/softrams/bulwark/commit/4a546fad84f7eabecee3fcb070f95211a4acb25d))
+* **deps-dev:** bump ts-jest from 26.5.0 to 26.5.1 ([f7fc6d3](https://github.com/softrams/bulwark/commit/f7fc6d30c1bd87595b8b1119df83e8b9b3e20118))
+* **deps-dev:** bump typescript from 4.1.3 to 4.1.5 ([979eddb](https://github.com/softrams/bulwark/commit/979eddba0e897528ba7b9ebeeb9ea7fbe35d3253))
+* **package.json:** update master with main ([29bc8b8](https://github.com/softrams/bulwark/commit/29bc8b8a75d9889ace85566dcd8b68070369f5c4))
+
+
+### Build System
+
+* **dependabot.yml:** removing Bill from dependabot config ([c8b2f9d](https://github.com/softrams/bulwark/commit/c8b2f9de379ae554c9ce21366f118e8ef3b8a3b6))
+
+
+### Docs
+
+* **readme.md:** update README.md ([3b778d2](https://github.com/softrams/bulwark/commit/3b778d29424bcbe6f40f8d4d37d3e9a9ff137821))
+
 ### [7.0.4](https://github.com/softrams/bulwark/compare/v7.0.3...v7.0.4) (2021-02-10)
 
 
