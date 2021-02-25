@@ -7,7 +7,6 @@ updates:
     target-branch: 'develop'
     reviewers:
       - 'Whamo12'
-      - 'skewled'
 
   - package-ecosystem: 'npm'
     directory: '/frontend'
@@ -16,4 +15,3 @@ updates:
     target-branch: 'develop'
     reviewers:
       - 'Whamo12'
-      - 'skewled'
