@@ -75,7 +75,7 @@
     "rimraf": "^3.0.2",
     "sqlite3": "^5.0.2",
     "standard-version": "^9.1.1",
-    "ts-jest": "^26.5.1",
+    "ts-jest": "^26.5.2",
     "tsc-watch": "^4.2.9",
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
