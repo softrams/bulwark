@@ -16,7 +16,7 @@
   "dependencies": {
     "@angular-devkit/build-angular": "~0.1102.2",
     "@angular/animations": "~11.0.0",
-    "@angular/cdk": "^11.2.1",
+    "@angular/cdk": "^11.2.2",
     "@angular/cli": "~11.2.2",
     "@angular/common": "~11.0.0",
     "@angular/compiler": "~11.0.0",
@@ -29,7 +29,7 @@
     "@ng-select/ng-select": "^6.1.0",
     "chart.js": "^2.9.4",
     "jwt-decode": "^3.1.2",
-    "core-js": "^3.9.0",
+    "core-js": "^3.9.1",
     "ngx-markdown": "^11.1.0",
     "primeflex": "^2.0.0",
     "primeicons": "^4.1.0",
