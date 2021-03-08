@@ -93,7 +93,7 @@
     "express": "^4.17.1",
     "helmet": "^4.4.1",
     "jira-client": "^6.21.1",
-    "jira2md": "^2.0.5",
+    "jira2md": "^2.1.0",
     "jsonwebtoken": "^8.5.1",
     "mime-types": "^2.1.29",
     "multer": "^1.4.2",
