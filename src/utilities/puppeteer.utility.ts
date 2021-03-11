@@ -32,7 +32,7 @@ export const generateReport = async (req: UserRequest, res: Response) => {
     localStorage.setItem('AUTH_TOKEN', token);
   }, jwtToken);
   await page.goto(url, { waitUntil: 'networkidle0' });
-  await page.pdf({ path: filePath, format: 'A4' });
+  await page.pdf({ path: filePath, format: 'a4' });
   await browser.close();
   const file = fs.createReadStream(filePath);
   const stat = fs.statSync(filePath);
