@@ -25,7 +25,7 @@
     "@angular/forms": "~11.0.0",
     "@angular/platform-browser": "~11.0.0",
     "@angular/platform-browser-dynamic": "~11.0.0",
-    "@angular/router": "~11.0.0",
+    "@angular/router": "~11.2.6",
     "@ng-select/ng-select": "^6.1.0",
     "chart.js": "^2.9.4",
     "core-js": "^3.9.1",
