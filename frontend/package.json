@@ -14,7 +14,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular-devkit/build-angular": "~0.1102.5",
+    "@angular-devkit/build-angular": "~0.1102.6",
     "@angular/animations": "~11.0.9",
     "@angular/cdk": "^11.2.5",
     "@angular/cli": "~11.2.6",
@@ -25,7 +25,7 @@
     "@angular/forms": "~11.0.0",
     "@angular/platform-browser": "~11.2.7",
     "@angular/platform-browser-dynamic": "~11.0.0",
-    "@angular/router": "~11.0.0",
+    "@angular/router": "~11.2.7",
     "@ng-select/ng-select": "^6.1.0",
     "chart.js": "^2.9.4",
     "core-js": "^3.9.1",
@@ -39,7 +39,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.1102.5",
+    "@angular-devkit/build-angular": "~0.1102.6",
     "@angular/language-service": "~11.2.7",
     "@types/jasmine": "~3.6.7",
     "@types/jasminewd2": "~2.0.3",
