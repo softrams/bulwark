@@ -35,7 +35,7 @@
     "primeicons": "^4.1.0",
     "primeng": "^11.3.2",
     "rxjs": "~6.6.7",
-    "tslib": "^2.1.0",
+    "tslib": "^2.2.0",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
