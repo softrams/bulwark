@@ -28,7 +28,7 @@
     "@angular/router": "~11.2.10",
     "@ng-select/ng-select": "^6.1.0",
     "chart.js": "^3.1.0",
-    "core-js": "^3.10.1",
+    "core-js": "^3.10.2",
     "jwt-decode": "^3.1.2",
     "ngx-markdown": "^11.1.1",
     "primeflex": "^2.0.0",
