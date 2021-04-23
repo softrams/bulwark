@@ -46,14 +46,18 @@ export const generateHash = (password: string): Promise<string> => {
  * @param {Response} res
  * @returns hashed password
  */
-export const updatePassword = (oldPassword, currentPassword, newPassword): Promise<string> => {
+export const updatePassword = (
+  hashedCurrentPassword: string,
+  currentPassword: string,
+  newPassword: string
+): Promise<string> => {
   return new Promise(async (resolve, reject) => {
-    const valid = await compare(currentPassword, oldPassword);
+    const valid = await compare(currentPassword, hashedCurrentPassword);
     if (valid) {
       const newPasswordHash = await generateHash(newPassword);
       resolve(newPasswordHash);
     } else {
-      reject('Incorrect previous password');
+      reject('The current password is incorrect');
     }
   });
 };
@@ -64,9 +68,12 @@ export const updatePassword = (oldPassword, currentPassword, newPassword): Promi
  * @param {Response} res
  * @returns true/false
  */
-export const compare = (currentPassword, oldPassword): Promise<boolean> => {
+export const compare = (
+  currentPassword: string | string[],
+  hashedCurrentPassword: string
+): Promise<boolean> => {
   return new Promise((resolve, reject) => {
-    bcrypt.compare(currentPassword, oldPassword, (err, valid) => {
+    bcrypt.compare(currentPassword, hashedCurrentPassword, (err, valid) => {
       if (err) {
         reject('Bcrypt comparison failure');
       }

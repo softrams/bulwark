@@ -84,6 +84,9 @@
         <div class="row">
           <div class="col-md-12">
             <h4>Security</h4>
+            <i class="pi pi-info-circle"></i><i style="font-size: smaller;"> Password Requirements: Must be at least 12
+              characters, at least one uppercase characters, at least one lowercase characters,at least one digit, and
+              at least one symbol.</i>
             <hr />
           </div>
         </div>
@@ -91,7 +94,7 @@
           <form [formGroup]="securityForm" (ngSubmit)="onSecuritySubmit(securityForm)" id="securityForm">
             <div class="col-md-12">
               <div class="form-group row">
-                <label for="oldPassword" class="col-4 col-form-label">Old Password:</label>
+                <label for="oldPassword" class="col-4 col-form-label">Current Password:</label>
                 <div class="col-8">
                   <input pInputText formControlName="oldPassword" type="password" id="oldPassword" class="form-control"
                     name="oldPassword" style="margin-bottom: 5px;" />

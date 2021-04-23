@@ -187,10 +187,11 @@ export const verify = async (req: Request, res: Response) => {
  */
 export const updateUserPassword = async (req: UserRequest, res: Response) => {
   const { oldPassword, newPassword, confirmNewPassword } = req.body;
+  const currentPassword = oldPassword;
   if (newPassword !== confirmNewPassword) {
     return res.status(400).json('Passwords do not match');
   }
-  if (newPassword === oldPassword) {
+  if (newPassword === currentPassword) {
     return res
       .status(400)
       .json('New password can not be the same as the old password');
@@ -200,10 +201,11 @@ export const updateUserPassword = async (req: UserRequest, res: Response) => {
   }
   const user = await getConnection().getRepository(User).findOne(req.user);
   if (user) {
+    const hashedUserPassword = user.password;
     try {
       user.password = await updatePassword(
-        user.password,
-        oldPassword,
+        hashedUserPassword,
+        currentPassword,
         newPassword
       );
     } catch (err) {
