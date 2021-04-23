@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.9](https://github.com/softrams/bulwark/compare/v7.0.8...v7.0.9) (2021-04-23)
+
+
+### Bug Fixes
+
+* **frontend/package.json:** update angular CLI ([3107c38](https://github.com/softrams/bulwark/commit/3107c389226dac0ee7037328d4849a91d56d70e9))
+* **password.utility.ts:** update password utility and user.controller for readability ([d6cdebb](https://github.com/softrams/bulwark/commit/d6cdebbe4958c85946f653779d7b0eab13e18b6f)), closes [#753](https://github.com/softrams/bulwark/issues/753)
+* **user.controller.ts:** fixed failing unit tests ([ff08636](https://github.com/softrams/bulwark/commit/ff0863640765c119d8064724359a813069b3b109)), closes [#753](https://github.com/softrams/bulwark/issues/753)
+
+
+### Others
+
+* **deps:** bump @angular-devkit/build-angular in /frontend ([3543a48](https://github.com/softrams/bulwark/commit/3543a48c0026c35cab27188ed6fd457e9983d9d4))
+* **deps:** bump @angular/cdk from 11.2.7 to 11.2.8 in /frontend ([414e270](https://github.com/softrams/bulwark/commit/414e27021febd4befe7e3133cd5e93b931b31f67))
+* **deps:** bump @angular/router from 11.2.8 to 11.2.9 in /frontend ([65b900e](https://github.com/softrams/bulwark/commit/65b900ef4f7db31e9ec18fa1a89579e29b4e687c))
+* **deps:** bump chart.js from 3.0.2 to 3.1.0 in /frontend ([c1c9a97](https://github.com/softrams/bulwark/commit/c1c9a97dfe5761da07f366bfbafdc420bcab473b))
+* **deps:** bump chart.js from 3.1.0 to 3.1.1 in /frontend ([346cb8b](https://github.com/softrams/bulwark/commit/346cb8b1b0912c826f76d5fa2d277e3856280979))
+* **deps:** bump concurrently from 6.0.0 to 6.0.1 ([217bcfe](https://github.com/softrams/bulwark/commit/217bcfec490913dacf44fc045815020fdcb4ab98))
+* **deps:** bump concurrently from 6.0.1 to 6.0.2 ([337ac3a](https://github.com/softrams/bulwark/commit/337ac3aa8d515703f817f996393f92ca29334333))
+* **deps:** bump core-js from 3.10.0 to 3.10.1 in /frontend ([8a321eb](https://github.com/softrams/bulwark/commit/8a321ebeed19ded4609a0ee816b9e173208b468f))
+* **deps:** bump core-js from 3.10.1 to 3.10.2 in /frontend ([7e99aec](https://github.com/softrams/bulwark/commit/7e99aec0503dfeec4f0f449055265ca30c1ba65c))
+* **deps:** bump helmet from 4.4.1 to 4.5.0 ([12275da](https://github.com/softrams/bulwark/commit/12275da6475a19368b0d9444446e0f9594d6bafd))
+* **deps:** bump ngx-markdown from 11.1.2 to 11.1.3 in /frontend ([deec7bf](https://github.com/softrams/bulwark/commit/deec7bf0abf33889382511cbf21c799f7e3c0e66))
+* **deps:** bump primeng from 11.3.1 to 11.3.2 in /frontend ([b296584](https://github.com/softrams/bulwark/commit/b296584376a6cd3c4fd1065d723c320f2a27f069))
+* **deps:** bump tslib from 2.1.0 to 2.2.0 in /frontend ([090415a](https://github.com/softrams/bulwark/commit/090415a6be66454e239469aec7cdb30ca361462a))
+* **deps-dev:** bump @babel/core from 7.13.13 to 7.13.15 ([4d2430d](https://github.com/softrams/bulwark/commit/4d2430dfd4225632179851f1b9f9e19619a57b70))
+* **deps-dev:** bump @babel/preset-env from 7.13.12 to 7.13.15 ([ca01c10](https://github.com/softrams/bulwark/commit/ca01c102cac3176e608b559b6cd5c2ad3fa077c2))
+* **deps-dev:** bump @types/node from 14.14.37 to 14.14.41 in /frontend ([2ae9804](https://github.com/softrams/bulwark/commit/2ae98040ecc6fc6b09bb6e81ac3448188c595a9f))
+* **deps-dev:** bump jasmine-spec-reporter in /frontend ([2da5194](https://github.com/softrams/bulwark/commit/2da51946fcf47a7f8a50dd884603ce50ec7ec59b))
+* **deps-dev:** bump standard-version from 9.1.1 to 9.2.0 ([b1623d9](https://github.com/softrams/bulwark/commit/b1623d951b713eab4f82e086a3518c04e64367b0))
+* **deps-dev:** bump ts-jest from 26.5.4 to 26.5.5 ([371a25b](https://github.com/softrams/bulwark/commit/371a25bc304577dbad5e8cea0b09df7da25623f1))
+* **deps-dev:** bump typescript from 4.2.3 to 4.2.4 ([a0bf85f](https://github.com/softrams/bulwark/commit/a0bf85fe62c951dca8d45099c5818c33be622fbc))
+* **frontend/package.json:** update @angular/cdk ([dd5aab2](https://github.com/softrams/bulwark/commit/dd5aab2904dc4b9be7bfb138fced39ebdd54c8f3))
+* **frontend/package.json:** update @angular/cli ([1ecd2ce](https://github.com/softrams/bulwark/commit/1ecd2ce752d3e0bd5baa8d5dddd9b2e53c89e707))
+* **frontend/package.json:** update @angular/core ([9052f8a](https://github.com/softrams/bulwark/commit/9052f8a084299f3ff81954ba3b931a03dc8e183d))
+* **frontend/package.json:** update global angular version ([9faf260](https://github.com/softrams/bulwark/commit/9faf260f296f49cea163893ce9857cc665f0fbfb))
+
 ### [7.0.8](https://github.com/softrams/bulwark/compare/v7.0.7...v7.0.8) (2021-04-13)
 
 
