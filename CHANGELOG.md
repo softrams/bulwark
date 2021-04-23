@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.10](https://github.com/softrams/bulwark/compare/v7.0.9...v7.0.10) (2021-04-23)
+
+
+### Bug Fixes
+
+* **chart.js:** reverting chart.js to v2 ([05b7704](https://github.com/softrams/bulwark/commit/05b77040bee13cd7040a81cacb02f949b9b230a0))
+
 ### [7.0.9](https://github.com/softrams/bulwark/compare/v7.0.8...v7.0.9) (2021-04-23)
 
 
