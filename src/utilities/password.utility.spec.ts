@@ -22,7 +22,7 @@ describe('password utility', () => {
   });
 
   test('compare hash bcrypt failure', async (done) => {
-    await expect(compare(null, 0)).rejects.toBe('Bcrypt comparison failure');
+    await expect(compare(null, 'a')).rejects.toBe('Bcrypt comparison failure');
     done();
   });
 
@@ -30,7 +30,11 @@ describe('password utility', () => {
     const currentPassword = 'qwerty';
     const oldPassword = await generateHash(currentPassword);
     const newPassword = 'newQwerty';
-    const result = await updatePassword(oldPassword, currentPassword, newPassword);
+    const result = await updatePassword(
+      oldPassword,
+      currentPassword,
+      newPassword
+    );
     expect(result).toEqual(expect.anything());
   });
 
@@ -38,7 +42,9 @@ describe('password utility', () => {
     const currentPassword = 'qwerty2';
     const oldPassword = await generateHash('1234');
     const newPassword = 'newQwerty';
-    await expect(updatePassword(oldPassword, currentPassword, newPassword)).rejects.toBe('Incorrect previous password');
+    await expect(
+      updatePassword(oldPassword, currentPassword, newPassword)
+    ).rejects.toBe('The current password is incorrect');
     done();
   });
 });
