@@ -10,6 +10,7 @@ import { Report } from '../classes/Report';
 import { Config } from '../entity/Config';
 import {
   hasAssessmentAccess,
+  hasAssetAccess,
   hasTesterAssetAccess,
 } from '../utilities/role.utility';
 const userController = require('../routes/user.controller');
@@ -30,13 +31,20 @@ export const getAssessmentsByAssetId = async (
   if (isNaN(+req.params.id)) {
     return res.status(400).json('Invalid Asset ID');
   }
+  const assetAccess = await hasAssetAccess(req, +req.params.id);
+  if (!assetAccess) {
+    return res.status(404).json('Asset not found');
+  }
   const asset = await getConnection()
     .getRepository(Asset)
     .findOne(req.params.id, { relations: ['organization'] });
   if (!asset) {
     return res.status(404).json('Asset does not exist');
   }
-  const hasAccess = await hasTesterAssetAccess(req, asset.organization.id);
+  const hasTesterAccess = await hasTesterAssetAccess(
+    req,
+    asset.organization.id
+  );
   const assessments = await getConnection()
     .getRepository(Assessment)
     .createQueryBuilder('assessment')
@@ -54,7 +62,7 @@ export const getAssessmentsByAssetId = async (
       'tester.lastName',
     ])
     .getMany();
-  return res.status(200).json({ assessments, readOnly: !hasAccess });
+  return res.status(200).json({ assessments, readOnly: !hasTesterAccess });
 };
 /**
  * @description Get all vulnerabilities by assessment
@@ -68,6 +76,10 @@ export const getAssessmentVulns = async (req: UserRequest, res: Response) => {
   }
   if (isNaN(+req.params.id)) {
     return res.status(400).json('Invalid Assessment ID');
+  }
+  const hasReadAccess = await hasAssessmentAccess(req, +req.params.id);
+  if (!hasReadAccess) {
+    return res.status(404).json('Assessment not found');
   }
   const assessment = await getConnection()
     .getRepository(Assessment)
@@ -154,12 +166,16 @@ export const getAssessmentById = async (req: UserRequest, res: Response) => {
   const assessment = await getConnection()
     .getRepository(Assessment)
     .createQueryBuilder('assessment')
+    .leftJoinAndSelect('assessment.asset', 'asset')
+    .leftJoinAndSelect('asset.organization', 'organization')
     .leftJoinAndSelect('assessment.testers', 'tester')
     .where('assessment.id = :assessmentId', {
       assessmentId: req.params.assessmentId,
     })
     .select([
       'assessment',
+      'asset',
+      'organization',
       'tester.firstName',
       'tester.lastName',
       'tester.title',
@@ -170,7 +186,14 @@ export const getAssessmentById = async (req: UserRequest, res: Response) => {
     return res.status(404).json('Assessment does not exist');
   }
   const hasAccess = await hasAssessmentAccess(req, assessment.id);
-  return res.status(200).json({ assessment, readOnly: !hasAccess });
+  if (!hasAccess) {
+    return res.status(404).json('Assessment not found');
+  }
+  const hasTesterAccess = await hasTesterAssetAccess(
+    req,
+    assessment.asset.organization.id
+  );
+  return res.status(200).json({ assessment, readOnly: !hasTesterAccess });
 };
 /**
  * @description Update assessment
@@ -231,6 +254,13 @@ export const queryReportDataByAssessment = async (
   }
   if (isNaN(+req.params.assessmentId)) {
     return res.status(400).json('Invalid Assessment ID');
+  }
+  const hasReadAccess = await hasAssessmentAccess(
+    req,
+    +req.params.assessmentId
+  );
+  if (!hasReadAccess) {
+    return res.status(404).json('Assessment not found');
   }
   const assessment = await getConnection()
     .getRepository(Assessment)

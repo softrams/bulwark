@@ -7,7 +7,7 @@ import { Organization } from '../entity/Organization';
 import { status } from '../enums/status-enum';
 import { encrypt } from '../utilities/crypto.utility';
 import { Jira } from '../entity/Jira';
-import { hasOrgAccess } from '../utilities/role.utility';
+import { hasAssetAccess, hasOrgAccess } from '../utilities/role.utility';
 /**
  * @description Get organization assets
  * @param {UserRequest} req
@@ -216,6 +216,10 @@ export const getAssetById = async (req: UserRequest, res: Response) => {
   if (isNaN(+req.params.assetId)) {
     return res.status(400).json('Invalid Asset ID');
   }
+  const hasAccess = await hasAssetAccess(req, +req.params.assetId);
+  if (!hasAccess) {
+    return res.status(404).json('Asset not found');
+  }
   const asset = await getConnection()
     .getRepository(Asset)
     .findOne(req.params.assetId, { relations: ['jira'] });
@@ -225,7 +229,7 @@ export const getAssetById = async (req: UserRequest, res: Response) => {
   if (asset.jira) {
     delete asset.jira.apiKey;
   }
-  res.status(200).json(asset);
+  return res.status(200).json(asset);
 };
 
 /**

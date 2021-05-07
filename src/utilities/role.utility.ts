@@ -49,7 +49,10 @@ export const hasAssessmentAccess = async (
     .getOne();
   const orgId = assessment.asset.organization.id;
   const allowedTeams = req.userTeams.filter(
-    (team) => team.role === ROLE.TESTER || team.role === ROLE.ADMIN
+    (team) =>
+      team.role === ROLE.TESTER ||
+      team.role === ROLE.ADMIN ||
+      team.role === ROLE.READONLY
   );
   if (allowedTeams && allowedTeams.length) {
     const allowedOrgIds = allowedTeams.map(
