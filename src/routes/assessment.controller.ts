@@ -9,8 +9,8 @@ import { Organization } from '../entity/Organization';
 import { Report } from '../classes/Report';
 import { Config } from '../entity/Config';
 import {
-  hasAssessmentAccess,
-  hasTesterAssetAccess,
+  hasAssetReadAccess,
+  hasAssetWriteAccess,
 } from '../utilities/role.utility';
 const userController = require('../routes/user.controller');
 
@@ -36,7 +36,11 @@ export const getAssessmentsByAssetId = async (
   if (!asset) {
     return res.status(404).json('Asset does not exist');
   }
-  const hasAccess = await hasTesterAssetAccess(req, asset.organization.id);
+  const assetAccess = await hasAssetReadAccess(req, asset.id);
+  if (!assetAccess) {
+    return res.status(404).json('Asset not found');
+  }
+  const hasTesterAccess = await hasAssetWriteAccess(req, asset.id);
   const assessments = await getConnection()
     .getRepository(Assessment)
     .createQueryBuilder('assessment')
@@ -54,7 +58,7 @@ export const getAssessmentsByAssetId = async (
       'tester.lastName',
     ])
     .getMany();
-  return res.status(200).json({ assessments, readOnly: !hasAccess });
+  return res.status(200).json({ assessments, readOnly: !hasTesterAccess });
 };
 /**
  * @description Get all vulnerabilities by assessment
@@ -80,10 +84,11 @@ export const getAssessmentVulns = async (req: UserRequest, res: Response) => {
   if (!assessment) {
     return res.status(404).json('Assessment does not exist');
   }
-  const hasAccess = await hasTesterAssetAccess(
-    req,
-    assessment.asset.organization.id
-  );
+  const hasReadAccess = await hasAssetReadAccess(req, assessment.asset.id);
+  if (!hasReadAccess) {
+    return res.status(404).json('Assessment not found');
+  }
+  const hasTesterAccess = await hasAssetWriteAccess(req, assessment.asset.id);
   const vulnerabilities = await getConnection()
     .getRepository(Vulnerability)
     .find({
@@ -92,7 +97,7 @@ export const getAssessmentVulns = async (req: UserRequest, res: Response) => {
   if (!vulnerabilities) {
     return res.status(404).json('Vulnerabilities do not exist');
   }
-  return res.status(200).json({ vulnerabilities, readOnly: !hasAccess });
+  return res.status(200).json({ vulnerabilities, readOnly: !hasTesterAccess });
 };
 /**
  * @description Create assessment
@@ -110,7 +115,7 @@ export const createAssessment = async (req: UserRequest, res: Response) => {
   if (!asset) {
     return res.status(404).json('Asset does not exist');
   }
-  const hasAccess = await hasTesterAssetAccess(req, asset.organization.id);
+  const hasAccess = await hasAssetWriteAccess(req, asset.id);
   if (!hasAccess) {
     return res.status(403).json('Authorization is required');
   }
@@ -154,12 +159,16 @@ export const getAssessmentById = async (req: UserRequest, res: Response) => {
   const assessment = await getConnection()
     .getRepository(Assessment)
     .createQueryBuilder('assessment')
+    .leftJoinAndSelect('assessment.asset', 'asset')
+    .leftJoinAndSelect('asset.organization', 'organization')
     .leftJoinAndSelect('assessment.testers', 'tester')
     .where('assessment.id = :assessmentId', {
       assessmentId: req.params.assessmentId,
     })
     .select([
       'assessment',
+      'asset',
+      'organization',
       'tester.firstName',
       'tester.lastName',
       'tester.title',
@@ -169,8 +178,12 @@ export const getAssessmentById = async (req: UserRequest, res: Response) => {
   if (!assessment) {
     return res.status(404).json('Assessment does not exist');
   }
-  const hasAccess = await hasAssessmentAccess(req, assessment.id);
-  return res.status(200).json({ assessment, readOnly: !hasAccess });
+  const hasReadAccess = await hasAssetReadAccess(req, assessment.asset.id);
+  if (!hasReadAccess) {
+    return res.status(404).json('Assessment not found');
+  }
+  const hasTesterAccess = await hasAssetWriteAccess(req, assessment.asset.id);
+  return res.status(200).json({ assessment, readOnly: !hasTesterAccess });
 };
 /**
  * @description Update assessment
@@ -187,11 +200,11 @@ export const updateAssessmentById = async (req: UserRequest, res: Response) => {
   }
   let assessment = await getConnection()
     .getRepository(Assessment)
-    .findOne(req.params.assessmentId, { relations: ['testers'] });
+    .findOne(req.params.assessmentId, { relations: ['testers', 'asset'] });
   if (!assessment) {
     return res.status(404).json('Assessment does not exist');
   }
-  const hasAccess = await hasAssessmentAccess(req, assessment.id);
+  const hasAccess = await hasAssetWriteAccess(req, assessment.asset.id);
   if (!hasAccess) {
     return res.status(403).json('Authorization is required');
   }
@@ -255,6 +268,10 @@ export const queryReportDataByAssessment = async (
     .findOne(assessmentForId.asset.id, {
       relations: ['organization'],
     });
+  const hasReadAccess = await hasAssetReadAccess(req, asset.id);
+  if (!hasReadAccess) {
+    return res.status(404).json('Assessment not found');
+  }
   const organization = await getConnection()
     .getRepository(Organization)
     .findOne(asset.organization.id);
@@ -307,11 +324,11 @@ export const deleteAssessmentById = async (req: UserRequest, res: Response) => {
   }
   const assessment = await getConnection()
     .getRepository(Assessment)
-    .findOne(req.params.assessmentId);
+    .findOne(req.params.assessmentId, { relations: ['asset'] });
   if (!assessment) {
     return res.status(404).send('Assessment does not exist.');
   } else {
-    const hasAccess = await hasAssessmentAccess(req, assessment.id);
+    const hasAccess = await hasAssetWriteAccess(req, assessment.asset.id);
     if (!hasAccess) {
       return res.status(403).json('Authorization is required');
     }

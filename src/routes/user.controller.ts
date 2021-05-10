@@ -294,7 +294,7 @@ export const getTesters = async (req: UserRequest, res: Response) => {
     return res.status(400).json('Invalid Organization ID');
   }
   if (!req.userOrgs.includes(+req.params.orgId)) {
-    return res.status(404).json('Testers not found');
+    //return res.status(404).json('Testers not found');
   }
   const users = await getConnection()
     .getRepository(User)

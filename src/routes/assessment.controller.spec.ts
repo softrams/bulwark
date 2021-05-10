@@ -210,6 +210,7 @@ describe('Assessment Controller', () => {
       params: {
         id: savedAsset.id,
       },
+      userAssets: [1],
       userTeams: [savedTeam],
     });
     await assessmentController.getAssessmentsByAssetId(request, response);
@@ -231,5 +232,15 @@ describe('Assessment Controller', () => {
     });
     await assessmentController.getAssessmentsByAssetId(request3, response3);
     expect(response3.statusCode).toBe(400);
+    const response4 = new MockExpressResponse();
+    const request4 = new MockExpressRequest({
+      params: {
+        id: savedAsset.id,
+      },
+      userAssets: [2],
+      userTeams: [savedTeam],
+    });
+    await assessmentController.getAssessmentsByAssetId(request4, response4);
+    expect(response4.statusCode).toBe(404);
   });
 });
