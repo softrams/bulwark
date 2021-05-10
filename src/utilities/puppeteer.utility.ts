@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { insertReportAuditRecord } from '../routes/report-audit.controller';
 import puppeteer = require('puppeteer');
 import * as path from 'path';
-import { hasAssessmentAccess } from './role.utility';
+import { hasAssetReadAccess } from './role.utility';
 const fs = require('fs');
 /**
  * @description API backend for report generation with Puppeteer
@@ -16,9 +16,11 @@ export const generateReport = async (req: UserRequest, res: Response) => {
   if (!req.body.orgId || !req.body.assetId || !req.body.assessmentId) {
     return res.status(400).send('Invalid report parameters');
   }
-  const hasReadAccess = await hasAssessmentAccess(req, +req.body.assessmentId);
+  const hasReadAccess = await hasAssetReadAccess(req, +req.body.assetId);
   if (!hasReadAccess) {
-    return res.status(404).json('Assessment not found');
+    return res
+      .status(404)
+      .json('Failed to generate report. Please contact an administrator.');
   }
   const url =
     process.env.NODE_ENV === 'production'

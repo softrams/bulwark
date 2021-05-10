@@ -463,10 +463,44 @@ describe('Asset Controller', () => {
       params: {
         assetId: 1,
       },
+      userAssets: [1],
     });
     const response = new MockExpressResponse();
     await assetController.getAssetById(request, response);
     expect(response.statusCode).toBe(200);
+  });
+  test('Get asset by id failure no access', async () => {
+    const org: Organization = {
+      id: null,
+      name: 'testOrg',
+      asset: null,
+      status: 'A',
+      teams: null,
+    };
+    await getConnection().getRepository(Organization).insert(org);
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(1);
+    const assessments: Assessment[] = [];
+    const asset: Asset = {
+      id: null,
+      name: 'Test Asset',
+      status: 'A',
+      assessment: assessments,
+      organization: savedOrg,
+      jira: null,
+      teams: null,
+    };
+    await getConnection().getRepository(Asset).insert(asset);
+    const request = new MockExpressRequest({
+      params: {
+        assetId: 1,
+      },
+      userAssets: [2],
+    });
+    const response = new MockExpressResponse();
+    await assetController.getAssetById(request, response);
+    expect(response.statusCode).toBe(404);
   });
   test('get asset by id failure', async () => {
     const request = new MockExpressRequest({
@@ -504,6 +538,7 @@ describe('Asset Controller', () => {
       params: {
         assetId: 2,
       },
+      userAssets: [2],
     });
     const response = new MockExpressResponse();
     await assetController.getAssetById(request, response);
@@ -545,6 +580,7 @@ describe('Asset Controller', () => {
       params: {
         assetId: 1,
       },
+      userAssets: [1],
     });
     const response = new MockExpressResponse();
     await assetController.getAssetById(request, response);
