@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.11](https://github.com/softrams/bulwark/compare/v7.0.10...v7.0.11) (2021-05-10)
+
+
+### Bug Fixes
+
+* **multiple api's:** add additional ACL checks ([2cdc01a](https://github.com/softrams/bulwark/commit/2cdc01abaf6d499951407105d56883956c644e28))
+* **role.utility.ts:** updated role-utility.ts ([f0fc0c5](https://github.com/softrams/bulwark/commit/f0fc0c57e5f0d13d287f7305900448a8bd80f6fe))
+
+
+### Others
+
+* **deps:** bump core-js from 3.10.2 to 3.11.0 in /frontend ([90aa392](https://github.com/softrams/bulwark/commit/90aa392655accf6d6212fc8bbadbd852518d773b))
+* **deps:** bump primeng from 11.3.2 to 11.4.0 in /frontend ([211c294](https://github.com/softrams/bulwark/commit/211c29491912cf95f8c71494f2be77b5397ac498))
+* **deps:** bump puppeteer from 8.0.0 to 9.0.0 ([9dbe9d2](https://github.com/softrams/bulwark/commit/9dbe9d299fb613690b078be01defc290ae9162b6))
+* **deps-dev:** bump @babel/core from 7.13.15 to 7.13.16 ([08fa5a6](https://github.com/softrams/bulwark/commit/08fa5a647322f4dbfb599ecc2ea91f7a0de2e028))
+* **frontend/package.json:** ng update @angular/cli ([58ad735](https://github.com/softrams/bulwark/commit/58ad735626521f4aa1480649a1a155982082dd3a))
+* **frontend/package.json:** update @angular/cdk ([51fe3c1](https://github.com/softrams/bulwark/commit/51fe3c16d111d9dd3d960ae6048fe4096f575782))
+* **frontend/package.json:** update @angular/cli ([b3b0a18](https://github.com/softrams/bulwark/commit/b3b0a18cf41b4ea5ceb14710c6e21f149119f3b6))
+* **frontend/package.json:** update @angular/core ([8f8a247](https://github.com/softrams/bulwark/commit/8f8a24778a158deae7d8b936f815569bb3ddbc1a))
+* **ng update @angular/cdk:** ng update @angular/cdk ([d960688](https://github.com/softrams/bulwark/commit/d9606880878f75aa61ce6d08a426b8f12ef37b65))
+* **package.json:** ng update @angular/core ([431b10e](https://github.com/softrams/bulwark/commit/431b10ec7521e92c7f4aa4358816edce89b31da7))
+* **package.json:** npm audit fix ([6a9f8b1](https://github.com/softrams/bulwark/commit/6a9f8b1b8fef2bb846e3dcd72e12080edee76270))
+
 ### [7.0.10](https://github.com/softrams/bulwark/compare/v7.0.9...v7.0.10) (2021-04-23)
 
 
