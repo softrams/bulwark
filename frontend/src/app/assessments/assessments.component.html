@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <p-table #assessmentTable [value]="assessmentAry" [columns]="cols" [paginator]="true" [rows]="10"
-    styleClass="p-datatable-striped">
+    styleClass="p-datatable-striped" [sortField]="'id'" sortOrder="-1">
 
     <ng-template pTemplate="header" let-columns>
       <tr>
