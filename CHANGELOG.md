@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.1.2](https://github.com/softrams/bulwark/compare/v7.1.1...v7.1.2) (2021-05-27)
+
+
+### Others
+
+* **package-lock.json:** update package-lock.json to force docker build ([b1904c4](https://github.com/softrams/bulwark/commit/b1904c440009da267a50ee689045e127869844ee))
+
 ### [7.1.1](https://github.com/softrams/bulwark/compare/v7.1.0...v7.1.1) (2021-05-26)
 
 
