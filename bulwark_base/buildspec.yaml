@@ -1,0 +1,18 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Docker Hub...
+      - docker login --username ${DOCKERHUB_USER} --password ${DOCKERHUB_TOKEN}
+  build:
+    on-failure: ABORT
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - cd bulwark_base
+      - docker build -t softramsdocker/bulwark-base:latest .
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push softramsdocker/bulwark-base:latest

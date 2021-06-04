@@ -1,0 +1,33 @@
+version: 0.2
+phases:
+  pre_build:
+    on-failure: ABORT
+    commands:
+      - echo Logging in to Docker Hub...
+      - docker login --username ${DOCKERHUB_USER} --password ${DOCKERHUB_TOKEN}
+      - |
+        if [ -z $CODEBUILD_WEBHOOK_TRIGGER ]
+        then
+         TAG="latest"
+        else
+          if [ "${CODEBUILD_WEBHOOK_TRIGGER}" = "branch/master" ]
+          then
+            TAG="latest"
+          else
+            echo "in else ${CODEBUILD_WEBHOOK_TRIGGER}"
+            TAG=${CODEBUILD_WEBHOOK_TRIGGER/branch\//}
+          fi
+        fi
+      - echo $TAG
+  build:
+    on-failure: ABORT
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - echo "docker build -t softramsdocker/bulwark:${TAG} ."
+      - docker build -t softramsdocker/bulwark:${TAG} .
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push softramsdocker/bulwark:${TAG}
