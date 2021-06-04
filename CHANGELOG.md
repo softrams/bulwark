@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.1.3](https://github.com/softrams/bulwark/compare/v7.1.2...v7.1.3) (2021-06-04)
+
 ### [7.1.2](https://github.com/softrams/bulwark/compare/v7.1.1...v7.1.2) (2021-05-27)
 
 
