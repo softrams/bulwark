@@ -28,11 +28,11 @@ Please keep in mind, this project is in early development.
 
 ## Demo
 
-![Bulwark Walkthrough Demo](https://github.com/Whamo12/media/blob/master/bulwark_report_demo.gif)
+![Bulwark Walkthrough Demo](https://github.com/softrams/media/blob/main/bulwark_report_demo.gif)
 
 ## Jira Integration
 
-![Bulwark Jira Demo](https://github.com/Whamo12/media/blob/master/bulwark_jira_demo.gif)
+![Bulwark Jira Demo](https://github.com/softrams/media/blob/master/bulwark_jira_demo.gif)
 
 ## Launch with Docker
 
