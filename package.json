@@ -59,7 +59,7 @@
   "devDependencies": {
     "@babel/core": "^7.14.6",
     "@babel/preset-env": "^7.14.2",
-    "@babel/preset-typescript": "^7.13.0",
+    "@babel/preset-typescript": "^7.14.5",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
     "@types/jest": "^26.0.23",
