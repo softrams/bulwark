@@ -32,7 +32,7 @@ Please keep in mind, this project is in early development.
 
 ## Jira Integration
 
-![Bulwark Jira Demo](https://bulwark-github-readme-demos.s3.amazonaws.com/bulwark_jira_demo.gif)
+![Bulwark Jira Demo](https://bulwark-github-readme-demos.s3.us-east-1.amazonaws.com/bulwark_jira_demo.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIATOAREJEGVYNKT5F6%2F20210621%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210621T181613Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEPv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIHbwm5pJIDcc0H5ySuEwT71Won7hj1wgwYa1Pa5rPgH2AiEAj9SDQH2Wyt%2FgBylVooxKvw6qhLGBg4%2BlJbnvf5UhPBMqowMIw%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgwyMzYyNTkxMzM3MDkiDIbnKxSvgZ24yM8hMSr3AqTf%2FOllPIVx7Z%2BcBWxZTGf1c3cfwf4X0RzkFKybAKCCJ0HHu7A4h5N6sNt4YT5x0KZYOGqFakY2ttzwpLT0O0EoHypPlpexcBR15wtZGZzBa9ZZx6jh%2BsSCmsyFxOBCR4iVzvwpw7f9r0P1LTHY8UaEZScrr96nfBxIEyKHSL5Y1XrJaY4f2LewkywnAI7YpnsZPEMvX%2BZHnndNhu4vIwTiVQWUIprSZdOqqyCVCU2yev%2BmNOvm01r1MJ5sQ0DPsA2lprTik6lPuyuWGXFIz4TdnqMaxHnjMgaVb7J2GZ4HdyUkE6T2pUdDKbwVB7tW9SjK5IohGeu2u9PNROt2ZVPLsbQZkW4LHV1iOxblhe7ifBCouXwU3ZebCJlmSoYj1aitHsJQL0UUh4LTT%2BzIQcj4kjJ4ZaAfQH2BAHYbu6YFy7fuBk8R6lxWY7vZbfveibXvR6Yx%2BeNyDLF6pmTlfl%2FII5sFZ5wSbs80KoRT1PfhC4P%2B0c6f7jDtrsOGBjqmAcWZOi8CJ1fttq5D2TKBZY8CewZqwzs%2Bpglq7Wh1QPvW3uV%2F3FhFdXfj6Q5gTmBD%2BlwMAv4l0sob74S5VmWORuEp94ppfIOjUch%2FCiw0WvD%2BLXneoS8hSu0%2BVq7cRkpde3h46%2FSKclGh6TzN0SvmNzYh5DP0wt5SxK%2FexM2kGEQFEC3%2BPhK0w0HkjRXN4%2F9%2FeSMR8yttM58Dr3qEk8uiQ5YJTi3YGxk%3D&X-Amz-Signature=6ad519c732a773fb2143d290360f27e3bb1d363d5af92fa1f0dd1752099b7821)
 
 ## Launch with Docker
 
