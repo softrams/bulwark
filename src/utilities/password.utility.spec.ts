@@ -7,23 +7,20 @@ describe('password utility', () => {
     expect(hashedPassword).toBeDefined();
   });
 
-  test('compare hash success', async (done) => {
+  test('compare hash success', async () => {
     const oldPassword = await generateHash('qwerty');
     const currentPassword = 'qwerty';
     await expect(compare(currentPassword, oldPassword)).resolves.toBeTruthy();
-    done();
   });
 
-  test('compare hash failure', async (done) => {
+  test('compare hash failure', async () => {
     const oldPassword = await generateHash('qwerty');
     const currentPassword = 'qwerty2';
     await expect(compare(currentPassword, oldPassword)).resolves.toBeFalsy();
-    done();
   });
 
-  test('compare hash bcrypt failure', async (done) => {
+  test('compare hash bcrypt failure', async () => {
     await expect(compare(null, 'a')).rejects.toBe('Bcrypt comparison failure');
-    done();
   });
 
   test('password updated successfully', async () => {
@@ -38,13 +35,12 @@ describe('password utility', () => {
     expect(result).toEqual(expect.anything());
   });
 
-  test('password updated failure', async (done) => {
+  test('password updated failure', async () => {
     const currentPassword = 'qwerty2';
     const oldPassword = await generateHash('1234');
     const newPassword = 'newQwerty';
     await expect(
       updatePassword(oldPassword, currentPassword, newPassword)
     ).rejects.toBe('The current password is incorrect');
-    done();
   });
 });
