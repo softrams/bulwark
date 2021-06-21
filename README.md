@@ -419,7 +419,6 @@ Cache-Control: no-cache
 
 The Softrams Bulwark core development team are:
 
-- [Alejandro Saenz](https://github.com/whamo12) aka `Whamo12`
 - [Bill Jones](https://github.com/skewled) aka `skewled`
 
 ## Contributing

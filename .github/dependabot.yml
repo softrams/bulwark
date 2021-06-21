@@ -5,13 +5,9 @@ updates:
     schedule:
       interval: 'weekly'
     target-branch: 'develop'
-    reviewers:
-      - 'Whamo12'
 
   - package-ecosystem: 'npm'
     directory: '/frontend'
     schedule:
       interval: 'weekly'
     target-branch: 'develop'
-    reviewers:
-      - 'Whamo12'
