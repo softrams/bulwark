@@ -7,7 +7,12 @@ import { Assessment } from '../entity/Assessment';
 import { User } from '../entity/User';
 import { ProblemLocation } from '../entity/ProblemLocation';
 import { Resource } from '../entity/Resource';
+import { File } from '../entity/File';
 import { Jira } from '../entity/Jira';
+import { Team } from '../entity/Team';
+import { ApiKey } from '../entity/ApiKey';
+import { Config } from '../entity/Config';
+import { ReportAudit } from '../entity/ReportAudit';
 // TODO: Figure out how to mock jira-client API calls so that we do not hit the atlassian API's
 describe('jira utility db', () => {
   beforeEach(async () => {
@@ -15,18 +20,30 @@ describe('jira utility db', () => {
       type: 'sqlite',
       database: ':memory:',
       dropSchema: true,
-      entities: [Asset, Organization, File, Vulnerability, Assessment, User, ProblemLocation, Resource, Jira],
+      entities: [
+        Config,
+        User,
+        Team,
+        Organization,
+        Asset,
+        Assessment,
+        Vulnerability,
+        ProblemLocation,
+        ReportAudit,
+        Resource,
+        Jira,
+        File,
+        ApiKey,
+      ],
       synchronize: true,
       logging: false,
-      name: 'default'
+      name: 'default',
     });
   });
   afterEach(() => {
     const conn = getConnection('default');
     return conn.close();
   });
-});
-describe('jira utility mapping functions', () => {
   test('map risk to severity informational', () => {
     let risk = 'Informational';
     expect(jiraUtility.mapRiskToSeverity(risk)).toBe('Lowest');
@@ -62,23 +79,25 @@ describe('jira utility mapping functions', () => {
       problemLocations: probLoc,
       assessment,
       cvssUrl: 'http://test.com',
-      screenshots: null
+      screenshots: null,
     };
     const firstProbLoc: ProblemLocation = {
       id: 1,
       target: '',
       vulnerability: vuln,
-      location: ''
+      location: '',
     };
     const resource: Resource = {
       id: 1,
       description: 'test',
       vulnerability: vuln,
-      url: 'http://test.com'
+      url: 'http://test.com',
     };
     vuln.problemLocations.push(firstProbLoc);
     vuln.resources.push(resource);
-    expect(await jiraUtility.mapVulnToJiraIssue(vuln, 'test-123')).toBeDefined();
+    expect(
+      await jiraUtility.mapVulnToJiraIssue(vuln, 'test-123')
+    ).toBeDefined();
   });
   test('get issue key', () => {
     const jiraUrl = 'https://bulwark-test.atlassian.net/browse/tst-1';
