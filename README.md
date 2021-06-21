@@ -32,7 +32,7 @@ Please keep in mind, this project is in early development.
 
 ## Jira Integration
 
-![Bulwark Jira Demo](hhttps://github.com/softrams/media/blob/main/bulwark_jira_demo.gif)
+![Bulwark Jira Demo](https://github.com/softrams/media/blob/main/bulwark_jira_demo.gif)
 
 ## Launch with Docker
 
