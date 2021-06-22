@@ -9,6 +9,7 @@
         <th pSortableColumn="jira">Jira Enabled<p-sortIcon field="jira"></p-sortIcon>
         </th>
         <th scope="col">Status</th>
+        <th scope="col"># Open Vulnerabilities</th>
         <th scope="col"></th>
       </tr>
       <tr>
@@ -23,6 +24,7 @@
         <th></th>
         <th></th>
         <th></th>
+        <th></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-asset>
@@ -31,6 +33,7 @@
         <td>{{ asset?.name }}</td>
         <td>{{asset?.jira?.id ? 'Yes' : 'No'}}</td>
         <td>{{ asset?.status === 'A' ? 'Active':'Archived' }}</td>
+        <td>{{asset?.openVulnCount}}</td>
         <td>
           <button *ngIf="!isArchive" class="btn btn-secondary" type="button" style="margin-right: 10px;"
             data-toggle="tooltip" (click)="navigateToAsset(asset.id)" c data-placement="bottom" title="Edit Asset">
