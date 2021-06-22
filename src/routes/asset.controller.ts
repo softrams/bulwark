@@ -8,6 +8,7 @@ import { status } from '../enums/status-enum';
 import { encrypt } from '../utilities/crypto.utility';
 import { Jira } from '../entity/Jira';
 import { hasAssetReadAccess, hasOrgAccess } from '../utilities/role.utility';
+import { Vulnerability } from '../entity/Vulnerability';
 /**
  * @description Get organization assets
  * @param {UserRequest} req
@@ -24,7 +25,7 @@ export const getOrgAssets = async (req: UserRequest, res: Response) => {
   if (!hasOrgAccess(req, +req.params.id)) {
     return res.status(404).json('Organization not found');
   }
-  const asset = await getConnection()
+  const assets = await getConnection()
     .getRepository(Asset)
     .createQueryBuilder('asset')
     .leftJoinAndSelect('asset.jira', 'jira')
@@ -42,10 +43,13 @@ export const getOrgAssets = async (req: UserRequest, res: Response) => {
     })
     .select(['asset.id', 'asset.name', 'asset.status', 'jira.id'])
     .getMany();
-  if (!asset) {
+  if (!assets) {
     return res.status(404).json('Assets not found');
   }
-  return res.status(200).json(asset);
+  for (const asset of assets) {
+    asset['openVulnCount'] = await getOpenVulnCountByAsset(asset);
+  }
+  return res.status(200).json(assets);
 };
 /**
  * @description Get organization archived assets
@@ -63,7 +67,7 @@ export const getArchivedOrgAssets = async (req: UserRequest, res: Response) => {
   if (!hasOrgAccess(req, +req.params.id)) {
     return res.status(404).json('Organization not found');
   }
-  const asset = await getConnection()
+  const assets = await getConnection()
     .getRepository(Asset)
     .createQueryBuilder('asset')
     .leftJoinAndSelect('asset.jira', 'jira')
@@ -81,10 +85,34 @@ export const getArchivedOrgAssets = async (req: UserRequest, res: Response) => {
     })
     .select(['asset.id', 'asset.name', 'asset.status', 'jira.id'])
     .getMany();
-  if (!asset) {
+  if (!assets) {
     return res.status(404).json('Assets not found');
   }
-  return res.status(200).json(asset);
+  for (const asset of assets) {
+    asset['openVulnCount'] = await getOpenVulnCountByAsset(asset);
+  }
+  return res.status(200).json(assets);
+};
+/**
+ * @description Gets vulnerability count by asset ID
+ * @param {Asset} asset
+ * @returns integer
+ */
+export const getOpenVulnCountByAsset = async (asset: Asset) => {
+  const vulnCount = await getConnection()
+    .getRepository(Vulnerability)
+    .createQueryBuilder('vuln')
+    .leftJoinAndSelect('vuln.assessment', 'assessment')
+    .leftJoinAndSelect('assessment.asset', 'asset')
+    .where('asset.id = :assetId', {
+      assetId: asset.id,
+    })
+    .andWhere('vuln.status = :status', {
+      status: 'Open',
+    })
+    .select(['vuln.id', 'vuln.name', 'assessment.id', 'asset.id'])
+    .getCount();
+  return vulnCount;
 };
 /**
  * @description API backend for creating an asset associated by org ID
