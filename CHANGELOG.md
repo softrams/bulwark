@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.2.1](https://github.com/softrams/bulwark/compare/v7.2.0...v7.2.1) (2021-06-23)
+
+
+### Bug Fixes
+
+* **app.ts:** fixed missing middleware for update password ([fd2600a](https://github.com/softrams/bulwark/commit/fd2600a77b369c13672d641aff47af9e3190ffe1)), closes [#860](https://github.com/softrams/bulwark/issues/860)
+
 ## [7.2.0](https://github.com/softrams/bulwark/compare/v7.1.4...v7.2.0) (2021-06-23)
 
 
