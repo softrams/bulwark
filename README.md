@@ -415,12 +415,6 @@ Cache-Control: no-cache
 - [Angular](https://angular.io/) - The Angular Framework
 - [Express](https://expressjs.com/) - A minimal and flexible Node.js web application framework
 
-## Team
-
-The Softrams Bulwark core development team are:
-
-- [Bill Jones](https://github.com/skewled) aka `skewled`
-
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Read the [contribution guidelines](CONTRIBUTING.md) for more information.
