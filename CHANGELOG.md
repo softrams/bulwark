@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.2.0](https://github.com/softrams/bulwark/compare/v7.1.4...v7.2.0) (2021-06-23)
+
+
+### Features
+
+* **asset.controller.ts:** return number of open vulnerabilities with assets ([8ccbbc7](https://github.com/softrams/bulwark/commit/8ccbbc7c055b3fef92382746a77b2b14a562bf42)), closes [#858](https://github.com/softrams/bulwark/issues/858)
+
+
+### Docs
+
+* **readme.md:** temporarily remove Team section from README ([7b17ee6](https://github.com/softrams/bulwark/commit/7b17ee63f6c330875a78dee4b53002923a6bebd8))
+
 ### [7.1.4](https://github.com/softrams/bulwark/compare/v7.1.3...v7.1.4) (2021-06-21)
 
 
