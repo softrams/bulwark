@@ -101,6 +101,11 @@ createConnection().then((_) => {
     jwtMiddleware.checkToken,
     userController.getTesters
   );
+  app.patch(
+    '/api/user/password',
+    jwtMiddleware.checkToken,
+    userController.updateUserPassword
+  );
   app.post(
     '/api/refresh',
     jwtMiddleware.checkRefreshToken,
@@ -229,7 +234,6 @@ createConnection().then((_) => {
   app.patch('/api/forgot-password', authController.forgotPassword);
   app.patch('/api/password-reset', authController.resetPassword);
   app.post('/api/user/email/validate', userController.validateEmailRequest);
-  app.patch('/api/user/password', userController.updateUserPassword);
   app.post('/api/login', authController.login);
 
   // Tester Routes
