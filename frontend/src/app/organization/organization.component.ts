@@ -16,8 +16,18 @@ export class OrganizationComponent implements OnInit {
   org: any;
   isArchive = false;
   isAdmin: boolean;
+  displayOpenVulnModal = false;
+  openVulns: any = [];
+  assetNameHeader: string;
   @ViewChild('dt') table: Table;
-
+  @ViewChild('vulnTable') vulnTable: Table;
+  risks = [
+    { name: 'Informational' },
+    { name: 'Low' },
+    { name: 'Medium' },
+    { name: 'High' },
+    { name: 'Critical' },
+  ];
   constructor(
     public activatedRoute: ActivatedRoute,
     public router: Router,
@@ -95,6 +105,19 @@ export class OrganizationComponent implements OnInit {
   }
 
   /**
+   * Function responsible for navigating the user to the assets open vulnereabilities
+   * @param assetId asset ID passed required
+   */
+  showOpenVulnsModal(assetId: number, assetName: string) {
+    this.displayOpenVulnModal = true;
+    this.assetNameHeader = assetName;
+    this.openVulns = [];
+    this.appService.getOpenVulnsByAssetId(assetId).subscribe((openVulns) => {
+      this.openVulns = openVulns;
+    });
+  }
+
+  /**
    * Function responsible for archiving an asset
    */
   archiveAsset(asset: Asset) {
@@ -117,5 +140,10 @@ export class OrganizationComponent implements OnInit {
         this.getArchivedAssets();
       });
     }
+  }
+
+  onRiskChange(event) {
+    const selectedRiskAry = event.value.map((x) => x.name);
+    this.vulnTable.filter(selectedRiskAry, 'risk', 'in');
   }
 }

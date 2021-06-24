@@ -51,6 +51,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { ListboxModule } from 'primeng/listbox';
 import { UserFormComponent } from './user-form/user-form.component';
 import { ApikeyManagementComponent } from './apikey-management/apikey-management.component';
+import { DialogModule } from 'primeng/dialog';
 @NgModule({
   declarations: [
     AppComponent,
@@ -101,6 +102,7 @@ import { ApikeyManagementComponent } from './apikey-management/apikey-management
     PasswordModule,
     SelectButtonModule,
     ListboxModule,
+    DialogModule,
   ],
   providers: [
     AppService,

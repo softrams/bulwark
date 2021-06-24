@@ -33,7 +33,7 @@
         <td>{{ asset?.name }}</td>
         <td>{{asset?.jira?.id ? 'Yes' : 'No'}}</td>
         <td>{{ asset?.status === 'A' ? 'Active':'Archived' }}</td>
-        <td>{{asset?.openVulnCount}}</td>
+        <td><a (click)="showOpenVulnsModal(asset.id, asset.name)">{{asset?.openVulnCount}}</a></td>
         <td>
           <button *ngIf="!isArchive" class="btn btn-secondary" type="button" style="margin-right: 10px;"
             data-toggle="tooltip" (click)="navigateToAsset(asset.id)" c data-placement="bottom" title="Edit Asset">
@@ -73,4 +73,54 @@
     <button (click)="navigateToCreateAsset()" *ngIf="!isArchive && isAdmin" type="button" class="btn btn-primary ">
       Add Asset
     </button>
+    <p-dialog header="{{assetNameHeader}} Open Vulnerabilities" [(visible)]="displayOpenVulnModal" modal="true"
+      [style]="{width: '70vw'}">
+      <p-table #vulnTable [value]="openVulns" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="id">ID<p-sortIcon field="id"></p-sortIcon>
+            </th>
+            <th pSortableColumn="name">Name<p-sortIcon field="name"></p-sortIcon>
+            </th>
+            <th pSortableColumn="risk">Risk<p-sortIcon field="risk"></p-sortIcon>
+            </th>
+            <th pSortableColumn="systemic">Systemic<p-sortIcon field="systemic"></p-sortIcon>
+            </th>
+            <th pSortableColumn="cvssScore">CVSS Score<p-sortIcon field="cvssScore"></p-sortIcon>
+            </th>
+          </tr>
+          <tr>
+            <th>
+              <input pInputText type="text" (input)="vulnTable.filter($event.target.value, 'id', 'equals')"
+                placeholder="Search by ID" class="p-column-filter">
+            </th>
+            <th>
+              <input pInputText type="text" (input)="vulnTable.filter($event.target.value, 'name', 'contains')"
+                placeholder="Search by Name" class="p-column-filter">
+            </th>
+            <th>
+              <p-multiSelect [options]="risks" placeholder="All" (onChange)="onRiskChange($event)" optionLabel="name"
+                styleClass="p-column-filter">
+                <ng-template let-option pTemplate="item">
+                  <div class="p-multiselect-representative-option">
+                    <span class="p-ml-1">{{option.name}}</span>
+                  </div>
+                </ng-template>
+              </p-multiSelect>
+            </th>
+            <th></th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-vuln>
+          <tr>
+            <td>{{vuln?.id}}</td>
+            <td>{{vuln?.name}}</td>
+            <td>{{vuln?.risk}}</td>
+            <td>{{vuln?.systemic}}</td>
+            <td>{{vuln?.cvssScore}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-dialog>
   </div>
