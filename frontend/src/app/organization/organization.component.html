@@ -33,7 +33,7 @@
         <td>{{ asset?.name }}</td>
         <td>{{asset?.jira?.id ? 'Yes' : 'No'}}</td>
         <td>{{ asset?.status === 'A' ? 'Active':'Archived' }}</td>
-        <td><a (click)="showOpenVulnsModal(asset.id, asset.name)">{{asset?.openVulnCount}}</a></td>
+        <td><a (click)="showOpenVulnsModal(asset.id, asset.name)" href="javascript:;">{{asset?.openVulnCount}}</a></td>
         <td>
           <button *ngIf="!isArchive" class="btn btn-secondary" type="button" style="margin-right: 10px;"
             data-toggle="tooltip" (click)="navigateToAsset(asset.id)" c data-placement="bottom" title="Edit Asset">
@@ -88,6 +88,7 @@
             </th>
             <th pSortableColumn="cvssScore">CVSS Score<p-sortIcon field="cvssScore"></p-sortIcon>
             </th>
+            <th></th>
           </tr>
           <tr>
             <th>
@@ -110,6 +111,7 @@
             </th>
             <th></th>
             <th></th>
+            <th></th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-vuln>
@@ -118,7 +120,14 @@
             <td>{{vuln?.name}}</td>
             <td>{{vuln?.risk}}</td>
             <td>{{vuln?.systemic}}</td>
-            <td>{{vuln?.cvssScore}}</td>
+            <td><a [href]="vuln?.cvssUrl" target="_blank">{{vuln?.cvssScore}}</a></td>
+            <td>
+              <button class="btn btn-secondary" type="button" style="margin-right: 10px;" data-toggle="tooltip"
+                (click)="navigateToVulnDetail(vuln.id, vuln.assessment.id)" data-placement="bottom"
+                title="View Vulnerability">
+                <i class="pi pi-eye"></i>
+              </button>
+            </td>
           </tr>
         </ng-template>
       </p-table>

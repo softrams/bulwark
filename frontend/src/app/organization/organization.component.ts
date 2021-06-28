@@ -13,6 +13,7 @@ import { AuthService } from '../auth.service';
 export class OrganizationComponent implements OnInit {
   assetAry: any = [];
   orgId: number;
+  assetId: number;
   org: any;
   isArchive = false;
   isAdmin: boolean;
@@ -109,12 +110,15 @@ export class OrganizationComponent implements OnInit {
    * @param assetId asset ID passed required
    */
   showOpenVulnsModal(assetId: number, assetName: string) {
+    this.assetId = assetId;
     this.displayOpenVulnModal = true;
     this.assetNameHeader = assetName;
     this.openVulns = [];
-    this.appService.getOpenVulnsByAssetId(assetId).subscribe((openVulns) => {
-      this.openVulns = openVulns;
-    });
+    this.appService
+      .getOpenVulnsByAssetId(this.assetId)
+      .subscribe((openVulns) => {
+        this.openVulns = openVulns;
+      });
   }
 
   /**
@@ -145,5 +149,16 @@ export class OrganizationComponent implements OnInit {
   onRiskChange(event) {
     const selectedRiskAry = event.value.map((x) => x.name);
     this.vulnTable.filter(selectedRiskAry, 'risk', 'in');
+  }
+
+  navigateToVulnDetail(vulnId: number, assessmentId: number) {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([
+        `organization/${this.orgId}/asset/${this.assetId}/assessment/${assessmentId}/vuln-form/${vulnId}`,
+      ])
+    );
+    let baseUrl = window.location.href.replace(this.router.url, '');
+
+    window.open(baseUrl + url, '_blank');
   }
 }

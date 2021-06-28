@@ -135,7 +135,15 @@ export const getOpenVulnsByAsset = async (req: UserRequest, res: Response) => {
     .andWhere('vuln.status = :status', {
       status: 'Open',
     })
-    .select(['vuln'])
+    .select([
+      'vuln.id',
+      'vuln.name',
+      'vuln.risk',
+      'vuln.systemic',
+      'vuln.cvssScore',
+      'vuln.cvssUrl',
+      'assessment.id',
+    ])
     .getMany();
   return res.status(200).json(vulns);
 };
