@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.3.0](https://github.com/softrams/bulwark/compare/v7.2.1...v7.3.0) (2021-06-28)
+
+
+### Features
+
+* **asset.controller.ts:** add open vulnerability modal to asset ([1c0b5b0](https://github.com/softrams/bulwark/commit/1c0b5b028a33be1f5225c9417a06635ec5f21726)), closes [#862](https://github.com/softrams/bulwark/issues/862)
+* **asset.controller.ts:** optimize asset queries. Complete vulnerability table ([7c5729b](https://github.com/softrams/bulwark/commit/7c5729b847f02a5011be5f37f4c6f3758730dca4)), closes [#862](https://github.com/softrams/bulwark/issues/862)
+
 ### [7.2.1](https://github.com/softrams/bulwark/compare/v7.2.0...v7.2.1) (2021-06-23)
 
 
