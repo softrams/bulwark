@@ -749,4 +749,70 @@ describe('Asset Controller', () => {
     await assetController.updateAssetById(request, response);
     expect(response.statusCode).toBe(400);
   });
+  test('Get open vulns by asset', async () => {
+    const org: Organization = {
+      id: null,
+      name: 'testOrg',
+      asset: null,
+      status: 'A',
+      teams: null,
+    };
+    await getConnection().getRepository(Organization).insert(org);
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(1);
+    const assessments: Assessment[] = [];
+    const asset: Asset = {
+      id: null,
+      name: 'Test Asset',
+      status: 'A',
+      assessment: assessments,
+      organization: savedOrg,
+      jira: null,
+      teams: null,
+    };
+    const savedAsset = await getConnection().getRepository(Asset).save(asset);
+    const request = new MockExpressRequest({
+      params: {
+        assetId: savedAsset.id,
+      },
+      userAssets: [savedAsset.id],
+    });
+    const response = new MockExpressResponse();
+    await assetController.getOpenVulnsByAsset(request, response);
+    expect(response.statusCode).toBe(200);
+  });
+  test('Get open vulns by asset', async () => {
+    const org: Organization = {
+      id: null,
+      name: 'testOrg',
+      asset: null,
+      status: 'A',
+      teams: null,
+    };
+    await getConnection().getRepository(Organization).insert(org);
+    const savedOrg = await getConnection()
+      .getRepository(Organization)
+      .findOne(1);
+    const assessments: Assessment[] = [];
+    const asset: Asset = {
+      id: null,
+      name: 'Test Asset',
+      status: 'A',
+      assessment: assessments,
+      organization: savedOrg,
+      jira: null,
+      teams: null,
+    };
+    const savedAsset = await getConnection().getRepository(Asset).save(asset);
+    const request = new MockExpressRequest({
+      params: {
+        assetId: savedAsset.id,
+      },
+      userAssets: [999],
+    });
+    const response = new MockExpressResponse();
+    await assetController.getOpenVulnsByAsset(request, response);
+    expect(response.statusCode).toBe(404);
+  });
 });

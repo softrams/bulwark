@@ -115,6 +115,39 @@ export const getOpenVulnCountByAsset = async (asset: Asset) => {
   return vulnCount;
 };
 /**
+ * @description Fetch open vulnerabilities by asset ID
+ * @param {Asset} asset
+ * @returns array of vulnerabilities
+ */
+export const getOpenVulnsByAsset = async (req: UserRequest, res: Response) => {
+  const assetAccess = await hasAssetReadAccess(req, +req.params.assetId);
+  if (!assetAccess) {
+    return res.status(404).json('Asset not found');
+  }
+  const vulns = await getConnection()
+    .getRepository(Vulnerability)
+    .createQueryBuilder('vuln')
+    .leftJoinAndSelect('vuln.assessment', 'assessment')
+    .leftJoinAndSelect('assessment.asset', 'asset')
+    .where('asset.id = :assetId', {
+      assetId: req.params.assetId,
+    })
+    .andWhere('vuln.status = :status', {
+      status: 'Open',
+    })
+    .select([
+      'vuln.id',
+      'vuln.name',
+      'vuln.risk',
+      'vuln.systemic',
+      'vuln.cvssScore',
+      'vuln.cvssUrl',
+      'assessment.id',
+    ])
+    .getMany();
+  return res.status(200).json(vulns);
+};
+/**
  * @description API backend for creating an asset associated by org ID
  * @param {UserRequest} req
  * @param {Response} res

@@ -147,6 +147,11 @@ createConnection().then((_) => {
     assetController.getAssetById
   );
   app.get(
+    '/api/asset/:assetId/open/vulnerabilities',
+    jwtMiddleware.checkToken,
+    assetController.getOpenVulnsByAsset
+  );
+  app.get(
     '/api/assessment/:id',
     jwtMiddleware.checkToken,
     assessmentController.getAssessmentsByAssetId

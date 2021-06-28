@@ -89,6 +89,15 @@ export class AppService {
   }
 
   /**
+   * Function returns all open vulnerabilities by Asset ID
+   * @param assetId
+   * @returns open asset vulnerabilities
+   */
+  getOpenVulnsByAssetId(assetId: number) {
+    return this.http.get(`${this.api}/asset/${assetId}/open/vulnerabilities`);
+  }
+
+  /**
    * Function returns all archived assets related to the organization ID
    * @param id is the ID of the organization
    * @returns all assets related to the organization passed
