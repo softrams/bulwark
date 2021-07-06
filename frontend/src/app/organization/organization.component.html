@@ -74,7 +74,7 @@
       Add Asset
     </button>
     <p-dialog header="{{assetNameHeader}} Open Vulnerabilities" [(visible)]="displayOpenVulnModal" modal="true"
-      [style]="{width: '70vw'}">
+      [style]="{width: '125vw'}">
       <p-table #vulnTable [value]="openVulns" [paginator]="true" [rows]="10" styleClass="p-datatable-striped">
         <ng-template pTemplate="header">
           <tr>
@@ -87,6 +87,8 @@
             <th pSortableColumn="systemic">Systemic<p-sortIcon field="systemic"></p-sortIcon>
             </th>
             <th pSortableColumn="cvssScore">CVSS Score<p-sortIcon field="cvssScore"></p-sortIcon>
+            </th>
+            <th pSortableColumn="jiraId">Jira ID<p-sortIcon field="jiraId"></p-sortIcon>
             </th>
             <th></th>
           </tr>
@@ -112,6 +114,7 @@
             <th></th>
             <th></th>
             <th></th>
+            <th></th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-vuln>
@@ -121,6 +124,7 @@
             <td>{{vuln?.risk}}</td>
             <td>{{vuln?.systemic}}</td>
             <td><a [href]="vuln?.cvssUrl" target="_blank">{{vuln?.cvssScore}}</a></td>
+            <td><a [href]="vuln?.jiraId" target="_blank">{{vuln?.jiraId}}</a></td>
             <td>
               <button class="btn btn-secondary" type="button" style="margin-right: 10px;" data-toggle="tooltip"
                 (click)="navigateToVulnDetail(vuln.id, vuln.assessment.id)" data-placement="bottom"
