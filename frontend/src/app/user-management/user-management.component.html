@@ -7,20 +7,8 @@
         <tr>
           <th>
             <div class="p-d-flex p-jc-between p-ai-center">
-              User Email
-              <p-columnFilter type="text" field="email" display="menu"></p-columnFilter>
-            </div>
-          </th>
-          <th>
-            <div class="p-d-flex p-jc-between p-ai-center">
-              First Name
-              <p-columnFilter type="text" field="firstName" display="menu"></p-columnFilter>
-            </div>
-          </th>
-          <th>
-            <div class="p-d-flex p-jc-between p-ai-center">
-              Last Name
-              <p-columnFilter type="text" field="lastName" display="menu"></p-columnFilter>
+              Full Name
+              <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
             </div>
           </th>
           <th>
@@ -36,11 +24,10 @@
       </ng-template>
       <ng-template pTemplate="body" let-user>
         <tr>
-          <td>{{user?.email}}</td>
-          <td>{{user?.firstName}}</td>
-          <td>{{user?.lastName}}</td>
+          <td><div class="name"><td class="fitwidth">{{user?.firstName}} {{user?.lastName}}</td></div>
+          <div class="hide"><td class="fitwidth">{{user?.email}}</td></div>
           <td>{{user?.title}}</td>
-          <td>{{user?.active ? 'Active': 'Inactive'}}</td>
+          <td class="fitwidth">{{user?.active ? 'Active': 'Inactive'}}</td>
           <td><span *ngFor="let team of user.teams; let isLast=last">{{team.name}}{{isLast ? '' : ', '}}</span></td>
         </tr>
       </ng-template>
