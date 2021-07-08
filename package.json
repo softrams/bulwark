@@ -40,7 +40,7 @@
     "vulnerable",
     "vulnerability"
   ],
-  "author": "Alejandro Saenz (https://www.alejandrosaenz.com/)",
+  "author": "Softrams https://www.softrams.com",
   "contributors": [
     "Bill Jones",
     "Ryan Mathus",
@@ -79,7 +79,7 @@
     "tsc-watch": "^4.2.9",
     "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^4.3.4"
+    "typescript": "^4.3.5"
   },
   "dependencies": {
     "@types/body-parser": "^1.19.0",

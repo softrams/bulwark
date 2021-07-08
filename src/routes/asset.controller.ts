@@ -143,6 +143,7 @@ export const getOpenVulnsByAsset = async (req: UserRequest, res: Response) => {
       'vuln.cvssScore',
       'vuln.cvssUrl',
       'assessment.id',
+      'vuln.jiraId',
     ])
     .getMany();
   return res.status(200).json(vulns);

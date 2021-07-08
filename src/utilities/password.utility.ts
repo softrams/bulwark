@@ -6,7 +6,7 @@ const passwordValidator = require('password-validator');
 export const passwordSchema = new passwordValidator();
 passwordSchema
   .is()
-  .min(12) // Minimum length 8
+  .min(12) // Minimum length 12
   .has()
   .uppercase() // Must have uppercase letters
   .has()
