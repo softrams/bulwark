@@ -62,7 +62,7 @@
     "@babel/preset-typescript": "^7.14.5",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^27.0.2",
     "babel-jest": "^27.0.2",
     "cz-conventional-changelog": "^3.3.0",
     "highlight.js": ">=11.0.1",
