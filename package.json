@@ -74,7 +74,7 @@
     "prettier": "2.4.1",
     "rimraf": "^3.0.2",
     "sqlite3": "^5.0.2",
-    "standard-version": "^9.3.0",
+    "standard-version": "^9.3.2",
     "ts-jest": "^27.0.5",
     "tsc-watch": "^4.5.0",
     "tslint": "^6.1.3",
