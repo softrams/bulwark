@@ -4,7 +4,7 @@
   "description": "An organizational asset and vulnerability management tool",
   "main": "index.js",
   "scripts": {
-    "test:node": "node_modules/.bin/jest --config=jest.config.js --collectCoverage",
+    "test:node": "node_modules/.bin/jest --config=jest.config.js --collectCoverage --runInBand",
     "test:front": "cd frontend && npm run-script test",
     "test": "npm run-script test:node && npm run-script test:front",
     "start": "node dist/app.js",
@@ -59,7 +59,7 @@
   "devDependencies": {
     "@babel/core": "^7.15.8",
     "@babel/preset-env": "^7.15.8",
-    "@babel/preset-typescript": "^7.15.0",
+    "@babel/preset-typescript": "^7.16.5",
     "@commitlint/cli": "^13.2.1",
     "@commitlint/config-conventional": "^13.2.0",
     "@types/jest": "^27.0.2",
@@ -98,7 +98,7 @@
     "mime-types": "^2.1.33",
     "multer": "^1.4.3",
     "mysql": "^2.18.1",
-    "node-fetch": "^3.0.0",
+    "node-fetch": "^2.6.6",
     "nodemailer": "^6.7.0",
     "password-validator": "^5.1.1",
     "puppeteer": "^10.4.0",
