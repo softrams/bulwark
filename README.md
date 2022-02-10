@@ -55,7 +55,7 @@ DB_TYPE="mysql"
 NODE_ENV="production"
 DEV_URL="http://localhost:4200"
 SERVER_ADDRESS="http://localhost"
-PORT=5000
+PORT=4500
 JWT_KEY="changeme"
 JWT_REFRESH_KEY="changeme"
 CRYPTO_SECRET="changeme"
@@ -81,7 +81,7 @@ Remove Bulwark containers:
 docker-compose down
 ```
 
-Bulwark will be available at [localhost:5000](http://localhost:5000)
+Bulwark will be available at [localhost:4500](http://localhost:4500)
 
 ## Local Installation
 
@@ -167,7 +167,7 @@ Used by Angular to build and serve the application
 
 Update if a different server address is required
 
-#### `PORT=5000`
+#### `PORT=4500`
 
 Update if a different server port is required
 
@@ -207,7 +207,7 @@ DB_TYPE=""
 NODE_ENV=""
 DEV_URL="http://localhost:4200"
 SERVER_ADDRESS="http://localhost"
-PORT=5000
+PORT=4500
 JWT_KEY=""
 JWT_REFRESH_KEY=""
 CRYPTO_SECRET=""
@@ -396,7 +396,7 @@ Example:
 
 ```
 GET /api/assessment/1 HTTP/1.1
-Host: localhost:5000
+Host: localhost:4500
 Accept: application/json, text/plain, */*
 Accept-Language: en-US,en;q=0.5
 Accept-Encoding: gzip, deflate
