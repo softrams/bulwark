@@ -98,7 +98,7 @@
     "mime-types": "^2.1.33",
     "multer": "^1.4.3",
     "mysql": "^2.18.1",
-    "node-fetch": "^2.6.6",
+    "node-fetch": "^3.2.1",
     "nodemailer": "^6.7.0",
     "password-validator": "^5.1.1",
     "puppeteer": "^10.4.0",
