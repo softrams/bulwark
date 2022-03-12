@@ -92,7 +92,7 @@
     "dotenv": "^16.0.0",
     "express": "^4.17.1",
     "helmet": "^5.0.2",
-    "jira-client": "^6.23.0",
+    "jira-client": "^8.1.0",
     "jira2md": "^2.1.0",
     "jsonwebtoken": "^8.5.1",
     "mime-types": "^2.1.33",
