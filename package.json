@@ -66,7 +66,7 @@
     "babel-jest": "^27.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "highlight.js": ">=11.3.1",
-    "husky": "^7.0.4",
+    "husky": "^8.0.1",
     "jest": "^27.3.1",
     "lint-staged": "^12.3.5",
     "mock-express-request": "^0.2.2",
