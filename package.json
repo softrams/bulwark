@@ -86,7 +86,7 @@
     "@types/express": "^4.17.11",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
-    "class-validator": "^0.13.1",
+    "class-validator": "^0.14.0",
     "concurrently": "^6.2.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
