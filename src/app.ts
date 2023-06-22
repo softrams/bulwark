@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 if (fs.existsSync(path.join(__dirname, '../.env'))) {
   const envPath = fs.readFileSync(path.join(__dirname, '../.env'));
   // tslint:disable-next-line: no-console
-  console.log('A .env file has been found found and will now be parsed.');
+  console.log('A .env file has been found and will now be parsed.');
   // https://github.com/motdotla/dotenv#what-happens-to-environment-variables-that-were-already-set
   const envConfig = dotenv.parse(envPath);
   if (envConfig) {
