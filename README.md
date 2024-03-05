@@ -229,6 +229,7 @@ Prepare for a fresh install:
 rm -rf node_modules
 npm cache verify
 npm i --force
+```
 
 ### Create Initial Database Migration
 
