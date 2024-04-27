@@ -26,7 +26,6 @@
     "lint": "tslint --project . && cd frontend && npm run-script lint",
     "lint:fix": "tslint --fix --project . && cd frontend && npm run-script lint --fix=true",
     "release": "standard-version",
-    "commit": "npx git-cz",
     "config": "node dist/init/setEnv.js"
   },
   "keywords": [
