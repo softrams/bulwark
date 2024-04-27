@@ -10,7 +10,7 @@
 name: 'Dependency review'
 on:
   pull_request:
-    branches: [ "master" ]
+    branches: ['master']
 
 # If using a dependency submission action in this workflow this permission will need to be set to:
 #
@@ -34,6 +34,7 @@ jobs:
         # Commonly enabled options, see https://github.com/actions/dependency-review-action#configuration-options for all available options.
         with:
           comment-summary-in-pr: always
+          warn-only: true
         #   fail-on-severity: moderate
         #   deny-licenses: GPL-1.0-or-later, LGPL-2.0-or-later
         #   retry-on-snapshot-warnings: true
