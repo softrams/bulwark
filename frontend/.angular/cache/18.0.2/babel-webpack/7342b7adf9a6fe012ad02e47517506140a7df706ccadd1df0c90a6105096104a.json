@@ -1,0 +1,1 @@
+{"ast":null,"code":"\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.observable = void 0;\nexports.observable = function () {\n  return typeof Symbol === 'function' && Symbol.observable || '@@observable';\n}();\n//# sourceMappingURL=observable.js.map","map":null,"metadata":{},"sourceType":"script","externalDependencies":[]}

@@ -1,6 +1,7 @@
 {
   "name": "frontend",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -14,18 +15,18 @@
   },
   "private": true,
   "dependencies": {
-    "@angular-devkit/build-angular": "~13.2.5",
-    "@angular/animations": "~13.2.6",
-    "@angular/cdk": "^13.2.6",
-    "@angular/cli": "~13.2.6",
-    "@angular/common": "~13.2.6",
-    "@angular/compiler": "~13.2.6",
-    "@angular/compiler-cli": "^12.0.5",
-    "@angular/core": "~13.2.6",
-    "@angular/forms": "~13.2.6",
-    "@angular/platform-browser": "~13.2.6",
-    "@angular/platform-browser-dynamic": "~13.2.6",
-    "@angular/router": "~13.2.6",
+    "@angular-devkit/build-angular": "~18.0.1",
+    "@angular/animations": "~18.0.1",
+    "@angular/cdk": "^18.0.1",
+    "@angular/cli": "^18.0.1",
+    "@angular/common": "~18.0.1",
+    "@angular/compiler": "~18.0.1",
+    "@angular/compiler-cli": "~18.0.1",
+    "@angular/core": "~18.0.1",
+    "@angular/forms": "~18.0.1",
+    "@angular/platform-browser": "~18.0.1",
+    "@angular/platform-browser-dynamic": "~18.0.1",
+    "@angular/router": "~18.0.1",
     "@ng-select/ng-select": "^8.1.1",
     "chart.js": "^3.6.0",
     "core-js": "^3.19.0",
@@ -39,10 +40,10 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular/language-service": "~13.2.6",
+    "@angular/language-service": "~18.0.1",
     "@types/jasmine": "~3.10.1",
     "@types/jasminewd2": "^2.0.10",
-    "@types/node": "^17.0.21",
+    "@types/node": "20.12.13",
     "codelyzer": "^6.0.2",
     "jasmine-core": "~4.0.1",
     "jasmine-spec-reporter": "~7.0.0",
@@ -52,8 +53,8 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.7.0",
     "protractor": "~7.0.0",
-    "ts-node": "~10.7.0",
+    "ts-node": "~10.9.2",
     "tslint": "~6.1.0",
-    "typescript": "4.6.2"
+    "typescript": "~5.4.1"
   }
 }

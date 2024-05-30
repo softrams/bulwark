@@ -32,7 +32,7 @@
               "./node_modules/primeflex/primeflex.css"
             ],
             "scripts": [
-              "./node_modules/marked/lib/marked.js",
+              "./node_modules/marked/bin/marked.js",
               "./node_modules/prismjs/prism.js"
             ],
             "vendorChunk": true,

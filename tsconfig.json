@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "lib": ["es5", "es6", "dom"],
-    "target": "es5",
+    "lib": ["es6", "dom"],
+    "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -10,7 +10,7 @@
     "removeComments": true,
     "baseUrl": "./",
     "sourceMap": true,
-    "types": ["@types/jest"]
+    "types": ["@types/jest"],
   },
   "exclude": ["./frontend", "./migration"],
   "include": ["src/**/*"]
