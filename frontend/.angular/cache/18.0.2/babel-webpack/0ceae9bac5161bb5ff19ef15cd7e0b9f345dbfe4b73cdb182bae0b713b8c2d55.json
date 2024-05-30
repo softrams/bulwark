@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { Chart, registerables } from '../dist/chart.mjs';\nChart.register(...registerables);\nexport default Chart;","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

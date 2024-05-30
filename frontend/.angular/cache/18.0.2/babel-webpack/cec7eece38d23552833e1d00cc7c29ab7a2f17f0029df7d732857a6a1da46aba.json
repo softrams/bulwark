@@ -1,0 +1,1 @@
+{"ast":null,"code":"\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.ROLE = void 0;\nexports.ROLE = {\n  ADMIN: 'Admin',\n  READONLY: 'Read-Only',\n  TESTER: 'Tester'\n};","map":null,"metadata":{},"sourceType":"script","externalDependencies":[]}

@@ -1,0 +1,1 @@
+{"ast":null,"code":"\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.not = void 0;\nfunction not(pred, thisArg) {\n  return function (value, index) {\n    return !pred.call(thisArg, value, index);\n  };\n}\nexports.not = not;\n//# sourceMappingURL=not.js.map","map":null,"metadata":{},"sourceType":"script","externalDependencies":[]}
