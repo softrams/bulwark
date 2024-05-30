@@ -1,0 +1,1 @@
+{"ast":null,"code":"\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.isArrayLike = void 0;\nexports.isArrayLike = function (x) {\n  return x && typeof x.length === 'number' && typeof x !== 'function';\n};\n//# sourceMappingURL=isArrayLike.js.map","map":null,"metadata":{},"sourceType":"script","externalDependencies":[]}
