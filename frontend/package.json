@@ -47,7 +47,11 @@
     "codelyzer": "^6.0.2",
     "jasmine-core": "~4.0.1",
     "jasmine-spec-reporter": "~7.0.0",
+<<<<<<< HEAD
     "karma": "~6.3.5",
+=======
+    "karma": "~6.3.16",
+>>>>>>> master
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage-istanbul-reporter": "~3.0.2",
     "karma-jasmine": "~4.0.0",

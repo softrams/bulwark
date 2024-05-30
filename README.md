@@ -214,6 +214,22 @@ CRYPTO_SECRET=""
 CRYPTO_SALT=""
 ```
 
+### Note on M1/M2 Macs
+```
+Install sqlite3: 
+brew install sqlite3
+
+Export compiler related env variables: 
+export LDFLAGS="-L/opt/homebrew/opt/sqlite/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/sqlite/include"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/sqlite/lib/pkgconfig"
+export NODE_OPTIONS=--openssl-legacy-provider
+
+Prepare for a fresh install:
+rm -rf node_modules
+npm cache verify
+npm i --force
+
 ### Create Initial Database Migration
 
 1. Create the initial database migration
