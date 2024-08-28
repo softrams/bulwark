@@ -31,7 +31,7 @@ export const getAllTeams = async (req: Request, res: Response) => {
 export const fetchAssets = async (assetIds: number[]) => {
   const assetAry: Asset[] = [];
   for (const assetId of assetIds) {
-    const asset = await getConnection().getRepository(Asset).findOne(assetId);
+    const asset = await getConnection().getRepository(Asset).findOne({ where: { id: assetId } });
     if (asset) {
       assetAry.push(asset);
     }
@@ -44,7 +44,7 @@ export const fetchUsers = async (userIds: number[]) => {
   for (const userId of userIds) {
     const user = await getConnection()
       .getRepository(User)
-      .findOne(userId, { where: { active: true } });
+      .findOne({ where: { id: userId, active: true } });
     if (user) {
       userAry.push(user);
     }
@@ -113,7 +113,7 @@ export const createTeam = async (req: UserRequest, res: Response) => {
   if (role !== ROLE.ADMIN) {
     fetchedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(organization, { relations: ['teams'] });
+      .findOne({ where: { id: organization }, relations: ['teams'] });
     if (!fetchedOrg) {
       return res.status(404).json('Organization not found');
     }
@@ -147,7 +147,7 @@ export const addTeamMember = async (req: UserRequest, res: Response) => {
   }
   const team = await getConnection()
     .getRepository(Team)
-    .findOne(teamId, { relations: ['users'] });
+    .findOne({ where: { id: teamId }, relations: ['users'] });
   if (!team) {
     return res.status(404).json(`A Team with ID ${teamId} does not exist`);
   }
@@ -167,7 +167,7 @@ export const removeTeamMember = async (req: UserRequest, res: Response) => {
   }
   const team = await getConnection()
     .getRepository(Team)
-    .findOne(teamId, { relations: ['users'] });
+    .findOne({ where: { id: teamId }, relations: ['users'] });
   if (!team) {
     return res.status(404).json(`A Team with ID ${teamId} does not exist`);
   }
@@ -213,7 +213,7 @@ export const updateTeamInfo = async (req: Request, res: Response) => {
   if (role !== ROLE.ADMIN) {
     organization = await getConnection()
       .getRepository(Organization)
-      .findOne(organization, { relations: ['teams'] });
+      .findOne({ where: { id: +organization }, relations: ['teams'] });
     if (!organization) {
       return res.status(404).json('Organization not found');
     }
@@ -244,7 +244,7 @@ export const deleteTeam = async (req: Request, res: Response) => {
   if (!teamId) {
     return res.status(400).json('Invalid Team ID');
   }
-  const team = await getConnection().getRepository(Team).findOne(teamId);
+  const team = await getConnection().getRepository(Team).findOne({ where: { id: +teamId } });
   if (!team) {
     return res.status(404).json(`A Team with ID ${teamId} does not exist`);
   }
@@ -257,7 +257,7 @@ export const deleteTeam = async (req: Request, res: Response) => {
 export const getMyTeams = async (req: UserRequest, res: Response) => {
   const user = await getConnection()
     .getRepository(User)
-    .findOne(req.user, { relations: ['teams'] });
+    .findOne({ where: { id: +req.user }, relations: ['teams'] });
   return res.status(200).json(user.teams);
 };
 
@@ -268,13 +268,13 @@ export const addTeamAsset = async (req: Request, res: Response) => {
   }
   const team = await getConnection()
     .getRepository(Team)
-    .findOne(teamId, { relations: ['assets', 'organization'] });
+    .findOne({ where: { id: teamId }, relations: ['assets', 'organization'] });
   if (!team) {
     return res.status(404).json(`A Team with ID ${teamId} does not exist`);
   }
   const org = await getConnection()
     .getRepository(Organization)
-    .findOne(team.organization.id, { relations: ['asset'] });
+    .findOne({ where: { id: team.organization.id }, relations: ['asset'] });
   const orgAssets = org.asset.map((asset) => asset.id);
   // Verify each asset ID links to a valid user
   for (const assetId of assetIds) {
@@ -299,13 +299,13 @@ export const removeTeamAsset = async (req: Request, res: Response) => {
   }
   const team = await getConnection()
     .getRepository(Team)
-    .findOne(teamId, { relations: ['assets', 'organization'] });
+    .findOne({ where: { id: teamId }, relations: ['assets', 'organization'] });
   if (!team) {
     return res.status(404).json(`A Team with ID ${teamId} does not exist`);
   }
   const org = await getConnection()
     .getRepository(Organization)
-    .findOne(team.organization.id, { relations: ['asset'] });
+    .findOne({ where: { id: team.organization.id }, relations: ['asset'] });
   const orgAssets = org.asset.map((asset) => asset.id);
   // Verify each asset ID links to a valid user
   for (const assetId of assetIds) {

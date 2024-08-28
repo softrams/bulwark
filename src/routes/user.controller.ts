@@ -74,7 +74,7 @@ export const register = async (req: Request, res: Response) => {
  * @returns success message
  */
 export const invite = async (req: Request, res: Response) => {
-  const config = await getConnection().getRepository(Config).findOne(1);
+  const config = await getConnection().getRepository(Config).findOne({ where: { id: 1 } });
   if (!config.fromEmail || !config.fromEmailPassword) {
     return res
       .status(400)
@@ -199,7 +199,7 @@ export const updateUserPassword = async (req: UserRequest, res: Response) => {
   if (!passwordSchema.validate(newPassword)) {
     return res.status(400).json(passwordRequirement);
   }
-  const user = await getConnection().getRepository(User).findOne(req.user);
+  const user = await getConnection().getRepository(User).findOne({ where: { id: +req.user } });
   if (user) {
     const hashedUserPassword = user.password;
     try {
@@ -229,7 +229,7 @@ export const updateUserPassword = async (req: UserRequest, res: Response) => {
  */
 export const patch = async (req: UserRequest, res: Response) => {
   const { firstName, lastName, title } = req.body;
-  const user = await getConnection().getRepository(User).findOne(req.user);
+  const user = await getConnection().getRepository(User).findOne({ where: { id: +req.user } });
   if (firstName) {
     user.firstName = firstName;
   }
@@ -257,7 +257,7 @@ export const patch = async (req: UserRequest, res: Response) => {
 export const getUser = async (req: UserRequest, res: Response) => {
   const user = await getConnection()
     .getRepository(User)
-    .findOne(req.user, { relations: ['teams'] });
+    .findOne({ where: { id: +req.user }, relations: ['teams'] });
   if (!user) return res.status(404).json('User not found');
   delete user.active;
   delete user.password;
@@ -340,7 +340,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
 export const getUsersById = async (userIds: number[]) => {
   const userArray: User[] = [];
   for (const iterator of userIds) {
-    const user = await getConnection().getRepository(User).findOne(iterator);
+    const user = await getConnection().getRepository(User).findOne({ where: { id: iterator } });
     if (user) {
       userArray.push(user);
     }
@@ -361,7 +361,7 @@ export const updateUserEmail = async (req: UserRequest, res: Response) => {
       .status(400)
       .json('The new email address and confirmation email address must match');
   }
-  const user = await getConnection().getRepository(User).findOne(req.user);
+  const user = await getConnection().getRepository(User).findOne({ where: { id: +req.user } });
   if (user.newEmail) {
     return res
       .status(400)
@@ -405,7 +405,7 @@ export const updateUserEmail = async (req: UserRequest, res: Response) => {
  * @returns string
  */
 export const revokeEmailRequest = async (req: UserRequest, res: Response) => {
-  const user = await getConnection().getRepository(User).findOne(req.user);
+  const user = await getConnection().getRepository(User).findOne({ where: { id: +req.user } });
   if (!user || !user.newEmail) {
     return res
       .status(404)

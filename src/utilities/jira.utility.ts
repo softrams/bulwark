@@ -4,7 +4,7 @@ import { JiraInit } from 'src/interfaces/jira/jira-init.interface';
 import { decrypt } from './crypto.utility';
 import { JiraResult } from 'src/interfaces/jira/jira-result.interface';
 const j2m = require('jira2md');
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 import * as fs from 'fs';
 import * as mime from 'mime-types';
 import { IssueLink } from 'src/interfaces/jira/jira-issue-link.interface';

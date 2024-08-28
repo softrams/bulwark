@@ -47,7 +47,7 @@ export const initialInsert = async () => {
 };
 
 export const getConfig = async (req: Request, res: Response) => {
-  const existingConfig = await getConnection().getRepository(Config).findOne(1);
+  const existingConfig = await getConnection().getRepository(Config).findOne({ where: { id: 1 } });
   delete existingConfig.fromEmailPassword;
   return res.status(200).json(existingConfig);
 };
@@ -56,7 +56,7 @@ export const saveConfig = async (req: Request, res: Response) => {
   const fromEmail = req.body.fromEmail;
   const fromEmailPassword = req.body.fromEmailPassword;
   const companyName = req.body.companyName;
-  const existingConfig = await getConnection().getRepository(Config).findOne(1);
+  const existingConfig = await getConnection().getRepository(Config).findOne({ where: { id: 1 } });
   existingConfig.companyName = companyName;
   existingConfig.fromEmail = fromEmail;
   if (fromEmailPassword) {

@@ -69,7 +69,7 @@ const getFileById = async (req: Request, res: Response) => {
     if (isNaN(+req.params.id)) {
         return res.status(400).json('Invalid File ID');
     }
-    const file = await getConnection().getRepository(File).findOne(req.params.id);
+    const file = await getConnection().getRepository(File).findOne({ where: { id: +req.params.id } });
     if (!file) {
         return res.status(404).json('File not found');
     }

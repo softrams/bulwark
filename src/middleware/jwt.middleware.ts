@@ -157,15 +157,11 @@ const fetchUserByApiKey = async (
 const fetchUserByJwt = async (userId: string) => {
   const user = await getConnection()
     .getRepository(User)
-    .findOne(userId, {
-      join: {
-        alias: 'user',
-        leftJoinAndSelect: {
-          teams: 'user.teams',
-          organization: 'teams.organization',
-          assets: 'teams.assets',
-        },
-      },
-    });
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.teams', 'teams')
+    .leftJoinAndSelect('teams.organization', 'organization')
+    .leftJoinAndSelect('teams.assets', 'assets')
+    .where('user.id = :userId', { userId })
+    .getOne();
   return user;
 };

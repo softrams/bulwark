@@ -57,8 +57,8 @@ export const getOrgById = async (req: UserRequest, res: Response) => {
     return res.status(404).json('Organization not found');
   }
   const org = await getConnection()
-    .getRepository(Organization)
-    .findOne(req.params.id);
+      .getRepository(Organization)
+      .findOne({ where: { id: +req.params.id } });
   if (!org) {
     return res.status(404).json('Organization does not exist');
   }
@@ -76,7 +76,7 @@ export const archiveOrgById = async (req: UserRequest, res: Response) => {
   }
   const org = await getConnection()
     .getRepository(Organization)
-    .findOne(req.params.id);
+    .findOne({ where: { id: +req.params.id } });
   if (!org) {
     return res.status(404).json('Organization does not exist');
   }
@@ -101,7 +101,7 @@ export const activateOrgById = async (req: UserRequest, res: Response) => {
   }
   const org = await getConnection()
     .getRepository(Organization)
-    .findOne(req.params.id);
+    .findOne({ where: { id: +req.params.id } });
   if (!org) {
     return res.status(404).json('Organization does not exist');
   }
@@ -126,7 +126,7 @@ export const updateOrgById = async (req: UserRequest, res: Response) => {
   }
   const org = await getConnection()
     .getRepository(Organization)
-    .findOne(req.params.id);
+    .findOne({ where: { id: +req.params.id } });
   if (!org) {
     return res.status(404).json('Organization does not exist');
   }

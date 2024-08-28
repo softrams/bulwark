@@ -14,7 +14,7 @@ import { generateHash } from '../utilities/password.utility';
  * @returns success message with API key
  */
 export const generateApiKey = async (req: UserRequest, res: Response) => {
-  const user = await getConnection().getRepository(User).findOne(req.user);
+  const user = await getConnection().getRepository(User).findOne({ where: { id: +req.user } });
   const buf = crypto.randomBytes(24);
   const secretBuf = crypto.randomBytes(24);
   const secretKey = await generateHash(secretBuf.toString('hex'));
@@ -99,7 +99,7 @@ export const deleteApiKeyAsAdmin = async (req: UserRequest, res: Response) => {
   if (!id) {
     return res.status(400).json('Invalid API key');
   }
-  const apiKey = await getConnection().getRepository(ApiKey).findOne(id);
+  const apiKey = await getConnection().getRepository(ApiKey).findOne({ where: { id: +id } });
   if (!apiKey) {
     return res.status(404).json('API key not found');
   } else {

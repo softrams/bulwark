@@ -10,7 +10,7 @@ import { User } from '../entity/User';
  * @returns string
  */
 export const sendEmail = async (mailOptions, callback) => {
-  const config = await getConnection().getRepository(Config).findOne(1);
+  const config = await getConnection().getRepository(Config).findOne({ where: { id: 1 } });
   if (config.fromEmail && config.fromEmailPassword) {
     const decryptedEmailPassword = decrypt(config.fromEmailPassword);
     const transporter = nodemailer.createTransport({

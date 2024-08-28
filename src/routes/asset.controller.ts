@@ -160,7 +160,7 @@ export const createAsset = async (req: UserRequest, res: Response) => {
   }
   const org = await getConnection()
     .getRepository(Organization)
-    .findOne(req.params.id);
+    .findOne({ where: { id: +req.params.id } });
   if (!org) {
     return res.status(404).json('Organization does not exist');
   }
@@ -217,7 +217,7 @@ export const purgeJiraInfo = async (req: Request, res: Response) => {
   }
   const asset = await getConnection()
     .getRepository(Asset)
-    .findOne(req.params.assetId, { relations: ['jira'] });
+    .findOne({ where: { id: +req.params.assetId }, relations: ['jira'] });
   await getConnection().getRepository(Jira).delete(asset.jira);
   return res.status(200).json('The API Key has been purged successfully');
 };
@@ -236,7 +236,7 @@ const addJiraIntegration = (
   return new Promise(async (resolve, reject) => {
     const existingAsset = await getConnection()
       .getRepository(Asset)
-      .findOne(asset.id);
+      .findOne({ where: { id: asset.id } });
     if (existingAsset.jira) {
       reject(
         `The Asset: ${existingAsset.name} contains an existing Jira integration.  Purge the existing Jira integration and try again.`
@@ -280,7 +280,7 @@ export const getAssetById = async (req: UserRequest, res: Response) => {
   }
   const asset = await getConnection()
     .getRepository(Asset)
-    .findOne(req.params.assetId, { relations: ['jira'] });
+    .findOne({ where: { id: +req.params.assetId }, relations: ['jira'] });
   if (!asset) {
     return res.status(404).send('Asset does not exist');
   }
@@ -305,8 +305,8 @@ export const updateAssetById = async (req: UserRequest, res: Response) => {
     return res.status(400).json('Asset ID is not valid');
   }
   const asset = await getConnection()
-    .getRepository(Asset)
-    .findOne(req.params.assetId);
+      .getRepository(Asset)
+      .findOne({ where: { id: +req.params.assetId } });
   if (!asset) {
     return res.status(404).json('Asset does not exist');
   }
@@ -350,8 +350,8 @@ export const archiveAssetById = async (req: UserRequest, res: Response) => {
     return res.status(400).json('Asset ID is not valid');
   }
   const asset = await getConnection()
-    .getRepository(Asset)
-    .findOne(req.params.assetId);
+      .getRepository(Asset)
+      .findOne({ where: { id: +req.params.assetId } });
   if (!asset) {
     return res.status(404).json('Asset does not exist');
   }
@@ -370,8 +370,8 @@ export const activateAssetById = async (req: UserRequest, res: Response) => {
     return res.status(400).json('Asset ID is not valid');
   }
   const asset = await getConnection()
-    .getRepository(Asset)
-    .findOne(req.params.assetId);
+      .getRepository(Asset)
+      .findOne({ where: { id: +req.params.assetId } });
   if (!asset) {
     return res.status(404).json('Asset does not exist');
   }

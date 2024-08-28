@@ -37,7 +37,7 @@ const login = async (req: UserRequest, res: Response) => {
       user.uuid = uuidv4();
       // No need to validate as validation happend with user creation
       await getConnection().getRepository(User).save(user);
-      const config = await getConnection().getRepository(Config).findOne(1);
+      const config = await getConnection().getRepository(Config).findOne({ where: { id: 1 } });
       if (!config.fromEmail || !config.fromEmailPassword) {
         emailService.sendVerificationEmail(user.uuid, user.email);
         return res
@@ -95,7 +95,7 @@ const forgotPassword = async (req: UserRequest, res: Response) => {
   }
   user.uuid = uuidv4();
   await getConnection().getRepository(User).save(user);
-  const config = await getConnection().getRepository(Config).findOne(1);
+  const config = await getConnection().getRepository(Config).findOne({ where: { id: 1 } });
   if (!config.fromEmail || !config.fromEmailPassword) {
     emailService.sendForgotPasswordEmail(user.uuid, user.email);
     return res

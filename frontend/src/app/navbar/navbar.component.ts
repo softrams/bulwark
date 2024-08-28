@@ -10,13 +10,15 @@ import { GlobalManagerService } from '../global-manager.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavbarComponent implements OnInit {
-  loggedIn$ = this.globalManager.loggedIn$;
+  loggedIn$;
 
   constructor(
     public loaderService: LoaderService,
     public authService: AuthService,
     private globalManager: GlobalManagerService
-  ) {}
+  ) {
+    this.loggedIn$ = this.globalManager.loggedIn$;
+  }
 
   ngOnInit() {}
 

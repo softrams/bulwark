@@ -31,8 +31,8 @@ export const getAssessmentsByAssetId = async (
     return res.status(400).json('Invalid Asset ID');
   }
   const asset = await getConnection()
-    .getRepository(Asset)
-    .findOne(req.params.id, { relations: ['organization'] });
+                  .getRepository(Asset)
+                  .findOne({ where: { id: +req.params.id } });
   if (!asset) {
     return res.status(404).json('Asset does not exist');
   }
@@ -92,7 +92,7 @@ export const getAssessmentVulns = async (req: UserRequest, res: Response) => {
   const vulnerabilities = await getConnection()
     .getRepository(Vulnerability)
     .find({
-      where: { assessment: req.params.id },
+      where: { assessment: { id: +req.params.id } },
     });
   if (!vulnerabilities) {
     return res.status(404).json('Vulnerabilities do not exist');
@@ -110,8 +110,8 @@ export const createAssessment = async (req: UserRequest, res: Response) => {
     return res.status(400).json('Asset ID is invalid');
   }
   const asset = await getConnection()
-    .getRepository(Asset)
-    .findOne(req.body.asset, { relations: ['organization'] });
+                    .getRepository(Asset)
+                    .findOne({ where: { id: req.body.asset }, relations: ['organization'] });
   if (!asset) {
     return res.status(404).json('Asset does not exist');
   }
@@ -200,7 +200,7 @@ export const updateAssessmentById = async (req: UserRequest, res: Response) => {
   }
   let assessment = await getConnection()
     .getRepository(Assessment)
-    .findOne(req.params.assessmentId, { relations: ['testers', 'asset'] });
+    .findOneOrFail({ where: { id: +req.params.assessmentId }, relations: ['testers', 'asset'] });
   if (!assessment) {
     return res.status(404).json('Assessment does not exist');
   }
@@ -262,19 +262,17 @@ export const queryReportDataByAssessment = async (
     .getOne();
   const assessmentForId = await getConnection()
     .getRepository(Assessment)
-    .findOne(req.params.assessmentId, { relations: ['asset'] });
+    .findOne({ where: { id: +req.params.assessmentId }, relations: ['asset'] });
   const asset = await getConnection()
-    .getRepository(Asset)
-    .findOne(assessmentForId.asset.id, {
-      relations: ['organization'],
-    });
+      .getRepository(Asset)
+      .findOne({ where: { id: assessmentForId.asset.id }, relations: ['organization'] });
   const hasReadAccess = await hasAssetReadAccess(req, asset.id);
   if (!hasReadAccess) {
     return res.status(404).json('Assessment not found');
   }
   const organization = await getConnection()
     .getRepository(Organization)
-    .findOne(asset.organization.id);
+    .findOne({ where: { id: asset.organization.id } });
   const vulnerabilities = await getConnection()
     .getRepository(Vulnerability)
     .createQueryBuilder('vuln')
@@ -294,8 +292,8 @@ export const queryReportDataByAssessment = async (
     ])
     .getMany();
   const config = await getConnection()
-    .getRepository(Config)
-    .findOne(1, { select: ['companyName'] });
+      .getRepository(Config)
+      .findOne({ where: { id: 1 }, select: ['companyName'] });
   const report = new Report();
   report.org = organization;
   report.asset = asset;
@@ -323,8 +321,8 @@ export const deleteAssessmentById = async (req: UserRequest, res: Response) => {
     return res.status(400).send('Invalid assessment ID');
   }
   const assessment = await getConnection()
-    .getRepository(Assessment)
-    .findOne(req.params.assessmentId, { relations: ['asset'] });
+      .getRepository(Assessment)
+      .findOne({ where: { id: +req.params.assessmentId }, relations: ['asset'] });
   if (!assessment) {
     return res.status(404).send('Assessment does not exist.');
   } else {
