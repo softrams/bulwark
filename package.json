@@ -90,7 +90,7 @@
     "concurrently": "^6.2.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
-    "express": "^4.17.1",
+    "express": "^4.20.0",
     "helmet": "^4.6.0",
     "jira-client": "^6.21.1",
     "jira2md": "^2.1.0",
