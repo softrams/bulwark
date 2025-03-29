@@ -101,7 +101,7 @@
     "node-fetch": "^2.6.7",
     "nodemailer": "^6.6.2",
     "password-validator": "^5.1.1",
-    "puppeteer": "^10.0.0",
+    "puppeteer": "^24.4.0",
     "reflect-metadata": "^0.1.13",
     "ts-node": "^10.0.0",
     "tsconfig-paths": "^3.9.0",
