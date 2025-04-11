@@ -279,7 +279,7 @@ describe('Team Controller', () => {
     expect(badResponse3.statusCode).toBe(400);
     const team = await getConnection()
       .getRepository(Team)
-      .findOne(savedTeam.id, { relations: ['users'] });
+      .findOne({ where: { id: savedTeam.id }, relations: ['users'] });
     expect(team.users.length).toBe(3);
   });
 
@@ -344,13 +344,13 @@ describe('Team Controller', () => {
     const savedTeam = await getConnection().getRepository(Team).save(bravoTeam);
     let fetchTeam = await getConnection()
       .getRepository(Team)
-      .findOne(savedTeam.id, { relations: ['users'] });
+      .findOne({ where: { id: savedTeam.id }, relations: ['users'] });
     expect(fetchTeam.users.length).toBe(0);
     fetchTeam.users.push(addedUser1, addedUser2, addedUser3);
     fetchTeam = await getConnection().getRepository(Team).save(fetchTeam);
     fetchTeam = await getConnection()
       .getRepository(Team)
-      .findOne(fetchTeam.id, { relations: ['users'] });
+      .findOne({ where: { id: fetchTeam.id }, relations: ['users'] });
     expect(fetchTeam.users.length).toBe(3);
     const request = new MockExpressRequest({
       body: {
@@ -363,7 +363,7 @@ describe('Team Controller', () => {
     expect(response.statusCode).toBe(200);
     fetchTeam = await getConnection()
       .getRepository(Team)
-      .findOne(fetchTeam.id, { relations: ['users'] });
+      .findOne({ where: { id: fetchTeam.id }, relations: ['users'] });
     expect(fetchTeam.users.length).toBe(2);
     const badRequest = new MockExpressRequest({
       body: {
@@ -491,7 +491,7 @@ describe('Team Controller', () => {
     expect(response.statusCode).toBe(200);
     const updatedTeam = await getConnection()
       .getRepository(Team)
-      .findOne(savedTeam.id, { relations: ['users', 'assets'] });
+      .findOne({ where: { id: savedTeam.id }, relations: ['users', 'assets'] });
     expect(updatedTeam.name).toBe('Alpha');
     expect(updatedTeam.role).toBe(ROLE.TESTER);
     expect(updatedTeam.users.length).toBe(2);
@@ -579,14 +579,14 @@ describe('Team Controller', () => {
     const savedTeam = await getConnection().getRepository(Team).save(bravoTeam);
     const fetchTeam = await getConnection()
       .getRepository(Team)
-      .findOne(savedTeam.id, { relations: ['users'] });
+      .findOne({ where: { id: savedTeam.id }, relations: ['users'] });
     fetchTeam.users.push(addedUser1);
     const savedTeamWithUser = await getConnection()
       .getRepository(Team)
       .save(fetchTeam);
     const userWithTeam = await getConnection()
       .getRepository(User)
-      .findOne(addedUser1.id, { relations: ['teams'] });
+      .findOne({ where: { id: addedUser1.id }, relations: ['teams'] });
     expect(userWithTeam.teams.length).toBe(1);
     let teams = await getConnection().getRepository(Team).find({});
     expect(teams.length).toBe(1);
@@ -602,7 +602,7 @@ describe('Team Controller', () => {
     expect(teams.length).toBe(0);
     const userNoTeam = await getConnection()
       .getRepository(User)
-      .findOne(addedUser1.id, { relations: ['teams'] });
+      .findOne({ where: { id: addedUser1.id }, relations: ['teams'] });
     expect(userNoTeam.teams.length).toBe(0);
     const badRequest = new MockExpressRequest({
       params: {},
@@ -656,7 +656,7 @@ describe('Team Controller', () => {
     const savedTeam = await getConnection().getRepository(Team).save(bravoTeam);
     const fetchTeam = await getConnection()
       .getRepository(Team)
-      .findOne(savedTeam.id, { relations: ['users'] });
+      .findOne({ where: { id: savedTeam.id }, relations: ['users'] });
     fetchTeam.users.push(addedUser1);
     await getConnection().getRepository(Team).save(fetchTeam);
     // Team 2
@@ -674,7 +674,7 @@ describe('Team Controller', () => {
       .save(alphaTeam);
     const fetchTeam2 = await getConnection()
       .getRepository(Team)
-      .findOne(savedTeam2.id, { relations: ['users'] });
+      .findOne({ where: { id: savedTeam2.id }, relations: ['users'] });
     fetchTeam2.users.push(addedUser1);
     await getConnection().getRepository(Team).save(fetchTeam2);
     const request = new MockExpressRequest({
@@ -753,7 +753,7 @@ describe('Team Controller', () => {
     expect(response.statusCode).toBe(200);
     const fetchTeam = await getConnection()
       .getRepository(Team)
-      .findOne(savedTeam.id, { relations: ['assets'] });
+      .findOne({ where: { id: savedTeam.id }, relations: ['assets'] });
     expect(fetchTeam.assets.length).toBe(3);
     const badRequest = new MockExpressRequest({
       body: {
@@ -839,12 +839,12 @@ describe('Team Controller', () => {
     const savedTeam = await getConnection().getRepository(Team).save(team1);
     const fetchTeam = await getConnection()
       .getRepository(Team)
-      .findOne(savedTeam.id, { relations: ['assets'] });
+      .findOne({ where: { id: savedTeam.id }, relations: ['assets'] });
     fetchTeam.assets.push(savedAsset1, savedAsset2, savedAsset3);
     await getConnection().getRepository(Team).save(fetchTeam);
     const fetchTeamWithAssets = await getConnection()
       .getRepository(Team)
-      .findOne(savedTeam.id, { relations: ['assets'] });
+      .findOne({ where: { id: savedTeam.id }, relations: ['assets'] });
     expect(fetchTeamWithAssets.assets.length).toBe(3);
     const request = new MockExpressRequest({
       body: {
@@ -856,7 +856,7 @@ describe('Team Controller', () => {
     await removeTeamAsset(request, response);
     const fetchTeamWithRemovedAsset = await getConnection()
       .getRepository(Team)
-      .findOne(savedTeam.id, { relations: ['assets'] });
+      .findOne({ where: { id: savedTeam.id }, relations: ['assets'] });
     expect(fetchTeamWithRemovedAsset.assets.length).toBe(1);
 
     const badRequest = new MockExpressRequest({

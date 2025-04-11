@@ -2,7 +2,7 @@ import jwt = require('jsonwebtoken');
 import { Asset } from '../entity/Asset';
 import { Organization } from '../entity/Organization';
 import { UserRequest } from '../interfaces/user-request.interface';
-import { getConnection } from 'typeorm';
+import { AppDataSource } from '../data-source';
 import { User } from '../entity/User';
 import { ROLE } from '../enums/roles-enum';
 import { Response } from 'express';
@@ -64,13 +64,14 @@ export const checkRefreshToken = (req, res, next) => {
  * @param {Response} res
  */
 export const isAdmin = async (req, res, next) => {
-  const user = await getConnection()
-    .getRepository(User)
-    .createQueryBuilder('user')
-    .leftJoinAndSelect('user.teams', 'teams')
-    .where('user.id = :userId', { userId: req.user })
-    .getOne();
-  if (user.teams.some((team) => team.role === ROLE.ADMIN)) {
+  const userRepository = AppDataSource.getRepository(User);
+  
+  const user = await userRepository.findOne({
+    where: { id: req.user },
+    relations: ['teams']
+  });
+  
+  if (user && user.teams.some((team) => team.role === ROLE.ADMIN)) {
     next();
   } else {
     return res.status(403).json('Authorization is required');
@@ -88,30 +89,47 @@ export const fetchRoles = async (
   next?
 ) => {
   let user: User;
-  if (apiKey && secretKey) {
-    const apiKeyInfo = await fetchUserByApiKey(apiKey, secretKey);
-    if (!apiKeyInfo) {
-      return res
-        .status(401)
-        .json('The provided API key or Secret key is not valid');
-    } else {
-      user = apiKeyInfo.user;
-      req.user = user.id.toString();
-      await setUserRoles(req, user);
-      next();
+  if (apiKey && secretKey && res) {
+    try {
+      const apiKeyInfo = await fetchUserByApiKey(apiKey, secretKey);
+      if (!apiKeyInfo) {
+        return res
+          .status(401)
+          .json('The provided API key or Secret key is not valid');
+      } else {
+        user = apiKeyInfo.user;
+        req.user = user.id.toString();
+        await setUserRoles(req, user);
+        next();
+      }
+    } catch (error) {
+      console.error('Error fetching API key:', error);
+      return res.status(401).json('Authentication failed');
     }
   } else {
-    user = await fetchUserByJwt(req.user);
-    await setUserRoles(req, user);
+    try {
+      user = await fetchUserByJwt(req.user);
+      await setUserRoles(req, user);
+    } catch (error) {
+      console.error('Error fetching user by JWT:', error);
+      if (res) {
+        return res.status(401).json('Authentication failed');
+      }
+    }
   }
 };
 
 const setUserRoles = async (req: UserRequest, user: User) => {
+  const organizationRepository = AppDataSource.getRepository(Organization);
+  const assetRepository = AppDataSource.getRepository(Asset);
+  
   req.userTeams = user.teams;
   const isAdmin = req.userTeams.some((team) => team.role === ROLE.ADMIN);
+  
   if (isAdmin) {
-    const orgs = await getConnection().getRepository(Organization).find({});
-    const assets = await getConnection().getRepository(Asset).find({});
+    const orgs = await organizationRepository.find();
+    const assets = await assetRepository.find();
+    
     req.userOrgs = orgs.map((org) => org.id);
     req.userAssets = assets.map((asset) => asset.id);
     req.isAdmin = true;
@@ -119,12 +137,16 @@ const setUserRoles = async (req: UserRequest, user: User) => {
     req.isAdmin = false;
     req.userOrgs = req.userTeams.map((team) => team.organization.id);
     req.userAssets = [];
+    
     for (const team of req.userTeams) {
-      const assets = team.assets.map((asset) => asset.id);
-      for (const asset of assets) {
-        req.userAssets.push(asset);
+      if (team.assets && team.assets.length > 0) {
+        const assets = team.assets.map((asset) => asset.id);
+        req.userAssets.push(...assets);
       }
     }
+    
+    // Remove duplicate asset IDs
+    req.userAssets = [...new Set(req.userAssets)];
   }
 };
 
@@ -132,20 +154,17 @@ const fetchUserByApiKey = async (
   apiKey: string | string[],
   secretKey: string | string[]
 ) => {
-  const apiKeyInfo = await getConnection()
-    .getRepository(ApiKey)
-    .createQueryBuilder('apiKey')
-    .leftJoinAndSelect('apiKey.user', 'user')
-    .leftJoinAndSelect('user.teams', 'teams')
-    .leftJoinAndSelect('teams.organization', 'organization')
-    .leftJoinAndSelect('teams.assets', 'assets')
-    .select(['user', 'teams', 'organization', 'assets', 'apiKey'])
-    .where('apiKey.key =:apiKey', { apiKey })
-    .andWhere('apiKey.active = true')
-    .getOne();
+  const apiKeyRepository = AppDataSource.getRepository(ApiKey);
+  
+  const apiKeyInfo = await apiKeyRepository.findOne({
+    where: { key: apiKey.toString(), active: true },
+    relations: ['user', 'user.teams', 'user.teams.organization', 'user.teams.assets']
+  });
+  
   if (!apiKeyInfo) {
     return null;
   }
+  
   const valid = await compare(secretKey, apiKeyInfo.secretKey);
   if (valid) {
     return apiKeyInfo;
@@ -154,18 +173,17 @@ const fetchUserByApiKey = async (
   }
 };
 
-const fetchUserByJwt = async (userId: string) => {
-  const user = await getConnection()
-    .getRepository(User)
-    .findOne(userId, {
-      join: {
-        alias: 'user',
-        leftJoinAndSelect: {
-          teams: 'user.teams',
-          organization: 'teams.organization',
-          assets: 'teams.assets',
-        },
-      },
-    });
+const fetchUserByJwt = async (userId: string): Promise<User> => {
+  const userRepository = AppDataSource.getRepository(User);
+  
+  const user = await userRepository.findOne({
+    where: { id: parseInt(userId) },
+    relations: ['teams', 'teams.organization', 'teams.assets']
+  });
+  
+  if (!user) {
+    throw new Error('User not found');
+  }
+  
   return user;
 };

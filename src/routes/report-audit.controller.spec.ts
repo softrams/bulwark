@@ -87,7 +87,7 @@ describe('Report Audit Controller', () => {
     );
     const savedAuditRecord = await getConnection()
       .getRepository(ReportAudit)
-      .findOne(auditRecord.id);
+      .findOne({ where: { id: auditRecord.id } });
     expect(savedAuditRecord.assessmentId).toBe(savedAssessment.id);
   });
 });

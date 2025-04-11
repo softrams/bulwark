@@ -120,7 +120,10 @@ describe('config controller', () => {
     expect(response.statusCode).toBe(200);
     newUser = await getConnection()
       .getRepository(User)
-      .findOne(newUser.id, { relations: ['apiKey'] });
+      .findOne({
+        where: { id: newUser.id },
+        relations: ['apiKey'],
+      });
     const response2 = new MockExpressResponse();
     const request2 = new MockExpressRequest({
       user: newUser.id,
@@ -181,7 +184,10 @@ describe('config controller', () => {
     expect(response.statusCode).toBe(200);
     newUser = await getConnection()
       .getRepository(User)
-      .findOne(newUser.id, { relations: ['apiKey'] });
+      .findOne({
+        where: { id: newUser.id },
+        relations: ['apiKey'],
+      });
     const response2 = new MockExpressResponse();
     const request2 = new MockExpressRequest({
       user: newUser.id,
@@ -242,7 +248,10 @@ describe('config controller', () => {
     expect(response.statusCode).toBe(200);
     newUser = await getConnection()
       .getRepository(User)
-      .findOne(newUser.id, { relations: ['apiKey'] });
+      .findOne({
+        where: { id: newUser.id },
+        relations: ['apiKey'],
+      });
     const response2 = new MockExpressResponse();
     const request2 = new MockExpressRequest({
       user: newUser.id,
@@ -261,7 +270,10 @@ describe('config controller', () => {
     newUser = await getConnection().getRepository(User).save(newUser);
     newUser = await getConnection()
       .getRepository(User)
-      .findOne(newUser.id, { relations: ['apiKey'] });
+      .findOne({
+        where: { id: newUser.id },
+        relations: ['apiKey'],
+      });
     const response2 = new MockExpressResponse();
     const request2 = new MockExpressRequest({
       user: newUser.id,
