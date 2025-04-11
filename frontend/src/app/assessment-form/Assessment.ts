@@ -1,4 +1,4 @@
-import { Url } from 'url';
+import { URL } from 'url';
 import { User } from '../interfaces/User';
 
 export class Assessment {
@@ -8,8 +8,8 @@ export class Assessment {
     public executiveSummary: string,
     public asset: number,
     public jiraId: string,
-    public testUrl: Url,
-    public prodUrl: Url,
+    public testUrl: URL,
+    public prodUrl: URL,
     public scope: string,
     public tag: number,
     public startDate: Date,

@@ -73,7 +73,7 @@ describe('Asset Controller', () => {
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(1);
+      .findOne({ where: { id: 1 } });
     const assessments: Assessment[] = [];
     const insertAsset: Asset = {
       id: null,
@@ -121,7 +121,7 @@ describe('Asset Controller', () => {
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(1);
+      .findOne({ where: { id: 1 } });
     const assessments: Assessment[] = [];
     const insertAsset: Asset = {
       id: null,
@@ -228,7 +228,7 @@ describe('Asset Controller', () => {
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(1);
+      .findOne({ where: { id: 1 } });
     const assessments: Assessment[] = [];
     const insertAsset: Asset = {
       id: null,
@@ -272,7 +272,7 @@ describe('Asset Controller', () => {
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(1);
+      .findOne({ where: { id: 1 } });
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -284,7 +284,7 @@ describe('Asset Controller', () => {
       teams: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
-    let savedAsset = await getConnection().getRepository(Asset).findOne(1);
+    let savedAsset = await getConnection().getRepository(Asset).findOne({ where: { id: 1 } });
     const jira: Jira = {
       id: null,
       username: 'test',
@@ -293,7 +293,7 @@ describe('Asset Controller', () => {
       asset: null,
     };
     await getConnection().getRepository(Asset).save(savedAsset);
-    savedAsset = await getConnection().getRepository(Asset).findOne(1);
+    savedAsset = await getConnection().getRepository(Asset).findOne({ where: { id: 1 } });
     jira.asset = savedAsset;
     await getConnection().getRepository(Jira).insert(jira);
     const request = new MockExpressRequest({
@@ -342,7 +342,7 @@ describe('Asset Controller', () => {
       teams: null,
     };
     await getConnection().getRepository(Organization).insert(org);
-    await getConnection().getRepository(Organization).findOne(1);
+    await getConnection().getRepository(Organization).findOne({ where: { id: 1 } });
     await assetController.createAsset(request, response);
     expect(response.statusCode).toBe(200);
   });
@@ -371,7 +371,7 @@ describe('Asset Controller', () => {
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(1);
+      .findOne({ where: { id: 1 } });
     await assetController.createAsset(request, response);
     expect(response.statusCode).toBe(200);
   });
@@ -447,7 +447,7 @@ describe('Asset Controller', () => {
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(1);
+      .findOne({ where: { id: 1 } });
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -480,7 +480,7 @@ describe('Asset Controller', () => {
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(1);
+      .findOne({ where: { id: 1 } });
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -555,7 +555,7 @@ describe('Asset Controller', () => {
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(1);
+      .findOne({ where: { id: 1 } });
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -567,7 +567,7 @@ describe('Asset Controller', () => {
       teams: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
-    const savedAsset = await getConnection().getRepository(Asset).findOne(1);
+    const savedAsset = await getConnection().getRepository(Asset).findOne({ where: { id: 1 } });
     const jira: Jira = {
       id: null,
       username: 'test',
@@ -597,7 +597,7 @@ describe('Asset Controller', () => {
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(1);
+      .findOne({ where: { id: 1 } });
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -609,7 +609,7 @@ describe('Asset Controller', () => {
       teams: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
-    await getConnection().getRepository(Asset).findOne(1);
+    await getConnection().getRepository(Asset).findOne({ where: { id: 1 } });
     const request = new MockExpressRequest({
       params: {
         assetId: 1,
@@ -677,7 +677,7 @@ describe('Asset Controller', () => {
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(1);
+      .findOne({ where: { id: 1 } });
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -689,7 +689,7 @@ describe('Asset Controller', () => {
       teams: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
-    await getConnection().getRepository(Asset).findOne(1);
+    await getConnection().getRepository(Asset).findOne({ where: { id: 1 } });
     const request = new MockExpressRequest({
       params: {
         assetId: 1,
@@ -718,7 +718,7 @@ describe('Asset Controller', () => {
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(1);
+      .findOne({ where: { id: 1 } });
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -730,7 +730,7 @@ describe('Asset Controller', () => {
       teams: null,
     };
     await getConnection().getRepository(Asset).insert(asset);
-    await getConnection().getRepository(Asset).findOne(1);
+    await getConnection().getRepository(Asset).findOne({ where: { id: 1 } });
     const request = new MockExpressRequest({
       params: {
         assetId: 1,
@@ -760,7 +760,7 @@ describe('Asset Controller', () => {
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(1);
+      .findOne({ where: { id: 1 } });
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,
@@ -793,7 +793,7 @@ describe('Asset Controller', () => {
     await getConnection().getRepository(Organization).insert(org);
     const savedOrg = await getConnection()
       .getRepository(Organization)
-      .findOne(1);
+      .findOne({ where: { id: 1 } });
     const assessments: Assessment[] = [];
     const asset: Asset = {
       id: null,

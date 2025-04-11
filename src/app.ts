@@ -1,26 +1,9 @@
 import * as express from 'express';
 import * as path from 'path';
-const fs = require('fs');
-const dotenv = require('dotenv');
-
-if (fs.existsSync(path.join(__dirname, '../.env'))) {
-  const envPath = fs.readFileSync(path.join(__dirname, '../.env'));
-  // tslint:disable-next-line: no-console
-  console.log('A .env file has been found and will now be parsed.');
-  // https://github.com/motdotla/dotenv#what-happens-to-environment-variables-that-were-already-set
-  const envConfig = dotenv.parse(envPath);
-  if (envConfig) {
-    for (const key in envConfig) {
-      if (envConfig.hasOwnProperty(key)) {
-        process.env[key] = envConfig[key];
-      }
-    }
-    // tslint:disable-next-line: no-console
-    console.log('The provided .env file has been parsed successfully.');
-  }
-}
+import * as fs from 'fs';
+import * as dotenv from 'dotenv';
 import * as bodyParser from 'body-parser';
-import { createConnection } from 'typeorm';
+import { AppDataSource } from './data-source';
 const authController = require('./routes/authentication.controller');
 import * as userController from './routes/user.controller';
 const fileUploadController = require('./routes/file-upload.controller');
@@ -35,6 +18,9 @@ import * as teamController from './routes/team.controller';
 import * as apiKeyController from './routes/api-key.controller';
 const helmet = require('helmet');
 const cors = require('cors');
+
+// Environment variables are loaded from .env file in data-source.ts
+
 const app = express();
 app.use(cors());
 app.use(
@@ -64,16 +50,12 @@ const serverIpAddress = process.env.SERVER_ADDRESS || '127.0.0.1';
 app.set('port', serverPort);
 app.set('serverIpAddress', serverIpAddress);
 // tslint:disable-next-line: no-console
-app.listen(serverPort, () =>
-  console.info(`Server running on ${serverIpAddress}:${serverPort}`)
-);
-// create typeorm connection
-createConnection().then((_) => {
-  // tslint:disable-next-line: no-console
-  console.info(`Database connection successful`);
-  // Check for initial configuration and user
-  // If none exist, insert
-  configController.initialInsert();
+
+// Initialize TypeORM connection
+AppDataSource.initialize()
+  .then(async () => {
+    console.info(`Database connection successful`);
+    await configController.initialInsert();
 
   // Protected Global Routes
   app.post(
@@ -364,4 +346,14 @@ createConnection().then((_) => {
     [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
     apiKeyController.deleteApiKeyAsAdmin
   );
+    
+  // Start the server
+  app.listen(serverPort, () =>
+    console.info(`Server running on ${serverIpAddress}:${serverPort}`)
+  );
+})
+.catch((error) => {
+  console.error('Error during Data Source initialization:', error);
 });
+
+export { app };
