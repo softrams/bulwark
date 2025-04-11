@@ -46,7 +46,7 @@ services:
       && npm run start"
 
   bulwark-db:
-    image: mysql:5.7.31
+    image: mysql:9.0.1  # 7.7.31
     container_name: bulwark_db
     environment:
       MYSQL_DATABASE: '${DB_NAME}'
