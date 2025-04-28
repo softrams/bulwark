@@ -20,6 +20,7 @@
           <th pSortableColumn="active">Status <p-sortIcon field="active"></p-sortIcon>
           </th>
           <th>Teams</th>
+          <th>Actions</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-user>
@@ -29,6 +30,14 @@
           <td>{{user?.title}}</td>
           <td class="fitwidth">{{user?.active ? 'Active': 'Inactive'}}</td>
           <td><span *ngFor="let team of user.teams; let isLast=last">{{team.name}}{{isLast ? '' : ', '}}</span></td>
+          <td>
+            <button *ngIf="user?.active" (click)="deactivateUser(user)" type="button" class="btn btn-danger btn-sm">
+              Deactivate
+            </button>
+            <button *ngIf="!user?.active" (click)="activateUser(user)" type="button" class="btn btn-success btn-sm">
+              Activate
+            </button>
+          </td>
         </tr>
       </ng-template>
     </p-table>

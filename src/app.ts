@@ -266,6 +266,18 @@ AppDataSource.initialize()
     [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
     userController.invite
   );
+  // Activate user
+  app.patch(
+    '/api/user/activate/:id',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    userController.activateUser
+  );
+  // Deactivate user
+  app.patch(
+    '/api/user/deactivate/:id',
+    [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
+    userController.deactivateUser
+  );
   app.patch(
     '/api/organization/:id/archive',
     [jwtMiddleware.checkToken, jwtMiddleware.isAdmin],
