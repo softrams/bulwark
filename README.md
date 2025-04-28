@@ -21,6 +21,7 @@
 - API Key & Management
 - Email Integration
 - Markdown Support
+- User Activation/Deactivation (Admin)
 
 ## Note
 
