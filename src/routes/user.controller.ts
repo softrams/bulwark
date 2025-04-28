@@ -606,3 +606,45 @@ export const validateEmailRequest = async (req: UserRequest, res: Response) => {
     return res.status(500).json('An error occurred while validating the email request');
   }
 };
+/**
+ * @description Activate user
+ * @param {Request} req
+ * @param {Response} res
+ * @returns Success message
+ */
+export const activateUser = async (req: Request, res: Response) => {
+  try {
+    const userRepository = AppDataSource.getRepository(User);
+    const user = await userRepository.findOne({ where: { id: +req.params.id } });
+    if (!user) {
+      return res.status(404).json('User not found');
+    }
+    user.active = true;
+    await userRepository.save(user);
+    return res.status(200).json('User activated successfully');
+  } catch (error) {
+    console.error('Error activating user:', error);
+    return res.status(500).json('An error occurred while activating the user');
+  }
+};
+/**
+ * @description Deactivate user
+ * @param {Request} req
+ * @param {Response} res
+ * @returns Success message
+ */
+export const deactivateUser = async (req: Request, res: Response) => {
+  try {
+    const userRepository = AppDataSource.getRepository(User);
+    const user = await userRepository.findOne({ where: { id: +req.params.id } });
+    if (!user) {
+      return res.status(404).json('User not found');
+    }
+    user.active = false;
+    await userRepository.save(user);
+    return res.status(200).json('User deactivated successfully');
+  } catch (error) {
+    console.error('Error deactivating user:', error);
+    return res.status(500).json('An error occurred while deactivating the user');
+  }
+};

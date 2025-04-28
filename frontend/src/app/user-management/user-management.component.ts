@@ -36,4 +36,34 @@ export class UserManagementComponent implements OnInit {
   navigateToTeamInviteUser() {
     this.router.navigate(['administration/user/invite']);
   }
+  /**
+   * Activate the given user
+   * @param user User to activate
+   */
+  activateUser(user: User) {
+    this.userService.activateUser(user.id).subscribe(
+      (message) => {
+        this.alertService.success(message as string);
+        this.getUsers();
+      },
+      (error) => {
+        this.alertService.error(error);
+      }
+    );
+  }
+  /**
+   * Deactivate the given user
+   * @param user User to deactivate
+   */
+  deactivateUser(user: User) {
+    this.userService.deactivateUser(user.id).subscribe(
+      (message) => {
+        this.alertService.success(message as string);
+        this.getUsers();
+      },
+      (error) => {
+        this.alertService.error(error);
+      }
+    );
+  }
 }

@@ -36,4 +36,18 @@ export class UserService {
   createUser(user: User) {
     return this.http.post(`${this.api}/user`, user);
   }
+  /**
+   * Activate a user (admin)
+   * @param id user ID
+   */
+  activateUser(id: string | number) {
+    return this.http.patch(`${this.api}/user/activate/${id}`, {});
+  }
+  /**
+   * Deactivate a user (admin)
+   * @param id user ID
+   */
+  deactivateUser(id: string | number) {
+    return this.http.patch(`${this.api}/user/deactivate/${id}`, {});
+  }
 }
