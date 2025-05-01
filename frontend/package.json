@@ -28,7 +28,7 @@
     "@angular/platform-browser-dynamic": "~18.0.1",
     "@angular/router": "~18.0.1",
     "@ng-select/ng-select": "^13.2.0",
-    "chart.js": "^3.6.0",
+    "chart.js": "^4.4.9",
     "core-js": "^3.19.0",
     "jwt-decode": "^3.1.2",
     "ngx-markdown": "^18.0.0",
