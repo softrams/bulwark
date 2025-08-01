@@ -103,7 +103,7 @@
     "nodemailer": "^6.9.14",
     "password-validator": "^5.3.0",
     "prod": "^1.0.1",
-    "puppeteer": "^23.2.0",
+    "puppeteer": "^24.15.0",
     "reflect-metadata": "^0.2.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
