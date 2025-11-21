@@ -8,9 +8,9 @@ import * as path from 'path';
 import * as mime from 'mime-types';
 import { IssueLink } from 'src/interfaces/jira/jira-issue-link.interface';
 import fetch from 'node-fetch';
-// jira2md doesn't have proper TypeScript definitions, use require
+// jira2md and jira-client don't have proper TypeScript definitions, use require
 const j2m = require('jira2md');
-import * as JiraApi from 'jira-client';
+const JiraApi = require('jira-client');
 let jira = null;
 
 /**

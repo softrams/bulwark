@@ -48,7 +48,7 @@ const uploadFile = (req: UserRequest, res: Response) => {
  * @param {Response} res
  * @returns file ID
  */
-const uploadFileArray = (req: UserRequest, res: Response) => {
+const uploadFileArray = (req: UserRequest, res: Response): Promise<UserRequest> => {
     return new Promise((resolve, reject) => {
         uploadArray(req, res, async err => {
             if (req.fileExtError) {
