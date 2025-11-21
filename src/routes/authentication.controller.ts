@@ -3,7 +3,7 @@ import { AppDataSource } from '../data-source';
 import { User } from '../entity/User';
 import { v4 as uuidv4 } from 'uuid';
 import { Response } from 'express';
-import jwt = require('jsonwebtoken');
+import * as jwt from 'jsonwebtoken';
 import {
   generateHash,
   passwordSchema,
@@ -251,7 +251,7 @@ const generateTokens = (user: User) => {
   };
 };
 
-module.exports = {
+export {
   login,
   forgotPassword,
   resetPassword,

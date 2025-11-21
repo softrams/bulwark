@@ -1,7 +1,7 @@
-const dotenv = require('dotenv');
-const fs = require('fs');
+import * as dotenv from 'dotenv';
+import * as fs from 'fs';
 import * as path from 'path';
-const { writeFile } = require('fs');
+import { writeFile } from 'fs';
 
 // Grabs .env variables if running locally
 if (fs.existsSync(path.join(__dirname, '../../.env'))) {

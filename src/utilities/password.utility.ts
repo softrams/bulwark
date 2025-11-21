@@ -1,9 +1,8 @@
 import * as bcrypt from 'bcrypt';
-// tslint:disable-next-line: no-var-requires
-const passwordValidator = require('password-validator');
+import PasswordValidator from 'password-validator';
 
 // Create a password schema with requirements
-export const passwordSchema = new passwordValidator();
+export const passwordSchema = new PasswordValidator();
 passwordSchema
   .is()
   .min(12) // Minimum length 12

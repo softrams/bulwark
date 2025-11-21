@@ -1,4 +1,4 @@
-import jwt = require('jsonwebtoken');
+import * as jwt from 'jsonwebtoken';
 import { Asset } from '../entity/Asset';
 import { Organization } from '../entity/Organization';
 import { UserRequest } from '../interfaces/user-request.interface';

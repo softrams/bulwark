@@ -7,10 +7,10 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as mime from 'mime-types';
 import { IssueLink } from 'src/interfaces/jira/jira-issue-link.interface';
-// Use fetch-node version 2 with CommonJS compatibility
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
+// jira2md doesn't have proper TypeScript definitions, use require
 const j2m = require('jira2md');
-const JiraApi = require('jira-client');
+import * as JiraApi from 'jira-client';
 let jira = null;
 
 /**

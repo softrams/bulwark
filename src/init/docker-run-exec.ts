@@ -1,5 +1,5 @@
 import { Connection, createConnection, getManager } from 'typeorm';
-const exec = require('child_process').exec;
+import { exec } from 'child_process';
 let connection: Connection;
 export const initDbCheck = async () => {
   connection = await createConnection();

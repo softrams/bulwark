@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "lib": ["es6", "dom"],
-    "target": "es2017",
+    "lib": ["es2020", "dom"],
+    "target": "es2020",
     "module": "commonjs",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -11,6 +11,10 @@
     "baseUrl": "./",
     "sourceMap": true,
     "types": ["@types/jest"],
+    "strict": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
   "exclude": ["./frontend", "./migration"],
   "include": ["src/**/*"]

@@ -12,7 +12,7 @@ import {
   hasAssetReadAccess,
   hasAssetWriteAccess,
 } from '../utilities/role.utility';
-const userController = require('../routes/user.controller');
+import * as userController from '../routes/user.controller';
 
 /**
  * @description Get assessments by asset ID

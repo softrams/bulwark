@@ -103,7 +103,7 @@ const getFileById = async (req: Request, res: Response) => {
     }
 };
 
-module.exports = {
+export {
     uploadFile,
     uploadFileArray,
     getFileById

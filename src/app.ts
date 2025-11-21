@@ -1,12 +1,12 @@
-import * as express from 'express';
+import express from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as dotenv from 'dotenv';
 import * as bodyParser from 'body-parser';
 import { AppDataSource } from './data-source';
-const authController = require('./routes/authentication.controller');
+import * as authController from './routes/authentication.controller';
 import * as userController from './routes/user.controller';
-const fileUploadController = require('./routes/file-upload.controller');
+import * as fileUploadController from './routes/file-upload.controller';
 import * as orgController from './routes/organization.controller';
 import * as assetController from './routes/asset.controller';
 import * as assessmentController from './routes/assessment.controller';
@@ -16,8 +16,8 @@ import { generateReport } from './utilities/puppeteer.utility';
 import * as configController from './routes/config.controller';
 import * as teamController from './routes/team.controller';
 import * as apiKeyController from './routes/api-key.controller';
-const helmet = require('helmet');
-const cors = require('cors');
+import helmet from 'helmet';
+import cors from 'cors';
 
 // Environment variables are loaded from .env file in data-source.ts
 
