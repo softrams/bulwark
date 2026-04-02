@@ -59,7 +59,7 @@
     "@angular/cli": "^18.2.1",
     "@babel/core": "^7.25.2",
     "@babel/preset-env": "^7.25.4",
-    "@babel/preset-typescript": "^7.24.7",
+    "@babel/preset-typescript": "^7.28.5",
     "@commitlint/cli": "^19.4.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@types/jest": "29.5.12",
