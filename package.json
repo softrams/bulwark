@@ -74,7 +74,7 @@
     "mock-express-response": "^0.3.0",
     "prettier": "3.3.3",
     "rimraf": "^6.0.1",
-    "sqlite3": "^5.1.7",
+    "sqlite3": "^6.0.1",
     "standard-version": "^9.5.0",
     "ts-jest": "29.2.5",
     "tsc-watch": "^6.2.0",
@@ -107,7 +107,7 @@
     "reflect-metadata": "^0.2.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typeorm": "^0.3.20",
+    "typeorm": "^1.0.0",
     "uuid": "^10.0.0"
   },
   "husky": {
